@@ -1,6 +1,7 @@
 const sql = require('mssql');
 const dbConfig = require('../dbconfig');
 const bcrypt = require('bcryptjs');
+const moment = require('moment');
 
 
 const getAdmin = async (req, res) => {
@@ -40,6 +41,10 @@ const getAdmin = async (req, res) => {
 const createAdmin = async (req, res) => {
     const { name, apellidos, email, password, rol, estado } = req.body;
 
+    const currentDate  = moment().format('YYYY-MM-DD');
+    const fregistro = currentDate;
+    console.log(currentDate);
+    console.log(fregistro);
     const pool = await sql.connect(dbConfig);
     
     // Verificar si el correo electrónico ya existe
@@ -63,7 +68,8 @@ const createAdmin = async (req, res) => {
                 .input('password', sql.Text, hashedPassword)
                 .input('rol', sql.NChar, rol)
                 .input('estado', sql.Bit, estado)
-                .query('INSERT INTO usuarioWeb (name, apellidos, email, password, rol, estado) VALUES (@name, @apellidos, @email, @password, @rol, @estado)');
+                .input('fregistro', sql.Date, fregistro)
+                .query('INSERT INTO usuarioWeb (name, apellidos, email, password, rol, estado, fregistro) VALUES (@name, @apellidos, @email, @password, @rol, @estado, @fregistro)');
             res.json({ message: 'Usuario creado correctamente' });
         } catch (error) {
             console.error('Error al crear un usuario:', error);
