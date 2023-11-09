@@ -5,6 +5,7 @@ const { connectDB } = require('./dbConnection'); // Asegúrate de que la importa
 const detalleVentasRoutes = require('./routes/detalleventas'); // Importa el enrutador de detalleventas
 const adminRoutes = require('./routes/admin');
 const cventasRoutes = require('./routes/cventas');
+const renviosRouters = require('./routes/renvios');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -36,6 +37,7 @@ app.get('/database', async (req, res) => {
 app.use('/api', detalleVentasRoutes);
 app.use('/api', adminRoutes);
 app.use('/api', cventasRoutes);
+app.use('/api',renviosRouters);
 
 // Escuchar en el puerto
 app.listen(PORT, () => {
