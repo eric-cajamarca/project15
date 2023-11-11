@@ -2,6 +2,7 @@ const sql = require('mssql');
 const dbConfig = require('../dbconfig');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
+const jwt = require('../helpers/jwt');
 
 
 const getAdmin = async (req, res) => {
@@ -105,6 +106,7 @@ const updateAdmin = async (req, res) => {
 
 const getAdminLogin = async (req, res) => {
     const { email, password } = req.body;
+    const data = req.body;
 
     const pool = await sql.connect(dbConfig);
     const checkEmailQuery = await pool
@@ -112,8 +114,14 @@ const getAdminLogin = async (req, res) => {
       .input('email', sql.VarChar, email)
       .query('SELECT * FROM usuarioWeb WHERE email = @email');
       
+      console.log('checkEmailQuery');
+      console.log(checkEmailQuery)
     if (checkEmailQuery.recordset.length > 0) {
         const bdPassword = checkEmailQuery.recordset[0].password;
+        let user = checkEmailQuery.recordset[0];
+        console.log('user');
+        console.log(user);
+
         console.log(bdPassword);
         bcrypt.compare(password, bdPassword, (err, result) => {
             if (err) {
@@ -121,7 +129,10 @@ const getAdminLogin = async (req, res) => {
                 res.status(500).send('Error al comparar contraseñas');
             } else if (result) {
                 // Las contraseñas coinciden, inicia sesión
-                res.status(200).json({ message: 'Contraseña correcta. Inicio de sesión exitoso' });
+                res.status(200).send({
+                    data: user,
+                    token: jwt.createToken(user)
+                });
             } else {
                 // Las contraseñas no coinciden, devuelve un mensaje de error
                 res.status(400).json({ message: 'La contraseña es incorrecta' });

@@ -3,14 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from "@angular/common/http";
 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { routing} from "./app.routing";
-import { from } from 'rxjs';
 import { InicioComponent } from './components/inicio/inicio.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 @NgModule({
@@ -25,9 +24,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     FormsModule,
     HttpClientModule,
     routing,
-    BrowserAnimationsModule,
-    MatSidenavModule
-    
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
