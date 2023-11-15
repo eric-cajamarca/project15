@@ -104,9 +104,11 @@ const updateAdmin = async (req, res) => {
 };
 
 
-const getAdminLogin = async (req, res) => {
+const admin_login = async (req, res) => {
     const { email, password } = req.body;
     const data = req.body;
+    console.log('entro a login admin')
+    console.log(data);
 
     const pool = await sql.connect(dbConfig);
     const checkEmailQuery = await pool
@@ -115,7 +117,7 @@ const getAdminLogin = async (req, res) => {
       .query('SELECT * FROM usuarioWeb WHERE email = @email');
       
       console.log('checkEmailQuery');
-      console.log(checkEmailQuery)
+      console.log(checkEmailQuery.recordset.length)
     if (checkEmailQuery.recordset.length > 0) {
         const bdPassword = checkEmailQuery.recordset[0].password;
         let user = checkEmailQuery.recordset[0];
@@ -133,13 +135,15 @@ const getAdminLogin = async (req, res) => {
                     data: user,
                     token: jwt.createToken(user)
                 });
+                console.log('las contraseñas coinciden');
             } else {
                 // Las contraseñas no coinciden, devuelve un mensaje de error
-                res.status(400).json({ message: 'La contraseña es incorrecta' });
+                res.status(200).send({ message: 'La contraseña es incorrecta', data:undefined });
             }
         });
     } else {
-        return res.status(400).json({ message: 'El email no existe. Por favor elija otro.' });
+        // return res.status(400).json({ message: 'El email no existe. Por favor elija otro.' });
+        res.status(200).send({ message: 'El email no existe o usted no tiene permisos para acceder' });
     }
 };
 
@@ -167,5 +171,5 @@ module.exports = {
     createAdmin,
     updateAdmin,
     deleteAdmin,
-    getAdminLogin
+    admin_login
 };
