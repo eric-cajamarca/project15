@@ -42,24 +42,24 @@ const getAdmin = async (req, res) => {
 const createAdmin = async (req, res) => {
     const { name, apellidos, email, password, rol, estado } = req.body;
 
-    const currentDate  = moment().format('YYYY-MM-DD');
+    const currentDate = moment().format('YYYY-MM-DD');
     const fregistro = currentDate;
     console.log(currentDate);
     console.log(fregistro);
     const pool = await sql.connect(dbConfig);
-    
+
     // Verificar si el correo electrónico ya existe
     const checkEmailQuery = await pool
-      .request()
-      .input('email', sql.VarChar, email)
-      .query('SELECT * FROM usuarioWeb WHERE email = @email');
-      
+        .request()
+        .input('email', sql.VarChar, email)
+        .query('SELECT * FROM usuarioWeb WHERE email = @email');
+
     if (checkEmailQuery.recordset.length > 0) {
-      return res.status(400).json({ message: 'El email ya existe. Por favor elija otro.' });
-    }else{
+        return res.status(400).json({ message: 'El email ya existe. Por favor elija otro.' });
+    } else {
         try {
             const hashedPassword = await bcrypt.hash(password, 8); // El número 10 es el factor de coste para el cifrado
-    
+
             const pool = await sql.connect(dbConfig);
             const result = await pool
                 .request()
@@ -78,7 +78,7 @@ const createAdmin = async (req, res) => {
         }
     }
 
-    
+
 };
 
 const updateAdmin = async (req, res) => {
@@ -86,17 +86,40 @@ const updateAdmin = async (req, res) => {
     const { name, apellidos, password, rol, estado } = req.body;
     const { id } = req.params;
     try {
-        const pool = await sql.connect(dbConfig);
-        const result = await pool
-            .request()
-            .input('id', sql.Int, id)
-            .input('name', sql.VarChar, name)
-            .input('apellidos', sql.VarChar, apellidos)
-            .input('password', sql.Text, password)
-            .input('rol', sql.NChar, rol)
-            .input('estado', sql.Bit, estado)
-            .query('UPDATE usuarioWeb SET name = @name, apellidos = @apellidos, password = @password, rol = @rol, estado = @estado WHERE id = @id');
-        res.json({ message: 'Usuario actualizado correctamente' });
+
+        if (password != null) {
+            //cuando viene con password
+            console.log('cuando viene con password')
+            const hashedPassword = await bcrypt.hash(password, 8);
+
+            const pool = await sql.connect(dbConfig);
+            const result = await pool
+                .request()
+                .input('id', sql.Int, id)
+                .input('name', sql.VarChar, name)
+                .input('apellidos', sql.VarChar, apellidos)
+                .input('password', sql.Text, hashedPassword)
+                .input('rol', sql.NChar, rol)
+                .input('estado', sql.Bit, estado)
+                .query('UPDATE usuarioWeb SET name = @name, apellidos = @apellidos, password = @password, rol = @rol, estado = @estado WHERE id = @id');
+            res.json({ message: 'Usuario actualizado correctamente' });
+        } else {
+            //cuando viene sin password
+            console.log('cuando viene sin password');
+            
+
+            const pool = await sql.connect(dbConfig);
+            const result = await pool
+                .request()
+                .input('id', sql.Int, id)
+                .input('name', sql.VarChar, name)
+                .input('apellidos', sql.VarChar, apellidos)
+                .input('rol', sql.NChar, rol)
+                .input('estado', sql.Bit, estado)
+                .query('UPDATE usuarioWeb SET name = @name, apellidos = @apellidos, rol = @rol, estado = @estado WHERE id = @id');
+            res.json({ message: 'Usuario actualizado correctamente' });
+        }
+
     } catch (error) {
         console.error('Error al actualizar un usuario:', error);
         res.status(500).send('Error al actualizar un usuario');
@@ -112,12 +135,12 @@ const admin_login = async (req, res) => {
 
     const pool = await sql.connect(dbConfig);
     const checkEmailQuery = await pool
-      .request()
-      .input('email', sql.VarChar, email)
-      .query('SELECT * FROM usuarioWeb WHERE email = @email');
-      
-      console.log('checkEmailQuery');
-      console.log(checkEmailQuery.recordset.length)
+        .request()
+        .input('email', sql.VarChar, email)
+        .query('SELECT * FROM usuarioWeb WHERE email = @email');
+
+    console.log('checkEmailQuery');
+    console.log(checkEmailQuery.recordset.length)
     if (checkEmailQuery.recordset.length > 0) {
         const bdPassword = checkEmailQuery.recordset[0].password;
         let user = checkEmailQuery.recordset[0];
@@ -138,7 +161,7 @@ const admin_login = async (req, res) => {
                 console.log('las contraseñas coinciden');
             } else {
                 // Las contraseñas no coinciden, devuelve un mensaje de error
-                res.status(200).send({ message: 'La contraseña es incorrecta', data:undefined });
+                res.status(200).send({ message: 'La contraseña es incorrecta', data: undefined });
             }
         });
     } else {

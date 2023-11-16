@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminService } from 'src/app/services/admin.service';
 
+
 declare var jQuery:any;
 declare var $:any;
 declare var iziToast:any;
@@ -29,7 +30,8 @@ export class LoginComponent implements OnInit{
     if(this.token){
       this._router.navigate(['/']);
     }else{
-      //mantener en el componente
+      
+      
     }
     
   }
@@ -57,7 +59,7 @@ export class LoginComponent implements OnInit{
             });
           }else{
             this.usuario = response.data;
-            console.log(this.usuario);
+            // console.log(this.usuario);
 
             localStorage.setItem('token', response.token);
             localStorage.setItem('_id', response.data.id);

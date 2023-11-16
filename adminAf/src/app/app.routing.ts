@@ -7,8 +7,10 @@ import { IndexDespachosComponent } from "./components/despachos/index-despachos/
 import { IndexEnviosComponent } from "./components/envios/index-envios/index-envios.component";
 import { LoginComponent } from "./components/login/login.component";
 
+import { AdminGuard } from "./guards/admin.guard";
+
 const appRoute : Routes = [
-    {path: '', component: InicioComponent},
+    {path: '', component: InicioComponent, canActivate: [AdminGuard]},
     {path: 'sidebar', component: SidebarComponent},
     {path: 'login', component: LoginComponent},
     {path: 'colaborador', component: IndexColaboradorComponent},
