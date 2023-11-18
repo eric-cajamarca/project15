@@ -29,7 +29,7 @@ export class AdminService {
   }
 
   //aqui creo el servicio para la autenticacion del token
-  public isAuthenticated_original(allowRoles: string[]): boolean {
+  public isAuthenticated(allowRoles: string[]): boolean {
     const token: any = localStorage.getItem('token');
 
     //aqui valido que exista un token
@@ -60,50 +60,15 @@ export class AdminService {
 
   }
 
-  public isAuthenticated(allowRoles: string[]): boolean {
-    const token: any = localStorage.getItem('token');
   
-    // Aquí valido que exista un token
-    if (!token) {
-      return false;
-    }
-  
-    try {
-      const helper = new JwtHelperService();
-      const decodedToken = helper.decodeToken(token);
-  
-      // Aquí valido que el token sea válido
-      if (!decodedToken) {
-        console.log('Token no válido');
-        localStorage.removeItem('token');
-        return false;
-      }
-  
-      // Obtener los roles del token
-      const userRoles: string[] = decodedToken['rol'];
-  
-      // Verificar si el usuario tiene al menos uno de los roles permitidos
-      const hasAllowedRole = allowRoles.some(role => userRoles.includes(role));
-  
-    
-  
-      // Determinar a qué componente redirigir según el rol
-      if (userRoles.includes('Administrador')) {
-        this._router.navigate(['/']);
-      } else if (userRoles.includes('Ventas')) {
-        this._router.navigate(['/despachos']);
-      } else if (userRoles.includes('Conductor')) {
-        this._router.navigate(['/envios']);
-      }
-  
-    } catch (error) {
-      console.error('Error al decodificar el token:', error);
-      localStorage.removeItem('token');
-      return false;
-    }
-  
-    return true;
-  }
   
 
+  getAdmin(token:any):Observable<any>{
+    
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.get(this.url + 'admin',{headers:headers});
+  }
+
 }
+
+

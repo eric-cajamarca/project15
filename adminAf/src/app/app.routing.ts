@@ -8,14 +8,21 @@ import { IndexEnviosComponent } from "./components/envios/index-envios/index-env
 import { LoginComponent } from "./components/login/login.component";
 
 import { AdminGuard } from "./guards/admin.guard";
+import { CreateColaboradorComponent } from "./components/colaboradores/create-colaborador/create-colaborador.component";
+import { UpdateColaboradorComponent } from "./components/colaboradores/update-colaborador/update-colaborador.component";
 
 const appRoute : Routes = [
     {path: '', component: InicioComponent, canActivate: [AdminGuard]},
-    {path: 'sidebar', component: SidebarComponent},
+    {path: 'sidebar', component: SidebarComponent, canActivate: [AdminGuard]},
     {path: 'login', component: LoginComponent},
+    {path: 'colaborador', component: IndexColaboradorComponent, canActivate: [AdminGuard]},
+    {path: 'despachos', component: IndexDespachosComponent, canActivate: [AdminGuard]},
+    {path: 'envios', component: IndexEnviosComponent, canActivate: [AdminGuard]},
+
+    // colaborador
     {path: 'colaborador', component: IndexColaboradorComponent},
-    {path: 'despachos', component: IndexDespachosComponent},
-    {path: 'envios', component: IndexEnviosComponent}
+    {path: 'colaborador/create', component: CreateColaboradorComponent},
+    {path: 'colaborador/:id', component: UpdateColaboradorComponent}
 ]
 
 export const appRoutingProviders : any[]=[];

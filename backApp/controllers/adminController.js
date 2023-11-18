@@ -5,15 +5,32 @@ const moment = require('moment');
 const jwt = require('../helpers/jwt');
 
 
-const getAdmin = async (req, res) => {
-    try {
-        const pool = await sql.connect(dbConfig);
-        const result = await pool.request().query('SELECT * FROM usuarioWeb');
-        res.json(result.recordset);
-    } catch (error) {
-        console.error('Error al obtener los usuarios:', error);
-        res.status(500).send('Error al obtener los usuarios');
+const getAdmin = async function(req, res){
+    console.log(req.params);
+    console.log('req.user');
+    console.log(req.user);
+     if(req.user){
+        //  if(req.user.rol=='Administrador'){
+            console.log('req.user.rol');
+            try {
+                const pool = await sql.connect(dbConfig);
+                const result = await pool.request().query('SELECT * FROM usuarioWeb');
+                // res.json(result.recordset);
+                console.log('result.recordset');
+                console.log(result.recordset);
+                res.status(200).send({data:result.recordset});
+            } catch (error) {
+                console.error('Error al obtener los usuarios:', error);
+                res.status(200).send({data:undefined});
+            }
+        //  }else{
+        //      res.status(200).send({data:undefined});
+        //  }
+        
     }
+     else{
+         res.status(500).send({message: 'No Access'});
+    }  
 };
 
 // const createAdmin = async (req, res) => {
@@ -29,7 +46,7 @@ const getAdmin = async (req, res) => {
 //       .input('apellidos', sql.VarChar, apellidos)
 //       .input('email', sql.VarChar, email)
 //       .input('password', sql.Text, hashedPassword)
-//       .input('rol', sql.NChar, rol)
+//       .input('rol', sql.VarChar, rol)
 //       .input('estado', sql.Bit, estado)
 //       .query('INSERT INTO usuarioWeb (name, apellidos, email, password, rol, estado) VALUES (@name, @apellidos, @email, @password, @rol, @estado)');
 //     res.json({ message: 'Administrador creado correctamente' });
@@ -67,7 +84,7 @@ const createAdmin = async (req, res) => {
                 .input('apellidos', sql.VarChar, apellidos)
                 .input('email', sql.VarChar, email)
                 .input('password', sql.Text, hashedPassword)
-                .input('rol', sql.NChar, rol)
+                .input('rol', sql.VarChar, rol)
                 .input('estado', sql.Bit, estado)
                 .input('fregistro', sql.Date, fregistro)
                 .query('INSERT INTO usuarioWeb (name, apellidos, email, password, rol, estado, fregistro) VALUES (@name, @apellidos, @email, @password, @rol, @estado, @fregistro)');
@@ -99,7 +116,7 @@ const updateAdmin = async (req, res) => {
                 .input('name', sql.VarChar, name)
                 .input('apellidos', sql.VarChar, apellidos)
                 .input('password', sql.Text, hashedPassword)
-                .input('rol', sql.NChar, rol)
+                .input('rol', sql.VarChar, rol)
                 .input('estado', sql.Bit, estado)
                 .query('UPDATE usuarioWeb SET name = @name, apellidos = @apellidos, password = @password, rol = @rol, estado = @estado WHERE id = @id');
             res.json({ message: 'Usuario actualizado correctamente' });
@@ -114,7 +131,7 @@ const updateAdmin = async (req, res) => {
                 .input('id', sql.Int, id)
                 .input('name', sql.VarChar, name)
                 .input('apellidos', sql.VarChar, apellidos)
-                .input('rol', sql.NChar, rol)
+                .input('rol', sql.VarChar, rol)
                 .input('estado', sql.Bit, estado)
                 .query('UPDATE usuarioWeb SET name = @name, apellidos = @apellidos, rol = @rol, estado = @estado WHERE id = @id');
             res.json({ message: 'Usuario actualizado correctamente' });

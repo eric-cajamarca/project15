@@ -3,6 +3,8 @@ var moment = require('moment');
 var secret = 'ericortiz';
 
 exports.auth = function(req,res,next){
+    console.log('req.headers');
+    console.log(req.headers);
 
     if(!req.headers.authorization){
         return res.status(403).send({message: 'NoHeadersError'});

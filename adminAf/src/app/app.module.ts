@@ -15,6 +15,8 @@ import { TopNavComponent } from './components/top-nav/top-nav.component';
 import { IndexColaboradorComponent } from './components/colaboradores/index-colaborador/index-colaborador.component';
 import { IndexDespachosComponent } from './components/despachos/index-despachos/index-despachos.component';
 import { IndexEnviosComponent } from './components/envios/index-envios/index-envios.component';
+import { CreateColaboradorComponent } from './components/colaboradores/create-colaborador/create-colaborador.component';
+import { UpdateColaboradorComponent } from './components/colaboradores/update-colaborador/update-colaborador.component';
 
 
 @NgModule({
@@ -26,7 +28,9 @@ import { IndexEnviosComponent } from './components/envios/index-envios/index-env
     TopNavComponent,
     IndexColaboradorComponent,
     IndexDespachosComponent,
-    IndexEnviosComponent
+    IndexEnviosComponent,
+    CreateColaboradorComponent,
+    UpdateColaboradorComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,186 @@
 <app-top-nav></app-top-nav>
-<p>index-colaborador works!</p>
 
-<h1>bienvenidos a la lista de colaboradores</h1>
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row justify-content-center" style="background:rgb(207, 207, 207)">
+          <div class="col-12 col-lg-11 col-xl-11" style="background:white; border-radius: 1.5%; margin-top: 10px; margin-bottom: 10px;">
+
+            <!-- Header -->
+            <div class="header mt-md-5">
+              <div class="header-body">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <!-- Pretitle -->
+                    <h6 class="header-pretitle">
+                      Módulo
+                    </h6>
+
+                    <!-- Title -->
+                    <h1 class="header-title">
+                        Colaboradores
+                    </h1><br>
+
+                    <button class="btn btn-primary" [routerLink]="['/colaborador/create']" routerLinkActive="active" style="text-align: right; margin-bottom: 20px;">crear nuevo colaborador</button>
+                  </div>
+                </div> <!-- / .row -->
+      
+              </div>
+            </div>
+
+            <!-- Alert -->
+
+
+            <!-- Card -->
+            <div class="card">
+              <div class="card-header">
+
+                <!-- Title -->
+                <h4 class="card-header-title">
+                  Mostrando todos tus colaboradores de la pagina web
+                </h4>
+
+              </div>
+              
+              <div class="card-body">
+                <div class="input-group input-group-merge">
+                    <input type="text" class="form-control form-control-appended" placeholder="Buscador general" name="filtro" [(ngModel)]="filtro">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" (click)="filtrar()">
+                          Buscar
+                      </button>
+                    </div>
+                  </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-sm table-nowrap card-table">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Colaborador</th>
+                      <th>Correo</th>
+                      <!-- <th>Telefono</th> -->
+                      <th>Estado</th>
+                      <th>Rol</th>
+                      <th></th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody class="font-size-base">
+                    <tr *ngFor="let item of colaboradores | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+                        <td class="pl-0 py-5">
+                            <div class="d-flex" >
+                                <!-- <div class="symbol symbol-40 flex-shrink-0 mr-3" style="color: rgb(102, 206, 119); border-radius: 5px;" [ngClass]="{
+                                    'symbol-success': item.nombres.charAt(0) >='A' && item.nombres.charAt(0) <= 'H',
+                                    'symbol-info': item.nombres.charAt(0) >='I' && item.nombres.charAt(0) <= 'O',
+                                    'symbol-warning': item.nombres.charAt(0) >='P' && item.nombres.charAt(0) <= 'U',
+                                    'symbol-primary': item.nombres.charAt(0) >='V' && item.nombres.charAt(0) <= 'Z'}">
+                                    <div class="circle" style="background: #3b506c; width: 40px; height: 40px; border-radius: 10%; text-align: center;">
+                                        <div class="symbol-label" style="padding-top: 1px; font-size: 24px; font-weight: 800px; text-transform: uppercase;">{{item.nombres.charAt(0)}}</div>
+                                    </div>
+                                    								
+                                </div> -->
+
+                                <!-- <div class="symbol symbol-40 flex-shrink-0 mr-2" [ngClass]="{
+                                  'symbol-success': generateColor(item.name.charAt(0)) === 'success',
+                                  'symbol-info': generateColor(item.name.charAt(0)) === 'info',
+                                  'symbol-warning': generateColor(item.name.charAt(0)) === 'warning',
+                                  'symbol-primary': generateColor(item.name.charAt(0)) === 'primary'
+                                  }" [ngStyle]="{'background-color': generateColor(item.name.charAt(0))}">
+                                 
+                                    <div class="circle" [ngStyle]="{ 'width': '40px', 'height': '40px', 'border-radius': '10px', 'text-align': 'center','background': generateColor(item.name.charAt(0)) }">
+                                      <div class="symbol-label" style="padding-top: 1px; font-size: 24px; font-weight: 800; text-transform: uppercase;">{{item.name.charAt(0)}}</div>
+                                  </div>
+                              </div>
+                               -->
+
+                                <div>
+                                    <span>
+                                       {{item.name}} {{item.apellidos}}
+                                    </span>
+                                    <!-- <a class="text-primary font-weight-bolder text-hover-primary mb-1 font-size-lg">
+                                      {{item.name}} {{item.apellidos}}
+                                   </a> -->
+                                    <!-- <span class="text-muted font-weight-bold d-block">#{{item._id}}</span> -->
+                                </div>
+                            </div>
+                        </td>
+                      
+                        <td>
+                        <span >{{item.email}}</span>
+                        
+                      <!-- <td>
+                        <span *ngIf="item.telefono">{{item.telefono}}</span>
+                        <span *ngIf="!item.telefono">No registrado</span>
+                      </td> -->
+                      <td>
+                        <span class="badge bg-success" *ngIf="item.estado">Activo</span>
+                        <span class="badge bg-danger"  *ngIf="!item.estado">Desactivado</span>
+                      </td>
+                      <td>
+                        <span >{{item.rol}}</span>
+                        
+                      </td>
+                      <td>
+                        <div class="btn-group dropdown d-inline-block mb-3 me-2">
+                          <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+                          aria-expanded="false">OPCIONES</button>
+                            <div class="dropdown-menu">
+                                <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.estado" data-toggle="modal" [attr.data-target]="'#delete-'+item._id">
+                                    <i class="icon-1x text-dark-50 flaticon2-cross"></i> &nbsp; Desactivar
+                                </a>
+                                <a style="cursor: pointer;" class="dropdown-item" *ngIf="!item.estado"  data-toggle="modal" [attr.data-target]="'#delete-'+item._id">
+                                    <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Activar
+                                </a>
+                                <a class="dropdown-item" [routerLink]="['/colaborador',item._id]"  >
+                                    <i class="icon-1x text-dark-50 flaticon-edit"></i> &nbsp; Editar
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="delete-{{item._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Cambio de estado del colaborador: {{item.nombres}} {{item.apellidos}} </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <i aria-hidden="true" class="ki ki-close"></i>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Está seguro que desea cambiar el estado del colaborador?.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-warning font-weight-bold" data-dismiss="modal">Cerrar</button>
+                                        <button *ngIf="!load_estado" type="button" class="btn btn-danger font-weight-bold" (click)="set_state(item._id,item.estado)">Sí, Cambiar</button>
+                        
+                                        <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            Cambiando...
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      </td>
+                    </tr>
+                   
+                  </tbody>
+                </table>
+                
+              </div>
+
+            </div>
+                <ngb-pagination *ngIf="colaboradores.length >= 1"
+                        [(page)]="page"
+                        [pageSize]="pageSize"
+                        [maxSize]="10"
+                        [rotate]="true" [boundaryLinks]="true"
+                        [collectionSize]="colaboradores.length">
+                </ngb-pagination>
+  
+            <br>
+
+          </div>
+        </div> <!-- / .row -->
+      </div>
+</div>
