@@ -12,6 +12,7 @@ export class AdminService {
 
   public url: any;
   private _router: any;
+  public idUser:any;
 
   constructor(
     private _http: HttpClient,
@@ -41,7 +42,9 @@ export class AdminService {
       const helper = new JwtHelperService();
       var decodedToken = helper.decodeToken(token);
 
-      console.log(decodedToken);
+      // console.log(decodedToken);
+      const {nombres, apellidos} = decodedToken;
+      this.idUser = {nombres, apellidos};
       //aqui valido que el token sea valido
       if (!decodedToken) {
         console.log('token no valido');
@@ -60,13 +63,21 @@ export class AdminService {
 
   }
 
-  
+  registro_colaborador_admin(data:any,token:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.post(this.url + 'admin',data,{headers:headers});
+  }
   
 
   getAdmin(token:any):Observable<any>{
     
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.get(this.url + 'admin',{headers:headers});
+  }
+
+  cambiar_estado_colaborador_admin(id:any,data:any,token:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.put(this.url+'cambiar_estado_colaborador_admin/'+id,data,{headers:headers});
   }
 
 }

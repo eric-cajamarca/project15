@@ -18,7 +18,6 @@ import { IndexEnviosComponent } from './components/envios/index-envios/index-env
 import { CreateColaboradorComponent } from './components/colaboradores/create-colaborador/create-colaborador.component';
 import { UpdateColaboradorComponent } from './components/colaboradores/update-colaborador/update-colaborador.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,

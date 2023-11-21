@@ -9,12 +9,21 @@ import { AdminService } from 'src/app/services/admin.service';
 })
 export class TopNavComponent {
 
-
+ public usuario:any = {};
   
   constructor(
-    private _router:Router
+    private _router:Router,
+    private _adminService:AdminService
   ){
+    // let str_user :any = localStorage.getItem('user_data');
+    // this.usuario = JSON.parse(str_user);
+    // console.log(this.usuario);
 
+    this.usuario = this._adminService.idUser;
+     console.log(this.usuario);
+
+
+     let str_user = this._adminService.gettoken();
   }
 
   logout(){

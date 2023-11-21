@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit{
 
   ngOnInit(): void {
     console.log(this.token);
-
+    // $('body').css('background-color', 'red');
     if(this.token){
       this._router.navigate(['/']);
     }else{
@@ -62,7 +62,8 @@ export class LoginComponent implements OnInit{
             // console.log(this.usuario);
 
             localStorage.setItem('token', response.token);
-            localStorage.setItem('_id', response.data.id);
+            localStorage.setItem('identity', response.data.id);
+            localStorage.setItem('user_data',JSON.stringify(response.data));
 
             this._router.navigate(['/']);
           }

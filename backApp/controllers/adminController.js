@@ -5,64 +5,41 @@ const moment = require('moment');
 const jwt = require('../helpers/jwt');
 
 
-const getAdmin = async function(req, res){
-    console.log(req.params);
-    console.log('req.user');
-    console.log(req.user);
-     if(req.user){
+const getAdmin = async function (req, res) {
+    // console.log(req.params);
+    // console.log('req.user');
+    // console.log(req.user);
+    if (req.user) {
         //  if(req.user.rol=='Administrador'){
-            console.log('req.user.rol');
-            try {
-                const pool = await sql.connect(dbConfig);
-                const result = await pool.request().query('SELECT * FROM usuarioWeb');
-                // res.json(result.recordset);
-                console.log('result.recordset');
-                console.log(result.recordset);
-                res.status(200).send({data:result.recordset});
-            } catch (error) {
-                console.error('Error al obtener los usuarios:', error);
-                res.status(200).send({data:undefined});
-            }
-        //  }else{
-        //      res.status(200).send({data:undefined});
-        //  }
+        console.log('req.user.rol');
+        try {
+            const pool = await sql.connect(dbConfig);
+            const result = await pool.request().query('SELECT * FROM usuarioWeb');
+            // res.json(result.recordset);
+            // console.log('result.recordset');
+            // console.log(result.recordset);
+            res.status(200).send({ data: result.recordset });
+        } catch (error) {
+            // console.error('Error al obtener los usuarios:', error);
+            res.status(200).send({ data: undefined });
+        }
         
+
     }
-     else{
-         res.status(500).send({message: 'No Access'});
-    }  
+    else {
+        res.status(500).send({ message: 'No Access' });
+    }
 };
 
-// const createAdmin = async (req, res) => {
-//   const { name, apellidos, email, password, rol, estado } = req.body;
 
-//   try {
-//     const hashedPassword = await bcrypt.hash(password, 8); // El número 10 es el factor de coste para el cifrado
-
-//     const pool = await sql.connect(dbConfig);
-//     const result = await pool
-//       .request()
-//       .input('name', sql.VarChar, name)
-//       .input('apellidos', sql.VarChar, apellidos)
-//       .input('email', sql.VarChar, email)
-//       .input('password', sql.Text, hashedPassword)
-//       .input('rol', sql.VarChar, rol)
-//       .input('estado', sql.Bit, estado)
-//       .query('INSERT INTO usuarioWeb (name, apellidos, email, password, rol, estado) VALUES (@name, @apellidos, @email, @password, @rol, @estado)');
-//     res.json({ message: 'Administrador creado correctamente' });
-//   } catch (error) {
-//     console.error('Error al crear un administrador:', error);
-//     res.status(500).send('Error al crear un administrador');
-//   }
-// };
 
 const createAdmin = async (req, res) => {
     const { name, apellidos, email, password, rol, estado } = req.body;
 
     const currentDate = moment().format('YYYY-MM-DD');
     const fregistro = currentDate;
-    console.log(currentDate);
-    console.log(fregistro);
+    // console.log(currentDate);
+    // console.log(fregistro);
     const pool = await sql.connect(dbConfig);
 
     // Verificar si el correo electrónico ya existe
@@ -72,7 +49,7 @@ const createAdmin = async (req, res) => {
         .query('SELECT * FROM usuarioWeb WHERE email = @email');
 
     if (checkEmailQuery.recordset.length > 0) {
-        return res.status(400).json({ message: 'El email ya existe. Por favor elija otro.' });
+        return res.status(200).send({ message: 'El email ya existe. Por favor elija otro.', data: undefined });
     } else {
         try {
             const hashedPassword = await bcrypt.hash(password, 8); // El número 10 es el factor de coste para el cifrado
@@ -88,10 +65,13 @@ const createAdmin = async (req, res) => {
                 .input('estado', sql.Bit, estado)
                 .input('fregistro', sql.Date, fregistro)
                 .query('INSERT INTO usuarioWeb (name, apellidos, email, password, rol, estado, fregistro) VALUES (@name, @apellidos, @email, @password, @rol, @estado, @fregistro)');
-            res.json({ message: 'Usuario creado correctamente' });
+            // res.json({ message: 'Usuario creado correctamente' });}
+            console.log('valor de result:', result.rowsAffected);
+            let data = result.rowsAffected
+            res.status(200).send({message: 'Usuario creado correctamente', data: data });
         } catch (error) {
             console.error('Error al crear un usuario:', error);
-            res.status(500).send('Error al crear un usuario');
+            res.status(200).send({message:'Error al crear un usuario', data:undefined});
         }
     }
 
@@ -106,7 +86,7 @@ const updateAdmin = async (req, res) => {
 
         if (password != null) {
             //cuando viene con password
-            console.log('cuando viene con password')
+            // console.log('cuando viene con password')
             const hashedPassword = await bcrypt.hash(password, 8);
 
             const pool = await sql.connect(dbConfig);
@@ -122,8 +102,8 @@ const updateAdmin = async (req, res) => {
             res.json({ message: 'Usuario actualizado correctamente' });
         } else {
             //cuando viene sin password
-            console.log('cuando viene sin password');
-            
+            // console.log('cuando viene sin password');
+
 
             const pool = await sql.connect(dbConfig);
             const result = await pool
@@ -143,9 +123,43 @@ const updateAdmin = async (req, res) => {
     }
 };
 
+const cambiar_estado_colaborador_admin = async function (req, res) {
+    if (req.user) {
+        let id = req.params['id'];
+        let data = req.body;
+        let estado = data.estado;
+
+        let nuevo_estado;
+
+        console.log('cambiar_estado_colaborador_admin: ', data);
+        console.log('id: ', id);
+        
+
+        if (data.estado) {
+            nuevo_estado = false;
+        } else if (!data.estado) {
+            nuevo_estado = true;
+        }
+
+        console.log('nuevo estado: ', nuevo_estado);
+        
+        const pool = await sql.connect(dbConfig);
+        const result = await pool
+            .request()
+            .input('id', sql.Int, id)
+            .input('estado', sql.Bit, nuevo_estado)
+            .query('UPDATE usuarioWeb SET estado = @estado WHERE id = @id');
+        console.log(result.recordset);
+        res.status(200).send({ data: result.recordset });
+
+    } else {
+        res.status(403).send({ data: undefined, message: 'NoToken' });
+    }
+}
 
 const admin_login = async (req, res) => {
     const { email, password } = req.body;
+    const estado = true;
     const data = req.body;
     console.log('entro a login admin')
     console.log(data);
@@ -154,7 +168,8 @@ const admin_login = async (req, res) => {
     const checkEmailQuery = await pool
         .request()
         .input('email', sql.VarChar, email)
-        .query('SELECT * FROM usuarioWeb WHERE email = @email');
+        .input('estado', sql.Bit, estado)
+        .query('SELECT * FROM usuarioWeb WHERE email = @email and estado=@estado');
 
     console.log('checkEmailQuery');
     console.log(checkEmailQuery.recordset.length)
@@ -211,5 +226,6 @@ module.exports = {
     createAdmin,
     updateAdmin,
     deleteAdmin,
-    admin_login
+    admin_login,
+    cambiar_estado_colaborador_admin
 };
