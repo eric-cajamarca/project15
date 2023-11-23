@@ -80,6 +80,15 @@ export class AdminService {
     return this._http.put(this.url+'cambiar_estado_colaborador_admin/'+id,data,{headers:headers});
   }
 
+  obtener_datos_colaborador_admin(id:any,token:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.get(this.url+'obtener_datos_colaborador_admin/'+id,{headers:headers});
+  }
+
+  editar_colaborador_admin(id:any,data:any,token:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.put(this.url+'admin/'+id,data,{headers:headers});
+  }
 }
 
 

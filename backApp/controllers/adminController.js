@@ -23,7 +23,7 @@ const getAdmin = async function (req, res) {
             // console.error('Error al obtener los usuarios:', error);
             res.status(200).send({ data: undefined });
         }
-        
+
 
     }
     else {
@@ -68,10 +68,10 @@ const createAdmin = async (req, res) => {
             // res.json({ message: 'Usuario creado correctamente' });}
             console.log('valor de result:', result.rowsAffected);
             let data = result.rowsAffected
-            res.status(200).send({message: 'Usuario creado correctamente', data: data });
+            res.status(200).send({ message: 'Usuario creado correctamente', data: data });
         } catch (error) {
             console.error('Error al crear un usuario:', error);
-            res.status(200).send({message:'Error al crear un usuario', data:undefined});
+            res.status(200).send({ message: 'Error al crear un usuario', data: undefined });
         }
     }
 
@@ -80,13 +80,31 @@ const createAdmin = async (req, res) => {
 
 const updateAdmin = async (req, res) => {
     //   const { name, apellidos, email, password, rol, estado } = req.body;
-    const { name, apellidos, password, rol, estado } = req.body;
+    const { name, apellidos, password, rol} = req.body;
     const { id } = req.params;
     try {
+        console.log('password : ', password);
 
-        if (password != null) {
+        if (password.trim() == 'sin datos') {
+            
+            //cuando viene sin password
+            console.log('cuando viene sin password');
+
+            const pool = await sql.connect(dbConfig);
+            const result = await pool
+                .request()
+                .input('id', sql.Int, id)
+                .input('name', sql.VarChar, name)
+                .input('apellidos', sql.VarChar, apellidos)
+                .input('rol', sql.VarChar, rol)
+                
+                .query('UPDATE usuarioWeb SET name = @name, apellidos = @apellidos, rol = @rol WHERE id = @id');
+            res.status(200).send({ message: 'Usuario actualizado correctamente', data:result.rowsAffected });
+       
+        } else {
+ 
             //cuando viene con password
-            // console.log('cuando viene con password')
+            console.log('cuando viene con password')
             const hashedPassword = await bcrypt.hash(password, 8);
 
             const pool = await sql.connect(dbConfig);
@@ -97,29 +115,47 @@ const updateAdmin = async (req, res) => {
                 .input('apellidos', sql.VarChar, apellidos)
                 .input('password', sql.Text, hashedPassword)
                 .input('rol', sql.VarChar, rol)
-                .input('estado', sql.Bit, estado)
-                .query('UPDATE usuarioWeb SET name = @name, apellidos = @apellidos, password = @password, rol = @rol, estado = @estado WHERE id = @id');
-            res.json({ message: 'Usuario actualizado correctamente' });
-        } else {
-            //cuando viene sin password
-            // console.log('cuando viene sin password');
+                .query('UPDATE usuarioWeb SET name = @name, apellidos = @apellidos, password = @password, rol = @rol WHERE id = @id');
+            res.status(200).send({ message: 'Usuario actualizado correctamente', data:result.rowsAffected });
 
-
-            const pool = await sql.connect(dbConfig);
-            const result = await pool
-                .request()
-                .input('id', sql.Int, id)
-                .input('name', sql.VarChar, name)
-                .input('apellidos', sql.VarChar, apellidos)
-                .input('rol', sql.VarChar, rol)
-                .input('estado', sql.Bit, estado)
-                .query('UPDATE usuarioWeb SET name = @name, apellidos = @apellidos, rol = @rol, estado = @estado WHERE id = @id');
-            res.json({ message: 'Usuario actualizado correctamente' });
         }
 
     } catch (error) {
         console.error('Error al actualizar un usuario:', error);
         res.status(500).send('Error al actualizar un usuario');
+    }
+};
+
+const obtener_datos_colaborador_admin = async (req, res) => {
+    const { id } = req.params;
+    let data;
+
+    if (req.user) {
+
+        try {
+
+            const pool = await sql.connect(dbConfig);
+            const result = await pool.request().query('SELECT * FROM usuarioWeb where id =' + id);
+            // const result = await pool
+            //     .request()
+            //     .input('id', sql.Int, id)
+            //     .query('SELECT * FROM usuarioWeb WHERE email = @id');
+            // res.json({ message: 'Usuario actualizado correctamente' });
+            console.log(result.recordset);
+            data = result.recordset;
+            console.log('data: ', data);
+            // res.status(200).send({data: data });
+            res.json({data});
+
+
+        } catch (error) {
+            console.error('Error al actualizar un usuario:', error);
+            // res.status(500).send('Error al actualizar un usuario');
+            res.status(200).send({ message:'Error al actualizar un usuario',data:undefined });
+        }
+    }
+    else {
+        res.status(500).send({ message: 'No Access' });
     }
 };
 
@@ -133,7 +169,7 @@ const cambiar_estado_colaborador_admin = async function (req, res) {
 
         console.log('cambiar_estado_colaborador_admin: ', data);
         console.log('id: ', id);
-        
+
 
         if (data.estado) {
             nuevo_estado = false;
@@ -142,7 +178,7 @@ const cambiar_estado_colaborador_admin = async function (req, res) {
         }
 
         console.log('nuevo estado: ', nuevo_estado);
-        
+
         const pool = await sql.connect(dbConfig);
         const result = await pool
             .request()
@@ -227,5 +263,6 @@ module.exports = {
     updateAdmin,
     deleteAdmin,
     admin_login,
-    cambiar_estado_colaborador_admin
+    cambiar_estado_colaborador_admin,
+    obtener_datos_colaborador_admin
 };

@@ -5,9 +5,10 @@ var auth  = require('../middlewares/autenticate');
 
 // Rutas para el CRUD de ventas
 api.get('/admin',auth.auth, adminController.getAdmin);
+api.get('/obtener_datos_colaborador_admin/:id',auth.auth, adminController.obtener_datos_colaborador_admin);
 api.post('/admin_login', adminController.admin_login);
 api.post('/admin',auth.auth, adminController.createAdmin);
-api.put('/admin/:id', adminController.updateAdmin);
+api.put('/admin/:id',auth.auth, adminController.updateAdmin);
 api.put('/cambiar_estado_colaborador_admin/:id',auth.auth ,adminController.cambiar_estado_colaborador_admin);
 
 //api.delete('/admin/:id', adminController.deleteAdmin);
