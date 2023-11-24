@@ -1,6 +1,7 @@
 const express = require('express');
 const api = express.Router();
 const cventasController = require('../controllers/cventasController');
+var auth  = require('../middlewares/autenticate');
 
 // Rutas CRUD para la tabla Comp_Ventas
 
@@ -8,7 +9,7 @@ const cventasController = require('../controllers/cventasController');
 //api.post('/', cventasController.createCompVenta);
 
 // READ
-api.get('/cventas/:id', cventasController.getCompVentaById);
+api.get('/cventas/:id', auth.auth, cventasController.getCompVentaById);
 
 // UPDATE
 api.put('/cventas/:id', cventasController.updateCompVenta);
