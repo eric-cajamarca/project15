@@ -1,0 +1,15 @@
+.card-body{
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+.input-group{
+    margin-top: 10px;
+    width: 80%;
+    padding-left: 0px;
+}
+
+.select-empresa{
+    margin-bottom: 20px;
+    margin-top: 5px;
+}

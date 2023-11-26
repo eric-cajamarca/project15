@@ -11,7 +11,9 @@ export class IndexDespachosComponent implements OnInit {
 
   public id: any = '';
   public compVenta: any = {};
+  public compEnvio:any ='';
   public detalleVenta:any = [];
+  public henvio:any = [];
   public token = localStorage.getItem('token');
   public filtro = '';
   public page = 1;
@@ -24,13 +26,18 @@ export class IndexDespachosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.id = 'B001-00000002'
+     this.filtro = 'NP01-00000215'
 
-    this._despachoService.obtener_datos_cventas(this.id, this.token).subscribe(
+  }
+
+  filtrar(){
+
+    
+    this._despachoService.obtener_datos_cventas(this.filtro, this.token).subscribe(
       response => {
         console.log('obtener_datos_cventas', response);
         if (response != undefined) {
-          // Modificar el campo 'password' dentro del array 'data'
+          // Modificar el campo 'password' dentro del responseay 'data'
           response.forEach((item: any) => {
             this.compVenta.Serie_Numero = item.Serie_Numero;
             this.compVenta.IdDoc = item.IdDoc;
@@ -55,7 +62,7 @@ export class IndexDespachosComponent implements OnInit {
         console.log('this.compVenta', this.compVenta);
       });
 
-      this._despachoService.obtener_datos_dventas(this.id, this.token).subscribe(
+      this._despachoService.obtener_datos_dventas(this.filtro, this.token).subscribe(
         response=>{
 
           this.detalleVenta = response;
@@ -78,10 +85,70 @@ export class IndexDespachosComponent implements OnInit {
 
           console.log('obtener datos detalle ventas', this.detalleVenta);
         }
-      )
-  }
+      );
 
-  filtrar(){
+      this._despachoService.obtener_datos_renvios(this.filtro, this.token).subscribe(
+        response=>{
+          this.henvio = response;
+          console.log('henvio:', this.henvio);
+
+          // if (response != undefined) {
+          //      response.forEach((item:any) =>{
+
+          //     });
+          //   }
+
+          // if (response != undefined) {
+            
+          //   const encontrarDuplicados = (arr: any[]) => {
+          //     const duplicados: any[] = [];
+          //     const compVentasSet: Set<string> = new Set();
+      
+          //     arr.forEach((item: any) => {
+          //       const compVentas = item.CompVentas;
+      
+          //       if (compVentasSet.has(compVentas)) {
+          //         duplicados.push({
+          //           CompEnvio: item.CompEnvio,
+          //           FEnvio: item.FEnvio
+          //         });
+          //       } else {
+          //         compVentasSet.add(compVentas);
+          //       }
+          //     });
+      
+          //     return duplicados;
+          //   };
+      
+            
+          //   this.compEnvio = encontrarDuplicados(response);
+      
+          //   console.log('Duplicados:', this.compEnvio);
+
+          // }
+
+          if (response != undefined) {
+            // Conjunto para realizar un seguimiento de CompEnvio únicos
+            const compEnvioSet: Set<string> = new Set();
+      
+            // Filtrar registros únicos y almacenarlos en compEnvio
+            this.compEnvio = response.filter((item: any) => {
+              const compEnvio = item.CompEnvio;
+      
+              if (!compEnvioSet.has(compEnvio)) {
+                compEnvioSet.add(compEnvio);
+                return true; // Añadir al resultado final
+              }
+      
+              return false; // Duplicado, no añadir al resultado final
+            });
+      
+            console.log('Registros únicos de CompEnvio:', this.compEnvio);
+          }
+
+
+        } 
+      )
 
   }
 }

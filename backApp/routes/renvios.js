@@ -1,6 +1,7 @@
 const express = require('express');
 const api = express.Router();
 const rEnviosController = require('../controllers/renviosController');
+var auth  = require('../middlewares/autenticate');
 
 // Rutas CRUD
 api.get('/envios', rEnviosController.obtenerEnvios);
@@ -8,7 +9,7 @@ api.get('/envios', rEnviosController.obtenerEnvios);
 api.post('/envios/', rEnviosController.createCompEnvio);
 
 // READ
-api.get('/envios/:id', rEnviosController.getCompEnvio);
+api.get('/envios/:id', auth.auth, rEnviosController.getCompEnvio);
     
 
 // // UPDATE

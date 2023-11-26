@@ -31,4 +31,9 @@ export class DespachoSerciceService {
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.get(this.url+'dventas/'+id,{headers:headers});
   }
+
+  obtener_datos_renvios(id:any,token:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.get(this.url+'envios/'+id,{headers:headers});
+  }
 }
