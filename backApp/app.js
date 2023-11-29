@@ -7,6 +7,7 @@ const detalleVentasRoutes = require('./routes/detalleventas'); // Importa el enr
 const adminRoutes = require('./routes/admin');
 const cventasRoutes = require('./routes/cventas');
 const renviosRouters = require('./routes/renvios');
+const empresaRouters = require('./routes/empresa');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -50,6 +51,8 @@ app.use('/api', detalleVentasRoutes);
 app.use('/api', adminRoutes);
 app.use('/api', cventasRoutes);
 app.use('/api',renviosRouters);
+app.use('/api', empresaRouters);
+
 
 // Escuchar en el puerto
 app.listen(PORT, () => {

@@ -22,72 +22,87 @@ const dbConfig = require('../dbconfig');
 // };
 
 // READ
-const getCompVentaById = async function(req,res){
-    const Serie_Numero = req.params.id;
+const getCompVentaById_Empresa = async function (req, res) {
+  const Serie_Numero = req.params.id;
+  const aliasempresa = req.params.aliasempresa;
+  // var aliasempresa= req.params['aliasempresa'];
 
-    console.log('serieNumero');
-    console.log(req.params);
-    console.log(Serie_Numero);
-  try {
-    let pool = await sql.connect(dbConfig);
-    let result = await pool
-    .request()
-    .input('Serie_Numero',sql.Char, Serie_Numero)
-    .query('SELECT * FROM Comp_Ventas WHERE Serie_Numero = @Serie_Numero');
-    res.json(result.recordset);
-  } catch (error) {
-    console.error('Error al obtener la venta:', error);
-    res.status(500).send('Error al obtener la venta por id');
+console.log('aqui me encuentro dentro de getComooooooo')
+
+  console.log('aliasempresa :', aliasempresa);
+  console.log('req.params', req.params);
+  console.log('Serie_numero :', Serie_Numero);
+
+  if (req.user) {
+    try {
+      let pool = await sql.connect(dbConfig);
+      let result = await pool
+        .request()
+        .input('Serie_Numero', sql.Char, Serie_Numero)
+        .input('aliasempresa', sql.VarChar, aliasempresa)
+
+        .query('SELECT * FROM Comp_Ventas WHERE Serie_Numero = @Serie_Numero and destino=@aliasempresa');
+      res.json(result.recordset);
+    } catch (error) {
+      console.error('Error al obtener la venta:', error);
+      res.status(500).send('Error al obtener la venta por id');
+    }
   }
-
+  else {
+    res.status(500).send({ message: 'No Access' });
+  }
 };
 
 
 // UPDATE
-const updateCompVenta = async function(req,res){
-    const { Serie_Numero, Estado, EstadoPedido, EstadoSunat } = req.body;
-    // const Serie_Numero = req.params.id;
+const updateCompVenta = async function (req, res) {
+  const { Serie_Numero, Estado, EstadoPedido, EstadoSunat } = req.body;
+  // const Serie_Numero = req.params.id;
 
-    console.log('estado', Estado);
-    console.log('Estadopedido', EstadoPedido);
-    console.log('estado sunat', EstadoSunat);
+  console.log('estado', Estado);
+  console.log('Estadopedido', EstadoPedido);
+  console.log('estado sunat', EstadoSunat);
+  if (req.user) {
 
-  try {
-    let pool = await sql.connect(dbConfig);
-    let result = await pool
-      .request()
-      .input('Serie_Numero', sql.VarChar, Serie_Numero)
-      .input('Estado', sql.VarChar, Estado)
-      .input('EstadoPedido', sql.VarChar, EstadoPedido)
-      .input('EStadoSunat', sql.VarChar, EstadoSunat)
-      // ... completar con otras entradas
+    try {
+      let pool = await sql.connect(dbConfig);
+      let result = await pool
+        .request()
+        .input('Serie_Numero', sql.VarChar, Serie_Numero)
+        .input('Estado', sql.VarChar, Estado)
+        .input('EstadoPedido', sql.VarChar, EstadoPedido)
+        .input('EStadoSunat', sql.VarChar, EstadoSunat)
+        // ... completar con otras entradas
 
-      .query('UPDATE Comp_VentasTienda01 SET Estado = @Estado, EstadoPedido = @EstadoPedido, EstadoSunat = @EstadoSunat WHERE Serie_Numero = Serie_Numero');
+        .query('UPDATE Comp_VentasTienda01 SET Estado = @Estado, EstadoPedido = @EstadoPedido, EstadoSunat = @EstadoSunat WHERE Serie_Numero = Serie_Numero');
       res.status(200).json({ message: 'Registro actualizado correctamente' });
-  } catch (error) {
-    console.error('Error al actualizar el detalle de venta:', error);
-    res.status(500).send('Error al actualizar el detalle de venta');
+    } catch (error) {
+      console.error('Error al actualizar el detalle de venta:', error);
+      res.status(500).send('Error al actualizar el detalle de venta');
+    }
+  }
+  else {
+    res.status(500).send({ message: 'No Access' });
   }
 
+  //   try {
+  //     let pool = await sql.connect(dbConfig);
+  //     let result = await pool
+  //       .request()
+  //       .input('id', sql.Int, id)
+  //       .input('CantEntregado', sql.Decimal, CantEntregado)
+  //       .query('UPDATE DetalleVentas SET CantEntregado = @CantEntregado WHERE Id = @id');
 
-//   try {
-//     let pool = await sql.connect(dbConfig);
-//     let result = await pool
-//       .request()
-//       .input('id', sql.Int, id)
-//       .input('CantEntregado', sql.Decimal, CantEntregado)
-//       .query('UPDATE DetalleVentas SET CantEntregado = @CantEntregado WHERE Id = @id');
+  //     res.status(200).json({ message: 'Registro actualizado correctamente' });
 
-//     res.status(200).json({ message: 'Registro actualizado correctamente' });
-
-//   } catch (error) {
-//     console.error('Error al actualizar el detalle de venta:', error);
-//     res.status(500).send('Error al actualizar el detalle de venta');
-//   }
+  //   } catch (error) {
+  //     console.error('Error al actualizar el detalle de venta:', error);
+  //     res.status(500).send('Error al actualizar el detalle de venta');
+  //   }
 };
 
 // DELETE
-const deleteCompVenta = async function(req,res){
+const deleteCompVenta = async function (req, res) {
   try {
     let pool = await sql.connect(dbConfig);
     let result = await pool.request().query(`DELETE FROM Comp_Ventas WHERE id = ${id}`);
@@ -98,10 +113,10 @@ const deleteCompVenta = async function(req,res){
 };
 
 // Exportar las funciones
-module.exports = { 
-    // createCompVenta, 
-    getCompVentaById, 
-    updateCompVenta, 
-    deleteCompVenta
+module.exports = {
+  // createCompVenta, 
+  getCompVentaById_Empresa,
+  updateCompVenta,
+  deleteCompVenta
 };
 

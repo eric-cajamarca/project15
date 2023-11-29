@@ -8,8 +8,11 @@ var auth  = require('../middlewares/autenticate');
 // CREATE
 //api.post('/', cventasController.createCompVenta);
 
-// READ
-api.get('/cventas/:id', auth.auth, cventasController.getCompVentaById);
+// GET
+
+api.get('/cventas/:id/:aliasempresa', auth.auth, cventasController.getCompVentaById_Empresa);
+
+// api.get('/cventas/:id', auth.auth, cventasController.getCompVentaById);
 
 // UPDATE
 api.put('/cventas/:id', cventasController.updateCompVenta);

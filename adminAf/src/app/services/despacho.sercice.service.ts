@@ -36,4 +36,13 @@ export class DespachoSerciceService {
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.get(this.url+'envios/'+id,{headers:headers});
   }
+
+  obtener_datos_cventas_empresa(id:any, aliasempresa: any, token:any):Observable<any>{
+    console.log('aliasempresa',aliasempresa);
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.get(this.url + `cventas/${id}/${aliasempresa}`, { headers: headers });
+    //return this._http.get(this.url + `cventas/${id}?aliasempresa=${aliasempresa}`, { headers: headers });
+    // return this._http.get(this.url+'cventas/'+id+  aliasempresa,{headers:headers});
+
+  }
 }

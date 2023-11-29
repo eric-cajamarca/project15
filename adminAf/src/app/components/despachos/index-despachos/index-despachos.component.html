@@ -12,11 +12,10 @@
 
                     <!-- lista desplegable -->
                     <label for="select">Seleccione una empresa</label><br>
-                    <select class="select-empresa" aria-label="Default select example">
+                    <select class="select-empresa" aria-label="Default select example" [(ngModel)]="empresaSeleccionada" (change)="onEmpresaSeleccionada()">
                         <option selected disabled>Selecionar</option>
-                        <option value="1">Fenix</option>
-                        <option value="2">Lucila</option>
-                        <option value="3">Olitor</option>
+                        <option *ngFor="let empresa of empresa" [ngValue]="empresa">{{ empresa.Alias }}</option>
+                        <!-- <option *ngFor="let empresa of empresa" [value]="empresa.id">{{ empresa.Alias }}</option> -->
                     </select>
 
 
