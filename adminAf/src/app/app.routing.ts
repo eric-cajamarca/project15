@@ -10,6 +10,7 @@ import { LoginComponent } from "./components/login/login.component";
 import { AdminGuard } from "./guards/admin.guard";
 import { CreateColaboradorComponent } from "./components/colaboradores/create-colaborador/create-colaborador.component";
 import { UpdateColaboradorComponent } from "./components/colaboradores/update-colaborador/update-colaborador.component";
+import { RegistrarDespachosComponent } from "./components/despachos/registrar-despachos/registrar-despachos.component";
 
 const appRoute : Routes = [
     {path: '', component: InicioComponent, canActivate: [AdminGuard]},
@@ -17,6 +18,7 @@ const appRoute : Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'colaborador', component: IndexColaboradorComponent, canActivate: [AdminGuard]},
     {path: 'despachos', component: IndexDespachosComponent, canActivate: [AdminGuard]},
+    {path: 'despachos/registrar', component:RegistrarDespachosComponent, canActivate:[AdminGuard]},
     {path: 'envios', component: IndexEnviosComponent, canActivate: [AdminGuard]},
 
     // colaborador

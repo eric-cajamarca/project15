@@ -17,6 +17,7 @@ import { IndexDespachosComponent } from './components/despachos/index-despachos/
 import { IndexEnviosComponent } from './components/envios/index-envios/index-envios.component';
 import { CreateColaboradorComponent } from './components/colaboradores/create-colaborador/create-colaborador.component';
 import { UpdateColaboradorComponent } from './components/colaboradores/update-colaborador/update-colaborador.component';
+import { RegistrarDespachosComponent } from './components/despachos/registrar-despachos/registrar-despachos.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { UpdateColaboradorComponent } from './components/colaboradores/update-co
     IndexDespachosComponent,
     IndexEnviosComponent,
     CreateColaboradorComponent,
-    UpdateColaboradorComponent
+    UpdateColaboradorComponent,
+    RegistrarDespachosComponent
   ],
   imports: [
     BrowserModule,

@@ -5,7 +5,8 @@ var auth  = require('../middlewares/autenticate');
 
 // Rutas para el CRUD de ventas
 api.get('/ventas', dventasController.obtenerDetalleVentas);
-api.get('/dventas/:id', auth.auth, dventasController.obtenerDetalleVentaPorId);
+// api.get('/dventas/:id', auth.auth, dventasController.obtenerDetalleVentaPorId);
+api.get('/ventas/:id/:idempresa',auth.auth, dventasController.obtenerDetalleVentaPorId_empresa);
 // api.post('/ventas', ventasController.crearVenta);
 api.put('/ventas/:id', dventasController.actualizarDetalleVenta);
 api.delete('/ventas/:id', dventasController.eliminarDetalleVenta);

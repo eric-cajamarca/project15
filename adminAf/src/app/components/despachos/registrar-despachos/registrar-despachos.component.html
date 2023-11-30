@@ -1,0 +1,72 @@
+<app-top-nav></app-top-nav>
+
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-11 col-xl-11">
+
+                <h3>Comprobante de compra</h3>
+
+                <div class="card">
+                    <div class="card-header">
+                        Comprobante: {{compVenta.Serie_Numero}} <br>
+                        Cliente: {{compVenta.Razon_Social}}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+
+                        <div class="table-responsive">
+                            <table class="table table-dark">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Cantidad</th>
+                                        <th>Codigo</th>
+                                        <th>Descripción</th>
+                                        <th>Presentación</th>
+                                        <th>Precio</th>
+                                        <th>CEntregado</th>
+                                        <!-- <th>Entrega</th> -->
+
+                                    </tr>
+                                </thead>
+                                <tbody class="table-active">
+                                    <tr *ngFor="let item of detalleVenta">
+
+                                        <td>
+                                            <span>{{item.Cantidad}}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{item.Id}} </span>
+                                        </td>
+                                        <td>
+                                            <span>{{item.Descripcion}} </span>
+                                        </td>
+                                        <td>
+                                            <span>{{item.Presentacion}} </span>
+                                        </td>
+                                        <td>
+                                            <span>{{item.PVenta}} </span>
+                                        </td>
+                                        <td>
+                                           
+                                            <input type="text" [(ngModel)]="item.CantEntregado">
+                                            
+                                        </td>
+                                        
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        <!-- <a [routerLink]="['/despachos/registrar']" [queryParams]="{ idempresa: idempresa, Serie_Numero: compVenta.Serie_Numero }" class="btn btn-primary">Crear nuevo despacho</a> -->
+                        <!-- <a  class="btn btn-primary" [routerLink]="['/despachos/registrar']" (click)="ingresar()">Crear nuevo despacho</a> -->
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

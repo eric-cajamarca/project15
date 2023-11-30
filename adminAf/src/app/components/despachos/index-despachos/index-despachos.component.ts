@@ -82,7 +82,7 @@ export class IndexDespachosComponent implements OnInit {
         console.log('this.compVenta', this.compVenta);
       });
 
-    this._despachoService.obtener_datos_dventas(this.filtro, this.token).subscribe(
+    this._despachoService.obtener_datos_dventas_empresa(this.filtro, this.idempresa, this.token).subscribe(
       response => {
 
         this.detalleVenta = response;
@@ -148,6 +148,10 @@ export class IndexDespachosComponent implements OnInit {
     }
   }
   
-
+  ingresar(){
+    //envio los parametros
+    const datos = { id: this.idempresa, Alias:this.aliasEmpresa, Serie_Numero: this.compVenta.Serie_Numero };
+    this._despachoService.setDatos_rDespacho(datos);
+  }
 
 }

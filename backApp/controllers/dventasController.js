@@ -14,22 +14,22 @@ async function obtenerDetalleVentas(req, res) {
   }
 }
 
-async function obtenerDetalleVentaPorId(req, res) {
-  const CompVentas = req.params.id; // Cambia el nombre de la variable a compVentas
-  console.log('req.params.id');
-  console.log(req.params.id);
-  try {
-    let pool = await sql.connect(dbConfig);
-    let result = await pool
-      .request()
-      .input('CompVentas', sql.Char, CompVentas) // Cambia el tipo de dato a sql.VarChar si compVentas es una cadena de texto
-      .query('SELECT * FROM DetalleVentas WHERE CompVentas = @CompVentas'); // Cambia el nombre del campo a compVentas
-    res.json(result.recordset);
-  } catch (error) {
-    console.error('Error al obtener la venta:', error);
-    res.status(500).send('Error al obtener la venta');
-  }
-}
+// async function obtenerDetalleVentaPorId(req, res) {
+//   const CompVentas = req.params.id; 
+//   console.log('req.params.id');
+//   console.log(req.params.id);
+//   try {
+//     let pool = await sql.connect(dbConfig);
+//     let result = await pool
+//       .request()
+//       .input('CompVentas', sql.Char, CompVentas) 
+//       .query('SELECT * FROM DetalleVentas WHERE CompVentas = @CompVentas');
+//     res.json(result.recordset);
+//   } catch (error) {
+//     console.error('Error al obtener la venta:', error);
+//     res.status(500).send('Error al obtener la venta');
+//   }
+// }
 
 
 // async function actualizarDetalleVenta(req, res) {
@@ -67,6 +67,27 @@ async function obtenerDetalleVentaPorId(req, res) {
 //   }
 
 // }
+
+async function obtenerDetalleVentaPorId_empresa(req, res) {
+  const CompVentas = req.params.id; // Cambia el nombre de la variable a compVentas
+  const Destino = req.params.idempresa;
+
+  console.log('entro obtenerDetalleVentaPorId_empresa :','req.params');
+  console.log(req.params);
+  try {
+    let pool = await sql.connect(dbConfig);
+    let result = await pool
+      .request()
+      .input('CompVentas', sql.Char, CompVentas)
+      .input('Destino',sql.Int,Destino)
+      .query('SELECT * FROM DetalleVentas WHERE CompVentas = @CompVentas and Destino = @Destino'); // Cambia el nombre del campo a compVentas
+    res.json(result.recordset);
+  } catch (error) {
+    console.error('Error al obtener la venta:', error);
+    res.status(500).send('Error al obtener la venta');
+  }
+}
+
 
 async function actualizarDetalleVenta(req, res) {
   const { id, CantEntregado } = req.body;
@@ -149,7 +170,7 @@ async function eliminarDetalleVenta(req, res) {
 
 module.exports = {
   obtenerDetalleVentas,
-  obtenerDetalleVentaPorId,
+  obtenerDetalleVentaPorId_empresa,
   actualizarDetalleVenta,
   eliminarDetalleVenta,
 

@@ -5,7 +5,8 @@
         <div class="row justify-content-center">
             <div class="col-12 col-lg-11 col-xl-11">
 
-                <h1>Bien venidos al area de despachos</h1>
+                <h2>Bien venido al área de despachos</h2>
+                <p>Aquí se lista el comprobante de compra mas la descripcion de la mercaderia que el cliente a retirado.</p>
 
 
                 <div class="card-body">
@@ -89,7 +90,8 @@
 
                         </div>
 
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <!-- <a [routerLink]="['/despachos/registrar']" [queryParams]="{ idempresa: idempresa, Serie_Numero: compVenta.Serie_Numero }" class="btn btn-primary">Crear nuevo despacho</a> -->
+                        <a  class="btn btn-primary" [routerLink]="['/despachos/registrar']" (click)="ingresar()">Crear nuevo despacho</a>
                     </div>
                 </div>
 

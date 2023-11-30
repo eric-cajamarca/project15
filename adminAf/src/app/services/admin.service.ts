@@ -13,6 +13,7 @@ export class AdminService {
   public url: any;
   private _router: any;
   public idUser:any;
+  
 
   constructor(
     private _http: HttpClient,
@@ -28,6 +29,7 @@ export class AdminService {
   gettoken() {
     return localStorage.getItem('token');
   }
+
 
   //aqui creo el servicio para la autenticacion del token
   public isAuthenticated(allowRoles: string[]): boolean {
