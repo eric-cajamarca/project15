@@ -1,236 +1,158 @@
 <app-top-nav></app-top-nav>
 
 <div class="main-content">
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-11 col-xl-11">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-11 col-xl-11">
 
-                <h2>Bien venido al área de despachos</h2>
-                <p>Aquí se lista el comprobante de compra mas la descripcion de la mercaderia que el cliente a retirado.</p>
-
-
-                <div class="card-body">
-
-                    <!-- lista desplegable -->
-                    <label for="select">Seleccione una empresa</label><br>
-                    <select class="select-empresa" aria-label="Default select example" [(ngModel)]="empresaSeleccionada" (change)="onEmpresaSeleccionada()">
-                        <option selected disabled>Selecionar</option>
-                        <option *ngFor="let empresa of empresa" [ngValue]="empresa">{{ empresa.Alias }}</option>
-                        <!-- <option *ngFor="let empresa of empresa" [value]="empresa.id">{{ empresa.Alias }}</option> -->
-                    </select>
+        <h2>Bien venido al área de despachos</h2>
+        <p>Aquí se lista el comprobante de compra mas la descripcion de la mercaderia que el cliente a retirado.</p>
 
 
-                    <div class="input-group input-group-merge">
-                        <input type="text" class="form-control form-control-appended" placeholder="Buscador general"
-                            name="filtro" [(ngModel)]="filtro">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" (click)="filtrar()">
-                                Buscar
-                            </button>
-                        </div>
+        <div class="card-body">
 
-                        
-                    </div>
+          <!-- lista desplegable -->
+          <label for="select">Seleccione una empresa</label><br>
+          <select class="select-empresa" aria-label="Default select example" [(ngModel)]="empresaSeleccionada"
+            (change)="onEmpresaSeleccionada()">
+            <option selected disabled>Selecionar</option>
+            <option *ngFor="let empresa of empresa" [ngValue]="empresa">{{ empresa.Alias }}</option>
+            <!-- <option *ngFor="let empresa of empresa" [value]="empresa.id">{{ empresa.Alias }}</option> -->
+          </select>
 
-                    
-                </div>
 
-                <h3>Comprobante de compra</h3>
+          <div class="input-group input-group-merge">
+            <input type="text" class="form-control form-control-appended" placeholder="Buscador general" name="filtro"
+              [(ngModel)]="filtro">
+            <div class="input-group-append">
+              <button class="btn btn-primary" (click)="filtrar()">
+                Buscar
+              </button>
+            </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        Comprobante: {{compVenta.Serie_Numero}} <br>
-                        Cliente: {{compVenta.Razon_Social}}
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
 
-                        <div class="table-responsive">
-                            <table class="table table-dark">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Cantidad</th>
-                                        <th>Codigo</th>
-                                        <th>Descripción</th>
-                                        <th>Presentación</th>
-                                        <th>Precio</th>
-                                        <th>CEntregado</th>
-                                        <!-- <th>Entrega</th> -->
+          </div>
 
-                                    </tr>
-                                </thead>
-                                <tbody class="table-active">
-                                    <tr *ngFor="let item of detalleVenta">
 
-                                        <td>
-                                            <span>{{item.Cantidad}}</span>
-                                        </td>
-                                        <td>
-                                            <span>{{item.Codigo}} </span>
-                                        </td>
-                                        <td>
-                                            <span>{{item.Descripcion}} </span>
-                                        </td>
-                                        <td>
-                                            <span>{{item.Presentacion}} </span>
-                                        </td>
-                                        <td>
-                                            <span>{{item.PVenta}} </span>
-                                        </td>
-                                        <td>
-                                            <span>{{item.CantEntregado}} </span>
-                                        </td>
-                                        <!-- <td>
+        </div>
+
+        <h3>Comprobante de compra</h3>
+
+        <div class="card">
+          <div class="card-header">
+            Comprobante: {{compVenta.Serie_Numero}} <br>
+            Cliente: {{compVenta.Razon_Social}}
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Special title treatment</h5>
+
+            <div class="table-responsive">
+              <table class="table table-dark">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Cantidad</th>
+                    <th>Codigo</th>
+                    <th>Descripción</th>
+                    <th>Presentación</th>
+                    <th>Precio</th>
+                    <th>CEntregado</th>
+                    <!-- <th>Entrega</th> -->
+
+                  </tr>
+                </thead>
+                <tbody class="table-active">
+                  <tr *ngFor="let item of detalleVenta">
+
+                    <td>
+                      <span>{{item.Cantidad}}</span>
+                    </td>
+                    <td>
+                      <span>{{item.Codigo}} </span>
+                    </td>
+                    <td>
+                      <span>{{item.Descripcion}} </span>
+                    </td>
+                    <td>
+                      <span>{{item.Presentacion}} </span>
+                    </td>
+                    <td>
+                      <span>{{item.PVenta}} </span>
+                    </td>
+                    <td>
+                      <span>{{item.CantEntregado}} </span>
+                    </td>
+                    <!-- <td>
                                             <span>Entregar </span>
                                         </td> -->
-                                    </tr>
+                  </tr>
 
-                                </tbody>
-                            </table>
+                </tbody>
+              </table>
 
-                        </div>
+            </div>
 
-                        <!-- <a [routerLink]="['/despachos/registrar']" [queryParams]="{ idempresa: idempresa, Serie_Numero: compVenta.Serie_Numero }" class="btn btn-primary">Crear nuevo despacho</a> -->
-                        <a  class="btn btn-primary" [routerLink]="['/despachos/registrar']" (click)="ingresar()">Crear nuevo despacho</a>
-                    </div>
-                </div>
+            <!-- <a [routerLink]="['/despachos/registrar']" [queryParams]="{ idempresa: idempresa, Serie_Numero: compVenta.Serie_Numero }" class="btn btn-primary">Crear nuevo despacho</a> -->
+            <a class="btn btn-primary" [routerLink]="['/despachos/registrar', idempresa, compVenta.Serie_Numero]">Crear
+              nuevo despacho</a>
+            <!-- <a  class="btn btn-primary" [routerLink]="['/despachos/registrar']" >Crear nuevo despacho</a> -->
+          </div>
+        </div>
 
-                <h3>Comprobantes de despachos</h3>
+        <h3>Comprobantes de despachos</h3>
 
-               
-                <div class="accordion" id="accordionExample">
-                    <div *ngFor="let compEnvioItem of compEnvio" class="accordion-item">
-                        <h2 class="accordion-header" id="heading{{compEnvioItem.CompEnvio}}">
-                          <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            [attr.data-bs-target]="'#collapse' + compEnvioItem.CompEnvio"
-                            aria-expanded="true" [attr.aria-controls]="'collapse' + compEnvioItem.CompEnvio">
-                            Comprobante: {{compEnvioItem.CompEnvio}} <br>
-                            Fecha: {{compEnvioItem.FEnvio}}
-                          </button>
-                        </h2>
-                        <div [id]="'collapse' + compEnvioItem.CompEnvio" class="accordion-collapse collapse"
-                          [attr.aria-labelledby]="'heading' + compEnvioItem.CompEnvio" data-bs-parent="#accordionExample">
-                          <div class="accordion-body">
-                            <div class="table-responsive">
-                              <table class="table table-dark">
-                                <thead class="table-dark">
-                                  <tr>
-                                    <!-- <th>Comprobante</th>
+
+        <div class="accordion" id="accordionExample">
+          <div *ngFor="let compEnvioItem of compEnvio" class="accordion-item">
+            <h2 class="accordion-header" id="heading{{compEnvioItem.CompEnvio}}">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                [attr.data-bs-target]="'#collapse' + compEnvioItem.CompEnvio" aria-expanded="true"
+                [attr.aria-controls]="'collapse' + compEnvioItem.CompEnvio">
+                Comprobante: {{compEnvioItem.CompEnvio}} <br>
+                Fecha: {{compEnvioItem.FEnvio}}
+              </button>
+            </h2>
+            <div [id]="'collapse' + compEnvioItem.CompEnvio" class="accordion-collapse collapse"
+              [attr.aria-labelledby]="'heading' + compEnvioItem.CompEnvio" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="table-responsive">
+                  <table class="table table-dark">
+                    <thead class="table-dark">
+                      <tr>
+                        <!-- <th>Comprobante</th>
                                     <th>FEnvio</th> -->
-                                    <th>Descripción</th>
-                                    <th>Presentación</th>
-                                    <th>Cantidad</th>
-                                  </tr>
-                                </thead>
-                                <tbody class="table-active">
-                                  <tr *ngFor="let item of henvio">
-                                    <!-- <td *ngIf="item.CompEnvio === compEnvioItem.CompEnvio">
+                        <th>Descripción</th>
+                        <th>Presentación</th>
+                        <th>Cantidad</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-active">
+                      <tr *ngFor="let item of henvio">
+                        <!-- <td *ngIf="item.CompEnvio === compEnvioItem.CompEnvio">
                                       <span>{{item.CompEnvio}}</span>
                                     </td>
                                     <td *ngIf="item.CompEnvio === compEnvioItem.CompEnvio">
                                       <span>{{item.FEnvio}} </span>
                                     </td> -->
-                                    <td *ngIf="item.CompEnvio === compEnvioItem.CompEnvio">
-                                      <span>{{item.Descripcion}} </span>
-                                    </td>
-                                    <td *ngIf="item.CompEnvio === compEnvioItem.CompEnvio">
-                                      <span>{{item.Presentacion}} </span>
-                                    </td>
-                                    <td *ngIf="item.CompEnvio === compEnvioItem.CompEnvio">
-                                      <span>{{item.Cantidad}} </span>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-
-
-
-
-
-                    <!-- <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Comprobante: {{compEnvio.CompEnvio}} <br>
-                            Fecha: {{compEnvio.FEnvio}}
-                        </button>
-                      </h2>
-                      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                          
-                          <div class="table-responsive">
-                            <table class="table table-dark">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Comprobante</th>
-                                        <th>FEnvio</th>
-                                        <th>Descripción</th>
-                                        <th>Presentación</th>
-                                        <th>Cantidad</th>
-                                        
-
-                                    </tr>
-                                </thead>
-                                <tbody class="table-active">
-                                    <tr *ngFor="let item of henvio">
-
-                                        <td>
-                                            <span>{{item.CompEnvio}}</span>
-                                        </td>
-                                        <td>
-                                            <span>{{item.FEnvio}} </span>
-                                        </td>
-                                        <td>
-                                            <span>{{item.Descripcion}} </span>
-                                        </td>
-                                        <td>
-                                            <span>{{item.Presentacion}} </span>
-                                        </td>
-                                        <td>
-                                            <span>{{item.Cantidad}} </span>
-                                        </td>
-                                        
-                                    </tr>
-
-                                </tbody>
-                            </table>
-
-                        </div>
-
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingTwo">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                          Accordion Item #2
-                        </button>
-                      </h2>
-                      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                          <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingThree">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                          Accordion Item #3
-                        </button>
-                      </h2>
-                      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                          <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                        </div>
-                      </div>
-                    </div> -->
+                        <td *ngIf="item.CompEnvio === compEnvioItem.CompEnvio">
+                          <span>{{item.Descripcion}} </span>
+                        </td>
+                        <td *ngIf="item.CompEnvio === compEnvioItem.CompEnvio">
+                          <span>{{item.Presentacion}} </span>
+                        </td>
+                        <td *ngIf="item.CompEnvio === compEnvioItem.CompEnvio">
+                          <span>{{item.Cantidad}} </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-            
+              </div>
             </div>
+          </div>
+
         </div>
+
+      </div>
     </div>
+  </div>
 </div>

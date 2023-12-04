@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { DespachoSerciceService } from 'src/app/services/despacho.sercice.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { FormsModule } from '@angular/forms';
+import { CventaService } from 'src/app/services/cventa.service';
+import { DventaService } from 'src/app/services/dventa.service';
 
 @Component({
   selector: 'app-index-despachos',
@@ -27,13 +29,15 @@ export class IndexDespachosComponent implements OnInit {
 
   constructor(
     private _despachoService: DespachoSerciceService,
-    private _empresaService: EmpresaService
+    private _empresaService: EmpresaService,
+    private _cventas:CventaService,
+    private _dventas:DventaService
   ) {
 
   }
 
   ngOnInit(): void {
-    this.filtro = 'NP01-00000215'
+    this.filtro = 'NP01-00000011'
 
     this._empresaService.getEmpresas(this.token).subscribe(
       response => {
@@ -53,7 +57,7 @@ export class IndexDespachosComponent implements OnInit {
     // }
 
       
-    this._despachoService.obtener_datos_cventas_empresa(this.filtro, this.aliasEmpresa, this.token).subscribe(
+    this._cventas.obtener_datos_cventas_empresa(this.filtro, this.aliasEmpresa, this.token).subscribe(
       response => {
         console.log('obtener_datos_cventas', response);
         if (response != undefined) {
@@ -82,7 +86,7 @@ export class IndexDespachosComponent implements OnInit {
         console.log('this.compVenta', this.compVenta);
       });
 
-    this._despachoService.obtener_datos_dventas_empresa(this.filtro, this.idempresa, this.token).subscribe(
+    this._dventas.obtener_datos_dventas_empresa(this.filtro, this.idempresa, this.token).subscribe(
       response => {
 
         this.detalleVenta = response;
@@ -148,10 +152,10 @@ export class IndexDespachosComponent implements OnInit {
     }
   }
   
-  ingresar(){
-    //envio los parametros
-    const datos = { id: this.idempresa, Alias:this.aliasEmpresa, Serie_Numero: this.compVenta.Serie_Numero };
-    this._despachoService.setDatos_rDespacho(datos);
-  }
+  // ingresar(){
+  //   //envio los parametros
+  //   const datos = { id: this.idempresa, Alias:this.aliasEmpresa, Serie_Numero: this.compVenta.Serie_Numero };
+  //   this._despachoService.setDatos_rDespacho(datos);
+  // }
 
 }

@@ -4,8 +4,8 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-11 col-xl-11">
-
-                <h3>Comprobante de compra</h3>
+               
+                <h4>Comprobante de compra</h4>
 
                 <div class="card">
                     <div class="card-header">
@@ -13,56 +13,51 @@
                         Cliente: {{compVenta.Razon_Social}}
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-
-                        <div class="table-responsive">
-                            <table class="table table-dark">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Cantidad</th>
-                                        <th>Codigo</th>
-                                        <th>Descripción</th>
-                                        <th>Presentación</th>
-                                        <th>Precio</th>
-                                        <th>CEntregado</th>
-                                        <!-- <th>Entrega</th> -->
-
-                                    </tr>
-                                </thead>
-                                <tbody class="table-active">
-                                    <tr *ngFor="let item of detalleVenta">
-
-                                        <td>
-                                            <span>{{item.Cantidad}}</span>
-                                        </td>
-                                        <td>
-                                            <span>{{item.Id}} </span>
-                                        </td>
-                                        <td>
-                                            <span>{{item.Descripcion}} </span>
-                                        </td>
-                                        <td>
-                                            <span>{{item.Presentacion}} </span>
-                                        </td>
-                                        <td>
-                                            <span>{{item.PVenta}} </span>
-                                        </td>
-                                        <td>
-                                           
-                                            <input type="text" [(ngModel)]="item.CantEntregado">
-                                            
-                                        </td>
-                                        
-                                    </tr>
-
-                                </tbody>
-                            </table>
-
+                        <div>
+                            <a class="btn btn-primary" (click)="resetCantEntrega()">Resetear Cantidad Entregada</a>
                         </div>
+                        <h5 class="card-title">Detalle del comprobante</h5>
 
-                        <!-- <a [routerLink]="['/despachos/registrar']" [queryParams]="{ idempresa: idempresa, Serie_Numero: compVenta.Serie_Numero }" class="btn btn-primary">Crear nuevo despacho</a> -->
-                        <!-- <a  class="btn btn-primary" [routerLink]="['/despachos/registrar']" (click)="ingresar()">Crear nuevo despacho</a> -->
-                    </div>
+
+                        <form #miFormulario="ngForm" (ngSubmit)="guardarDatos(miFormulario.value)">
+                            <table class="table table-dark">
+                              <thead class="table-dark">
+                                <tr>
+                                  <th>Cantidad</th>
+                                  <th>Código</th>
+                                  <th>Descripción</th>
+                                  <th>Presentación</th>
+                                  <th>Precio de Venta</th>
+                                  <th>CEntrega</th>
+                                </tr>
+                              </thead>
+                              <tbody class="table-active">
+                                <tr *ngFor="let item of detalleVenta">
+                                  <td>{{item.Cantidad}}</td>
+                                  <td>{{item.Codigo}}</td>
+                                  <td>{{item.Descripcion}}</td>
+                                  <td>{{item.Presentacion}}</td>
+                                  <td>{{item.PVenta}}</td>
+                                  <td>
+                                    <ng-container *ngIf="item.Cantidad == item.CantEntregado">
+                                      <input type="text" name="cantidadIngresar{{item.Id}}" [(ngModel)]="item.CantEntregado" style="width: 60px; text-align: center; color: blue; background: rgb(214, 158, 158);" required [max]="item.Cantidad" disabled>
+                                    </ng-container>
+                                    <ng-container *ngIf="item.Cantidad !== item.CantEntregado">
+                                      <input type="text" name="cantidadIngresar{{item.Id}}" [(ngModel)]="item.CantEntregado" style="width: 60px; text-align: center; color: blue;" required [max]="item.Cantidad">
+                                    </ng-container>
+                                    
+                                  </td>
+                                  
+                                </tr>
+                              </tbody>
+                            </table>
+                          
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                          </form>
+                          
+
+                        
+                        </div>
                 </div>
 
 

@@ -18,7 +18,7 @@ const appRoute : Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'colaborador', component: IndexColaboradorComponent, canActivate: [AdminGuard]},
     {path: 'despachos', component: IndexDespachosComponent, canActivate: [AdminGuard]},
-    {path: 'despachos/registrar', component:RegistrarDespachosComponent, canActivate:[AdminGuard]},
+    {path: 'despachos/registrar/:id/:serie', component:RegistrarDespachosComponent, canActivate:[AdminGuard]},
     {path: 'envios', component: IndexEnviosComponent, canActivate: [AdminGuard]},
 
     // colaborador

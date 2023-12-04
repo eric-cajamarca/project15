@@ -186,7 +186,7 @@ const cambiar_estado_colaborador_admin = async function (req, res) {
             .input('estado', sql.Bit, nuevo_estado)
             .query('UPDATE usuarioWeb SET estado = @estado WHERE id = @id');
         console.log(result.recordset);
-        res.status(200).send({ data: result.recordset });
+        res.status(200).send({ data: result.recordset});
 
     } else {
         res.status(403).send({ data: undefined, message: 'NoToken' });
