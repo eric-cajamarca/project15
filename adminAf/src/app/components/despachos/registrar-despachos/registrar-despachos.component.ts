@@ -25,6 +25,7 @@ export class RegistrarDespachosComponent implements OnInit {
   public aliasempresa: any;
   public valides: any = false;
   public mensajeCant = '';
+  public registroCompEnvio:any = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -44,9 +45,9 @@ export class RegistrarDespachosComponent implements OnInit {
       this.serieNumero = params['serie'];
 
       // Haz algo con idempresa y serie
-      console.log('idempresa:', this.idempresa);
-      console.log('serieNumero:', this.serieNumero);
-      console.log(params);
+      // console.log('idempresa:', this.idempresa);
+      // console.log('serieNumero:', this.serieNumero);
+      // console.log(params);
     });
 
     this._empresaService.getEmpresas_id(this.idempresa, this.token).subscribe(
@@ -86,21 +87,11 @@ export class RegistrarDespachosComponent implements OnInit {
       }
     )
 
-
-    this.cargarDatos();
-
-  }
-
-  cargarDatos() {
-
-    console.log('alias en la funcion cargarDatos', this.aliasempresa);
-
-
     this._dventas.obtener_datos_dventas_empresa(this.serieNumero, this.idempresa, this.token).subscribe(
       response => {
 
         this.detalleVenta = response;
-        
+
         //   if (response != undefined) {
         //     response.forEach((item:any) =>{
         //       this.detalleVenta.id = item.id;
@@ -121,6 +112,7 @@ export class RegistrarDespachosComponent implements OnInit {
         //   console.log('obtener datos detalle ventas', this.detalleVenta);
       }
     );
+
   }
 
   guardarDatos(miFormulario: any) {
@@ -151,8 +143,6 @@ export class RegistrarDespachosComponent implements OnInit {
       }
     }
 
-    //const isValid = this.detalleVenta.every((item: { CantidadIngresar: number; Cantidad: number; }) => item.CantidadIngresar <= item.Cantidad);
-
     if (!this.valides) {
       console.log('El formulario si es valido');
       this._dventas.actualizar_CEntrega_DVentas(this.serieNumero, this.detalleVenta, this.token).subscribe(
@@ -180,34 +170,61 @@ export class RegistrarDespachosComponent implements OnInit {
           }
 
 
-        },
-        error => {
-
         }
-
       )
 
-    }
-    // else {
-    //   iziToast.show({
-    //     title: 'ERROR',
-    //     titleColor: '#FF0000',
-    //     color: '#FFF',
-    //     class: 'text-danger',
-    //     position: 'topRight',
-    //     message: 'Las cantidades ingresadas no son válidas'
-    //   });
-    //   console.error('Las cantidades ingresadas no son válidas');
-    // }
+      this.registrarCompEnvio()
 
+
+
+    }
 
   }
 
-  resetCantEntrega(){
+  // registrarCompEnvio(){
+  //   this.detalleVenta.forEach((item: any) => {
+  //     this.registroCompEnvio.CompEnvio = 'NE01-00005000'
+  //     this.registroCompEnvio.CompVentas = this.compVenta.Serie_Numero;
+  //     this.registroCompEnvio.Descripcion = item.Descripcion;
+  //     this.registroCompEnvio.Presentacion = item.Presentacion;
+  //     this.registroCompEnvio.Catidad = item.CantEntregado;
+  //   })
+
+  //   console.log('this.registroCompEnvio', this.registroCompEnvio);
+  // }
+
+  registrarCompEnvio() {
+    // Inicializa el objeto registroCompEnvio
+    this.registroCompEnvio = {};
+  
+    // Utiliza map para crear un nuevo array con los resultados
+    this.registroCompEnvio = this.detalleVenta.map((item:any) => ({
+      CompEnvio: 'NE01-00005000',
+      CompVentas: this.compVenta.Serie_Numero,
+      Descripcion: item.Descripcion,
+      Presentacion: item.Presentacion,
+      Cantidad: item.CantEntregado, // Asumo que es 'Cantidad', ajusta según tus datos reales
+      // Puedes agregar más campos aquí si es necesario
+    }));
+  
+    // Muestra el objeto resultante en la consola
+    console.log('this.registroCompEnvio', this.registroCompEnvio);
+
+    this._despachoService.registro_compEnvio(this.registroCompEnvio, this.token).subscribe(
+      response=>{
+
+      },
+      error=>{
+        console.log('error:', error);
+      }
+    )
+  }
+
+  resetCantEntrega() {
     this.detalleVenta.forEach((item: any) => {
       item.CantEntregado = 0;
     });
-    
+
   }
 
 }

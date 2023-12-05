@@ -35,42 +35,43 @@ const getCompEnvio = async function (req, res) {
 
 
 const createCompEnvio = async (req, res) => {
-    const { CompEnvio, CompVentas, FEnvio, Descripcion, Presentacion, Cantidad } = req.body;
+    let data = req.body;
 
-    const pool = await sql.connect(dbConfig);
+    console.log('createCompEnvio: data:', req.body);
+    //const pool = await sql.connect(dbConfig);
 
     // Verificar si el correo electrónico ya existe
-    const checkEmailQuery = await pool
-        .request()
-        .input('CompEnvio', sql.VarChar, CompEnvio)
-        .input('CompVentas', sql.VarChar, CompVentas)
-        .input('FEnvio', sql.VarChar, FEnvio)
-        .input('Descripcion', sql.VarChar, Descripcion)
-        .input('Presentacion', sql.VarChar, Presentacion)
-        .input('Cantidad', sql.Decimal, Cantidad)
-        .query('SELECT * FROM Historialpedidos WHERE CompEnvio = @CompEnvio');
+    // const checkEmailQuery = await pool
+    //     .request()
+    //     .input('CompEnvio', sql.VarChar, CompEnvio)
+    //     .input('CompVentas', sql.VarChar, CompVentas)
+    //     .input('FEnvio', sql.VarChar, FEnvio)
+    //     .input('Descripcion', sql.VarChar, Descripcion)
+    //     .input('Presentacion', sql.VarChar, Presentacion)
+    //     .input('Cantidad', sql.Decimal, Cantidad)
+    //     .query('SELECT * FROM Historialpedidos WHERE CompEnvio = @CompEnvio');
 
-    if (checkEmailQuery.recordset.length > 0) {
-        return res.status(400).json({ message: 'El comprobante ya existe.' });
-    } else {
-        try {
+    // if (checkEmailQuery.recordset.length > 0) {
+    //     return res.status(400).json({ message: 'El comprobante ya existe.' });
+    // } else {
+    //     try {
 
-            const pool = await sql.connect(dbConfig);
-            const result = await pool
-                .request()
-                .input('CompEnvio', sql.VarChar, CompEnvio)
-                .input('CompVentas', sql.VarChar, CompVentas)
-                .input('FEnvio', sql.VarChar, FEnvio)
-                .input('Descripcion', sql.VarChar, Descripcion)
-                .input('Presentacion', sql.VarChar, Presentacion)
-                .input('Cantidad', sql.Decimal, Cantidad)
-                .query('INSERT INTO Historialpedidos (CompEnvio, CompVentas, FEnvio, Descripcion, Presentacion, Cantidad) VALUES (@CompEnvio, @CompVentas, @FEnvio, @Descripcion, @Presentacion, @Cantidad)');
-            res.json({ message: 'Registro guardado correctamente' });
-        } catch (error) {
-            console.error('Error al crear el registro:', error);
-            res.status(500).send('Error al crear el registro');
-        }
-    }
+    //         const pool = await sql.connect(dbConfig);
+    //         const result = await pool
+    //             .request()
+    //             .input('CompEnvio', sql.VarChar, CompEnvio)
+    //             .input('CompVentas', sql.VarChar, CompVentas)
+    //             .input('FEnvio', sql.VarChar, FEnvio)
+    //             .input('Descripcion', sql.VarChar, Descripcion)
+    //             .input('Presentacion', sql.VarChar, Presentacion)
+    //             .input('Cantidad', sql.Decimal, Cantidad)
+    //             .query('INSERT INTO Historialpedidos (CompEnvio, CompVentas, FEnvio, Descripcion, Presentacion, Cantidad) VALUES (@CompEnvio, @CompVentas, @FEnvio, @Descripcion, @Presentacion, @Cantidad)');
+    //         res.json({ message: 'Registro guardado correctamente' });
+    //     } catch (error) {
+    //         console.error('Error al crear el registro:', error);
+    //         res.status(500).send('Error al crear el registro');
+    //     }
+    // }
 
 
 };

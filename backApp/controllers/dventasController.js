@@ -171,89 +171,103 @@ async function actualizarDetalleVentakkk(req, res) {
 async function actualizarDetalleVenta(req, res) {
   const data = req.body;
   let estado = '';
+  let mensaje = '';
+  let contador = 0;
+
 
   console.log('data:', data);
 
-  try {
-    // Verifica que data sea un array antes de intentar recorrerlo
-    if (Array.isArray(data)) {
-      // Inicializa una variable para la suma total de CantEntregado
-      let sumaTotal = 0;
-      let cantidadActual = 0;
-      let CantEntregadoRegistro=0;
-      let CantEntregadoBD = 0;
-
-      // Recorre cada elemento en el array data
-      for (const registro of data) {
-        cantidadActual = 0;
-        CantEntregadoRegistro=0;
-        CantEntregadoBD = 0;
-
-
-        const id = parseInt(registro.Id, 10);
-        CantEntregadoRegistro = parseFloat(registro.CantEntregado);
-        cantidadActual = parseInt(registro.Cantidad);
-
-        console.log('id:', id, 'CantEntregadoRegistro:', CantEntregadoRegistro);
-
-        // Recupera la CantEntregado actual de la base de datos
-        let pool = await sql.connect(dbConfig);
-        let resultadoConsulta = await pool
-          .request()
-          .input('id', sql.Int, id)
-          .query('SELECT CantEntregado FROM DetalleVentas WHERE Id = @id');
-
-        CantEntregadoBD = resultadoConsulta.recordset[0].CantEntregado;
-
-
-
-        // Suma la CantEntregado del registro actual con la CantEntregado en la base de datos
-        sumaTotal = 0;
-        sumaTotal = CantEntregadoBD + CantEntregadoRegistro;
-
-        console.log('suamtotal=', sumaTotal, ':CantEntregadoBD:', CantEntregadoBD, 'CantEntregadoRegistro:', CantEntregadoRegistro);
-
-        // Verifica si la suma total es menor o igual a la cantidad en la base de datos
-        console.log('sumatotal=', sumaTotal, '=>    cantidadactual=', cantidadActual);
-
-        if (sumaTotal <= cantidadActual) {
-
-          console.log('entro a sumaTotal <= cantidadActual');
-          // La suma es válida, procede con las actualizaciones
-          // for (const registro of data) {
-          //   const id = parseInt(registro.id, 10);
-          //   const CantEntregado = registro.CantEntregado;
-          // Realiza la actualización en la base de datos
-
-           let CantEntregado = sumaTotal;
-
+  if (req.user) {
+    try {
+      // Verifica que data sea un array antes de intentar recorrerlo
+      if (Array.isArray(data)) {
+        // Inicializa una variable para la suma total de CantEntregado
+        let sumaTotal = 0;
+        let cantidadActual = 0;
+        let CantEntregadoRegistro = 0;
+        let CantEntregadoBD = 0;
+  
+        // Recorre cada elemento en el array data
+        for (const registro of data) {
+          cantidadActual = 0;
+          CantEntregadoRegistro = 0;
+          CantEntregadoBD = 0;
+          sumaTotal = 0;
+  
+  
+          const id = parseInt(registro.Id, 10);
+          CantEntregadoRegistro = parseFloat(registro.CantEntregado);
+          cantidadActual = parseInt(registro.Cantidad);
+  
+          //console.log('id:', id, 'CantEntregadoRegistro:', CantEntregadoRegistro);
+  
+          // Recupera la CantEntregado actual de la base de datos
           let pool = await sql.connect(dbConfig);
-          let result = await pool
+          let resultadoConsulta = await pool
             .request()
             .input('id', sql.Int, id)
-            .input('CantEntregado', sql.Decimal, CantEntregado)
-            .query('UPDATE DetalleVentas SET CantEntregado = @CantEntregado WHERE Id = @id');
+            .query('SELECT CantEntregado FROM DetalleVentas WHERE Id = @id');
+  
+          CantEntregadoBD = resultadoConsulta.recordset[0].CantEntregado;
+  
+  
+  
+          // Suma la CantEntregado del registro actual con la CantEntregado en la base de datos
+  
+          sumaTotal = CantEntregadoBD + CantEntregadoRegistro;
+  
+          //console.log('suamtotal=', sumaTotal, ':CantEntregadoBD:', CantEntregadoBD, 'CantEntregadoRegistro:', CantEntregadoRegistro);
+  
+          // Verifica si la suma total es menor o igual a la cantidad en la base de datos
+          //console.log('sumatotal=', sumaTotal, '=>    cantidadactual=', cantidadActual);
+  
+          if (sumaTotal <= cantidadActual) {
+  
+            console.log('entro a sumaTotal <= cantidadActual');
+  
+            let CantEntregado = sumaTotal;
+  
+            let pool = await sql.connect(dbConfig);
+            let result = await pool
+              .request()
+              .input('id', sql.Int, id)
+              .input('CantEntregado', sql.Decimal, CantEntregado)
+              .query('UPDATE DetalleVentas SET CantEntregado = @CantEntregado WHERE Id = @id');
             console.log('guardo correctamente por cada registro');
-
+  
             estado = result.rowsAffected;
-          // }
-
-         
-
+            mensaje = 'Registros actualizados correctamente';
+            // }
+  
+          } else {
+  
+            contador++;
+  
+            console.log('data.length', data.length, 'contador:', contador)
+            if (contador == data.length) {
+              estado = undefined;
+              mensaje = 'La cantidad que deseas registrar es mayor a la cantidad comprada';
+            }
+  
+          }
+  
         }
-
+  
+  
       }
       
-
+      res.status(200).send({ message: mensaje, data: estado });
+  
+    } catch (error) {
+      console.error('Error al actualizar el detalle de venta:', error);
+      res.status(200).send({ message: 'Error al actualizar el detalle de venta', data: undefined });
     }
-    //else {
-    //   res.status(400).json({ message: 'El formato de datos no es válido' });
-    // }
-    res.status(200).send({ message: 'Registros actualizados correctamente',data: estado});
-  } catch (error) {
-    console.error('Error al actualizar el detalle de venta:', error);
-    res.status(200).send({message:'Error al actualizar el detalle de venta', data:undefined});
   }
+  else {
+    res.status(200).send({ message: 'No Access', data:undefined });
+  }
+
+
 }
 
 

@@ -44,7 +44,7 @@
             Cliente: {{compVenta.Razon_Social}}
           </div>
           <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
+            <h5 class="card-title">Detalle del comprobante</h5>
 
             <div class="table-responsive">
               <table class="table table-dark">
@@ -56,14 +56,14 @@
                     <th>Presentación</th>
                     <th>Precio</th>
                     <th>CEntregado</th>
-                    <!-- <th>Entrega</th> -->
+                    
 
                   </tr>
                 </thead>
                 <tbody class="table-active">
                   <tr *ngFor="let item of detalleVenta">
 
-                    <td>
+                    <td style="width: 70px;">
                       <span>{{item.Cantidad}}</span>
                     </td>
                     <td>
@@ -72,18 +72,16 @@
                     <td>
                       <span>{{item.Descripcion}} </span>
                     </td>
-                    <td>
+                    <td style="width: 60px; text-align: center;">
                       <span>{{item.Presentacion}} </span>
                     </td>
-                    <td>
-                      <span>{{item.PVenta}} </span>
+                    <td style="width: 60px; text-align: right;">
+                      <span>{{item.PVenta | number:'1.2-2'}} </span>
                     </td>
-                    <td>
+                    <td style="width: 60px; text-align: center;">
                       <span>{{item.CantEntregado}} </span>
                     </td>
-                    <!-- <td>
-                                            <span>Entregar </span>
-                                        </td> -->
+                    
                   </tr>
 
                 </tbody>

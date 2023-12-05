@@ -30,6 +30,11 @@ export class DespachoSerciceService {
     return this._http.get(this.url+'envios/'+id,{headers:headers});
   }
 
+  registro_compEnvio(data:any,token:any):Observable<any>{
+    console.log('data:', data);
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.post(this.url+'envios',data,{headers:headers});
+  }
   
  
 }
