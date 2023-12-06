@@ -8,6 +8,7 @@ const adminRoutes = require('./routes/admin');
 const cventasRoutes = require('./routes/cventas');
 const renviosRouters = require('./routes/renvios');
 const empresaRouters = require('./routes/empresa');
+const comprobantesRoutes = require('./routes/comprobantes');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -52,6 +53,7 @@ app.use('/api', adminRoutes);
 app.use('/api', cventasRoutes);
 app.use('/api',renviosRouters);
 app.use('/api', empresaRouters);
+app.use('/api', comprobantesRoutes);
 
 
 // Escuchar en el puerto

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ComprobanteService } from 'src/app/services/comprobante.service';
 import { CventaService } from 'src/app/services/cventa.service';
 import { DespachoSerciceService } from 'src/app/services/despacho.sercice.service';
 import { DventaService } from 'src/app/services/dventa.service';
@@ -25,14 +26,16 @@ export class RegistrarDespachosComponent implements OnInit {
   public aliasempresa: any;
   public valides: any = false;
   public mensajeCant = '';
-  public registroCompEnvio:any = {};
+  public registroCompEnvio: any = {};
+  public comprobantes: any = [];
 
   constructor(
     private route: ActivatedRoute,
     private _despachoService: DespachoSerciceService,
     private _empresaService: EmpresaService,
-    private _cventas: CventaService,
-    private _dventas: DventaService
+    private _cventaService: CventaService,
+    private _dventaService: DventaService,
+    private _router: Router,
   ) {
 
   }
@@ -44,10 +47,7 @@ export class RegistrarDespachosComponent implements OnInit {
       this.idempresa = params['id'];
       this.serieNumero = params['serie'];
 
-      // Haz algo con idempresa y serie
-      // console.log('idempresa:', this.idempresa);
-      // console.log('serieNumero:', this.serieNumero);
-      // console.log(params);
+      
     });
 
     this._empresaService.getEmpresas_id(this.idempresa, this.token).subscribe(
@@ -56,7 +56,7 @@ export class RegistrarDespachosComponent implements OnInit {
         console.log('this.alias', this.aliasempresa);
 
 
-        this._cventas.obtener_datos_cventas_empresa(this.serieNumero, this.aliasempresa, this.token).subscribe(
+        this._cventaService.obtener_datos_cventas_empresa(this.serieNumero, this.aliasempresa, this.token).subscribe(
           response => {
             console.log('obtener_datos_cventas', response);
             if (response != undefined) {
@@ -83,11 +83,22 @@ export class RegistrarDespachosComponent implements OnInit {
             }
 
             console.log('this.compVenta', this.compVenta);
-          });
+          }
+        );
+
+        // console.log('this.aliasempresa antes de entrar a obtner_comprobantes_alias', this.aliasempresa);
+        // this._comprobanteService.obtener_comprobantes_alias(this.aliasempresa, this.token).subscribe(
+        //   response => {
+        //     this.comprobantes = response;
+        //     console.log('this.comprobantes', this.comprobantes);
+        //   }
+        // )
+        
+
       }
     )
 
-    this._dventas.obtener_datos_dventas_empresa(this.serieNumero, this.idempresa, this.token).subscribe(
+    this._dventaService.obtener_datos_dventas_empresa(this.serieNumero, this.idempresa, this.token).subscribe(
       response => {
 
         this.detalleVenta = response;
@@ -112,6 +123,10 @@ export class RegistrarDespachosComponent implements OnInit {
         //   console.log('obtener datos detalle ventas', this.detalleVenta);
       }
     );
+
+
+
+
 
   }
 
@@ -145,7 +160,7 @@ export class RegistrarDespachosComponent implements OnInit {
 
     if (!this.valides) {
       console.log('El formulario si es valido');
-      this._dventas.actualizar_CEntrega_DVentas(this.serieNumero, this.detalleVenta, this.token).subscribe(
+      this._dventaService.actualizar_CEntrega_DVentas(this.serieNumero, this.detalleVenta, this.token).subscribe(
         response => {
           if (response.data == undefined) {
             iziToast.show({
@@ -167,55 +182,65 @@ export class RegistrarDespachosComponent implements OnInit {
               message: response.message,
             });
             // console.log('actualizar_CEntrega_DVentas response', response);
+
+            this.registrarCompEnvio();
+            this._router.navigate(['/despachos']);
           }
 
 
         }
       )
 
-      this.registrarCompEnvio()
-
-
 
     }
 
   }
 
-  // registrarCompEnvio(){
-  //   this.detalleVenta.forEach((item: any) => {
-  //     this.registroCompEnvio.CompEnvio = 'NE01-00005000'
-  //     this.registroCompEnvio.CompVentas = this.compVenta.Serie_Numero;
-  //     this.registroCompEnvio.Descripcion = item.Descripcion;
-  //     this.registroCompEnvio.Presentacion = item.Presentacion;
-  //     this.registroCompEnvio.Catidad = item.CantEntregado;
-  //   })
-
-  //   console.log('this.registroCompEnvio', this.registroCompEnvio);
-  // }
 
   registrarCompEnvio() {
     // Inicializa el objeto registroCompEnvio
     this.registroCompEnvio = {};
-  
+
     // Utiliza map para crear un nuevo array con los resultados
-    this.registroCompEnvio = this.detalleVenta.map((item:any) => ({
-      CompEnvio: 'NE01-00005000',
+    this.registroCompEnvio = this.detalleVenta.map((item: any) => ({
       CompVentas: this.compVenta.Serie_Numero,
       Descripcion: item.Descripcion,
       Presentacion: item.Presentacion,
-      Cantidad: item.CantEntregado, // Asumo que es 'Cantidad', ajusta según tus datos reales
+      Cantidad: item.CantEntregado,
+      IdEmpresa: this.idempresa,
+      Alias: this.aliasempresa, // Asumo que es 'Cantidad', ajusta según tus datos reales
       // Puedes agregar más campos aquí si es necesario
     }));
-  
+
     // Muestra el objeto resultante en la consola
     console.log('this.registroCompEnvio', this.registroCompEnvio);
 
     this._despachoService.registro_compEnvio(this.registroCompEnvio, this.token).subscribe(
-      response=>{
+      response => {
+        if (response.data == undefined) {
+          iziToast.show({
+            title: 'ERROR',
+            titleColor: '#FF0000',
+            color: '#FFF',
+            class: 'text-danger',
+            position: 'topRight',
+            message: response.message,
+          });
 
-      },
-      error=>{
-        console.log('error:', error);
+        } else {
+          iziToast.show({
+            title: 'SUCCESS',
+            titleColor: '#1DC74C',
+            color: '#FFF',
+            class: 'text-success',
+            position: 'topRight',
+            message: response.message,
+          });
+
+          
+          
+
+        }
       }
     )
   }
