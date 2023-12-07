@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { ComprobanteService } from 'src/app/services/comprobante.service';
 import { CventaService } from 'src/app/services/cventa.service';
 import { DespachoSerciceService } from 'src/app/services/despacho.sercice.service';
@@ -19,7 +20,7 @@ export class RegistrarDespachosComponent implements OnInit {
   public datos: any;
   public compVenta: any = {};
   public detalleVenta: any = [];
-  public token = localStorage.getItem('token');
+  public token: any = "";
   public dCantidad: any;
   public idempresa: any;
   public serieNumero: any;
@@ -36,8 +37,9 @@ export class RegistrarDespachosComponent implements OnInit {
     private _cventaService: CventaService,
     private _dventaService: DventaService,
     private _router: Router,
-  ) {
-
+    private _cookieService: CookieService,
+  ) { 
+    this.token = this._cookieService.get('token');
   }
 
   ngOnInit(): void {

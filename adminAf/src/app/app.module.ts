@@ -18,6 +18,8 @@ import { IndexEnviosComponent } from './components/envios/index-envios/index-env
 import { CreateColaboradorComponent } from './components/colaboradores/create-colaborador/create-colaborador.component';
 import { UpdateColaboradorComponent } from './components/colaboradores/update-colaborador/update-colaborador.component';
 import { RegistrarDespachosComponent } from './components/despachos/registrar-despachos/registrar-despachos.component';
+import {CookieService} from 'ngx-cookie-service';
+
 
 @NgModule({
   declarations: [
@@ -41,7 +43,7 @@ import { RegistrarDespachosComponent } from './components/despachos/registrar-de
     routing,
     NgbModule
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

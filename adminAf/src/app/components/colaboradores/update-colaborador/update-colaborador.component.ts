@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { AdminService } from 'src/app/services/admin.service';
 
 declare var iziToast: any;
@@ -18,7 +19,7 @@ export class UpdateColaboradorComponent {
   // public colaborador: Array<any> = [];
 
   public btn_actualizar = false;
-  public token = localStorage.getItem('token');
+  public token: any = "";
   public id = '';
   public load_data = false;
   public data = false;
@@ -26,8 +27,11 @@ export class UpdateColaboradorComponent {
   constructor(
     private _adminservice: AdminService,
     private _router: Router,
-    private _route: ActivatedRoute
-  ) { };
+    private _route: ActivatedRoute,
+    private _cookieService: CookieService,
+  ) { 
+    this.token = this._cookieService.get('token');
+  };
 
 
   ngOnInit(): void {

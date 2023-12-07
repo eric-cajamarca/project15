@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { AdminService } from 'src/app/services/admin.service';
 
 @Component({
@@ -9,27 +10,33 @@ import { AdminService } from 'src/app/services/admin.service';
 })
 export class TopNavComponent {
 
- public usuario:any = {};
-  
+  public usuario: any = {};
+  public user: any = "";
+
   constructor(
-    private _router:Router,
-    private _adminService:AdminService
-  ){
-    // let str_user :any = localStorage.getItem('user_data');
-    // this.usuario = JSON.parse(str_user);
-    // console.log(this.usuario);
+    private _router: Router,
+    private _adminService: AdminService,
+    private _cookieService: CookieService,
+  ) {
 
     this.usuario = this._adminService.idUser;
-     console.log(this.usuario);
+    console.log(this.usuario);
 
-
-     let str_user = this._adminService.gettoken();
+    let str_user = this._cookieService.get('token');
+    this.user = this._cookieService.get('user_data');
+    
+    //quiero extraer el rol de this.user
+    this.user = JSON.parse(this.user);
+    console.log('this.user', this.user.rol);
   }
 
-  logout(){
+  logout() {
     window.location.reload();
-    localStorage.clear();
-   
+    this._cookieService.delete('token');
+
+    //localStorage.clear();
+
+
   }
-  
+
 }

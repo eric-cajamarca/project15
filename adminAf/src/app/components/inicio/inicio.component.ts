@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { AdminService } from 'src/app/services/admin.service';
 
 @Component({
@@ -12,9 +13,10 @@ export class InicioComponent implements OnInit{
 
   constructor(
     private _adminService:AdminService,
-    private _router:Router
-  ){
-    this.token =  this._adminService.gettoken;
+    private _router:Router,
+    private _cookieService: CookieService,
+  ) { 
+    this.token = this._cookieService.get('token');
   }
 
   ngOnInit(): void {

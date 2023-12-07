@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { AdminService } from 'src/app/services/admin.service';
 
 
@@ -19,9 +20,11 @@ export class LoginComponent implements OnInit{
 
   constructor(
     private _adminService:AdminService,
-    private _router:Router
-  ){
-    this.token =  this._adminService.gettoken;
+    private _router:Router,
+    private cookieService: CookieService,
+    private _cookieService: CookieService,
+  ) { 
+    this.token = this._cookieService.get('token');
   }
 
   ngOnInit(): void {
@@ -61,9 +64,15 @@ export class LoginComponent implements OnInit{
             this.usuario = response.data;
             // console.log(this.usuario);
 
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('identity', response.data.id);
-            localStorage.setItem('user_data',JSON.stringify(response.data));
+            //quiero guardar el token en CookieService
+            this.cookieService.set('token', response.token);
+            this.cookieService.set('identity', response.data.id);
+            this.cookieService.set('user_data',JSON.stringify(response.data));
+
+            //quiero guardar el token en localStorage
+            // localStorage.setItem('token', response.token);
+            // localStorage.setItem('identity', response.data.id);
+            // localStorage.setItem('user_data',JSON.stringify(response.data));
 
             this._router.navigate(['/']);
           }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminService } from 'src/app/services/admin.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CookieService } from 'ngx-cookie-service';
 
 declare var $: any;
 declare var iziToast: any;
@@ -18,7 +18,8 @@ export class IndexColaboradorComponent implements OnInit {
 
   public clientes: Array<any> = [];
   public clientes_const: Array<any> = [];
-  public token = localStorage.getItem('token');
+  public token: any = "";
+
   public page = 1;
   public pageSize = 10;
   public filtro = '';
@@ -30,12 +31,14 @@ export class IndexColaboradorComponent implements OnInit {
   constructor(
     private _adminService: AdminService,
     private _router: Router,
-    private modalService: NgbModal
-  ) { }
+    private _cookieService: CookieService,
+  ) {
+    this.token = this._cookieService.get('token');
+  }
 
   ngOnInit(): void {
-    
-     this.init_data();
+
+    this.init_data();
   }
 
   init_data() {
@@ -78,56 +81,26 @@ export class IndexColaboradorComponent implements OnInit {
   set_state(id: any, estado: any) {
     console.log($);
     this.load_estado = true;
-    this._adminService.cambiar_estado_colaborador_admin(id,{estado:estado},this.token).subscribe(
-      response=>{
+    this._adminService.cambiar_estado_colaborador_admin(id, { estado: estado }, this.token).subscribe(
+      response => {
         this.load_estado = false;
-        $('#delete-'+id).modal().hide('delete-${id}');
-        
-        
-        //this.hideModal();
-        this.init_data();
+        //quiero cerrar el modal usando jquery sabiendo que el id="delete-{{item.id}}"
 
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+        //habilitar el scroll en el body en el componente
+        $('body').css('overflow-y', 'auto');
+
+
+        this.init_data();
       }
     );
 
-    
+
 
   }
 
-  // closeModal(id: string) {
-  //   const modalId = `delete-${id}`;
-  //   const modalElement = this.el.nativeElement.querySelector(`#${modalId}`);
-    
-  //   if (modalElement) {
-  //     this.renderer.removeClass(modalElement, 'show');
-  //     this.renderer.setStyle(modalElement, 'display', 'none');
-  //   }
 
-  // }
-
-  openModal(content: any) {
-    this.modalService.open(content, { centered: true, backdrop: 'static' });
-  }
-  
-  // closeModal() {
-  //   this.modalService.dismissAll();
-  // }
-
-  hideModal() {
-    // Aquí debes proporcionar el identificador del modal que deseas ocultar
-    const modalId = 'delete-${id}'; // Reemplaza 'nombreDelModal' con el identificador de tu modal
-    this.modalService.dismissAll(modalId);
-  }
-
-  // generateColor(initial: string): string {
-  //   console.log(initial);
-  //   const charCode = initial.charCodeAt(0);
-  //   const colors = ['success', 'info', 'warning', 'primary'];
-  //   const index = charCode % 9; // Ajusta el índice para obtener un color de la matriz de colores
-  //    return colors[index];
-
-
-  // }
 
   generateColor(initial: string): string {
     const charCode = initial.charCodeAt(0);

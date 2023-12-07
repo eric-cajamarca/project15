@@ -18,7 +18,10 @@ export class AdminGuard implements CanActivate {
   }
 
   canActivate(): any {
-    const allowedRoles = ['Administrador']; // Lista de roles permitidos para acceder a la ruta
+    
+    //quiero agregar mas roles al array allowedRoles
+    const allowedRoles = ['Administrador', 'Despachador', 'Almacen', 'Vendedor'];
+
   
     if (!this._adminService.isAuthenticated(allowedRoles)) {
       // El usuario no tiene permisos, redirige a la página de login
@@ -30,16 +33,5 @@ export class AdminGuard implements CanActivate {
     return true;
   }
   
-
-  // canActivate():any{
-  //   if(!this._adminService.isAuthenticated(['Administrador'])){
-  //     this._router.navigate(['/login']);
-  //     return false;
-  //   }
-
-     
-    
-  //   return true;
-  // }
   
 }

@@ -5,6 +5,7 @@ import { EmpresaService } from 'src/app/services/empresa.service';
 import { FormsModule } from '@angular/forms';
 import { CventaService } from 'src/app/services/cventa.service';
 import { DventaService } from 'src/app/services/dventa.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-index-despachos',
@@ -22,7 +23,7 @@ export class IndexDespachosComponent implements OnInit {
   public empresaSeleccionada: any;
   public idempresa: any = {};
   public aliasEmpresa: any = '';
-  public token = localStorage.getItem('token');
+  public token: any = "";
   public filtro = '';
   public page = 1;
   public pageSize = 10;
@@ -31,10 +32,11 @@ export class IndexDespachosComponent implements OnInit {
     private _despachoService: DespachoSerciceService,
     private _empresaService: EmpresaService,
     private _cventas:CventaService,
-    private _dventas:DventaService
-  ) {
-
-  }
+    private _dventas:DventaService,
+    private _cookieService: CookieService,
+  ) { 
+    this.token = this._cookieService.get('token');
+  };
 
   ngOnInit(): void {
     this.filtro = 'NP01-00000011'
