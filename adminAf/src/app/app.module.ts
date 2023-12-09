@@ -19,6 +19,10 @@ import { CreateColaboradorComponent } from './components/colaboradores/create-co
 import { UpdateColaboradorComponent } from './components/colaboradores/update-colaborador/update-colaborador.component';
 import { RegistrarDespachosComponent } from './components/despachos/registrar-despachos/registrar-despachos.component';
 import {CookieService} from 'ngx-cookie-service';
+import { ClienteEnviosComponent } from './components/envios/cliente-envios/cliente-envios.component';
+import { IndexProgramacionComponent } from './components/progamaciones/index-programacion/index-programacion.component';
+import { CrearProgramacionComponent } from './components/progamaciones/crear-programacion/crear-programacion.component';
+import { EditarProgramacionComponent } from './components/progamaciones/editar-programacion/editar-programacion.component';
 
 
 @NgModule({
@@ -33,7 +37,11 @@ import {CookieService} from 'ngx-cookie-service';
     IndexEnviosComponent,
     CreateColaboradorComponent,
     UpdateColaboradorComponent,
-    RegistrarDespachosComponent
+    RegistrarDespachosComponent,
+    ClienteEnviosComponent,
+    IndexProgramacionComponent,
+    CrearProgramacionComponent,
+    EditarProgramacionComponent
   ],
   imports: [
     BrowserModule,

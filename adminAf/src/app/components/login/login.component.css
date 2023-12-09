@@ -1,29 +1,39 @@
-html,
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+
 body {
-  height: 100%;
-  
+    height: 100%;
+
 }
 
 body {
-  display: flex;
-  align-items: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+
 }
 
 .container-fluid {
-  background-color: #646060 !important;
-  height: 100%;
-  padding: 0;
+    background-color: #646060 !important;
+    height: 100%;
+    padding: 0;
 }
 
 .form-signin {
-  width: 100%;
-  max-width: 350px;
-  padding: 15px;
-  margin: auto;
-  border-radius: 10px !important;
+    width: 100%;
+    max-width: 350px;
+    padding: auto;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+
+    border-radius: 10px !important;
 }
 
 /* .form{
@@ -33,23 +43,23 @@ body {
 } */
 
 .form-signin .checkbox {
-  font-weight: 400;
+    font-weight: 400;
 }
 
 .form-signin .form-floating:focus-within {
-  z-index: 2;
+    z-index: 2;
 }
 
 .form-signin input[type="email"] {
-  margin-bottom: 20px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
+    margin-bottom: 20px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
 
 .bd-placeholder-img {
@@ -58,7 +68,7 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    
+
 }
 
 /* .mb-4 {
@@ -70,6 +80,6 @@ body {
 @media (min-width: 768px) {
     .bd-placeholder-img-lg {
         font-size: 3.5rem;
-       
+
     }
 }

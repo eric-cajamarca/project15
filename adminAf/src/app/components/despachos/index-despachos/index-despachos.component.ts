@@ -1,4 +1,3 @@
-import { Token } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { DespachoSerciceService } from 'src/app/services/despacho.sercice.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
@@ -113,7 +112,7 @@ export class IndexDespachosComponent implements OnInit {
       }
     );
 
-    this._despachoService.obtener_datos_renvios(this.filtro, this.token).subscribe(
+    this._despachoService.obtener_datos_envios_id(this.filtro, this.token).subscribe(
       response => {
         this.henvio = response;
         console.log('henvio:', this.henvio);

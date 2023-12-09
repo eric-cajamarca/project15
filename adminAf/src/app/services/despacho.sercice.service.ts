@@ -23,9 +23,12 @@ export class DespachoSerciceService {
   }
 
   
- 
+  obtener_datos_envios(token:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.get(this.url+'envios/',{headers:headers});
+  }
 
-  obtener_datos_renvios(id:any,token:any):Observable<any>{
+  obtener_datos_envios_id(id:any,token:any):Observable<any>{
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.get(this.url+'envios/'+id,{headers:headers});
   }
@@ -35,6 +38,8 @@ export class DespachoSerciceService {
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.post(this.url+'envios',data,{headers:headers});
   }
+
+
   
  
 
