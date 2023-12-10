@@ -15,11 +15,15 @@
 }
 
 h3{
-    color: rgb(33, 109, 33);
+    margin-top: 10px;
+    color: rgb(54, 53, 53);
 }
 
-h4{
-    color: rgb(72, 76, 189);
+h5{
+    color: #0d6efd;
+}
+h6{
+    color: #0d6efd;
 }
 h2{
     color: rgb(98, 99, 110);

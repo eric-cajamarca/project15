@@ -15,4 +15,8 @@ ALTER TABLE ProgramacionPedidos ADD Estado bit;
 --alterar el tipo de dato de la columna
 ALTER TABLE ProgramacionPedidos
 ALTER COLUMN Estado int;
+--cambiar el nombre de una columna
+EXEC sp_rename 'ProgramacionPedidos.Estado', 'idEstado', 'COLUMN';
 
+
+SELECT * FROM ProgramacionPedidos INNER JOIN Estado ON EstaPedidos.id = Estado.idEstado

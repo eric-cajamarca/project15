@@ -1,4 +1,128 @@
 <app-top-nav></app-top-nav>
 
-<p>cliente-envios works!</p>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-11 col-xl-11" style="text-align: center;">
+            <h4 style="color: white; margin-top: 20px;">Detalle de los envios programados</h4>
 
+            <div class="contenedor">
+
+                <ng-container *ngFor="let item of enviosProgramados">
+                    <ng-container *ngIf="item.FEnvio == idUrlFecha">
+                        <ol class="list-group" style="width: 60%; margin: auto; margin-bottom: 20px; text-align: left;">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div> <strong>Fecha: </strong> {{item.FEnvio}} </div>
+                                    <div><strong>Documento: </strong> {{item.Ruc}} </div>
+                                    <div><strong>Cliente: </strong> {{item.RSocial}} </div>
+                                    <div><strong>Dirección: </strong> {{item.Direccion}} </div>
+                                    <div><strong>Referencia: </strong> {{item.Referencia}} </div>
+                                    <div><strong>Distrito: </strong> {{item.Distrito}} </div>
+                                    <div><strong>Celular: </strong> {{item.Celular}} </div>
+                                    <div><strong>Estado: </strong>
+                                        <span class="badge bg-secondary"
+                                            *ngIf="item.descripcion == 'Sin Programación'">{{item.descripcion}}</span>
+                                        <span class="badge bg-info text-dark"
+                                            *ngIf="item.descripcion == 'Programado'">{{item.descripcion}}</span>
+                                        <span class="badge bg-primary"
+                                            *ngIf="item.descripcion == 'En camino'">{{item.descripcion}}</span>
+                                        <span class="badge bg-success"
+                                            *ngIf="item.descripcion == 'Entregado'">{{item.descripcion}}</span>
+                                    </div>
+
+
+                                </div>
+
+                            </li>
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseOne" aria-expanded="true"
+                                            aria-controls="collapseOne">
+                                            Accordion Item #1
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show"
+                                        aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <strong>This is the first item's accordion body.</strong> It is shown by
+                                            default.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                        </ol>
+
+                    </ng-container>
+
+                </ng-container>
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<!-- <div class="card">
+    <div class="card-header">
+      Comprobante: {{compVenta.Serie_Numero}} <br>
+      Cliente: {{compVenta.Razon_Social}}
+    </div>
+    <div class="card-body">
+      <h6 class="card-title">Detalle del comprobante</h6>
+
+      <div class="table-responsive">
+        <table class="table table-dark">
+          <thead class="table-dark">
+            <tr>
+              <th>Cantidad</th>
+              <th>Codigo</th>
+              <th>Descripción</th>
+              <th>Presentación</th>
+              <th>Precio</th>
+              <th>CEntregado</th>
+              
+
+            </tr>
+          </thead>
+          <tbody class="table-active">
+            <tr *ngFor="let item of detalleVenta">
+
+              <td style="width: 70px;">
+                <span>{{item.Cantidad}}</span>
+              </td>
+              <td>
+                <span>{{item.Codigo}} </span>
+              </td>
+              <td>
+                <span>{{item.Descripcion}} </span>
+              </td>
+              <td style="width: 60px; text-align: center;">
+                <span>{{item.Presentacion}} </span>
+              </td>
+              <td style="width: 60px; text-align: right;">
+                <span>{{item.PVenta | number:'1.2-2'}} </span>
+              </td>
+              <td style="width: 60px; text-align: center;">
+                <span>{{item.CantEntregado}} </span>
+              </td>
+              
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+
+      
+      <a class="btn btn-primary" [routerLink]="['/despachos/registrar', idempresa, compVenta.Serie_Numero]">Crear
+        nuevo despacho</a>
+      
+    </div>
+  </div> -->

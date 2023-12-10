@@ -27,10 +27,10 @@ GO
 
 select * from usuarioWeb
 
---drop table estadospedidos
+--drop table EstadosPedidos
 --Estados de Entrega Pedidos
 create table EstadosPedidos(
-id int identity(1,1) primary key,
+idEstado int identity(1,1) primary key,
 descripcion varchar(50) not null
 )
 

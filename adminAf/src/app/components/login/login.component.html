@@ -1,34 +1,37 @@
-
 <div class="container-fluid">
     <div class="row">
-      <div class="col-12 p-12">
-        <main class="form-signin" style="background-color: rgb(252, 250, 250) !important;">
-            <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" style="text-align: center !important;">
-                <img class="mb-4" src="assets/logos/login.png" alt="" width="200" height="200" style="text-align: center;">
-                <h1 class="h3 mb-3 fw-normal" style="color: rgb(121, 123, 126);">Inicio de sesión</h1>
-        
-                <div class="form-floating">
-                    <input type="email" class="form-control" name="email" [(ngModel)]="user.email" placeholder="Correo electrónico" required>
-                    <label for="floatingInput">Correo electrónico</label>
-                </div>
-                <div class="form-floating">
-                    <input type="password" class="form-control" name="password" [(ngModel)]="user.password" placeholder="Tú contraseña" required>
-                    <label for="floatingPassword">Contraseña</label>
-                </div>
-        
-                <div class="checkbox mb-3"  style="color: rgb(121, 123, 126) !important;">
-                    <label>
-                        <input type="checkbox" value="remember-me"> Recordarme
-                    </label>
-                </div>
-                <button class="w-100 btn btn-lg btn-primary" type="submit" style="margin-bottom: 15px;">Ingresar</button>
-                <!-- <p class="mt-5 mb-3 text-muted">&copy; 2023</p> -->
-            </form>
-        
-          
-        </main>
-      </div>
+        <div class="col-12 p-5" >
+            <div class="form-signin0" >
+                <main class="form-signin" >
+                    <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" style="text-align: center !important;">
+                        <img class="mb-4" src="assets/logos/login.png" alt="" width="200" height="200"
+                            style="text-align: center;">
+                        <h1 class="h3 mb-3 fw-normal">Inicio de sesión</h1>
+
+                        <div class="form-floating">
+                            <input type="email" class="form-control" name="email" [(ngModel)]="user.email"
+                                placeholder="Correo electrónico" required>
+                            <label for="floatingInput">Correo electrónico</label>
+                        </div>
+                        <div class="form-floating">
+                            <input type="password" class="form-control" name="password" [(ngModel)]="user.password"
+                                placeholder="Tú contraseña" required>
+                            <label for="floatingPassword">Contraseña</label>
+                        </div>
+
+                        <div class="checkbox mb-3" >
+                            <label>
+                                <input type="checkbox" value="remember-me"> Recordarme
+                            </label>
+                        </div>
+                        <button class="w-100 btn btn-lg btn-primary" type="submit"
+                            style="margin-bottom: 15px;">Ingresar</button>
+                        <!-- <p class="mt-5 mb-3 text-muted">&copy; 2023</p> -->
+                    </form>
+
+
+                </main>
+            </div>
+        </div>
     </div>
 </div>
-
-

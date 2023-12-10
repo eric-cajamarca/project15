@@ -5,7 +5,7 @@
     <div class="row justify-content-center" >
       <div class="col-12 col-lg-11 col-xl-11">
 
-        <h2>Bien venido al área de despachos</h2>
+        <h3>Bien venido al módulo de despachos</h3>
         <p>Aquí se lista el comprobante de compra mas la descripcion de la mercaderia que el cliente a retirado.</p>
 
 
@@ -21,9 +21,9 @@
           </select>
 
 
-          <div class="input-group input-group-merge">
+          <div class="input-group input-group-merge" style="width: 40%;">
             <input type="text" class="form-control form-control-appended" placeholder="Buscador general" name="filtro"
-              [(ngModel)]="filtro">
+              [(ngModel)]="filtro" >
             <div class="input-group-append">
               <button class="btn btn-primary" (click)="filtrar()">
                 Buscar
@@ -36,7 +36,7 @@
 
         </div>
 
-        <h3>Comprobante de compra</h3>
+        <h5>Comprobante de compra</h5>
 
         <div class="card">
           <div class="card-header">
@@ -44,7 +44,7 @@
             Cliente: {{compVenta.Razon_Social}}
           </div>
           <div class="card-body">
-            <h5 class="card-title">Detalle del comprobante</h5>
+            <h6 class="card-title">Detalle del comprobante</h6>
 
             <div class="table-responsive">
               <table class="table table-dark">
@@ -96,7 +96,7 @@
           </div>
         </div>
 
-        <h3>Comprobantes de despachos</h3>
+        <h5>Comprobantes de despachos</h5>
 
 
         <div class="accordion" id="accordionExample">

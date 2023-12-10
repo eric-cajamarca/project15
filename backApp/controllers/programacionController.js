@@ -47,8 +47,8 @@ async function obtener_programacion_id(req, res) {
         if(rol == 'Administrador'){
            // query = 'SELECT * FROM ProgramacionPedidos';
             //quiero que la consulta tambien me traiga la descripcion del estado
-             //query = 'SELECT * FROM ProgramacionPedidos INNER JOIN EstadosPedidos ON ProgramacionPedidos.idEstado = EstadosPedidos.idEstado';
-             query = 'SELECT ProgramacionPedidos.CompVentas, ProgramacionPedidos.RSocial, EstadosPedidos.Descripcion FROM ProgramacionPedidos, EstadosPedidos WHERE ProgramacionPedidos.idEstado = EstadosPedidos.idEstado';
+             query = 'SELECT * FROM ProgramacionPedidos INNER JOIN EstadosPedidos ON ProgramacionPedidos.idEstado = EstadosPedidos.idEstado';
+             //query = 'SELECT ProgramacionPedidos.CompVentas, ProgramacionPedidos.RSocial, EstadosPedidos.Descripcion FROM ProgramacionPedidos, EstadosPedidos WHERE ProgramacionPedidos.idEstado = EstadosPedidos.idEstado';
 
             console.log(query);
 

@@ -6,6 +6,7 @@ var auth  = require('../middlewares/autenticate');
 // Rutas CRUD para la tabla
 // READ
 api.get('/programacion', auth.auth, programacionController.obtener_programacion);
+api.get('/programacion/:id', auth.auth, programacionController.obtener_programacion_id);
 
 // CREATE
 // api.post('/empresa',auth.auth, empresasController.createEmpresa);

@@ -23,6 +23,9 @@ export class ProgramacionService {
     return this._http.get(this.url+'programacion',{headers:headers});
   }
 
-
+  obtener_programaciones_id(id:any,token:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.get(this.url+'programacion/'+id,{headers:headers});
+  }
 
 }
