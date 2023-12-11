@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { DventaService } from 'src/app/services/dventa.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 
 @Component({
@@ -12,11 +13,13 @@ export class ClienteEnviosComponent {
   public token: any = "";
   public enviosProgramados: any = [];
   public idUrlFecha = '';
+  public filtro = '';
 
   constructor(
     private _cookieService: CookieService,
     private _programacionService: ProgramacionService,
     private _route: ActivatedRoute,
+    private _dventasService: DventaService,
   ) { 
     this.token = this._cookieService.get('token');
 
@@ -61,6 +64,32 @@ export class ClienteEnviosComponent {
         console.log('this.enviosProgramados',this.enviosProgramados);
       }
     )
+
+     
+    // this._dventasService.obtener_datos_dventas_empresa(this.filtro, this.idempresa, this.token).subscribe(
+    //   response => {
+
+    //     this.detalleVenta = response;
+        // if (response != undefined) {
+        //   response.forEach((item:any) =>{
+        //     this.detalleVenta.id = item.id;idad;
+        //     this.detalleVenta.Codigo = item.Codigo;
+        //     this.detalleVenta.compVenta = item.CompVenta;
+        //     this.detalleVenta.Cantidad = item.Cant
+        //     this.detalleVenta.Descripcion = item.Descripcion;
+        //     this.detalleVenta.Presentacion = item.Presentacion;
+        //     this.detalleVenta.Precio = item.PVenta;
+        //     this.detalleVenta.CEntregado = item.CantEntregado;
+
+        //   });
+
+        // } else {
+
+        // }
+
+    //     console.log('obtener datos detalle ventas', this.detalleVenta);
+    //   }
+    // );
   }
 
 }

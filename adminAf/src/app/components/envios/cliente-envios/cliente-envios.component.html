@@ -1,71 +1,77 @@
 <app-top-nav></app-top-nav>
 
 <div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-12 col-lg-11 col-xl-11" style="text-align: center;">
-            <h4 style="color: white; margin-top: 20px;">Detalle de los envios programados</h4>
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-11 col-xl-11" style="text-align: center;">
+      <h4 style="color: white; margin-top: 20px;">Detalle de los envios programados</h4>
 
-            <div class="contenedor">
+      <div class="contenedor">
 
-                <ng-container *ngFor="let item of enviosProgramados">
-                    <ng-container *ngIf="item.FEnvio == idUrlFecha">
-                        <ol class="list-group" style="width: 60%; margin: auto; margin-bottom: 20px; text-align: left;">
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div> <strong>Fecha: </strong> {{item.FEnvio}} </div>
-                                    <div><strong>Documento: </strong> {{item.Ruc}} </div>
-                                    <div><strong>Cliente: </strong> {{item.RSocial}} </div>
-                                    <div><strong>Dirección: </strong> {{item.Direccion}} </div>
-                                    <div><strong>Referencia: </strong> {{item.Referencia}} </div>
-                                    <div><strong>Distrito: </strong> {{item.Distrito}} </div>
-                                    <div><strong>Celular: </strong> {{item.Celular}} </div>
-                                    <div><strong>Estado: </strong>
-                                        <span class="badge bg-secondary"
-                                            *ngIf="item.descripcion == 'Sin Programación'">{{item.descripcion}}</span>
-                                        <span class="badge bg-info text-dark"
-                                            *ngIf="item.descripcion == 'Programado'">{{item.descripcion}}</span>
-                                        <span class="badge bg-primary"
-                                            *ngIf="item.descripcion == 'En camino'">{{item.descripcion}}</span>
-                                        <span class="badge bg-success"
-                                            *ngIf="item.descripcion == 'Entregado'">{{item.descripcion}}</span>
-                                    </div>
+        <ng-container *ngFor="let item of enviosProgramados">
+          <ng-container *ngIf="item.FEnvio == idUrlFecha">
+            <ol class="list-group" style="width: 70%; margin: auto; margin-bottom: 20px; text-align: left;">
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto" style="width: 100%;">
+                  <hr>
+                    <div style="font-size: 20px;"> <strong>Fecha: </strong> {{item.FEnvio}} </div>
+                  <hr />
+                  <div class="documento-celular">
+                    <div><strong>Documento: </strong> {{item.Ruc}}</div> <br>
+                    <div style="margin-left: 20px;"><strong>Celular: </strong> {{item.Celular}}</div>
+                  </div>
+                  <div><strong>Cliente: </strong> {{item.RSocial}} </div>
+                  <!-- <div><strong>Celular: </strong> {{item.Celular}} </div> -->
+                  <hr>
+                    <div class="distrito"><strong>Distrito: </strong> {{item.Distrito}} </div>
 
-
-                                </div>
-
-                            </li>
-                            <div class="accordion" id="accordionExample">
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingOne">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseOne" aria-expanded="true"
-                                            aria-controls="collapseOne">
-                                            Accordion Item #1
-                                        </button>
-                                    </h2>
-                                    <div id="collapseOne" class="accordion-collapse collapse show"
-                                        aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">
-                                            <strong>This is the first item's accordion body.</strong> It is shown by
-                                            default.
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                            </div>
-
-                        </ol>
-
-                    </ng-container>
-
-                </ng-container>
-
-            </div>
+                    <div class="direccion"><strong>Dirección: </strong> {{item.Direccion}} </div>
+                    <div class="referencia"><strong>Referencia: </strong> {{item.Referencia}} </div>
+                  <hr />
+                 
+                  <div><strong>Estado: </strong>
+                    <span class="badge bg-secondary"
+                      *ngIf="item.descripcion == 'Sin Programación'">{{item.descripcion}}</span>
+                    <span class="badge bg-info text-dark"
+                      *ngIf="item.descripcion == 'Programado'">{{item.descripcion}}</span>
+                    <span class="badge bg-primary" *ngIf="item.descripcion == 'En camino'">{{item.descripcion}}</span>
+                    <span class="badge bg-success" *ngIf="item.descripcion == 'Entregado'">{{item.descripcion}}</span>
+                  </div>
 
 
+                </div>
 
-        </div>
+              </li>
+              <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Accordion Item #1
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                    data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <strong>This is the first item's accordion body.</strong> It is shown by
+                      default.
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </ol>
+
+          </ng-container>
+
+        </ng-container>
+
+      </div>
+
+
+
     </div>
+  </div>
 </div>
 
 

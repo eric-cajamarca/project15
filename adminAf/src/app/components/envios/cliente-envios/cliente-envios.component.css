@@ -14,3 +14,32 @@
     text-align: right;
     margin-bottom: auto;
 }
+
+.direccion{
+    color: rgb(28, 128, 243);
+    font-size: 15px;
+    text-align: left;
+}
+
+.referencia{
+    color: rgb(10, 121, 113);
+    font-size: 15px;
+    text-align: left;
+}
+
+.distrito{
+    color: rgb(87, 111, 165);
+    font-size: 15px;
+    text-align: left;
+
+}
+
+.documento-celular{
+    display: inline-flex;
+}
+
+.list-group-item{
+    color: gray;
+    font-size: 15px;
+    text-align: left;
+}

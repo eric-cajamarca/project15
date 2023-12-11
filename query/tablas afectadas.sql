@@ -5,6 +5,7 @@ select * from HistorialPedidos
 select * from ComprobantesTienda01
 select * from usuarioWeb
 select * from ProgramacionPedidos
+select * from EstadosPedidos
 
 
 --truncate table historialpedidos
