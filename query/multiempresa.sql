@@ -4,7 +4,7 @@ use multiempresa
 
 --drop table Empresas
 CREATE TABLE Empresas(
-	idEmpresa int IDENTITY(1,1) primary key NOT NULL,
+	idEmpresa UNIQUEIDENTIFIER primary key NOT NULL,
 	ruc varchar(11) NULL,
 	razon_Social varchar(200) NULL,
 	rubro varchar(200) NULL,
@@ -18,13 +18,16 @@ CREATE TABLE Empresas(
 	Logo varbinary(max) NULL,
 	Alias varchar(29) NULL,
 )
-
+go
+select * from Empresas
+--insert into Empresas values (NEWID(),'20145678961','EMPRESA PRUEBA','PRUEBA','DIRECCION PRUEBA','JAEN','CAJAMARCA','JAEN','993288445','998974567','EMPRESA@GAMIL.COM',CONVERT(varbinary(max),''),'FENIX');
+go
 --truncate table Empleado
 create table Empleados
 (
-	IdEmpleado int identity (1,1) primary key not null,
-	idEmpresa int not null,
-	idDocumento int not null,
+	IdEmpleado UNIQUEIDENTIFIER primary key NOT NULL,
+	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas (idEmpresa) ON DELETE CASCADE,
+	idDocumento int FOREIGN KEY REFERENCES Documentos (idDocumento) not null,
 	dni varchar(8) ,
 	nombres varchar (50),
 	apellidos varchar(100),
@@ -34,48 +37,49 @@ create table Empleados
 	fIngreso varchar (10),
 	fNacimiento varchar (10),
 	foto varbinary(max),
-	idUsuario int not null,
-	FOREIGN KEY (idEmpresa) REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-	FOREIGN KEY (idDocumento) REFERENCES Documentos(idDocumento) ON DELETE CASCADE,
-	FOREIGN KEY (idUsuario) REFERENCES Usuarios(idUsuario) ON DELETE CASCADE,
+	idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+	
 )
 go
---truncate table usuarios
+--drop table usuarios
 CREATE TABLE Usuarios
 (
-	idUsuario int identity (1,1) primary key  NOT NULL,
-	idEmpresa int not null,
+	idUsuario UNIQUEIDENTIFIER primary key NOT NULL,
+	idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 	nombres varchar(50) NOT NULL,
 	apellidos varchar(100) NOT NULL,
 	email varchar(100) NOT NULL,
 	password text NOT NULL,
-	rol varchar(50) NOT NULL,
+	idRol UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Rol(idRol) not null, 
 	estado bit NOT NULL,
 	fregistro date NOT NULL,
-	FOREIGN KEY (idEmpresa) REFERENCES Empresas(idEmpresa),
+	
  )
 GO
 
 --select * from usuarios
 go
 
+--drop table Rol
 create table Rol
 (
-idRol int identity (1,1) primary key not null,
-idEmpresa int not null,
+idRol UNIQUEIDENTIFIER primary key NOT NULL,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 descripcion varchar(50) not null,
-FOREIGN KEY (idEmpresa) REFERENCES Empresas(idEmpresa),
-)
 
-go
-
-create table Permisos
-(
-idPermisos int identity(1,1) primary key not null,
-idEmpresa int not null,
-nombres varchar(50)not null,
-descripcion varchar(200) not null,
 )
+--select * from Rol
+--insert into Rol values('33F8239F-6AAC-458D-B7CA-8E8AB583C5B1','Administrador');
+
+--go
+
+--create table Permisos
+--(
+--idPermisos int identity(1,1) primary key not null,
+--idEmpresa int not null,
+--nombres varchar(50)not null,
+--descripcion varchar(200) not null,
+--)
 
 go
 
@@ -86,20 +90,20 @@ nombre varchar(20) not null,
 descripcion varchar(200) not null,
 
 )
-select * from Documentos
+--select * from Documentos
 go
 
-insert into Documentos values ('1','DNI','Documento Nacional de Identidad')
-insert into Documentos values ('6','RUC','Registro Unico de Contributentes')
-insert into Documentos values ('4','CARNET','Carnet de extrangería')
-insert into Documentos values ('A','CEDULA','Cédula diplomática de identidad')
+--insert into Documentos values ('1','DNI','Documento Nacional de Identidad')
+--insert into Documentos values ('6','RUC','Registro Unico de Contributentes')
+--insert into Documentos values ('4','CARNET','Carnet de extrangería')
+--insert into Documentos values ('A','CEDULA','Cédula diplomática de identidad')
 
 go
 
 create table Clientes
 (
 idCliente int identity (1,1) primary key not null ,
-idEmpresa int not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 ruc varchar(11) not null,
 idDocumento int not null,
 rSocial varchar(200) not null,
@@ -110,13 +114,14 @@ ubigeo varchar(12) null,
 celular varchar (50) null,
 correo varchar(100) null,
 condicion varchar(50) null,
+FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
 )
 go
 
 create table Proveedors
 (
 idProveedor int identity(1,1) primary key not null,
-idEmpresa int not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 idDocumento int not null,
 ruc varchar (11) not null,
 rSocial varchar (200) not null,
@@ -126,14 +131,16 @@ ubigeo varchar(12) null,
 celular varchar (50) null,
 correo varchar(100) null,
 condicion varchar(50) null,
+
+FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
 )
 go
 
 create table Presentacion
 (
 idPresentacion int identity(1,1) primary key not null,
-idEmpresa int not null,
-Descripcion varchar(50) not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE null,
+Descripcion varchar(50) null,
 Multiplicador int null,
 
 )
@@ -160,11 +167,12 @@ select * from Presentacion
 
 
 --drop table Categoria
-create table Categoria 
+create table Categorias 
 (
 idCategoria int identity (1,1) primary key not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 Descripcion varchar(200)not null,
-idEmpresa int null
+
 
 
 )
@@ -175,14 +183,15 @@ go
 
 
 --TRUNCATE TABLE CORRELATIVO
-create table Correlativo
+create table Correlativos
 (
 idCorrelativo int identity (1,1) primary key not null,
-idEmpresa int not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 numero int not null,
 
-)
 
+)
+go
 --insert into Correlativo values(1,100000)
 --insert into Correlativo values(2,200000)
 
@@ -192,22 +201,25 @@ numero int not null,
 --drop table Productos
 create table Productos   
 (
-idProducto int identity(1,1) primary key not null,
+idProducto UNIQUEIDENTIFIER primary key not null,
+idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 Codigo varchar(20) not null,
-idCategoria varchar(50) not null,
+idCategoria int not null,
 descripcion varchar(200) not null,
-idPresentacion varchar(20) not null,
+idPresentacion int not null,
 cUnitario decimal(18,5) not null,
 cantidad decimal(18,2) not null, --agrego la cantidad
 fProduccion varchar(10) null,
 fVencimiento varchar(10) null,
-idEmpresa int not null,
 alertaMinimo varchar(5)null,
 alertaMaximo varchar(5) null,
 VecesVendidas int null,
 facturar varchar(2) null,
-idUsuario int not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
 FIngreso varchar(10) not null,
+
+FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
+FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
 )
 
 go
@@ -216,11 +228,12 @@ go
 create table PreciosV
 (
 idPreciosV int identity (1,1) not null,
-idEmpresa int not null,
-idProducto varchar(20) not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 Mayorista decimal(18,4) null,
 Cliente decimal(18,4) null,
 Transeunte decimal(18,4) null,
+idUSuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
 
 )
 go
@@ -228,11 +241,11 @@ go
 create table HistorialProductos
 (
 idHistorialP int identity(1,1) primary key not null,
-idEmpresa int not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 Fecha date not null,
-idProducto int not null,
+idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 descripcion varchar(100), 
-idUsuario int not null
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
 )
 
 go
@@ -244,10 +257,11 @@ go
 create table Sucursal
 (
 idSucursal int identity (1,1) primary key not null,
-idEmpresa int not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 nombre varchar(20) not null,
 direccion varchar(200) null,
 inventario decimal(18,4) null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
 )
 
 go
@@ -255,25 +269,29 @@ go
 create table stockSucursal
 (
 idStockSucursal int identity(1,1) primary key not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 idSucursal int not null,
-idProducto int not null,
+idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 idCategoria int not null,
 cantidad decimal(18,2) not null,
 ubicacion Varchar(20) null,
 fIngreso date null,
-idUsuario int,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+
+FOREIGN KEY (idSucursal) REFERENCES Sucursal(idSucursal),
+FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
 )
 
 --DROP TABLE ORDENESALIDA
 create table OrdenSalida
 (
 idOrdenSalida int identity(1,1) primary key not null,
-idEmpresa int not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 fechaSalida date not null,
 responsable varchar(200) null,
-idProducto int not null,
+idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 cantidad decimal(18,3) null,
-idUsuario int not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,,
 )
 
 
@@ -281,7 +299,7 @@ idUsuario int not null,
 create table Comprobantes
 (
 idComprobante int identity (1,1) primary key not null,
-idEmpresa int not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 codigo varchar(2) not null,
 nombre varchar(50) not null,
 serie varchar(4) not null,
@@ -314,7 +332,7 @@ go
 create table Compras
 (
 idcompra int identity (1,1) primary key not null,
-idEmpresa int not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 compCompra char(13) not null,
 idComprobante int not null,
 serie varchar(4) not null,
@@ -333,7 +351,12 @@ descuentos decimal(18,2),
 total decimal(18,2),
 idMediosPago int not null, --el estado determinara pendiente o pagado
 compRelacionado varchar(50),
-idUsuario int not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+
+FOREIGN KEY (idComprobante) REFERENCES Comprobantes(idComprobante),
+FOREIGN KEY (idMoneda) REFERENCES Moneda (idMoneda),
+FOREIGN KEY (idProveedor) REFERENCES Proveedors (idProveedor),
+FOREIGN KEY (idMediosPago) REFERENCES MediosPago (idMediosPago),
 )
 
 go
@@ -376,7 +399,7 @@ go
 
 create table EstadosPedidos(
 idEstadoPEdido int identity(1,1) primary key,
-idEmpresa int not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 descripcion varchar(50) not null
 )
 select * from EstadosPedidos
@@ -394,18 +417,23 @@ go
 create table DetalleCompras
 (
 idDetalleCompra int identity(1,1) primary key not null,
-idEmpresa int not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 idCompra int not null,
-idProducto int not null,
+idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 idCategoria int not null,
 idSucursal int not null,
 Cantidad decimal(18,3) not null,
 --Codigo varchar(50),
 --Categoria varchar(50),
 --Descripcion varchar(200),
---Presentacion varchar(20),
-P_Unitario decimal(18,5),
-Total decimal(18,2),
+idPresentacion int not null,
+pUnitario decimal(18,5),
+total decimal(18,2),
+
+FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
+FOREIGN KEY (idCompra) REFERENCES Compras (idCompra),
+FOREIGN KEY (idSucursal) REFERENCES Sucursal (idSucursal),
+FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
 )
 
 --SELECT * FROM DetalleCompras
@@ -414,7 +442,7 @@ go
 create table BorradorCompras
 (
 idBorradorCompras int identity(1,1) not null,
-idEmpresa int not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 Cantidad decimal(18,3) null,
 Codigo varchar(50) null,
 Categoria varchar(50) null,
@@ -439,7 +467,7 @@ go
 CREATE TABLE Ventas
 (
 	idVentas int identity(1,1) primary key not null,
-	idEmpresa int not null,
+	idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 	compVenta varchar(13) NOT NULL,
 	idComprobante int not NULL,
 	serie varchar(4) not NULL,
@@ -449,7 +477,7 @@ CREATE TABLE Ventas
 	idDocumento int not NULL,
 	idCliente int NULL,
 	idMoneda int NULL,
-	idMediosPago int not NULL, --contado, deposito...
+	idMediosPago varchar(3) not NULL, --contado, deposito...
 	subTotal decimal(18, 2) NULL,
 	igv decimal(18, 2) NULL,
 	exonerado decimal(18, 2) NULL,
@@ -462,7 +490,18 @@ CREATE TABLE Ventas
 	idEstadoPedido int not NULL,
 	idEstadoSunat int not NULL,
 	idCompRel int not NULL,
-	idUsuario int not NULL,
+	idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+
+	FOREIGN KEY (idComprobante) REFERENCES Comprobantes (idComprobante),
+	FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
+	FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
+	FOREIGN KEY (idMoneda) REFERENCES Moneda (idMoneda),
+	FOREIGN KEY (idMediosPago) REFERENCES MediosPago (idMediosPago),
+	FOREIGN KEY (idEstadoPago) REFERENCES EstadoPago (idEstadoPago),
+	FOREIGN KEY (idEstadoPedido) REFERENCES EstadosPedidos (idEstadoPedido),
+	FOREIGN KEY (idEstadoSunat) REFERENCES EstadoSunat (idEstadoSunat),
+	FOREIGN KEY (idCompRel) REFERENCES ComprobanteRelacionado (idCompRel),
+	
 )
 
 select * from ventas
@@ -470,9 +509,10 @@ select * from ventas
 
 CREATE TABLE DetalleVentas(
 	idDetalleVenta int identity(1,1) primary key NOT NULL,
-	idVenta int not NULL,
+	idVentas int not NULL,
 	cantidad decimal(18, 3) not NULL,
-	idProducto int not null,
+	idCategoria int not null,
+	idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 	--[Descripcion] [varchar](200) NULL,
 	idPresentacion int not NULL,
 	pVenta decimal(18, 5) not NULL,
@@ -482,12 +522,17 @@ CREATE TABLE DetalleVentas(
 	total decimal(18, 2) NULL,
 	cantEntregado decimal(18, 2) NULL,
 	hVenta varchar(10) NULL,
+
+	
+	FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
+	FOREIGN KEY (idVentas) REFERENCES Ventas (idVentas),
+	FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
 )
 
 
 CREATE TABLE BorradorVenta(
 	idBorradorVenta int identity(1,1) primary key not null,
-	idEmpresa int not null,
+	idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 	cantidad decimal(18, 3) NULL,
 	codigo varchar(50) NULL,
 	descripcion varchar(200) NULL,
@@ -501,7 +546,7 @@ GO
 
 CREATE TABLE Caja(
 	idCaja int identity(1,1) primary key not null,
-	idEmpresa int not null,
+	idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 	fecha date NOT NULL,
 	estadoAC varchar(20) NULL,
 	horaAC varchar(20) NULL,
@@ -516,6 +561,54 @@ CREATE TABLE Caja(
 	credito decimal(18, 2) NULL,
 	FOREIGN KEY (idEmpresa) REFERENCES Empresas(idEmpresa),
 );
+
+CREATE TABLE Cotizaciones(
+	idCotizacion int identity(1,1) primary key not null,
+	idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE, 
+	serieNumero char(13) NOT NULL,
+	idComprobante int NULL,
+	serie varchar(4) NULL,
+	numero varchar(8) NULL,
+	fEmision varchar(10) NULL,
+	fVencimiento varchar(10) NULL,
+	idDocumento int not NULL,
+	idCliente int not null,
+	moneda varchar(20) NULL,
+	idCondicionPago int NULL,
+	total decimal (18, 2) NULL,
+	idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+	Conversion varchar(13) NULL,
+
+	FOREIGN KEY (idComprobante) REFERENCES Comprobantes (idComprobante),
+	FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
+	FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
+	)
+
+	select * from cotizaciones
+
+
+
+	CREATE TABLE DetalleCotizacion(
+	idDetalleCotizacion int IDENTITY(1,1) primary key NOT NULL,
+	idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+	idCotizacion int not null,
+	cantidad decimal(18, 3) NULL,
+	codigo varchar(50) NULL,
+	descripcion varchar(200) NULL,
+	idPresentacion int not NULL,
+	pVenta decimal(18, 5) NULL,
+	descuentos decimal(18, 2) NULL,
+	igv decimal(18, 2) NULL,
+	ISC decimal(18, 2) NULL,
+	total decimal(18, 2) NULL,
+	idSucursal int not null,
+	hVenta varchar(10) NULL,
+
+	FOREIGN KEY (idCotizacion) REFERENCES Cotizaciones (idCotizacion),
+	FOREIGN KEY (idSucursal) REFERENCES Sucursal (idSucursal),
+	FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
+	
+)
 
 -------------------------------------
 --SUNAT
