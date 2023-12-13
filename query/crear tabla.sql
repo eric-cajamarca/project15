@@ -33,5 +33,40 @@ create table EstadosPedidos(
 idEstado int identity(1,1) primary key,
 descripcion varchar(50) not null
 )
-
 select * from EstadosPedidos
+
+CREATE TABLE ProgramacionPedidos(
+	idProgramacion int primary key,
+	idCompVentas varchar(13) not null,
+	--FVenta varchar(10) NULL,
+	FEnvio varchar(10) NULL,
+	idCliente int not null,
+	--Ruc varchar(11) NULL,
+	--RSocial varchar(200) NULL,
+	--Direccion varchar(200) NULL,
+	--Distrito varchar(50) NULL,
+	Referencia varchar(200) NULL,
+	--Celular varchar(50) NULL,
+	Observaciones varchar(200) NULL,
+	PagoXflete decimal(18, 2) NULL,
+	idEmpresa varchar(20) not null,
+	idEstado int not null
+)
+
+select * from Empresa
+
+CREATE TABLE Empresa(
+	idEmpresa int IDENTITY(1,1) NOT NULL,
+	ruc varchar(11) NULL,
+	razon_Social varchar(200) NULL,
+	rubro varchar(200) NULL,
+	direccion varchar(200) NULL,
+	distrito varchar(50) NULL,
+	region varchar(50) NULL,
+	provincia varchar(50) NULL,
+	celular varchar(11) NULL,
+	Whatsapp varchar(11) NULL,
+	Correo varchar(100) NULL,
+	Logo varbinary(max) NULL,
+	Alias varchar(29) NULL,
+)

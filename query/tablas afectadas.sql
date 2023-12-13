@@ -12,12 +12,19 @@ select * from EstadosPedidos
 select * from Usuarios
 
 --modifico la tabla programacion pedidos
-ALTER TABLE ProgramacionPedidos ADD Estado bit;
+ALTER TABLE ProgramacionPedidos ADD idEstado int;
 --alterar el tipo de dato de la columna
-ALTER TABLE ProgramacionPedidos
-ALTER COLUMN Estado int;
+--ALTER TABLE ProgramacionPedidos
+--ALTER COLUMN Estado int;
 --cambiar el nombre de una columna
 EXEC sp_rename 'ProgramacionPedidos.Estado', 'idEstado', 'COLUMN';
 
+--query para traer una tabla recionada
+SELECT * FROM ProgramacionPedidos INNER JOIN EstadosPedidos ON ProgramacionPedidos.idEstado = EstadosPedidos.idEstado
 
-SELECT * FROM ProgramacionPedidos INNER JOIN Estado ON EstaPedidos.id = Estado.idEstado
+
+--modifico en la tabla programacionpedidos
+EXEC sp_rename 'ProgramacionPedidos.CompVentas', 'idCompVentas', 'COLUMN';
+
+SELECT * FROM ProgramacionPedidos
+SELECT * FROM ProgramacionPedidos INNER JOIN EstadosPedidos ON ProgramacionPedidos.idEstado = EstadosPedidos.idEstado
