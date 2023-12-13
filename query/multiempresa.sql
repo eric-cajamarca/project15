@@ -2,8 +2,9 @@ create database multiempresa
 
 use multiempresa
 
+--drop table Empresas
 CREATE TABLE Empresas(
-	idEmpresa int IDENTITY(1,1) NOT NULL,
+	idEmpresa int IDENTITY(1,1) primary key NOT NULL,
 	ruc varchar(11) NULL,
 	razon_Social varchar(200) NULL,
 	rubro varchar(200) NULL,
@@ -33,6 +34,10 @@ create table Empleados
 	fIngreso varchar (10),
 	fNacimiento varchar (10),
 	foto varbinary(max),
+	idUsuario int not null,
+	FOREIGN KEY (idEmpresa) REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+	FOREIGN KEY (idDocumento) REFERENCES Documentos(idDocumento) ON DELETE CASCADE,
+	FOREIGN KEY (idUsuario) REFERENCES Usuarios(idUsuario) ON DELETE CASCADE,
 )
 go
 --truncate table usuarios
@@ -46,19 +51,20 @@ CREATE TABLE Usuarios
 	password text NOT NULL,
 	rol varchar(50) NOT NULL,
 	estado bit NOT NULL,
-	fregistro varchar(50) NOT NULL
+	fregistro date NOT NULL,
+	FOREIGN KEY (idEmpresa) REFERENCES Empresas(idEmpresa),
  )
 GO
 
 --select * from usuarios
 go
 
-create table Cargo
+create table Rol
 (
-idCargo int identity (1,1) primary key not null,
+idRol int identity (1,1) primary key not null,
 idEmpresa int not null,
 descripcion varchar(50) not null,
-
+FOREIGN KEY (idEmpresa) REFERENCES Empresas(idEmpresa),
 )
 
 go
@@ -464,7 +470,6 @@ select * from ventas
 
 CREATE TABLE DetalleVentas(
 	idDetalleVenta int identity(1,1) primary key NOT NULL,
-	idEmpresa int not null,
 	idVenta int not NULL,
 	cantidad decimal(18, 3) not NULL,
 	idProducto int not null,
@@ -480,8 +485,42 @@ CREATE TABLE DetalleVentas(
 )
 
 
+CREATE TABLE BorradorVenta(
+	idBorradorVenta int identity(1,1) primary key not null,
+	idEmpresa int not null,
+	cantidad decimal(18, 3) NULL,
+	codigo varchar(50) NULL,
+	descripcion varchar(200) NULL,
+	presentacion varchar(3) NULL,
+	pVenta decimal(18, 5) NULL,
+	total decimal(18, 2) NULL,
+	alias varchar(50) NULL
+)
+
+GO
+
+CREATE TABLE Caja(
+	idCaja int identity(1,1) primary key not null,
+	idEmpresa int not null,
+	fecha date NOT NULL,
+	estadoAC varchar(20) NULL,
+	horaAC varchar(20) NULL,
+	usuarioAC varchar(20) NULL,
+	efectivoAC decimal(18, 2) NULL,
+	estadoCC varchar(20) NULL,
+	horaCC varchar(20) NULL,
+	usuarioCC varchar(20) NULL,
+	efectivoCC decimal(18, 2) NULL,
+	transferencia decimal(18, 2) NULL,
+	tarjeta decimal(18, 2) NULL,
+	credito decimal(18, 2) NULL,
+	FOREIGN KEY (idEmpresa) REFERENCES Empresas(idEmpresa),
+);
 
 -------------------------------------
+--SUNAT
+-------------------------------------
+
 
 create table Tributos
 (
@@ -514,3 +553,4 @@ create table ComprobanteRelacionado
 	idCompRel int identity(1,1) primary key not null,
 	descripcion varchar(50) not null,
 )
+
