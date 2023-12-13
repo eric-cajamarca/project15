@@ -309,14 +309,14 @@ create table Compras
 (
 idcompra int identity (1,1) primary key not null,
 idEmpresa int not null,
-serieNumero char(13) not null,
+compCompra char(13) not null,
 idComprobante int not null,
 serie varchar(4) not null,
 numero varchar (8) not null,
 fEmision varchar (10) not null,
 fVencimiento varchar(10) null,
 idProveedor int not null,
-moneda varchar(20),
+idMoneda int not null,
 condicionPago varchar (20),
 subTotal decimal(18,2),
 igv decimal(18,2),
@@ -346,6 +346,43 @@ go
 --insert into MediosPago values	('009','CONTADO');
 --insert into MediosPago values	('009','CRÉDITO');
 
+CREATE TABLE Moneda(
+	idMoneda int identity(1,1) primary key not null,
+	codigoc varchar(3) NOT NULL,
+	descripcion varchar(20) not NULL,
+	simbolo varchar(3) not NULL,
+
+)
+
+select * from moneda
+
+create table EstadoPago
+(
+	idEstadoPago int identity(1,1) primary key not null,
+	descripcion varchar(20) not null,
+)
+go
+
+--insert into EstadoPago values	('Pendiente');
+--insert into EstadoPago values	('Pagado');
+
+
+
+create table EstadosPedidos(
+idEstadoPEdido int identity(1,1) primary key,
+idEmpresa int not null,
+descripcion varchar(50) not null
+)
+select * from EstadosPedidos
+go
+
+--insert into EstadosPedidos values	('Sin Programar');
+--insert into EstadosPedidos values	('Programado');
+--insert into EstadosPedidos values	('Enviado');
+--insert into EstadosPedidos values	('Entregado');
+
+
+
 --drop table DetalleCompras
 
 create table DetalleCompras
@@ -370,25 +407,81 @@ go
 
 create table BorradorCompras
 (
-Cantidad decimal(18,3),
-Codigo varchar(50),
-Categoria varchar(50),
-Descripcion varchar(200),
-Presentacion varchar(20),
-CUnitario decimal(18,5),
-FProduccion varchar(10),
-FVencimiento varchar(10),
-Ubicacion varchar(20),
-Total decimal(18,2),
-Serie_Numero char(13),
-Razon_Social varchar(200)
+idBorradorCompras int identity(1,1) not null,
+idEmpresa int not null,
+Cantidad decimal(18,3) null,
+Codigo varchar(50) null,
+Categoria varchar(50) null,
+Descripcion varchar(200) null,
+Presentacion varchar(20) null,
+CUnitario decimal(18,5) null,
+FProduccion varchar(10) null,
+FVencimiento varchar(10) null,
+Ubicacion varchar(20) null,
+Total decimal(18,2) null,
+Serie_Numero char(13) null,
+Razon_Social varchar(200) null
 )
 SELECT * FROM BorradorCompras
 go
 
 
 
+------------------------------------
+--VENTAS
+------------------------------------
+CREATE TABLE Ventas
+(
+	idVentas int identity(1,1) primary key not null,
+	idEmpresa int not null,
+	compVenta varchar(13) NOT NULL,
+	idComprobante int not NULL,
+	serie varchar(4) not NULL,
+	numero varchar(8) not NULL,
+	fEmision varchar(10) not NULL,
+	fVencimiento varchar(10) not NULL,
+	idDocumento int not NULL,
+	idCliente int NULL,
+	idMoneda int NULL,
+	idMediosPago int not NULL, --contado, deposito...
+	subTotal decimal(18, 2) NULL,
+	igv decimal(18, 2) NULL,
+	exonerado decimal(18, 2) NULL,
+	gratuito decimal(18, 2) NULL,
+	icbper decimal(18, 2) NULL,
+	otrosCargos decimal(18, 2) NULL,
+	descuentos decimal(18, 2) NULL,
+	total decimal(18, 2) NULL,
+	idEstadoPago int not NULL, --pagado o pendiente
+	idEstadoPedido int not NULL,
+	idEstadoSunat int not NULL,
+	idCompRel int not NULL,
+	idUsuario int not NULL,
+)
 
+select * from ventas
+
+
+CREATE TABLE DetalleVentas(
+	idDetalleVenta int identity(1,1) primary key NOT NULL,
+	idEmpresa int not null,
+	idVenta int not NULL,
+	cantidad decimal(18, 3) not NULL,
+	idProducto int not null,
+	--[Descripcion] [varchar](200) NULL,
+	idPresentacion int not NULL,
+	pVenta decimal(18, 5) not NULL,
+	descuentos decimal(18, 2) NULL,
+	igv decimal(18, 2) NULL,
+	ISC decimal(18, 2) NULL,
+	total decimal(18, 2) NULL,
+	cantEntregado decimal(18, 2) NULL,
+	hVenta varchar(10) NULL,
+)
+
+
+
+-------------------------------------
 
 create table Tributos
 (
@@ -407,3 +500,17 @@ create table Tributos
 --insert into Tributos values	('9998','Inafecto','FRE');
 --insert into Tributos values	('9999','Otros tributos','OTH');
 
+create table EstadoSunat
+(
+	idEstadoSunat int identity(1,1) primary key not null,
+	codigo varchar(3) not null,
+	descripcion varchar(30) not null,
+)
+go
+
+
+create table ComprobanteRelacionado
+(
+	idCompRel int identity(1,1) primary key not null,
+	descripcion varchar(50) not null,
+)
