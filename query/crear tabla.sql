@@ -8,7 +8,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 --drop table usuarioWeb
-CREATE TABLE usuarioWeb](
+CREATE TABLE usuarioWeb(
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[name] [varchar](50) NOT NULL,
 	[apellidos] [varchar](100) NOT NULL,
