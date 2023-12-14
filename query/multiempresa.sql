@@ -651,3 +651,263 @@ create table ComprobanteRelacionado
 	descripcion varchar(50) not null,
 )
 
+
+create table TipoCambio
+(
+idTipoCambio int identity(1,1) primary key,
+descripcion varchar(200),
+costo decimal(18,3),
+simbolo varchar(3)
+
+)
+--go
+--insert into TipoCambio values ('SOLES',1,'S/')
+--insert into TipoCambio values ('DOLARES AMERICANOS',3.688,'US$')
+--insert into TipoCambio values ('EUROS',3.688,'€')
+--SELECT * FROM TipoCambio
+--go
+
+
+
+--============================================================================================================================================================
+--RESTO DE TABLAS
+--============================================================================================================================================================
+create table Periodos
+(
+idPeriodo int identity(1,1) primary key not null,
+plazo int not null,
+descripcion varchar(20),
+)
+go
+
+--insert into Periodos values ('Dias')
+--insert into Periodos values ('Semanas')
+--insert into Periodos values ('Quincenal')
+--insert into Periodos values ('Meses')
+--insert into Periodos values ('Años')
+--go
+--select * from Periodos
+
+------------------------------
+--------CUENTAS X PAGAR
+-------------------------------
+
+--drop table CuentasxPagar
+
+create table CuentasxPagar
+(
+idCuentaxPagar int identity(1,1) primary key not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+idProveedor int not null,
+idCompra int not null,
+fEmision varchar(10),
+fVencimiento varchar(10),
+total decimal(18,2),
+idPeriodo int not null,
+cuota decimal(18,2),
+cPagadas varchar(2),
+saldo decimal(18,2),
+ctaBanco varchar(50),
+Estado varchar(50),
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+
+FOREIGN KEY (idProveedor) REFERENCES Proveedors (idProveedor),
+FOREIGN KEY (idCompra) REFERENCES Compras (idCompra),
+FOREIGN KEY (idPeriodo) REFERENCES Periodos (idPeriodo),
+)
+go
+
+
+go
+---drop table HistorialCXP
+create table HistorialCXP
+(
+idHistorialCXP int identity(1,1) not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+fecha varchar(10),
+idCuentaxPagar int not null,
+idProveedor int not null,
+nroCuota int,
+nroDocpago varchar(13),
+responsable varchar(200),
+total decimal(18,2),
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+
+FOREIGN KEY (idCuentaxPagar) REFERENCES CuentasxPagar (idCuentaxPagar),
+
+)
+
+go
+
+go
+
+create table DetalleCuotasCXP
+(
+idDetalleCuotaCxP int identity(1,1) primary key not null,
+idCuentaxPagar int not null,
+NroCuota int,
+Monto decimal(18,2),
+FVencimiento varchar(10),
+Moneda varchar(20),
+
+FOREIGN KEY (idCuentaxPagar) REFERENCES CuentasxPagar (idCuentaxPagar),
+)
+
+
+
+
+------------------------------
+--------CUENTAS X COBRAR
+-------------------------------
+
+--drop table CuentasxPagar
+
+create table CuentasxCobrar
+(
+idCuentaxCobrar int identity(1,1) primary key not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+idCliente int not null,
+idVentas int not null,
+fEmision varchar(10),
+fVencimiento varchar(10),
+total decimal(18,2),
+idPeriodo int not null,
+cuota decimal(18,2),
+cPagadas varchar(2),
+saldo decimal(18,2),
+ctaBanco varchar(50),
+Estado varchar(50),
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+
+FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
+FOREIGN KEY (idVentas) REFERENCES Ventas (idVentas),
+FOREIGN KEY (idPeriodo) REFERENCES Periodos (idPeriodo),
+)
+go
+
+
+go
+---drop table HistorialCXP
+create table HistorialCXC
+(
+idHistorialCXC int identity(1,1) not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+fecha varchar(10),
+idCuentaxCobrar int not null,
+nroCuota int,
+nroDocpago varchar(13),
+responsable varchar(200),
+total decimal(18,2),
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+
+
+FOREIGN KEY (idCuentaxCobrar) REFERENCES CuentasxCobrar (idCuentaxCobrar),
+)
+
+go
+
+go
+
+create table DetalleCuotasCXC
+(
+idDetalleCuotaCXC int identity(1,1) primary key not null,
+idCuentaxCobrar int not null,
+NroCuota int,
+Monto decimal(18,2),
+FVencimiento varchar(10),
+Moneda varchar(20),
+
+FOREIGN KEY (idCuentaxCobrar) REFERENCES CuentasxCobrar (idCuentaxCobrar),
+)
+
+--==============================================
+--TABLAS PROVICIONALES PARA VENTAS
+--==============================================
+--drop table ProvicionalTienda01
+create table Provicional
+(
+idProvicional int identity (1,1) primary key not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+--idCompro varchar(20),
+fecha varchar(10),
+ruc varchar(11),
+cliente char(200) ,
+cantidad decimal(18,3),
+codigo varchar(50),
+descripcion varchar(200),
+presentacion varchar(20),
+pVenta decimal(18,5),
+total decimal(18,2),
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+
+
+
+)
+
+--select * from ProvicionalTienda01
+go
+
+create table NoFacturado
+(
+idNoFacturado int identity(1,1) primary key not null,
+idVentas int  null,
+fecha varchar(10),
+idCliente int not null,
+Cantidad decimal(18,3),
+idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
+idPresentacion int not null,
+pVenta decimal(18,5),
+total decimal(18,2),
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+
+FOREIGN KEY (idVentas) REFERENCES Ventas (idVentas),
+FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
+FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
+
+)
+
+
+-----------------------------------------------
+--CONFIGURACIONES ADICIONALES
+-----------------------------------------------
+--drop table ModoImpresion
+create table ModoImpresion
+(
+idModoImpresion int identity (1,1) primary key not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+descripcion varchar(20),
+estado varchar(5)
+
+)
+--select * from ModoImpresion
+go
+--insert into  ModoImpresion values(1,'Tamaño Ticket','False')
+--insert into  ModoImpresion values(2,'Tamaño A4','True')
+
+--drop table ImpresorasDisponibles
+--truncate table ImpresorasDisponibles
+create table ImpresorasDisponibles
+(
+idImpresorasDisponibles int identity(1,1) primary key not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+Descripcion varchar(200),
+Predeterminado varchar(5)
+)
+
+--select * from ImpresorasDisponibles
+
+--insert into  ImpresorasDisponibles values('epson t22','SI')
+--insert into  ImpresorasDisponibles values('BROTHER 120','NO')
+
+--DROP TABLE Mostrarpdfs
+create table Mostrarpdfs
+(
+idMostrarPdf int identity(1,1) primary key not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+idComprobante int not null,
+Mostrar varchar(2),
+Imprimir varchar(2)
+
+)
+
+select * from Mostrarpdfs
