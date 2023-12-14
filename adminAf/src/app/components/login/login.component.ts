@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit{
       
       this._adminService.admin_login(data).subscribe(
         response=>{
+          console.log('response', response);
           if(response.data == undefined){
             iziToast.show({
               title: 'ERROR',
@@ -62,11 +63,11 @@ export class LoginComponent implements OnInit{
             });
           }else{
             this.usuario = response.data;
-            // console.log(this.usuario);
+             console.log(this.usuario);
 
             //quiero guardar el token en CookieService
             this.cookieService.set('token', response.token);
-            this.cookieService.set('identity', response.data.id);
+            this.cookieService.set('identity', response.data.idUsuario);
             this.cookieService.set('user_data',JSON.stringify(response.data));
 
             //quiero guardar el token en localStorage

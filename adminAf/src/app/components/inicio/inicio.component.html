@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-12 p-3">
       <!-- Aquí va el contenido principal de la página -->
-      <div class="accordion" id="accordionExample">
+      <!-- <div class="accordion" id="accordionExample">
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingOne">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -41,8 +41,68 @@
             </div>
           </div>
         </div>
+      </div> -->
+
+      <!-- Barra de navegación -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+          <a class="navbar-brand" href="#">Panel de Administrador</a>
+        </div>
+      </nav>
+
+      <!-- Contenido del panel -->
+      <div class="container mt-4">
+        <div class="row">
+          <!-- Gráfico de Ventas -->
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                Ventas Mensuales
+              </div>
+              <div class="card-body">
+                <canvas id="ventasChart" width="400" height="200"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gráfico de Compras -->
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                Compras Mensuales
+              </div>
+              <div class="card-body">
+                <canvas id="comprasChart" width="400" height="200"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gráfico de Compras -->
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                Compras Envios
+              </div>
+              <div class="card-body">
+                <canvas id="comprasChart" width="400" height="200"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Otros gráficos similares para productos más vendidos, envíos, y productos con stock insuficiente -->
+        </div>
       </div>
+
+      <!-- Pie de página -->
+      <footer class="bg-dark text-light mt-4">
+        <div class="container py-3">
+          <p class="text-center">&copy; 2023 Ferretería XYZ. Todos los derechos reservados.</p>
+        </div>
+      </footer>
+
+      <!-- Script para inicializar los gráficos -->
+    
+
     </div>
   </div>
 </div>
-

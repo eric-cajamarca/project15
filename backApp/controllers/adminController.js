@@ -254,9 +254,11 @@ const admin_login = async (req, res) => {
         .request()
         .input('email', sql.VarChar, email)
         .input('estado', sql.Bit, estado)
-        .query('SELECT * FROM usuarioWeb WHERE email = @email and estado=@estado');
+        .query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol');
+        // .query('SELECT * FROM usuarioWeb WHERE email = @email and estado=@estado');
 
-    console.log('checkEmailQuery');
+
+    console.log('checkEmailQuery',checkEmailQuery);
     console.log(checkEmailQuery.recordset.length)
     if (checkEmailQuery.recordset.length > 0) {
         const bdPassword = checkEmailQuery.recordset[0].password;

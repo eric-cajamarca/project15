@@ -8,7 +8,7 @@
 
     <div class="collapse navbar-collapse" id="navbarsExample01">
 
-      <ng-container *ngIf="user.rol==='Administrador'">
+      <ng-container *ngIf="user.descripcion==='Administrador'">
         <ul class="navbar-nav me-auto mb-2">
           <li class="nav-item">
             <a class="nav-link" [routerLink]="['/colaborador']" routerLinkActive="active">Colaboradores</a>
@@ -31,7 +31,7 @@
         </ul>
       </ng-container>
 
-      <ng-container *ngIf="user.rol==='Almacen'">
+      <ng-container *ngIf="user.descripcion==='Almacen'">
         <ul class="navbar-nav me-auto mb-2">
           
           <li class="nav-item">
