@@ -1,4 +1,4 @@
-create database Multiempresa
+﻿create database Multiempresa
 
 use multiempresa
 
@@ -33,7 +33,6 @@ go
 create table Rol
 (
 idRol UNIQUEIDENTIFIER primary key NOT NULL,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 descripcion varchar(50) not null,
 
 )
@@ -46,7 +45,6 @@ go
 CREATE TABLE Usuarios
 (
 	idUsuario UNIQUEIDENTIFIER primary key NOT NULL,
-	idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 	nombres varchar(50) NOT NULL,
 	apellidos varchar(100) NOT NULL,
 	email varchar(100) NOT NULL,
@@ -80,7 +78,6 @@ GO
 create table Empleados
 (
 	IdEmpleado UNIQUEIDENTIFIER primary key NOT NULL,
-	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas (idEmpresa) ON DELETE CASCADE,
 	idDocumento varchar(1)FOREIGN KEY REFERENCES Documentos (idDocumento) not null,
 	dni varchar(8) ,
 	nombres varchar (50),
@@ -100,7 +97,6 @@ go
 create table Clientes
 (
 idCliente int identity (1,1) primary key not null ,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 ruc varchar(11) not null,
 idDocumento varchar(1) not null,
 rSocial varchar(200) not null,
@@ -118,7 +114,6 @@ go
 create table Proveedors
 (
 idProveedor int identity(1,1) primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 idDocumento varchar(1) not null,
 ruc varchar (11) not null,
 rSocial varchar (200) not null,
@@ -136,7 +131,6 @@ go
 create table Presentacion
 (
 idPresentacion int identity(1,1) primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE null,
 Descripcion varchar(50) null,
 Multiplicador int null,
 
@@ -167,7 +161,6 @@ select * from Presentacion
 create table Categorias 
 (
 idCategoria int identity (1,1) primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 Descripcion varchar(200)not null,
 
 )
@@ -187,8 +180,11 @@ numero int not null,
 
 )
 go
---insert into Correlativo values(1,100000)
---insert into Correlativo values(2,200000)
+--select * from Empresas
+insert into Correlativos values('42099529-43C9-4B7F-921A-3D6FB946E93E',500000)
+insert into Correlativos values('BA51C992-7D05-459E-B419-A03358C0A788',600000)
+insert into Correlativos values('5615C329-F8B6-4634-B0EF-C02B9F2315B3',700000)
+
 
 
 --truncate table Productos
@@ -223,7 +219,6 @@ go
 create table PreciosV
 (
 idPreciosV int identity (1,1) not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 mayorista decimal(18,4) null,
 cliente decimal(18,4) null,
@@ -233,17 +228,17 @@ idUSuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
 )
 go
 
-create table HistorialProductos
-(
-idHistorialP int identity(1,1) primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-Fecha date not null,
-idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
-descripcion varchar(100), 
-idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
-)
+--create table HistorialProductos
+--(
+--idHistorialP int identity(1,1) primary key not null,
+--idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+--Fecha date not null,
+--idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
+--descripcion varchar(100), 
+--idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+--)
 
-go
+--go
 
 ----------------------------------
 --TIENDAS Y EXISTENCIAS
@@ -303,22 +298,63 @@ numero varchar(8) not null,
 )
 go
 
---insert into Comprobantes values	('01','Factura','F001','1')
---insert into Comprobantes values	('03','Boleta','B001','1')
---insert into Comprobantes values	('07','Nota de cr�dito','BC01','1')
---insert into Comprobantes values	('07','Nota de cr�dito','FC01','1')
---insert into Comprobantes values	('08','Nota de d�dito','BD01','1')
---insert into Comprobantes values	('08','Nota de d�dito','FD01','1')
---insert into Comprobantes values	('RA','Comunicaci�n de baja','-','1')
---insert into Comprobantes values	('RC','Resumen diario','-','1')
---insert into Comprobantes values	('10','Gu�a Remitente','TG01','1')
---insert into Comprobantes values	('11','Gu�a Transportista','RG01','1')
---insert into Comprobantes values	('LT','Letra por cobrar','LT','1')
---insert into Comprobantes values	('TK','Ticket de despacho','TK01','1')
---insert into Comprobantes values	('NP','Nota de pedido','NP01','1')
---insert into Comprobantes values	('CT','Cotizaci�n','CT01','1')
---insert into Comprobantes values	('NE','Nota de envio','NE01','1')
---insert into Comprobantes values	('RP','Recibo de pago','RP01','1')
+
+select * from Comprobantes
+
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','01','Factura','F001','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','03','Boleta','B001','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','07','Nota de credito','BC01','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','07','Nota de credito','FC01','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','08','Nota de dedito','BD01','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','08','Nota de dedito','FD01','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','RA','Comunicacion de baja','-','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','RC','Resumen diario','-','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','10','Guia Remitente','TG01','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','11','Guia Transportista','RG01','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','LT','Letra por cobrar','LT','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','TK','Ticket de despacho','TK01','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','NP','Nota de pedido','NP01','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','CT','Cotizacion','CT01','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','NE','Nota de envio','NE01','1')
+--insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','RP','Recibo de pago','RP01','1')
+--go
+
+
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','01','Factura','F001','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','03','Boleta','B001','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','07','Nota de credito','BC01','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','07','Nota de credito','FC01','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','08','Nota de dedito','BD01','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','08','Nota de dedito','FD01','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','RA','Comunicacion de baja','-','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','RC','Resumen diario','-','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','10','Guia Remitente','TG01','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','11','Guia Transportista','RG01','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','LT','Letra por cobrar','LT','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','TK','Ticket de despacho','TK01','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','NP','Nota de pedido','NP01','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','CT','Cotizacion','CT01','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','NE','Nota de envio','NE01','1')
+--insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','RP','Recibo de pago','RP01','1')
+--go
+
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','01','Factura','F001','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','03','Boleta','B001','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','07','Nota de credito','BC01','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','07','Nota de credito','FC01','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','08','Nota de dedito','BD01','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','08','Nota de dedito','FD01','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','RA','Comunicacion de baja','-','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','RC','Resumen diario','-','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','10','Guia Remitente','TG01','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','11','Guia Transportista','RG01','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','LT','Letra por cobrar','LT','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','TK','Ticket de despacho','TK01','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','NP','Nota de pedido','NP01','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','CT','Cotizacion','CT01','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','NE','Nota de envio','NE01','1')
+--insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','RP','Recibo de pago','RP01','1')
+
 
 create table MediosPago
 (
@@ -402,16 +438,15 @@ go
 
 create table EstadosPedidos(
 idEstadoPEdido int identity(1,1) primary key,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 descripcion varchar(50) not null
 )
 select * from EstadosPedidos
 go
 
-insert into EstadosPedidos values	('0D949A6D-0311-4B9F-AA5B-ADCF311970C7','Sin Programar');
-insert into EstadosPedidos values	('0D949A6D-0311-4B9F-AA5B-ADCF311970C7','Programado');
-insert into EstadosPedidos values	('0D949A6D-0311-4B9F-AA5B-ADCF311970C7','Enviado');
-insert into EstadosPedidos values	('0D949A6D-0311-4B9F-AA5B-ADCF311970C7','Entregado');
+insert into EstadosPedidos values	('Sin Programar');
+insert into EstadosPedidos values	('Programado');
+insert into EstadosPedidos values	('Enviado');
+insert into EstadosPedidos values	('Entregado');
 
 
 
@@ -625,7 +660,8 @@ create table Tributos
 	descripcion varchar(50) not null,
 	codigo varchar(3) not null
 )
-
+go
+select * from Tributos
 --insert into Tributos values	('1000','IGV Impuesto General a las Ventas','VAT');
 --insert into Tributos values	('1016','Impuesto a la Venta Arroz Pilado','VAT');
 --insert into Tributos values	('2000','ISC Impuesto Selectivo al Consumo','EXC');
@@ -636,6 +672,7 @@ create table Tributos
 --insert into Tributos values	('9998','Inafecto','FRE');
 --insert into Tributos values	('9999','Otros tributos','OTH');
 
+go
 create table EstadoSunat
 (
 	idEstadoSunat int identity(1,1) primary key not null,
