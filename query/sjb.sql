@@ -64,6 +64,21 @@ CREATE TABLE UsuarioWeb
 	
  )
 GO
+select * from UsuarioWeb
+
+
+INSERT INTO UsuarioWeb (idUsuario, nombres, apellidos, email, password, idRol, estado, fregistro)
+VALUES
+(
+    NEWID(),
+    'Eric',
+    'Ortiz Guevara',
+	'ericortizguevara@gmail.com',
+	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
+    '33F8239F-6AAC-458D-B7CA-8E8AB583C5B1', -- Utiliza directamente el identificador único
+    1,
+    GETDATE()
+);
 
 truncate table Usuarios
 --drop table usuarios
@@ -79,31 +94,42 @@ CREATE TABLE Usuarios
 	
  )
 GO
---INSERT INTO Usuarios (idUsuario, nombres, apellidos, password, idRol, estado, fregistro)
---VALUES
---(
---    NEWID(),
---    'Eric',
---    'Ortiz Guevara',
---	'12345m',
---    '33F8239F-6AAC-458D-B7CA-8E8AB583C5B1', -- Utiliza directamente el identificador único
---    1,
---    GETDATE()
---);
 
+create table IngresoUsuarios
+(
+idIngresoUsuario int identity primary key not null,
+fecha varchar(10),
+hIngreso varchar(20),
+)
+go
 
--- Asumiendo que la columna 'password' es de tipo 'VARBINARY'
+select * from IngresoUsuariosweb
+
 INSERT INTO Usuarios (idUsuario, nombres, apellidos, password, idRol, estado, fregistro)
 VALUES
 (
     NEWID(),
     'Eric',
     'Ortiz Guevara',
-    HASHBYTES('SHA2_256', '123456m'), -- Hash de la contraseña usando SHA-256
-	'33F8239F-6AAC-458D-B7CA-8E8AB583C5B1',
+	'12345m',
+    '33F8239F-6AAC-458D-B7CA-8E8AB583C5B1', -- Utiliza directamente el identificador único
     1,
     GETDATE()
 );
+
+
+-- Asumiendo que la columna 'password' es de tipo 'VARBINARY'
+--INSERT INTO Usuarios (idUsuario, nombres, apellidos, password, idRol, estado, fregistro)
+--VALUES
+--(
+--    NEWID(),
+--    'Eric',
+--    'Ortiz Guevara',
+--    HASHBYTES('SHA2_256', '123456m'), -- Hash de la contraseña usando SHA-256
+--	'33F8239F-6AAC-458D-B7CA-8E8AB583C5B1',
+--    1,
+--    GETDATE()
+--);
 
 
 

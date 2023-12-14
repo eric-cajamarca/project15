@@ -28,3 +28,5 @@ EXEC sp_rename 'ProgramacionPedidos.CompVentas', 'idCompVentas', 'COLUMN';
 
 SELECT * FROM ProgramacionPedidos
 SELECT * FROM ProgramacionPedidos INNER JOIN EstadosPedidos ON ProgramacionPedidos.idEstado = EstadosPedidos.idEstado
+
+SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol
