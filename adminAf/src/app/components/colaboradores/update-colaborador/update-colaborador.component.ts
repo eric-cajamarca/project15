@@ -48,12 +48,12 @@ export class UpdateColaboradorComponent {
             if (response.data != undefined) {
               // Modificar el campo 'password' dentro del array 'data'
               response.data.forEach((item:any) => {
-                this.colaborador.id = item.id;
-                this.colaborador.name = item.name;
+                this.colaborador.idUsuario = item.idUsuario;
+                this.colaborador.nombres = item.nombres;
                 this.colaborador.apellidos = item.apellidos;
                 this.colaborador.email = item.email;
                 this.colaborador.password  = '';
-                this.colaborador.rol = item.rol;
+                this.colaborador.idRol = item.idRol;
                 this.colaborador.fregistro = item.fregistro;
               });
 

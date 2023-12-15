@@ -15,7 +15,7 @@ const getAdmin = async function (req, res) {
             console.log('req.user.rol', req.user.rol);
             try {
                 const pool = await sql.connect(dbConfig);
-                const result = await pool.request().query('SELECT * FROM usuarioWeb');
+                const result = await pool.request().query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol');
                 // res.json(result.recordset);
                 // console.log('result.recordset');
                 // console.log(result.recordset);
@@ -167,14 +167,35 @@ const obtener_datos_colaborador_admin = async (req, res) => {
     const { id } = req.params;
     let data;
 
+    console.log('obtener_datos_colaborador_admin = id: ', id);
+    console.log('req.user.rol: ', req.user);
+    console.log('req.params: ', req.params);
+
     if (req.user) {
         //quiero validar si el rol del usuario es administrador
         if (req.user.rol == 'Administrador') {
             try {
 
                 const pool = await sql.connect(dbConfig);
-                const result = await pool.request().query('SELECT * FROM usuarioWeb where id =' + id);
+                const result = await pool
+                .request()
+                .input('idUsuario', sql.UniqueIdentifier, id)
+                .query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol where idUsuario = @idUsuario');
+                //.query('SELECT * FROM UsuarioWeb where idUsuario = @idUsuario');
 
+                
+
+                //despues del codigo anterior no puedo optener respuesta a la consulta
+                 console.log('result.recordset: ', result.recordset);
+                 console.log('result.recordset: ', result.recordset[0].idUsuario);
+
+                //quiero convertir el result.recordset.fregistro a un formato de fecha mas amigable
+                 let fecha = result.recordset[0].fregistro;
+                    let fecha2 = moment(fecha).format('DD-MM-YYYY');
+                    console.log('fecha2: ', fecha2);
+                    result.recordset[0].fregistro = fecha2;
+                    console.log('result.recordset[0].fregistro: ', result.recordset[0].fregistro);
+                    
 
                 data = result.recordset;
                 console.log('data: ', data);
@@ -183,7 +204,7 @@ const obtener_datos_colaborador_admin = async (req, res) => {
 
 
             } catch (error) {
-                //console.error('Error al actualizar un usuario:', error);
+                console.error('Error al actualizar un usuario:', error);
                 // res.status(500).send('Error al actualizar un usuario');
                 res.status(200).send({ message: 'Error al actualizar un usuario', data: undefined });
             }

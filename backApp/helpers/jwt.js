@@ -14,7 +14,7 @@ exports.createToken = function(user){
     
         // exp: moment().add(7,'day').unix()
     }
-    console.log('helpers jwt rol', payload);
+    //console.log('helpers jwt rol', payload);
 
     return jwt.encode(payload,secret);
 }

@@ -15,6 +15,9 @@ import { ClienteEnviosComponent } from "./components/envios/cliente-envios/clien
 import { IndexProgramacionComponent } from "./components/progamaciones/index-programacion/index-programacion.component";
 import { EditarProgramacionComponent } from "./components/progamaciones/editar-programacion/editar-programacion.component";
 import { CrearProgramacionComponent } from "./components/progamaciones/crear-programacion/crear-programacion.component";
+import { IdexRolComponent } from "./components/roles/idex-rol/idex-rol.component";
+import { UpdateRolComponent } from "./components/roles/update-rol/update-rol.component";
+import { CreateRolComponent } from "./components/roles/create-rol/create-rol.component";
 
 const appRoute : Routes = [
     {path: '', component: InicioComponent, canActivate: [AdminGuard]},
@@ -38,7 +41,13 @@ const appRoute : Routes = [
     //programaciones
     {path: 'programacion', component: IndexProgramacionComponent, canActivate: [AdminGuard]},
     {path: 'programacion/editar', component: EditarProgramacionComponent, canActivate: [AdminGuard]},
-    {path: 'programacion/crear', component: CrearProgramacionComponent, canActivate: [AdminGuard]}
+    {path: 'programacion/crear', component: CrearProgramacionComponent, canActivate: [AdminGuard]},
+
+    //rol
+    {path: 'rol', component: IdexRolComponent, canActivate: [AdminGuard]},
+    {path: 'rol/editar', component: UpdateRolComponent, canActivate: [AdminGuard]},
+    {path: 'rol/crear', component: CreateRolComponent, canActivate: [AdminGuard]},
+
 ]
 
 export const appRoutingProviders : any[]=[];

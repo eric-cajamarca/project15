@@ -73,7 +73,7 @@
                   <td>
 
                     <span>
-                      {{item.name}} {{item.apellidos}}
+                      {{item.nombres}} {{item.apellidos}}
                     </span>
                   </td>
 
@@ -89,7 +89,7 @@
                     <span class="badge bg-danger" *ngIf="!item.estado">Desactivado</span>
                   </td>
                   <td>
-                    <span>{{item.rol}}</span>
+                    <span>{{item.descripcion}}</span>
 
                   </td>
                   <td>
@@ -110,7 +110,7 @@
                           [attr.data-bs-target]="'#delete-'+item.id">
                           <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Activar
                         </a>
-                        <a class="dropdown-item" [routerLink]="['/colaborador',item.id]">
+                        <a class="dropdown-item" [routerLink]="['/colaborador',item.idUsuario]">
                           <i class="icon-1x text-dark-50 flaticon-edit"></i> &nbsp; Editar
                         </a>
                       </ul>

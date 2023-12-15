@@ -47,10 +47,12 @@ insert into Rol values
 (NEWID(),'Contador'),
  (NEWID(),'Almacen'),
  (NEWID(),'Despacho'),
+ (NEWID(),'Administrador'),
 (NEWID(),'Vendedor');
 
 go
 
+--drop table UsuarioWeb
 CREATE TABLE UsuarioWeb
 (
 	idUsuario UNIQUEIDENTIFIER primary key NOT NULL,
@@ -75,25 +77,25 @@ VALUES
     'Ortiz Guevara',
 	'ericortizguevara@gmail.com',
 	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
-    '33F8239F-6AAC-458D-B7CA-8E8AB583C5B1', -- Utiliza directamente el identificador único
+    'AC056670-1938-4728-82CB-495DAFBD0275', -- Utiliza directamente el identificador único
     1,
     GETDATE()
 );
 
 truncate table Usuarios
 --drop table usuarios
-CREATE TABLE Usuarios
-(
-	idUsuario UNIQUEIDENTIFIER primary key NOT NULL,
-	nombres varchar(50) NOT NULL,
-	apellidos varchar(100) NOT NULL,
-	password VARBINARY(32) NOT NULL,
-	idRol UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Rol(idRol) not null, 
-	estado bit NOT NULL,
-	fregistro date NOT NULL,
+--CREATE TABLE Usuarios
+--(
+--	idUsuario UNIQUEIDENTIFIER primary key NOT NULL,
+--	nombres varchar(50) NOT NULL,
+--	apellidos varchar(100) NOT NULL,
+--	password VARBINARY(32) NOT NULL,
+--	idRol UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Rol(idRol) not null, 
+--	estado bit NOT NULL,
+--	fregistro date NOT NULL,
 	
- )
-GO
+-- )
+--GO
 
 create table IngresoUsuarios
 (
@@ -103,19 +105,19 @@ hIngreso varchar(20),
 )
 go
 
-select * from IngresoUsuariosweb
+--select * from IngresoUsuariosweb
 
-INSERT INTO Usuarios (idUsuario, nombres, apellidos, password, idRol, estado, fregistro)
-VALUES
-(
-    NEWID(),
-    'Eric',
-    'Ortiz Guevara',
-	'12345m',
-    '33F8239F-6AAC-458D-B7CA-8E8AB583C5B1', -- Utiliza directamente el identificador único
-    1,
-    GETDATE()
-);
+--INSERT INTO Usuarios (idUsuario, nombres, apellidos, password, idRol, estado, fregistro)
+--VALUES
+--(
+--    NEWID(),
+--    'Eric',
+--    'Ortiz Guevara',
+--	'12345m',
+--    '33F8239F-6AAC-458D-B7CA-8E8AB583C5B1', -- Utiliza directamente el identificador único
+--    1,
+--    GETDATE()
+--);
 
 
 -- Asumiendo que la columna 'password' es de tipo 'VARBINARY'
@@ -184,7 +186,7 @@ nombre varchar(20) not null,
 descripcion varchar(200) not null,
 
 )
---select * from Documentos
+select * from Documentos
 go
 
 
@@ -208,7 +210,7 @@ create table Empleados
 	fIngreso varchar (10),
 	fNacimiento varchar (10),
 	foto varbinary(max),
-	idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+	idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 	
 )
 go
@@ -326,7 +328,7 @@ alertaMinimo varchar(5)null,
 alertaMaximo varchar(5) null,
 VecesVendidas int null,
 facturar varchar(2) null,
-idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 FIngreso varchar(10) not null,
 
 FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
@@ -343,7 +345,7 @@ idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 mayorista decimal(18,4) null,
 cliente decimal(18,4) null,
 transeunte decimal(18,4) null,
-idUSuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+idUSuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 )
 go
@@ -355,7 +357,7 @@ go
 --Fecha date not null,
 --idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 --descripcion varchar(100), 
---idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+--idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 --)
 
 --go
@@ -371,7 +373,7 @@ idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE 
 nombre varchar(20) not null,
 direccion varchar(200) null,
 inventario decimal(18,4) null,
-idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 )
 
 go
@@ -386,7 +388,7 @@ idCategoria int not null,
 cantidad decimal(18,2) not null,
 ubicacion Varchar(20) null,
 fIngreso date null,
-idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 FOREIGN KEY (idSucursal) REFERENCES Sucursal(idSucursal),
 FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
@@ -402,7 +404,7 @@ fechaSalida date not null,
 responsable varchar(200) null,
 idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 cantidad decimal(18,3) null,
-idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 )
 
 go
@@ -542,7 +544,7 @@ descuentos decimal(18,2),
 total decimal(18,2),
 idMediosPago varchar(3) not null, --el estado determinara pendiente o pagado
 compRelacionado varchar(50),
-idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 FOREIGN KEY (idComprobante) REFERENCES Comprobantes(idComprobante),
 FOREIGN KEY (idMoneda) REFERENCES Moneda (idMoneda),
@@ -648,7 +650,7 @@ CREATE TABLE Ventas
 	idEstadoPedido int not NULL,
 	idEstadoSunat int not NULL,
 	idCompRel int not NULL,
-	idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+	idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 	FOREIGN KEY (idComprobante) REFERENCES Comprobantes (idComprobante),
 	FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
@@ -734,7 +736,7 @@ CREATE TABLE Cotizaciones(
 	moneda varchar(20) NULL,
 	idCondicionPago int NULL,
 	total decimal (18, 2) NULL,
-	idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+	idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 	Conversion varchar(13) NULL,
 
 	FOREIGN KEY (idComprobante) REFERENCES Comprobantes (idComprobante),
@@ -867,7 +869,7 @@ cPagadas varchar(2),
 saldo decimal(18,2),
 ctaBanco varchar(50),
 Estado varchar(50),
-idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 FOREIGN KEY (idProveedor) REFERENCES Proveedors (idProveedor),
 FOREIGN KEY (idCompra) REFERENCES Compras (idCompra),
@@ -889,7 +891,7 @@ nroCuota int,
 nroDocpago varchar(13),
 responsable varchar(200),
 total decimal(18,2),
-idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 FOREIGN KEY (idCuentaxPagar) REFERENCES CuentasxPagar (idCuentaxPagar),
 
@@ -935,7 +937,7 @@ cPagadas varchar(2),
 saldo decimal(18,2),
 ctaBanco varchar(50),
 Estado varchar(50),
-idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
 FOREIGN KEY (idVentas) REFERENCES Ventas (idVentas),
@@ -956,7 +958,7 @@ nroCuota int,
 nroDocpago varchar(13),
 responsable varchar(200),
 total decimal(18,2),
-idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 
 FOREIGN KEY (idCuentaxCobrar) REFERENCES CuentasxCobrar (idCuentaxCobrar),
@@ -996,7 +998,7 @@ descripcion varchar(200),
 presentacion varchar(20),
 pVenta decimal(18,5),
 total decimal(18,2),
-idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 
 
@@ -1016,7 +1018,7 @@ idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 idPresentacion int not null,
 pVenta decimal(18,5),
 total decimal(18,2),
-idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Usuarios (idUsuario) not null,
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 FOREIGN KEY (idVentas) REFERENCES Ventas (idVentas),
 FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
