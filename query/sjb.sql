@@ -666,7 +666,7 @@ go
 ------------------------------------
 --VENTAS
 ------------------------------------
-drop table Ventas
+--drop table Ventas
 CREATE TABLE Ventas
 (
 	idVentas int identity(1,1) primary key not null,
@@ -675,8 +675,8 @@ CREATE TABLE Ventas
 	idComprobante int not NULL,
 	serie varchar(4) not NULL,
 	numero varchar(8) not NULL,
-	fEmision varchar(10) not NULL,
-	fVencimiento varchar(10) not NULL,
+	fEmision date not NULL,
+	fVencimiento date not NULL,
 	idDocumento varchar(1) not NULL,
 	idCliente int NULL,
 	idMoneda int NULL,
@@ -735,10 +735,10 @@ INSERT INTO Ventas (
 VALUES (
     -- Reemplazar con valores válidos o correctos
     '42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
-    'F001-0000002', -- varchar(13)
+    'F001-0000008', -- varchar(13)
     2, -- idComprobante
     'F001', -- varchar(4)
-    '0000002', -- varchar(8)
+    '0000004', -- varchar(8)
     GETDATE(), -- varchar(10)
     GETDATE(), -- varchar(10)
     '1', -- varchar(1)
@@ -752,7 +752,7 @@ VALUES (
     0.00, -- decimal(18, 2)
     0.00, -- decimal(18, 2)
     5.00, -- decimal(18, 2)
-    113.00, -- decimal(18, 2)
+    750.00, -- decimal(18, 2)
     1, -- int
     1, -- int
     1, -- int
@@ -762,7 +762,8 @@ VALUES (
 
 
 select * from ventas
-select * from Comprobantes
+select * from Caja
+
 
 --drop table detalleVentas
 --CREATE TABLE DetalleVentas(
@@ -863,6 +864,8 @@ CREATE TABLE BorradorVenta(
 
 GO
 
+--truncate table caja
+--drop table Caja
 CREATE TABLE Caja(
 	idCaja int identity(1,1) primary key not null,
 	idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
@@ -878,8 +881,46 @@ CREATE TABLE Caja(
 	transferencia decimal(18, 2) NULL,
 	tarjeta decimal(18, 2) NULL,
 	credito decimal(18, 2) NULL,
+	total decimal(18,2) null
 	FOREIGN KEY (idEmpresa) REFERENCES Empresas(idEmpresa),
 );
+
+
+INSERT INTO Caja (
+    idEmpresa,
+    fecha,
+    estadoAC,
+    horaAC,
+    usuarioAC,
+    efectivoAC,
+    estadoCC,
+    horaCC,
+    usuarioCC,
+    efectivoCC,
+    transferencia,
+    tarjeta,
+    credito,
+	total
+)
+VALUES (
+    -- Reemplaza con valores válidos o correctos
+    '42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
+    GETDATE(), -- date
+    'Abierto', -- estadoAC
+    '10:00 AM', -- horaAC
+    'viviana',--id usuario
+    100.00, -- efectivoAC
+    'Cerrado', -- estadoCC
+    '05:00 PM', -- horaCC
+    'eric',--id usuario
+    0.00, -- efectivoCC
+    0.00, -- transferencia
+    0.00, -- tarjeta
+    0.00, -- credito
+	0.00
+);
+
+select * from Caja
 
 CREATE TABLE Cotizaciones(
 	idCotizacion int identity(1,1) primary key not null,
