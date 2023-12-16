@@ -320,11 +320,10 @@ idCategoria int not null,
 descripcion varchar(200) not null,
 idPresentacion int not null,
 cUnitario decimal(18,5) not null,
-cantidad decimal(18,2) not null, --agrego la cantidad
 fProduccion varchar(10) null,
 fVencimiento varchar(10) null,
-alertaMinimo varchar(5)null,
-alertaMaximo varchar(5) null,
+alertaMinimo decimal(18,5)null,
+alertaMaximo decimal(18,5) null,
 VecesVendidas int null,
 facturar varchar(2) null,
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
@@ -336,7 +335,7 @@ FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
 
 go
 
-INSERT INTO Productos (idProducto, idEmpresa, Codigo, idCategoria, descripcion, idPresentacion, cUnitario, cantidad, fProduccion, fVencimiento, alertaMinimo, alertaMaximo, VecesVendidas, facturar, idUsuario, FIngreso)
+INSERT INTO Productos (idProducto, idEmpresa, Codigo, idCategoria, descripcion, idPresentacion, cUnitario, fProduccion, fVencimiento, alertaMinimo, alertaMaximo, VecesVendidas, facturar, idUsuario, FIngreso)
 VALUES
 (
     NEWID(),
@@ -346,7 +345,6 @@ VALUES
 	'TOmacorriente triple',
 	10, --idpresentacion
 	3.50,
-	30.00,
 	GETDATE(),
 	GETDATE(),
 	5,
@@ -401,7 +399,7 @@ select * from PreciosV
 --drop table Sucursal
 create table Sucursal
 (
-idSucursal int identity (1,1) primary key not null,
+idSucursal UNIQUEIDENTIFIER primary key not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 nombre varchar(20) not null,
 direccion varchar(200) null,
@@ -410,11 +408,12 @@ fregistro date not null
 )
 
 go
-INSERT INTO Sucursal (idEmpresa, nombre, direccion,idUsuario, fregistro)
+INSERT INTO Sucursal (idSucursal,idEmpresa, nombre, direccion,idUsuario, fregistro)
 VALUES
 (
+	NEWID(),
 	'42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
-    'Los Olivos',
+    'Fenix',
      'MAr abierto',
 	'9B697C80-FFE8-4C91-9362-98FE4D5221D8',--id usuario
     GETDATE()
@@ -423,30 +422,26 @@ go
 select * from Sucursal
 go
 
+--drop table StockSucursal
 create table StockSucursal
 (
 idStockSucursal int identity(1,1) primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-idSucursal int not null,
+idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal),
 idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
-idCategoria int not null,
 cantidad decimal(18,2) not null,
 ubicacion Varchar(20) null,
 fIngreso date null,
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
-FOREIGN KEY (idSucursal) REFERENCES Sucursal(idSucursal),
-FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
+
 )
 go
 
-INSERT INTO StockSucursal (idEmpresa, idSucursal, idProducto, idCategoria, cantidad, ubicacion, fIngreso, idUsuario)
+INSERT INTO StockSucursal (idSucursal, idProducto, cantidad, ubicacion, fIngreso, idUsuario)
 VALUES
 (
-	'42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
-    1, --idsucursal
+    'E50017E1-B809-41FD-92F4-8AD9163D2E92', --idsucursal
     '6C523685-D1FA-4B5F-822A-C052B3B49D6B', --idproducto
-	1, --idcategoria
 	30, --cantidad
 	'andamio1',
 	GETDATE(),
@@ -484,24 +479,25 @@ go
 
 
 select * from Comprobantes
+go
 
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','01','Factura','F001','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','03','Boleta','B001','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','07','Nota de credito','BC01','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','07','Nota de credito','FC01','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','08','Nota de dedito','BD01','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','08','Nota de dedito','FD01','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','RA','Comunicacion de baja','-','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','RC','Resumen diario','-','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','10','Guia Remitente','TG01','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','11','Guia Transportista','RG01','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','LT','Letra por cobrar','LT','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','TK','Ticket de despacho','TK01','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','NP','Nota de pedido','NP01','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','CT','Cotizacion','CT01','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','NE','Nota de envio','NE01','1')
---insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','RP','Recibo de pago','RP01','1')
---go
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','01','Factura','F001','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','03','Boleta','B001','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','07','Nota de credito','BC01','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','07','Nota de credito','FC01','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','08','Nota de dedito','BD01','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','08','Nota de dedito','FD01','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','RA','Comunicacion de baja','-','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','RC','Resumen diario','-','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','10','Guia Remitente','TG01','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','11','Guia Transportista','RG01','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','LT','Letra por cobrar','LT','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','TK','Ticket de despacho','TK01','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','NP','Nota de pedido','NP01','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','CT','Cotizacion','CT01','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','NE','Nota de envio','NE01','1')
+insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','RP','Recibo de pago','RP01','1')
+go
 
 
 --insert into Comprobantes values	('BA51C992-7D05-459E-B419-A03358C0A788','01','Factura','F001','1')
@@ -540,50 +536,13 @@ select * from Comprobantes
 --insert into Comprobantes values	('5615C329-F8B6-4634-B0EF-C02B9F2315B3','RP','Recibo de pago','RP01','1')
 
 
-create table MediosPago
-(
-	idMediospago varchar(3) primary key not null,
-	descripcion varchar(50) not null
 
-)
-go
---insert into MediosPago values	('001','DEP�SITO EN CUENTA');
---insert into MediosPago values	('003','TRANSFERENCIA DE FONDOS');
---insert into MediosPago values	('005','TARJETA D�BITO');
---insert into MediosPago values	('006','TARJETA CR�DITO');
---insert into MediosPago values	('009','CONTADO');
---insert into MediosPago values	('009','CR�DITO');
-
-CREATE TABLE Moneda(
-	idMoneda int identity(1,1) primary key not null,
-	codigoc varchar(3) NOT NULL,
-	descripcion varchar(20) not NULL,
-	simbolo varchar(3) not NULL,
-
-)
-
-go
-insert into Moneda values ('PEN','SOLES','S/.')
-insert into Moneda values ('USD','DOLLAR','US$')
-insert into Moneda values ('EUR','EUROS','€')
-select * from moneda
-go
-
-create table EstadoPago
-(
-	idEstadoPago int identity(1,1) primary key not null,
-	descripcion varchar(20) not null,
-)
-go
-
-insert into EstadoPago values	('Pendiente');
-insert into EstadoPago values	('Pagado');
 
 go
 --------------------------------.
 --COMPRAS
 ---------------------------------
-
+--drop table Compras
 create table Compras
 (
 idcompra int identity (1,1) primary key not null,
@@ -596,7 +555,7 @@ fEmision varchar (10) not null,
 fVencimiento varchar(10) null,
 idProveedor int not null,
 idMoneda int not null,
-condicionPago varchar (20),
+idEstadoPago int not null,
 subTotal decimal(18,2),
 igv decimal(18,2),
 exonerado decimal(18,2),
@@ -612,53 +571,74 @@ FOREIGN KEY (idComprobante) REFERENCES Comprobantes(idComprobante),
 FOREIGN KEY (idMoneda) REFERENCES Moneda (idMoneda),
 FOREIGN KEY (idProveedor) REFERENCES Proveedors (idProveedor),
 FOREIGN KEY (idMediosPago) REFERENCES MediosPago (idMediosPago),
+FOREIGN KEY (idEstadoPago) REFERENCES EstadoPago (idEstadoPago),
 )
 
 go
 
-
-
-
-
-create table EstadosPedidos(
-idEstadoPEdido int identity(1,1) primary key,
-descripcion varchar(50) not null
-)
-select * from EstadosPedidos
+INSERT INTO Compras (idEmpresa, compCompra, idComprobante, serie, numero, fEmision, fVencimiento, idProveedor, idMoneda, idEstadoPago, subTotal, igv, exonerado, gratuito, otrosCargos, descuentos, total, idMediosPago, compRelacionado, idUsuario)
+VALUES
+(
+	'42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
+    'f001-00000007',
+     1, --idcomprobante
+	'f001',
+	'00000007',
+	GETDATE(),
+	GETDATE(),
+	1,	--proveedor
+	1, --moneda
+	1, --idestadopago
+	10,
+	0,
+	0,
+	0,
+	0,
+	0,
+	10,
+	'009',--mediospago
+	'',
+	'9B697C80-FFE8-4C91-9362-98FE4D5221D8'--id usuario
+);
 go
-
-insert into EstadosPedidos values	('Sin Programar');
-insert into EstadosPedidos values	('Programado');
-insert into EstadosPedidos values	('Enviado');
-insert into EstadosPedidos values	('Entregado');
+select * from compras
 
 
 
 --drop table DetalleCompras
-
 create table DetalleCompras
 (
 idDetalleCompra int identity(1,1) primary key not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal), -- Nueva columna
 idCompra int not null,
+cantidad decimal(18,3) not null,
 idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
-idCategoria int not null,
-idSucursal int not null,
-Cantidad decimal(18,3) not null,
---Codigo varchar(50),
---Categoria varchar(50),
---Descripcion varchar(200),
 idPresentacion int not null,
 pUnitario decimal(18,5),
 total decimal(18,2),
+idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
-FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
 FOREIGN KEY (idCompra) REFERENCES Compras (idCompra),
-FOREIGN KEY (idSucursal) REFERENCES Sucursal (idSucursal),
 FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
 )
 
---SELECT * FROM DetalleCompras
+INSERT INTO DetalleCompras (idEmpresa,idSucursal, idcompra,  Cantidad,idproducto, idPresentacion, pUnitario,total, idUsuario)
+VALUES
+(
+	'42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
+    'E50017E1-B809-41FD-92F4-8AD9163D2E92',--id sucursal
+	1,
+	50.0, --cantidad
+    '6C523685-D1FA-4B5F-822A-C052B3B49D6B', --idproducto
+	10,
+	3.5,
+	175.00,
+	'9B697C80-FFE8-4C91-9362-98FE4D5221D8'--id usuario
+);
+go
+select * from DetalleCompras
+SELECT * FROM StockSucursal
 go
 
 create table BorradorCompras
@@ -686,6 +666,7 @@ go
 ------------------------------------
 --VENTAS
 ------------------------------------
+drop table Ventas
 CREATE TABLE Ventas
 (
 	idVentas int identity(1,1) primary key not null,
@@ -725,33 +706,148 @@ CREATE TABLE Ventas
 	FOREIGN KEY (idCompRel) REFERENCES ComprobanteRelacionado (idCompRel),
 	
 )
+INSERT INTO Ventas (
+    idEmpresa,
+    compVenta,
+    idComprobante,
+    serie,
+    numero,
+    fEmision,
+    fVencimiento,
+    idDocumento,
+    idCliente,
+    idMoneda,
+    idMediosPago,
+    subTotal,
+    igv,
+    exonerado,
+    gratuito,
+    icbper,
+    otrosCargos,
+    descuentos,
+    total,
+    idEstadoPago,
+    idEstadoPedido,
+    idEstadoSunat,
+    idCompRel,
+    idUsuario
+)
+VALUES (
+    -- Reemplazar con valores válidos o correctos
+    '42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
+    'F001-0000002', -- varchar(13)
+    2, -- idComprobante
+    'F001', -- varchar(4)
+    '0000002', -- varchar(8)
+    GETDATE(), -- varchar(10)
+    GETDATE(), -- varchar(10)
+    '1', -- varchar(1)
+    1, -- int
+    1, -- int
+    '009', -- varchar(3)
+    100.00, -- decimal(18, 2)
+    18.00, -- decimal(18, 2)
+    0.00, -- decimal(18, 2)
+    0.00, -- decimal(18, 2)
+    0.00, -- decimal(18, 2)
+    0.00, -- decimal(18, 2)
+    5.00, -- decimal(18, 2)
+    113.00, -- decimal(18, 2)
+    1, -- int
+    1, -- int
+    1, -- int
+    1, -- int
+    '9B697C80-FFE8-4C91-9362-98FE4D5221D8'--id usuario
+);
+
 
 select * from ventas
+select * from Comprobantes
 
-
-CREATE TABLE DetalleVentas(
-	idDetalleVenta int identity(1,1) primary key NOT NULL,
-	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-	idVentas int not NULL,
-	cantidad decimal(18, 3) not NULL,
-	idCategoria int not null,
-	idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
-	--[Descripcion] [varchar](200) NULL,
-	idPresentacion int not NULL,
-	pVenta decimal(18, 5) not NULL,
-	descuentos decimal(18, 2) NULL,
-	igv decimal(18, 2) NULL,
-	ISC decimal(18, 2) NULL,
-	total decimal(18, 2) NULL,
-	cantEntregado decimal(18, 2) NULL,
-	hVenta varchar(10) NULL,
+--drop table detalleVentas
+--CREATE TABLE DetalleVentas(
+--	idDetalleVenta int identity(1,1) primary key NOT NULL,
+--	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+--	idStockSucursal int not null,
+--	idVentas int not NULL,
+--	cantidad decimal(18, 3) not NULL,
+--	idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
+--	--[Descripcion] [varchar](200) NULL,
+--	idPresentacion int not NULL,
+--	pVenta decimal(18, 5) not NULL,
+--	descuentos decimal(18, 2) NULL,
+--	igv decimal(18, 2) NULL,
+--	ISC decimal(18, 2) NULL,
+--	total decimal(18, 2) NULL,
+--	cantEntregado decimal(18, 2) NULL,
+--	hVenta varchar(10) NULL,
 
 	
-	FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
-	FOREIGN KEY (idVentas) REFERENCES Ventas (idVentas),
-	FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
-)
+--	FOREIGN KEY (idVentas) REFERENCES Ventas (idVentas),
+--	FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
+--	FOREIGN KEY (idStockSucursal) REFERENCES StockSucursal (idStockSucursal),
+--)
 
+--drop table detalleventas
+CREATE TABLE DetalleVentas
+(
+    idDetalleVenta INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+    idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal), -- Nueva columna
+	idVentas INT NOT NULL,
+    cantidad DECIMAL(18, 3) NOT NULL,
+    idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
+    idPresentacion INT NOT NULL,
+    pVenta DECIMAL(18, 5) NOT NULL,
+    descuentos DECIMAL(18, 2) NULL,
+    igv DECIMAL(18, 2) NULL,
+    ISC DECIMAL(18, 2) NULL,
+    total DECIMAL(18, 2) NULL,
+    cantEntregado DECIMAL(18, 2) NULL,
+    hVenta VARCHAR(10) NULL,
+
+    FOREIGN KEY (idVentas) REFERENCES Ventas (idVentas),
+    FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion)
+);
+
+go
+
+select * from DetalleVentas
+
+INSERT INTO DetalleVentas (
+    idEmpresa,
+	idSucursal,
+    idVentas,
+    cantidad,
+    idProducto,
+    idPresentacion,
+    pVenta,
+    descuentos,
+    igv,
+    ISC,
+    total,
+    cantEntregado,
+    hVenta
+)
+VALUES (
+    -- Reemplazar con valores válidos o correctos
+    '42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
+	'E50017E1-B809-41FD-92F4-8AD9163D2E92',
+    7, -- idVentas
+    40.0, -- cantidad
+    '6C523685-D1FA-4B5F-822A-C052B3B49D6B', --idproducto
+    1, -- idPresentacion
+    10.5, -- pVenta
+    0, -- descuentos
+    0, -- igv
+    0, -- ISC
+    113, -- total
+    0, -- cantEntregado
+    '12:30' -- hVenta
+);
+select * from DetalleCompras
+select * from DetalleVentas
+select * from StockSucursal
 
 CREATE TABLE BorradorVenta(
 	idBorradorVenta int identity(1,1) primary key not null,
@@ -833,64 +929,6 @@ CREATE TABLE Cotizaciones(
 	
 	
 )
-
--------------------------------------
---SUNAT
--------------------------------------
-
-
-create table Tributos
-(
-	idTributo int primary key not null,
-	descripcion varchar(50) not null,
-	codigo varchar(3) not null
-)
-go
-select * from Tributos
---insert into Tributos values	('1000','IGV Impuesto General a las Ventas','VAT');
---insert into Tributos values	('1016','Impuesto a la Venta Arroz Pilado','VAT');
---insert into Tributos values	('2000','ISC Impuesto Selectivo al Consumo','EXC');
---insert into Tributos values	('7152','Impuesto a la bolsa plastica','OTH');
---insert into Tributos values	('9995','Exportaci�n','FRE');
---insert into Tributos values	('9996','Gratuito','FRE');
---insert into Tributos values	('9997','Exonerado','VAT');
---insert into Tributos values	('9998','Inafecto','FRE');
---insert into Tributos values	('9999','Otros tributos','OTH');
-
-go
-create table EstadoSunat
-(
-	idEstadoSunat int identity(1,1) primary key not null,
-	codigo varchar(3) not null,
-	descripcion varchar(30) not null,
-)
-go
-
-
-create table ComprobanteRelacionado
-(
-	idCompRel int identity(1,1) primary key not null,
-	descripcion varchar(50) not null,
-)
-
-
-
-create table TipoCambio
-(
-idTipoCambio int identity(1,1) primary key,
-descripcion varchar(200),
-costo decimal(18,3),
-simbolo varchar(3)
-
-)
---go
---insert into TipoCambio values ('SOLES',1,'S/')
---insert into TipoCambio values ('DOLARES AMERICANOS',3.688,'US$')
---insert into TipoCambio values ('EUROS',3.688,'€')
---SELECT * FROM TipoCambio
---go
-
-
 
 --============================================================================================================================================================
 --RESTO DE TABLAS
