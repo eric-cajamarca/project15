@@ -1,16 +1,33 @@
-<p>update-rol works!</p>
+<app-top-nav></app-top-nav>
 
-<!-- FILEPATH: /c:/project15/adminAf/src/app/components/roles/update-rol/update-rol.component.html -->
-<!-- BEGIN: abpxx6d04wxr -->
-<div>
-    <h1>Edit Role</h1>
-    <form>
-        <!-- Add your form fields here -->
-        <label for="roleName" class="form-label">Role Name:</label>
-        <input type="text" class="form-control" id="roleName" name="roleName" placeholder="Enter role name">
-        
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row justify-content-center" style="background:rgb(255, 254, 254)">
+            <!-- <div class="row justify-content-center" style="background:rgb(207, 207, 207)"> -->
+            <div class="col-12 col-lg-11 col-xl-11">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 offset-md-3">
+                            <h1>Editar rol</h1>
+                            <form #updateForm="ngForm" (ngSubmit)="actualizar(updateForm)">
+                                <div class="mb-3">
+                                    <label for="rolName" class="form-label">Nombre del rol</label>
+                                        <input class="form-control" name="descripcion"  [(ngModel)]="rol.descripcion" type="text" >
+                                        
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                                <a href="/rol" class="btn btn-warning" style="margin-left: 20px;">Regresar</a>
+                            </form>
+                        </div>
+                    </div>
 
-        <button type="submit" class="btn btn-success">Update Role</button>
-    </form>
+                </div>
+                
+            </div>
+
+            
+        </div>
+    </div>
+
 </div>
-<!-- END: abpxx6d04wxr -->

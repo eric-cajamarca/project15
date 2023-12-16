@@ -45,8 +45,9 @@ const appRoute : Routes = [
 
     //rol
     {path: 'rol', component: IdexRolComponent, canActivate: [AdminGuard]},
-    {path: 'rol/editar', component: UpdateRolComponent, canActivate: [AdminGuard]},
-    {path: 'rol/crear', component: CreateRolComponent, canActivate: [AdminGuard]},
+    {path: 'rol/create', component: CreateRolComponent, canActivate: [AdminGuard]},
+    {path: 'rol/:id', component: UpdateRolComponent, canActivate: [AdminGuard]},
+    
 
 ]
 

@@ -1,19 +1,29 @@
-<p>create-rol works!</p>
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row justify-content-center" style="background:rgb(255, 254, 254)">
+            <div class="col-12 col-lg-11 col-xl-11">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 offset-md-3">
+                            <h1>Crear nuevo rol</h1>
+                            <form class="form" #registroForm="ngForm" (ngSubmit)="registrar(registroForm)">
+                                <div class="mb-3">
+                                    <label for="rolName" class="form-label">Nombre del rol</label>
+                                    <input type="text" class="form-control" name="descripcion" [(ngModel)]="rol.descripcion" placeholder="Nombre del rol" required>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Create</button>
+                                <a href="/rol" class="btn btn-warning" style="margin-left: 20px;">Regresar</a>
+                            </form>
+                        </div>
+                    </div>
 
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <h1>Create Rol</h1>
-            <form>
-                <div class="mb-3">
-                    <label for="rolName" class="form-label">Rol Name</label>
-                    <input type="text" class="form-control" id="rolName" placeholder="Enter rol name">
                 </div>
                 
-                <button type="submit" class="btn btn-primary">Create</button>
-                <a href="/rol" class="btn btn-warning">Back to Index Rol</a>
-            </form>
+            </div>
+
+            
         </div>
     </div>
+
 </div>

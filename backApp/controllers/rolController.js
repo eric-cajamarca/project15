@@ -31,10 +31,12 @@ const crear_rol = async function (req, res) {
                             .input('descripcion', sql.VarChar, descripcion)
                             .query("INSERT INTO Rol (idRol,descripcion) VALUES (@idRol,@descripcion)");
 
-                        res.json(rol.recordset);
+                        
+                        res.status(200).send({ message: 'Rol creado correctamente', data: rol.rowsAffected });
                     } catch (error) {
-                        res.status(500);
-                        res.send(error.message);
+                        
+                        res.status(200).send({ message: 'Error al crear el rol', data: undefined });
+                        //res.send(error.message);
                     }
                 }
             } catch (error) {
@@ -140,15 +142,15 @@ const actualizar_rol = async function (req, res) {
                             .input('descripcion', sql.VarChar, descripcion)
                             .query("UPDATE Rol SET descripcion = @descripcion WHERE idRol = @idRol");
 
-                        res.json(rol.recordset);
+                        res.status(200).send({message: 'Rol actualizado correctamente', data: rol.rowsAffected});
                     } catch (error) {
-                        res.status(500);
-                        res.send(error.message);
+                        res.status(200).send({ message: 'Error al actualizar el rol', data: undefined });
+                        //res.send(error.message);
                     }
                 }
             } catch (error) {
-                res.status(500);
-                res.send(error.message);
+                res.status(200).send({ message: 'Error al actualizar el rol', data: undefined });
+                //res.send(error.message);
             }
 
         } else {

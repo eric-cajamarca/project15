@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { AdminService } from 'src/app/services/admin.service';
+import { RolService } from 'src/app/services/rol.service';
 
 declare var iziToast: any;
 declare var $: any;
@@ -23,12 +24,14 @@ export class UpdateColaboradorComponent {
   public id = '';
   public load_data = false;
   public data = false;
+  public roles: any = [];
 
   constructor(
     private _adminservice: AdminService,
     private _router: Router,
     private _route: ActivatedRoute,
     private _cookieService: CookieService,
+    private _rolService: RolService,
   ) { 
     this.token = this._cookieService.get('token');
   };
