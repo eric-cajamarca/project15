@@ -53,6 +53,7 @@ insert into Rol values
 
 go
 
+--truncate table usuarioweb
 --drop table UsuarioWeb
 CREATE TABLE UsuarioWeb
 (
@@ -80,12 +81,27 @@ VALUES
     'Ortiz Guevara',
 	'ericortizguevara@gmail.com',
 	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
-    '43A7B29E-0AA0-4231-AFEA-10349C7494F9', -- Utiliza directamente el identificador único
+    '86AF7535-6DBC-4A73-94EC-6D016655D0B6', -- Utiliza directamente el identificador único
     1,
     GETDATE()
 );
 
-truncate table Usuarios
+INSERT INTO UsuarioWeb (idUsuario, idEmpresa, nombres, apellidos, email, password, idRol, estado, fregistro)
+VALUES
+(
+    NEWID(),
+	'BA51C992-7D05-459E-B419-A03358C0A788',
+    'Mabel1',
+    'Hidrogo Paisig1',
+	'mabel1@gmail.com',
+	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
+    '86AF7535-6DBC-4A73-94EC-6D016655D0B6', -- Utiliza directamente el identificador único
+    1,
+    GETDATE()
+);
+
+select * from UsuarioWeb
+--truncate table Usuariosweb
 --drop table usuarios
 --CREATE TABLE Usuarios
 --(

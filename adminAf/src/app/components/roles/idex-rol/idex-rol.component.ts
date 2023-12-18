@@ -29,8 +29,8 @@ export class IdexRolComponent {
   ngOnInit(): void {
     this._rolService.obtener_roles(this.token).subscribe(
       response=>{
-        console.log('response: ',response);
-        this.roles = response;
+        console.log('response: ',response.data);
+        this.roles = response.data;
         console.log('this.roles: ',this.roles);
       },
       error=>{

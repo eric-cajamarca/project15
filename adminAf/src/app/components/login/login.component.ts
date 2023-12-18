@@ -46,7 +46,8 @@ export class LoginComponent implements OnInit{
 
       let data = {
         email: this.user.email,
-        password: this.user.password
+        password: this.user.password,
+        ruc: this.user.ruc
       }
       
       this._adminService.admin_login(data).subscribe(

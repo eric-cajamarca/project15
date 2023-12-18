@@ -56,7 +56,7 @@ const crear_rol = async function (req, res) {
 
 // GET ALL
 const obtener_roles = async function (req, res) {
-
+    console.log('obtener_roles' + req.user.rol)
     if (req.user) {
 
         if (req.user.rol == 'Administrador') {
@@ -66,9 +66,11 @@ const obtener_roles = async function (req, res) {
                 let roles = await pool
                     .request()
                     .query("SELECT * from Rol");
-                res.json(roles.recordset);
+               
+                res.status(200).send({data: roles.recordset });
+                
             } catch (error) {
-                res.status(500);
+                res.status(200).send({ message: 'Error al obtener los roles', data: undefined });
                 res.send(error.message);
             }
 

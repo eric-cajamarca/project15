@@ -24,7 +24,7 @@ export class UpdateColaboradorComponent {
   public id = '';
   public load_data = false;
   public data = false;
-  public roles: any = [];
+  public roles: any[] = [];
 
   constructor(
     private _adminservice: AdminService,
@@ -70,10 +70,38 @@ export class UpdateColaboradorComponent {
               this.load_data = false;
             }
             
-            // this.colaborador_const = this.colaborador;
+            
           }
 
         );
+
+        this._rolService.obtener_roles(this.token).subscribe(
+          response => {
+            console.log('response.data', response.data);
+            
+            if (response.data == undefined) {
+              iziToast.show({
+                title: 'ERROR',
+                titleColor: '#FF0000',
+                color: '#FFF',
+                class: 'text-danger',
+                position: 'topRight',
+                message: 'Usted no tiene acceso a roles'
+              });
+              //this._router.navigate(['/']);
+            } else {
+              this.roles = response.data;
+              console.log('this.roles: ', this.roles);
+              //convertir array de lista de roles this.roles a un objeto par usarlo en mi formulario
+              
+              
+
+
+              console.log(this.roles);
+            }
+
+          }
+        )
 
       }
     );
@@ -92,6 +120,13 @@ export class UpdateColaboradorComponent {
         
       }
       console.log('this.colaborador: ', this.colaborador);
+
+      //quiero cambiar el valor de this.colaborador.idRol por el valor de this.roles seleccionado en el select del html
+      //  this.roles.forEach((item:any) => {
+      //     if(item.idRol == this.colaborador.idRol){
+      //       this.colaborador.idRol = item.id;
+      //     }
+      //   });
 
       this._adminservice.editar_colaborador_admin(this.id, this.colaborador, this.token).subscribe(
         response => {

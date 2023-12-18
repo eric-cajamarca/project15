@@ -103,11 +103,11 @@
                       </button>
                       <ul class="dropdown-menu">
                         <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.estado" data-bs-toggle="modal"
-                          [attr.data-bs-target]="'#delete-'+item.id">
+                          [attr.data-bs-target]="'#delete-'+item.idUsuario">
                           <i class="icon-1x text-dark-50 flaticon2-cross"></i> &nbsp; Desactivar
                         </a>
                         <a style="cursor: pointer;" class="dropdown-item" *ngIf="!item.estado" data-bs-toggle="modal"
-                          [attr.data-bs-target]="'#delete-'+item.id">
+                          [attr.data-bs-target]="'#delete-'+item.idUsuario">
                           <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Activar
                         </a>
                         <a class="dropdown-item" [routerLink]="['/colaborador',item.idUsuario]">
@@ -118,7 +118,7 @@
 
 
 
-                    <div class="modal fade" id="delete-{{item.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="delete-{{item.idUsuario}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                           <div class="modal-content">
                               <div class="modal-header">
@@ -132,7 +132,7 @@
                               </div>
                               <div class="modal-footer">
                                   <button type="button" class="btn btn-warning font-weight-bold" data-bs-dismiss="modal">Cerrar</button>
-                                  <button *ngIf="!load_estado" type="button" class="btn btn-danger font-weight-bold" (click)="set_state(item.id,item.estado)">Sí, Cambiar</button>
+                                  <button *ngIf="!load_estado" type="button" class="btn btn-danger font-weight-bold" (click)="set_state(item.idUsuario,item.estado)">Sí, Cambiar</button>
                   
                                   <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
                                       <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>

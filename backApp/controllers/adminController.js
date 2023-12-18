@@ -15,13 +15,17 @@ const getAdmin = async function (req, res) {
             console.log('req.user.rol', req.user.rol);
             try {
                 const pool = await sql.connect(dbConfig);
-                const result = await pool.request().query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol');
+                const result = await pool
+                .request()
+                .input('empresa', sql.UniqueIdentifier, req.user.empresa)
+                .query('SELECT * FROM UsuarioWeb UW INNER JOIN Rol R ON UW.idRol = R.idRol WHERE UW.idEmpresa = @empresa')
+//.query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol where UsuarioWeb.estado = 1 and idEmpresa = @empresa');
                 // res.json(result.recordset);
                 // console.log('result.recordset');
                 // console.log(result.recordset);
                 res.status(200).send({ data: result.recordset });
             } catch (error) {
-                // console.error('Error al obtener los usuarios:', error);
+                console.error('Error al obtener los usuarios:', error);
                 res.status(200).send({ data: undefined });
             }
 
@@ -94,8 +98,9 @@ const createAdmin = async (req, res) => {
 
 const updateAdmin = async (req, res) => {
     //   const { name, apellidos, email, password, rol, estado } = req.body;
-    const { name, apellidos, password, rol } = req.body;
+    const { nombres, apellidos, password, idRol } = req.body;
     const { id } = req.params;
+    console.log('updateAdmin rol: ', idRol);
 
     if (req.user) {
         if (req.user.rol == 'Administrador') {
@@ -110,12 +115,13 @@ const updateAdmin = async (req, res) => {
                     const pool = await sql.connect(dbConfig);
                     const result = await pool
                         .request()
-                        .input('id', sql.Int, id)
-                        .input('name', sql.VarChar, name)
+                        .input('idUsuario', sql.UniqueIdentifier, id)
+                        .input('nombres', sql.VarChar, nombres)
                         .input('apellidos', sql.VarChar, apellidos)
-                        .input('rol', sql.VarChar, rol)
+                        .input('idRol', sql.UniqueIdentifier, idRol)
+                        .input('idEmpresa', sql.UniqueIdentifier, req.user.empresa)
 
-                        .query('UPDATE usuarioWeb SET name = @name, apellidos = @apellidos, rol = @rol WHERE id = @id');
+                        .query('UPDATE usuarioWeb SET nombres = @nombres, apellidos = @apellidos, idRol = @idRol WHERE idUsuario = @idUsuario and idEmpresa = @idEmpresa');
                     res.status(200).send({ message: 'Usuario actualizado correctamente', data: result.rowsAffected });
 
                 } else {
@@ -127,12 +133,12 @@ const updateAdmin = async (req, res) => {
                     const pool = await sql.connect(dbConfig);
                     const result = await pool
                         .request()
-                        .input('id', sql.Int, id)
-                        .input('name', sql.VarChar, name)
+                        .input('idUsuario', sql.UniqueIdentifier, id)
+                        .input('nombres', sql.VarChar, name)
                         .input('apellidos', sql.VarChar, apellidos)
                         .input('password', sql.Text, hashedPassword)
-                        .input('rol', sql.VarChar, rol)
-                        .query('UPDATE usuarioWeb SET name = @name, apellidos = @apellidos, password = @password, rol = @rol WHERE id = @id');
+                        .input('rol', sql.UniqueIdentifier, rol)
+                        .query('UPDATE usuarioWeb SET nombres = @nombres, apellidos = @apellidos, password = @password, rol = @rol WHERE idUsuario = @idUsuario');
                     res.status(200).send({ message: 'Usuario actualizado correctamente', data: result.rowsAffected });
 
                 }
@@ -168,39 +174,40 @@ const obtener_datos_colaborador_admin = async (req, res) => {
     let data;
 
     console.log('obtener_datos_colaborador_admin = id: ', id);
-    console.log('req.user.rol: ', req.user);
-    console.log('req.params: ', req.params);
+    console.log('req.params antes de validar el usuario: ', req.user);
+    
 
     if (req.user) {
         //quiero validar si el rol del usuario es administrador
         if (req.user.rol == 'Administrador') {
+            console.log('despues de validar el user.rol: ', req.user.rol);
             try {
 
                 const pool = await sql.connect(dbConfig);
                 const result = await pool
-                .request()
-                .input('idUsuario', sql.UniqueIdentifier, id)
-                .query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol where idUsuario = @idUsuario');
+                    .request()
+                    .input('idUsuario', sql.UniqueIdentifier, id)
+                    .query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol where idUsuario = @idUsuario');
                 //.query('SELECT * FROM UsuarioWeb where idUsuario = @idUsuario');
 
-                
+
 
                 //despues del codigo anterior no puedo optener respuesta a la consulta
-                 console.log('result.recordset: ', result.recordset);
-                 console.log('result.recordset: ', result.recordset[0].idUsuario);
+                console.log('result.recordset: ', result.recordset);
+                console.log('result.recordset: ', result.recordset[0].idUsuario);
 
                 //quiero convertir el result.recordset.fregistro a un formato de fecha mas amigable
-                 let fecha = result.recordset[0].fregistro;
-                    let fecha2 = moment(fecha).format('DD-MM-YYYY');
-                    console.log('fecha2: ', fecha2);
-                    result.recordset[0].fregistro = fecha2;
-                    console.log('result.recordset[0].fregistro: ', result.recordset[0].fregistro);
-                    
+                let fecha = result.recordset[0].fregistro;
+                let fecha2 = moment(fecha).format('DD-MM-YYYY');
+                console.log('fecha2: ', fecha2);
+                result.recordset[0].fregistro = fecha2;
+                console.log('result.recordset[0].fregistro: ', result.recordset[0].fregistro);
+
 
                 data = result.recordset;
                 console.log('data: ', data);
-                // res.status(200).send({data: data });
-                res.json({ data });
+                res.status(200).send({data: data });
+                //res.json({ data });
 
 
             } catch (error) {
@@ -220,6 +227,8 @@ const obtener_datos_colaborador_admin = async (req, res) => {
 };
 
 const cambiar_estado_colaborador_admin = async function (req, res) {
+
+    console.log('cambiar_estado_colaborador_admin: ', req.params);
     if (req.user) {
 
         //quiero validar si el rol del usuario es administrador
@@ -246,9 +255,9 @@ const cambiar_estado_colaborador_admin = async function (req, res) {
             const pool = await sql.connect(dbConfig);
             const result = await pool
                 .request()
-                .input('id', sql.Int, id)
+                .input('idUsuario', sql.UniqueIdentifier, id)
                 .input('estado', sql.Bit, nuevo_estado)
-                .query('UPDATE usuarioWeb SET estado = @estado WHERE id = @id');
+                .query('UPDATE usuarioWeb SET estado = @estado WHERE idUsuario = @idUsuario');
             console.log(result.recordset);
             res.status(200).send({ data: result.recordset });
         } else {
@@ -264,50 +273,76 @@ const cambiar_estado_colaborador_admin = async function (req, res) {
 }
 
 const admin_login = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, ruc } = req.body;
     const estado = true;
     const data = req.body;
     console.log('entro a login admin')
     console.log(data);
 
-    const pool = await sql.connect(dbConfig);
-    const checkEmailQuery = await pool
-        .request()
-        .input('email', sql.VarChar, email)
-        .input('estado', sql.Bit, estado)
-        .query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol');
-        // .query('SELECT * FROM usuarioWeb WHERE email = @email and estado=@estado');
+    console.log('aqui valido si es el ruc correcto', ruc);
+    //primero quiero validar si el ruc es correcto en la tabla de Empresas
+    try {
+        const pool = await sql.connect(dbConfig);
+        const checkEmailQuery = await pool
+            .request()
+            .input('ruc', sql.VarChar, ruc)
+            .query('SELECT * FROM Empresas where ruc = @ruc');
+        console.log('checkEmailQuery', checkEmailQuery);
+
+        if (checkEmailQuery.recordset.length > 0) {
+            console.log('el ruc existe');
+            console.log('aqui valido si el email es correcto', email,'estado :', estado);
+
+            const pool = await sql.connect(dbConfig);
+            const checkEmailQuery = await pool
+                .request()
+                .input('email', sql.VarChar, email)
+                .input('estado', sql.Bit, estado)
+                //.query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol');
+                .query('SELECT * FROM usuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol WHERE email = @email and estado=@estado');
 
 
-    console.log('checkEmailQuery',checkEmailQuery);
-    console.log(checkEmailQuery.recordset.length)
-    if (checkEmailQuery.recordset.length > 0) {
-        const bdPassword = checkEmailQuery.recordset[0].password;
-        let user = checkEmailQuery.recordset[0];
-        console.log('user');
-        console.log(user);
+            console.log('checkEmailQuery', checkEmailQuery);
+            console.log(checkEmailQuery.recordset.length)
 
-        console.log(bdPassword);
-        bcrypt.compare(password, bdPassword, (err, result) => {
-            if (err) {
-                console.error('Error al comparar contraseñas:', err);
-                res.status(500).send('Error al comparar contraseñas');
-            } else if (result) {
-                // Las contraseñas coinciden, inicia sesión
-                res.status(200).send({
-                    data: user,
-                    token: jwt.createToken(user)
+            if (checkEmailQuery.recordset.length > 0) {
+                const bdPassword = checkEmailQuery.recordset[0].password;
+                let user = checkEmailQuery.recordset[0];
+                console.log('user respuesta de la bd', user);
+                
+
+                console.log('bdpassword', bdPassword);
+                bcrypt.compare(password, bdPassword, (err, result) => {
+                    if (err) {
+                        console.error('Error al comparar contraseñas:', err);
+                        res.status(500).send('Error al comparar contraseñas');
+                    } else if (result) {
+                        // Las contraseñas coinciden, inicia sesión
+                        res.status(200).send({
+                            data: user,
+                            token: jwt.createToken(user)
+                        });
+                        console.log('las contraseñas coinciden');
+                    } else {
+                        // Las contraseñas no coinciden, devuelve un mensaje de error
+                        res.status(200).send({ message: 'La contraseña es incorrecta', data: undefined });
+                    }
                 });
-                console.log('las contraseñas coinciden');
             } else {
-                // Las contraseñas no coinciden, devuelve un mensaje de error
-                res.status(200).send({ message: 'La contraseña es incorrecta', data: undefined });
+                // return res.status(400).json({ message: 'El email no existe. Por favor elija otro.' });
+                res.status(200).send({ message: 'El email no existe o usted no tiene permisos para acceder' });
             }
-        });
-    } else {
-        // return res.status(400).json({ message: 'El email no existe. Por favor elija otro.' });
-        res.status(200).send({ message: 'El email no existe o usted no tiene permisos para acceder' });
+
+        } else {
+            console.log('el ruc no existe');
+            res.status(200).send({ message: 'El ruc no existe', data: undefined });
+        }
+    } catch (error) {
+        console.error('Error al obtener los usuriosa:', error);
+        res.status(200).send({ data: undefined });
     }
+
+
 };
 
 

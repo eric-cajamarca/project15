@@ -80,6 +80,7 @@ export class IndexColaboradorComponent implements OnInit {
 
   set_state(id: any, estado: any) {
     console.log($);
+    console.log('id', id);
     this.load_estado = true;
     this._adminService.cambiar_estado_colaborador_admin(id, { estado: estado }, this.token).subscribe(
       response => {

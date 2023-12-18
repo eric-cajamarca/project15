@@ -3,7 +3,9 @@ var moment = require('moment');
 var secret = 'ericortiz';
 
 exports.createToken = function(user){
+    console.log('helpers jwt', user);
     var payload = {
+        empresa: user.idEmpresa[0],
         sub: user.idUsuario,
         nombres: user.nombres,
         apellidos: user.apellidos,
@@ -14,7 +16,7 @@ exports.createToken = function(user){
     
         // exp: moment().add(7,'day').unix()
     }
-    //console.log('helpers jwt rol', payload);
+    console.log('helpers jwt rol despues de agregar el payload', payload);
 
     return jwt.encode(payload,secret);
 }

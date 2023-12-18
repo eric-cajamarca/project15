@@ -83,11 +83,7 @@
                                                         <div class="col-lg-9 col-xl-9">
                                                             <select required name="idRol" [(ngModel)]="colaborador.idRol" class="form-control">
                                                                 <option value="" selected disabled>Seleccionar cargo...</option>
-                                                                <option value="Administrador">Administrador</option>
-                                                                <option value="Despachador">Despachador</option>
-                                                                <option value="Vendedor">Vendedor</option>
-                                                                <option value="Almacen">Almacen</option>
-                                                                <option value="Conductor">Conductor</option>
+                                                                <option *ngFor="let rol of roles" [value]="rol.idRol">{{ rol.descripcion }}</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -109,9 +105,9 @@
                                                         <a class="btn btn-warning" [routerLink]="['/colaborador']" data-wizard-type="action-prev">Regresar</a>
                                                     </div>
                                                     <div>
-                                                        <button *ngIf="!btn_actualizar" type="submit" class="btn btn-success font-weight-bolder px-9 py-4">Actualizar</button>
+                                                        <button *ngIf="!btn_actualizar" type="submit" class="btn btn-success">Actualizar</button>
                                                         
-                                                        <button *ngIf="btn_actualizar" type="button" class="btn btn-success font-weight-bolder px-9 py-4" disabled>
+                                                        <button *ngIf="btn_actualizar" type="button" class="btn btn-success" disabled>
                                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                             Actualizando...
                                                         </button>
