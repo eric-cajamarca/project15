@@ -22,6 +22,8 @@ insert into Empresas values ('42099529-43C9-4B7F-921A-3D6FB946E93E','20611688564
 insert into Empresas values ('BA51C992-7D05-459E-B419-A03358C0A788','20611658495','GRUPO OLITOR SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','968073361','',CONVERT(varbinary(max),''),'Olitor');
 insert into Empresas values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','10426524541','TORRES NUÑEZ LUCILA','','VENTA AL POR MAYOR Y MENOR DE MATERIALES DE CONSTRUCCIÓN Y ARTÍCULOS DE FERRETERÍA','966818231','966818231','lucilatorressjb@gmail.com',CONVERT(varbinary(max),''),'Lucila');
 
+go 
+select * from Empresas
 
 -- Tabla para la dirección (reutilizable varias direcciones para varias empresas)
 CREATE TABLE DireccionEmpresa (
@@ -42,7 +44,7 @@ insert into DireccionEmpresa values ('BA51C992-7D05-459E-B419-A03358C0A788','060
 insert into DireccionEmpresa values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','060801','PEN','CAJAMARCA','JAEN','JAEN','URB. LOS OLIVOS','PSJE. LOS OLIVOS S/N URB. LOS OLIVOSPSJE. LOS OLIVOS S/N URB. LOS OLIVOS','');
 
 
-select * from Empresas
+select * from DireccionEmpresa
 
 go
 
@@ -92,7 +94,7 @@ VALUES
     'Ortiz Guevara',
 	'ericortizguevara@gmail.com',
 	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
-    '86AF7535-6DBC-4A73-94EC-6D016655D0B6', -- Utiliza directamente el identificador único
+    '7180761B-0761-4AAB-9A86-A5089C4A2722', -- Utiliza directamente el identificador único
     1,
     GETDATE()
 );
@@ -106,7 +108,7 @@ VALUES
     'Hidrogo Paisig1',
 	'mabel1@gmail.com',
 	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
-    '86AF7535-6DBC-4A73-94EC-6D016655D0B6', -- Utiliza directamente el identificador único
+    '7180761B-0761-4AAB-9A86-A5089C4A2722', -- Utiliza directamente el identificador único
     1,
     GETDATE()
 );
@@ -142,9 +144,9 @@ select * from Usuarios
 go
 
 --drop table Clientes
-create table Companias
+create table Clientes
 (
-idCompania int identity (1,1) primary key not null,
+idClientes int identity (1,1) primary key not null,
 idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 idDocumento varchar(1) not null,
 ruc varchar(11) not null,
