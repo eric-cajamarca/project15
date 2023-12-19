@@ -21,6 +21,32 @@ CREATE TABLE Empresas(
 )
 go
 
+CREATE TABLE Empresa (
+    idEmpresa UNIQUEIDENTIFIER PRIMARY KEY,
+    Ruc varchar(11) not null,
+    RazonSocial VARCHAR(255) not null,
+    NombreComercial VARCHAR(255) null,
+	Celular varchar(11) NULL,
+	Whatsapp varchar(11) NULL,
+	Correo varchar(100) NULL,
+	Logo varbinary(max) NULL,
+	Alias varchar(29) NULL,
+
+    AddressId INT FOREIGN KEY REFERENCES Address(AddressId)
+
+);
+
+
+-- Tabla para la dirección (reutilizable para client y company)
+CREATE TABLE Address (
+    AddressId INT PRIMARY KEY IDENTITY(1,1),
+    Direccion VARCHAR(255),
+    Provincia VARCHAR(50),
+    Departamento VARCHAR(50),
+    Distrito VARCHAR(50),
+    Ubigeo VARCHAR(10)
+);
+
 --insert into Empresas values (NEWID(),'20611688564','EMPRESA FERRETERA AVE FENIX SJB E.I.R.L.','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','PJ. LOS OLIVOS NRO. C-02 URB. H.U PALESTINA (FRENTE AL PARQUE LOS OLIVOS)','JAEN','CAJAMARCA','JAEN','968073361','968073361','',CONVERT(varbinary(max),''),'Fenix');
 --insert into Empresas values (NEWID(),'20611658495','GRUPO OLITOR SJB E.I.R.L.','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','PJ. LOS OLIVOS C-1 NRO. SN URB. PALESTINA (1ER PISO)','JAEN','CAJAMARCA','JAEN','968073361','968073361','',CONVERT(varbinary(max),''),'Olitor');
 --insert into Empresas values (NEWID(),'10426524541','TORRES NUÑEZ LUCILA','VENTA AL POR MAYOR Y MENOR DE MATERIALES DE CONSTRUCCIÓN Y ARTÍCULOS DE FERRETERÍA','PSJE. LOS OLIVOS S/N URB. LOS OLIVOSPSJE. LOS OLIVOS S/N URB. LOS OLIVOS','JAEN','CAJAMARCA','JAEN','966818231','966818231','lucilatorressjb@gmail.com',CONVERT(varbinary(max),''),'Lucila');
@@ -148,22 +174,7 @@ go
 
 select * from Usuarios
 --drop table Documentos
-create table Documentos
-(
-idDocumento varchar(1) primary key not null,
-nombre varchar(20) not null,
-descripcion varchar(200) not null,
 
-)
-select * from Documentos
-go
-
-
-insert into Documentos values ('1','DNI','Documento Nacional de Identidad')
-insert into Documentos values ('6','RUC','Registro Unico de Contributentes')
-insert into Documentos values ('4','CARNET','Carnet de extrangería')
-insert into Documentos values ('A','CEDULA','Cédula diplomática de identidad')
-GO
 
 ----drop table Empleados
 --create table Empleados

@@ -99,3 +99,49 @@ insert into Moneda values ('USD','DOLLAR','US$')
 insert into Moneda values ('EUR','EUROS','€')
 select * from moneda
 go
+
+
+CREATE TABLE FormaPago (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    moneda VARCHAR(3),
+    tipo VARCHAR(20)
+);
+
+create table Documentos
+(
+idDocumento varchar(1) primary key not null,
+nombre varchar(20) not null,
+descripcion varchar(200) not null,
+
+)
+select * from Documentos
+go
+
+
+insert into Documentos values ('1','DNI','Documento Nacional de Identidad')
+insert into Documentos values ('4','CARNET','Carnet de extrangería')
+insert into Documentos values ('6','RUC','Registro Unico de Contributentes')
+insert into Documentos values ('7','PASAPORTE','Pasaporte')
+insert into Documentos values ('A','CEDULA','Cédula diplomática de identidad')
+GO
+
+CREATE TABLE Leyenda (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    code VARCHAR(10),
+    value VARCHAR(255)
+);
+
+
+create table tipoDoc
+(
+	idTipoDoc int identity primary key not null,
+	codigo varchar(2) not null,
+	descripcion varchar(max) not null
+)
+
+insert into tipoDoc values ('01','FACTURA')
+insert into tipoDoc values ('03','BOLETA DE VENTA')
+insert into tipoDoc values ('07','NOTA DE CREDITO')
+insert into tipoDoc values ('08','NOTA DE DEBITO')
+insert into tipoDoc values ('09','GUIA DE TEMISIÓN REMITENTE')
+insert into tipoDoc values ('12','TICKET DE MAQUINA REGISTRADORA')
