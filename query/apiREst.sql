@@ -1,8 +1,8 @@
 ----facturas y boletas
 
 -- Tabla para la dirección (reutilizable para client y company)
-CREATE TABLE Address (
-    AddressId INT PRIMARY KEY IDENTITY(1,1),
+CREATE TABLE Direccion (
+    idDireccion INT PRIMARY KEY IDENTITY(1,1),
     Direccion VARCHAR(255),
     Provincia VARCHAR(50),
     Departamento VARCHAR(50),
@@ -157,9 +157,9 @@ CREATE TABLE Cliente (
     addressId INT FOREIGN KEY REFERENCES Address(Id)
 );
 
-CREATE TABLE Empresa (
-    Id INT PRIMARY KEY IDENTITY(1,1),
-    ruc INT,
+CREATE TABLE Compania (
+    IdCompania INT PRIMARY KEY IDENTITY(1,1),
+    ruc varchar(11) not null,
     razonSocial VARCHAR(255),
     nombreComercial VARCHAR(255),
     addressId INT FOREIGN KEY REFERENCES Address(Id)

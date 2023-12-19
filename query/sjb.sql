@@ -8,53 +8,38 @@ CREATE TABLE Empresas(
 	idEmpresa UNIQUEIDENTIFIER primary key NOT NULL,
 	ruc varchar(11) NULL,
 	razon_Social varchar(200) NULL,
+	nombreComercial varchar(200) null,
 	rubro varchar(200) NULL,
-	direccion varchar(200) NULL,
-	distrito varchar(50) NULL,
-	region varchar(50) NULL,
-	provincia varchar(50) NULL,
 	celular varchar(11) NULL,
-	Whatsapp varchar(11) NULL,
-	Correo varchar(100) NULL,
-	Logo varbinary(max) NULL,
-	Alias varchar(29) NULL,
+	whatsapp varchar(11) NULL,
+	correo varchar(100) NULL,
+	logo varbinary(max) NULL,
+	alias varchar(10) NULL,
 )
 go
 
-CREATE TABLE Empresa (
-    idEmpresa UNIQUEIDENTIFIER PRIMARY KEY,
-    Ruc varchar(11) not null,
-    RazonSocial VARCHAR(255) not null,
-    NombreComercial VARCHAR(255) null,
-	Celular varchar(11) NULL,
-	Whatsapp varchar(11) NULL,
-	Correo varchar(100) NULL,
-	Logo varbinary(max) NULL,
-	Alias varchar(29) NULL,
+insert into Empresas values ('42099529-43C9-4B7F-921A-3D6FB946E93E','20611688564','EMPRESA FERRETERA AVE FENIX SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','968073361','',CONVERT(varbinary(max),''),'Fenix');
+insert into Empresas values ('BA51C992-7D05-459E-B419-A03358C0A788','20611658495','GRUPO OLITOR SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','968073361','',CONVERT(varbinary(max),''),'Olitor');
+insert into Empresas values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','10426524541','TORRES NUÑEZ LUCILA','','VENTA AL POR MAYOR Y MENOR DE MATERIALES DE CONSTRUCCIÓN Y ARTÍCULOS DE FERRETERÍA','966818231','966818231','lucilatorressjb@gmail.com',CONVERT(varbinary(max),''),'Lucila');
 
-    AddressId INT FOREIGN KEY REFERENCES Address(AddressId)
 
+-- Tabla para la dirección (reutilizable varias direcciones para varias empresas)
+CREATE TABLE DireccionEmpresa (
+    idDireccionEmpresa INT IDENTITY(1,1) PRIMARY KEY not null,
+	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+    ubigeo varchar(10) null,
+	codPais varchar(10) null,
+    region varchar(50) NULL,
+	provincia varchar(50) NULL,
+	distrito varchar(50) NULL,
+	urbanizacion varchar(100) null,
+	direccion VARCHAR(255) null,
+	codLocal varchar(10) null
 );
 
-
--- Tabla para la dirección (reutilizable para client y company)
-CREATE TABLE Address (
-    AddressId INT PRIMARY KEY IDENTITY(1,1),
-    Direccion VARCHAR(255),
-    Provincia VARCHAR(50),
-    Departamento VARCHAR(50),
-    Distrito VARCHAR(50),
-    Ubigeo VARCHAR(10)
-);
-
---insert into Empresas values (NEWID(),'20611688564','EMPRESA FERRETERA AVE FENIX SJB E.I.R.L.','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','PJ. LOS OLIVOS NRO. C-02 URB. H.U PALESTINA (FRENTE AL PARQUE LOS OLIVOS)','JAEN','CAJAMARCA','JAEN','968073361','968073361','',CONVERT(varbinary(max),''),'Fenix');
---insert into Empresas values (NEWID(),'20611658495','GRUPO OLITOR SJB E.I.R.L.','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','PJ. LOS OLIVOS C-1 NRO. SN URB. PALESTINA (1ER PISO)','JAEN','CAJAMARCA','JAEN','968073361','968073361','',CONVERT(varbinary(max),''),'Olitor');
---insert into Empresas values (NEWID(),'10426524541','TORRES NUÑEZ LUCILA','VENTA AL POR MAYOR Y MENOR DE MATERIALES DE CONSTRUCCIÓN Y ARTÍCULOS DE FERRETERÍA','PSJE. LOS OLIVOS S/N URB. LOS OLIVOSPSJE. LOS OLIVOS S/N URB. LOS OLIVOS','JAEN','CAJAMARCA','JAEN','966818231','966818231','lucilatorressjb@gmail.com',CONVERT(varbinary(max),''),'Lucila');
-
-insert into Empresas values ('42099529-43C9-4B7F-921A-3D6FB946E93E','20611688564','EMPRESA FERRETERA AVE FENIX SJB E.I.R.L.','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','PJ. LOS OLIVOS NRO. C-02 URB. H.U PALESTINA (FRENTE AL PARQUE LOS OLIVOS)','JAEN','CAJAMARCA','JAEN','968073361','968073361','',CONVERT(varbinary(max),''),'Fenix');
-insert into Empresas values ('BA51C992-7D05-459E-B419-A03358C0A788','20611658495','GRUPO OLITOR SJB E.I.R.L.','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','PJ. LOS OLIVOS C-1 NRO. SN URB. PALESTINA (1ER PISO)','JAEN','CAJAMARCA','JAEN','968073361','968073361','',CONVERT(varbinary(max),''),'Olitor');
-insert into Empresas values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','10426524541','TORRES NUÑEZ LUCILA','VENTA AL POR MAYOR Y MENOR DE MATERIALES DE CONSTRUCCIÓN Y ARTÍCULOS DE FERRETERÍA','PSJE. LOS OLIVOS S/N URB. LOS OLIVOSPSJE. LOS OLIVOS S/N URB. LOS OLIVOS','JAEN','CAJAMARCA','JAEN','966818231','966818231','lucilatorressjb@gmail.com',CONVERT(varbinary(max),''),'Lucila');
-
+insert into DireccionEmpresa values ('42099529-43C9-4B7F-921A-3D6FB946E93E', '060801','PEN','CAJAMARCA','JAEN','JAEN','URB. LOS OLIVOS','PJ. LOS OLIVOS NRO. C-02 URB. H.U PALESTINA (FRENTE AL PARQUE LOS OLIVOS)','');
+insert into DireccionEmpresa values ('BA51C992-7D05-459E-B419-A03358C0A788','060801','PEN','CAJAMARCA','JAEN','JAEN' ,'URB. LOS OLIVOS','PJ. LOS OLIVOS C-1 NRO. SN URB. PALESTINA (1ER PISO)','');
+insert into DireccionEmpresa values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','060801','PEN','CAJAMARCA','JAEN','JAEN','URB. LOS OLIVOS','PSJE. LOS OLIVOS S/N URB. LOS OLIVOSPSJE. LOS OLIVOS S/N URB. LOS OLIVOS','');
 
 
 select * from Empresas
@@ -91,7 +76,7 @@ CREATE TABLE UsuarioWeb
 	password text NOT NULL,
 	idRol UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Rol(idRol) not null, 
 	estado bit NOT NULL,
-	fregistro date NOT NULL,
+	fregistro datetime NOT NULL,
 	
  )
 GO
@@ -127,47 +112,7 @@ VALUES
 );
 
 select * from UsuarioWeb
---truncate table Usuariosweb
---drop table usuarios
---CREATE TABLE Usuarios
---(
---	idUsuario UNIQUEIDENTIFIER primary key NOT NULL,
---	nombres varchar(50) NOT NULL,
---	apellidos varchar(100) NOT NULL,
---	password VARBINARY(32) NOT NULL,
---	idRol UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Rol(idRol) not null, 
---	estado bit NOT NULL,
---	fregistro date NOT NULL,
-	
--- )
---GO
 
---create table IngresoUsuarios
---(
---idIngresoUsuario int identity primary key not null,
---idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
---fecha varchar(10),
---hIngreso varchar(20),
---)
---go
-
---select * from IngresoUsuariosweb
-
---INSERT INTO Usuarios (idUsuario, nombres, apellidos, password, idRol, estado, fregistro)
---VALUES
---(
---    NEWID(),
---    'Eric',
---    'Ortiz Guevara',
---	'12345m',
---    '33F8239F-6AAC-458D-B7CA-8E8AB583C5B1', -- Utiliza directamente el identificador único
---    1,
---    GETDATE()
---);
-
-
-select * from Rol
-select * from Usuarios
 
 
 go
@@ -197,19 +142,15 @@ select * from Usuarios
 go
 
 --drop table Clientes
-create table Clientes
+create table Companias
 (
-idCliente int identity (1,1) primary key not null,
+idCompania int identity (1,1) primary key not null,
 idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 idDocumento varchar(1) not null,
 ruc varchar(11) not null,
 rSocial varchar(200) not null,
-direccion varchar(200) not null,
-referencia text null,
-distrito varchar(50) null,
-ubigeo varchar(12) null,
-celular varchar (50) null,
 correo varchar(100) null,
+celular varchar (50) null,
 condicion varchar(50) null,
 FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
 )
@@ -224,6 +165,38 @@ VALUES
 	4,
 	'10456333538',
     'Eric Ortiz Guevara',
+	'ericortizguevara@gmail.com',
+	'999999999',
+    'habido'
+);
+--truncate table Clientes
+select * from Clientes
+
+
+CREATE TABLE DireccionCompania (
+    idDireccionCompania INT IDENTITY(1,1) PRIMARY KEY not null,
+	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+	idCompania int not null,
+	ubigeo varchar(10) null,
+	codPais varchar(10) null,
+    region varchar(50) NULL,
+	provincia varchar(50) NULL,
+	distrito varchar(50) NULL,
+	urbanizacion varchar(100) null,
+	direccion VARCHAR(255) null,
+	referencia varchar(200) null,
+	codLocal varchar(10) null
+	
+	FOREIGN KEY (idCompania) REFERENCES Companias (idCompania),
+);
+
+INSERT INTO Clientes (idEmpresa, idCompania, ubigeo, codPais, region, provincia, distrito, urbanizacion, direccion, referencia, codLocal)
+VALUES
+(
+    '42099529-43C9-4B7F-921A-3D6FB946E93E',
+	4,
+	'10456333538',
+    'Eric Ortiz Guevara',
 	'los jardines 119',
 	'por mar habierto',
 	'jaen',
@@ -232,42 +205,42 @@ VALUES
 	'ericortizguevara@gmail.com',
     'habido'
 );
---truncate table Clientes
-select * from Clientes
 
-create table Proveedors
-(
-idProveedor int identity(1,1) primary key not null,
-idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-idDocumento varchar(1) not null,
-ruc varchar (11) not null,
-rSocial varchar (200) not null,
-direccion varchar(200) null,
-distrito varchar (50) null,
-ubigeo varchar(12) null,
-celular varchar (50) null,
-correo varchar(100) null,
-condicion varchar(50) null,
 
-FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
-)
-go
 
-INSERT INTO Proveedors (idEmpresa, idDocumento, ruc, rSocial, direccion, distrito, ubigeo, celular, correo, condicion)
-VALUES
-(
-    '42099529-43C9-4B7F-921A-3D6FB946E93E',
-	4,
-	'10456333538',
-    'Proveedor Ortiz Guevara',
-	'los jardines 119',
-	'jaen',
-	'060801',
-	'999999999',
-	'ericortizguevara@gmail.com',
-    'habido'
-);
-select * from Proveedors
+--create table Proveedors
+--(
+--idProveedor int identity(1,1) primary key not null,
+--idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+--idDocumento varchar(1) not null,
+--ruc varchar (11) not null,
+--rSocial varchar (200) not null,
+--direccion varchar(200) null,
+--distrito varchar (50) null,
+--ubigeo varchar(12) null,
+--celular varchar (50) null,
+--correo varchar(100) null,
+--condicion varchar(50) null,
+
+--FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
+--)
+--go
+
+--INSERT INTO Proveedors (idEmpresa, idDocumento, ruc, rSocial, direccion, distrito, ubigeo, celular, correo, condicion)
+--VALUES
+--(
+--    '42099529-43C9-4B7F-921A-3D6FB946E93E',
+--	4,
+--	'10456333538',
+--    'Proveedor Ortiz Guevara',
+--	'los jardines 119',
+--	'jaen',
+--	'060801',
+--	'999999999',
+--	'ericortizguevara@gmail.com',
+--    'habido'
+--);
+--select * from Proveedors
 
 
 --DROP TABLE presentacion
@@ -354,7 +327,7 @@ alertaMaximo decimal(18,5) null,
 VecesVendidas int null,
 facturar varchar(2) null,
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
-FIngreso date not null,
+FIngreso datetime not null,
 
 FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
 FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
@@ -431,7 +404,7 @@ idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE 
 nombre varchar(20) not null,
 direccion varchar(200) null,
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
-fregistro date not null
+fregistro datetime not null
 )
 
 go
@@ -457,7 +430,7 @@ idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal),
 idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 cantidad decimal(18,2) not null,
 ubicacion Varchar(20) null,
-fIngreso date null,
+fIngreso datetime null,
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 
@@ -484,7 +457,7 @@ create table OrdenSalida
 (
 idOrdenSalida int identity(1,1) primary key not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-fechaSalida date not null,
+fechaSalida datetime not null,
 responsable varchar(200) null,
 idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 cantidad decimal(18,3) null,
@@ -578,8 +551,8 @@ compCompra char(13) not null,
 idComprobante int not null,
 serie varchar(4) not null,
 numero varchar (8) not null,
-fEmision varchar (10) not null,
-fVencimiento varchar(10) null,
+fEmision datetime not null,
+fVencimiento datetime null,
 idProveedor int not null,
 idMoneda int not null,
 idEstadoPago int not null,
@@ -702,10 +675,10 @@ CREATE TABLE Ventas
 	idComprobante int not NULL,
 	serie varchar(4) not NULL,
 	numero varchar(8) not NULL,
-	fEmision date not NULL,
-	fVencimiento date not NULL,
+	fEmision datetime not NULL,
+	fVencimiento datetime not NULL,
 	idDocumento varchar(1) not NULL,
-	idCliente int NULL,
+	idCompania int NULL,
 	idMoneda int NULL,
 	idMediosPago varchar(3) not NULL, --contado, deposito...
 	subTotal decimal(18, 2) NULL,
@@ -724,7 +697,7 @@ CREATE TABLE Ventas
 
 	FOREIGN KEY (idComprobante) REFERENCES Comprobantes (idComprobante),
 	FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
-	FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
+	FOREIGN KEY (idCompania) REFERENCES Companias (idCompania),
 	FOREIGN KEY (idMoneda) REFERENCES Moneda (idMoneda),
 	FOREIGN KEY (idMediosPago) REFERENCES MediosPago (idMediosPago),
 	FOREIGN KEY (idEstadoPago) REFERENCES EstadoPago (idEstadoPago),
@@ -742,7 +715,7 @@ INSERT INTO Ventas (
     fEmision,
     fVencimiento,
     idDocumento,
-    idCliente,
+    idCompania,
     idMoneda,
     idMediosPago,
     subTotal,
@@ -896,7 +869,7 @@ GO
 CREATE TABLE Caja(
 	idCaja int identity(1,1) primary key not null,
 	idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-	fecha date NOT NULL,
+	fecha datetime NOT NULL,
 	estadoAC varchar(20) NULL,
 	horaAC varchar(20) NULL,
 	usuarioAC varchar(20) NULL,
@@ -956,10 +929,10 @@ CREATE TABLE Cotizaciones(
 	idComprobante int NULL,
 	serie varchar(4) NULL,
 	numero varchar(8) NULL,
-	fEmision varchar(10) NULL,
-	fVencimiento varchar(10) NULL,
+	fEmision datetime NULL,
+	fVencimiento datetime NULL,
 	idDocumento varchar(1) not NULL,
-	idCliente int not null,
+	idCompania int not null,
 	moneda varchar(20) NULL,
 	idCondicionPago int NULL,
 	total decimal (18, 2) NULL,
@@ -968,10 +941,29 @@ CREATE TABLE Cotizaciones(
 
 	FOREIGN KEY (idComprobante) REFERENCES Comprobantes (idComprobante),
 	FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
-	FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
+	FOREIGN KEY (idCompania) REFERENCES Companias (idCompania),
 	)
 
 	select * from cotizaciones
+
+
+	INSERT INTO Cotizaciones (idEmpresa,serieNumero,idComprobante,serie,numero,fEmision,fVencimiento,idDocumento,idCompania,moneda,idCondicionPago,total,idUsuario,Conversion)
+VALUES (
+    '42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
+    'COT-00000001',
+    1, -- Reemplaza con el valor correcto para idComprobante
+    'F001',
+    '12345',
+    GETDATE(),
+    GETDATE(),
+    '1', -- Reemplaza con el valor correcto para idDocumento
+    1, -- Reemplaza con el valor correcto para idCliente
+    'PEN',
+    1, -- Reemplaza con el valor correcto para idCondicionPago
+    500.00, -- Reemplaza con el valor correcto para total
+    '9B697C80-FFE8-4C91-9362-98FE4D5221D8',--id usuario
+    'factura'
+);
 
 
 
@@ -988,7 +980,7 @@ CREATE TABLE Cotizaciones(
 	igv decimal(18, 2) NULL,
 	ISC decimal(18, 2) NULL,
 	total decimal(18, 2) NULL,
-	idSucursal int not null,
+	idSucursal UNIQUEIDENTIFIER not null,
 	hVenta varchar(10) NULL,
 
 	FOREIGN KEY (idCotizacion) REFERENCES Cotizaciones (idCotizacion),
@@ -998,24 +990,40 @@ CREATE TABLE Cotizaciones(
 	
 )
 
+
+INSERT INTO DetalleCotizacion (idEmpresa,idCotizacion,cantidad,codigo,descripcion,idPresentacion,pVenta,descuentos,igv,ISC,total,idSucursal,hVenta)
+VALUES (
+    '42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
+    1, -- Reemplaza con el valor correcto para idCotizacion
+    10.5, -- Reemplaza con el valor correcto para cantidad
+    'ABC123', -- Reemplaza con el valor correcto para codigo
+    '6C523685-D1FA-4B5F-822A-C052B3B49D6B',--id producto
+    1, -- Reemplaza con el valor correcto para idPresentacion
+    50.12345, -- Reemplaza con el valor correcto para pVenta
+    5.75, -- Reemplaza con el valor correcto para descuentos
+    10.25, -- Reemplaza con el valor correcto para igv
+    2.5, -- Reemplaza con el valor correcto para ISC
+    500.75, -- Reemplaza con el valor correcto para total
+    'E50017E1-B809-41FD-92F4-8AD9163D2E92', -- Reemplaza con el valor correcto para idSucursal
+    GETDATE() -- Reemplaza con el valor correcto para hVenta
+);
+
+select * from Productos
+
+
+SELECT
+    C.*,
+    DC.*
+FROM
+    Cotizaciones C
+JOIN
+    DetalleCotizacion DC ON C.idCotizacion = DC.idCotizacion
+WHERE
+    C.idCotizacion = 1; -- Reemplaza con el ID de cotización que estás buscando
+
 --============================================================================================================================================================
 --RESTO DE TABLAS
 --============================================================================================================================================================
-create table Periodos
-(
-idPeriodo int identity(1,1) primary key not null,
-plazo int not null,
-descripcion varchar(20),
-)
-go
-
---insert into Periodos values ('Dias')
---insert into Periodos values ('Semanas')
---insert into Periodos values ('Quincenal')
---insert into Periodos values ('Meses')
---insert into Periodos values ('Años')
---go
---select * from Periodos
 
 ------------------------------
 --------CUENTAS X PAGAR
@@ -1027,10 +1035,10 @@ create table CuentasxPagar
 (
 idCuentaxPagar int identity(1,1) primary key not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-idProveedor int not null,
+idCompania int not null,
 idCompra int not null,
-fEmision varchar(10),
-fVencimiento varchar(10),
+fEmision datetime not null,
+fVencimiento datetime not null,
 total decimal(18,2),
 idPeriodo int not null,
 cuota decimal(18,2),
@@ -1040,7 +1048,7 @@ ctaBanco varchar(50),
 Estado varchar(50),
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
-FOREIGN KEY (idProveedor) REFERENCES Proveedors (idProveedor),
+FOREIGN KEY (idCompania) REFERENCES Companias (idCompania),
 FOREIGN KEY (idCompra) REFERENCES Compras (idCompra),
 FOREIGN KEY (idPeriodo) REFERENCES Periodos (idPeriodo),
 )
@@ -1053,9 +1061,9 @@ create table HistorialCXP
 (
 idHistorialCXP int identity(1,1) not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-fecha varchar(10),
+fecha datetime,
 idCuentaxPagar int not null,
-idProveedor int not null,
+idCompania int not null,
 nroCuota int,
 nroDocpago varchar(13),
 responsable varchar(200),
@@ -1063,6 +1071,7 @@ total decimal(18,2),
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 FOREIGN KEY (idCuentaxPagar) REFERENCES CuentasxPagar (idCuentaxPagar),
+FOREIGN KEY (idCompania) REFERENCES Companias (idCompania),
 
 )
 
@@ -1098,15 +1107,15 @@ idCuentaxCobrar int identity(1,1) primary key not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 idCliente int not null,
 idVentas int not null,
-fEmision varchar(10),
-fVencimiento varchar(10),
-total decimal(18,2),
+fEmision datetime null,
+fVencimiento datetime null,
+total decimal(18,2) not null,
 idPeriodo int not null,
-cuota decimal(18,2),
-cPagadas varchar(2),
-saldo decimal(18,2),
-ctaBanco varchar(50),
-Estado varchar(50),
+cuota decimal(18,2) null,
+cPagadas varchar(2) null,
+saldo decimal(18,2) null,
+ctaBanco varchar(50) null,
+Estado varchar(50)null,
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
@@ -1122,7 +1131,7 @@ create table HistorialCXC
 (
 idHistorialCXC int identity(1,1) not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-fecha varchar(10),
+fecha datetime,
 idCuentaxCobrar int not null,
 nroCuota int,
 nroDocpago varchar(13),
@@ -1160,7 +1169,7 @@ create table Provicional
 idProvicional int identity (1,1) primary key not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 --idCompro varchar(20),
-fecha varchar(10),
+fecha datetime,
 ruc varchar(11),
 cliente char(200) ,
 cantidad decimal(18,3),
@@ -1170,8 +1179,6 @@ presentacion varchar(20),
 pVenta decimal(18,5),
 total decimal(18,2),
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
-
-
 
 )
 
@@ -1183,7 +1190,7 @@ create table NoFacturado
 idNoFacturado int identity(1,1) primary key not null,
 idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 idVentas int  null,
-fecha varchar(10),
+fecha datetime,
 idCliente int not null,
 Cantidad decimal(18,3),
 idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
@@ -1198,48 +1205,3 @@ FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
 
 )
 
-
------------------------------------------------
---CONFIGURACIONES ADICIONALES
------------------------------------------------
---drop table ModoImpresion
-create table ModoImpresion
-(
-idModoImpresion int identity (1,1) primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-descripcion varchar(20),
-estado varchar(5)
-
-)
---select * from ModoImpresion
-go
---insert into  ModoImpresion values(1,'Tamaño Ticket','False')
---insert into  ModoImpresion values(2,'Tamaño A4','True')
-
---drop table ImpresorasDisponibles
---truncate table ImpresorasDisponibles
-create table ImpresorasDisponibles
-(
-idImpresorasDisponibles int identity(1,1) primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-Descripcion varchar(200),
-Predeterminado varchar(5)
-)
-
---select * from ImpresorasDisponibles
-
---insert into  ImpresorasDisponibles values('epson t22','SI')
---insert into  ImpresorasDisponibles values('BROTHER 120','NO')
-
---DROP TABLE Mostrarpdfs
-create table Mostrarpdfs
-(
-idMostrarPdf int identity(1,1) primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-idComprobante int not null,
-Mostrar varchar(2),
-Imprimir varchar(2)
-
-)
-
-select * from Mostrarpdfs
