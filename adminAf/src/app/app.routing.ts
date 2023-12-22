@@ -18,6 +18,9 @@ import { CrearProgramacionComponent } from "./components/progamaciones/crear-pro
 import { IdexRolComponent } from "./components/roles/idex-rol/idex-rol.component";
 import { UpdateRolComponent } from "./components/roles/update-rol/update-rol.component";
 import { CreateRolComponent } from "./components/roles/create-rol/create-rol.component";
+import { IndexClientesComponent } from "./components/clientes/index-clientes/index-clientes.component";
+import { CreateClientesComponent } from "./components/clientes/create-clientes/create-clientes.component";
+import { UpdateClientesComponent } from "./components/clientes/update-clientes/update-clientes.component";
 
 const appRoute : Routes = [
     {path: '', component: InicioComponent, canActivate: [AdminGuard]},
@@ -47,6 +50,11 @@ const appRoute : Routes = [
     {path: 'rol', component: IdexRolComponent, canActivate: [AdminGuard]},
     {path: 'rol/create', component: CreateRolComponent, canActivate: [AdminGuard]},
     {path: 'rol/:id', component: UpdateRolComponent, canActivate: [AdminGuard]},
+
+    //clientes
+    {path: 'cliente', component: IndexClientesComponent, canActivate: [AdminGuard]},
+    {path: 'cliente/create', component: CreateClientesComponent, canActivate: [AdminGuard]},
+    {path: 'cliente/:id', component: UpdateClientesComponent, canActivate: [AdminGuard]},
     
 
 ]

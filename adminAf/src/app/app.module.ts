@@ -26,6 +26,9 @@ import { EditarProgramacionComponent } from './components/progamaciones/editar-p
 import { IdexRolComponent } from './components/roles/idex-rol/idex-rol.component';
 import { CreateRolComponent } from './components/roles/create-rol/create-rol.component';
 import { UpdateRolComponent } from './components/roles/update-rol/update-rol.component';
+import { IndexClientesComponent } from './components/clientes/index-clientes/index-clientes.component';
+import { UpdateClientesComponent } from './components/clientes/update-clientes/update-clientes.component';
+import { CreateClientesComponent } from './components/clientes/create-clientes/create-clientes.component';
 
 
 @NgModule({
@@ -47,7 +50,10 @@ import { UpdateRolComponent } from './components/roles/update-rol/update-rol.com
     EditarProgramacionComponent,
     IdexRolComponent,
     CreateRolComponent,
-    UpdateRolComponent
+    UpdateRolComponent,
+    IndexClientesComponent,
+    UpdateClientesComponent,
+    CreateClientesComponent
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,7 @@ const dbConfig = require('../dbconfig');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
 const jwt = require('../helpers/jwt');
+const { v4: uuidv4 } = require('uuid');
 
 
 const getAdmin = async function (req, res) {
@@ -41,7 +42,8 @@ const getAdmin = async function (req, res) {
 
 
 const createAdmin = async (req, res) => {
-    const { name, apellidos, email, password, rol, estado } = req.body;
+    const { nombres, apellidos, email, password, idRol, estado } = req.body;
+    console.log('createAdmin req.body: ', req.body);
 
     const currentDate = moment().format('YYYY-MM-DD');
     const fregistro = currentDate;
@@ -61,18 +63,23 @@ const createAdmin = async (req, res) => {
             } else {
                 try {
                     const hashedPassword = await bcrypt.hash(password, 8); // El número 10 es el factor de coste para el cifrado
+                    //crear el idUsuario con uuidv4
+                     const idUsuario = uuidv4();
+
 
                     const pool = await sql.connect(dbConfig);
                     const result = await pool
                         .request()
-                        .input('name', sql.VarChar, name)
+                        .input('idUsuario', sql.UniqueIdentifier, idUsuario)
+                        .input('idEmpresa', sql.UniqueIdentifier, req.user.empresa)
+                        .input('nombres', sql.VarChar, nombres)
                         .input('apellidos', sql.VarChar, apellidos)
                         .input('email', sql.VarChar, email)
                         .input('password', sql.Text, hashedPassword)
-                        .input('rol', sql.VarChar, rol)
+                        .input('idRol', sql.VarChar, idRol)
                         .input('estado', sql.Bit, estado)
                         .input('fregistro', sql.Date, fregistro)
-                        .query('INSERT INTO usuarioWeb (name, apellidos, email, password, rol, estado, fregistro) VALUES (@name, @apellidos, @email, @password, @rol, @estado, @fregistro)');
+                        .query('INSERT INTO usuarioWeb (idUsuario, idEmpresa ,nombres, apellidos, email, password, idRol, estado, fregistro) VALUES (@idUsuario, @idEmpresa, @nombres, @apellidos, @email, @password, @idRol, @estado, @fregistro)');
                     // res.json({ message: 'Usuario creado correctamente' });}
                     console.log('valor de result:', result.rowsAffected);
                     let data = result.rowsAffected

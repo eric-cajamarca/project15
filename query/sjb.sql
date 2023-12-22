@@ -94,7 +94,7 @@ VALUES
     'Ortiz Guevara',
 	'ericortizguevara@gmail.com',
 	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
-    '7180761B-0761-4AAB-9A86-A5089C4A2722', -- Utiliza directamente el identificador único
+    '849816D6-BF4C-4EA9-9D85-189BA2D8A15C', -- Utiliza directamente el identificador único
     1,
     GETDATE()
 );
@@ -104,11 +104,11 @@ VALUES
 (
     NEWID(),
 	'BA51C992-7D05-459E-B419-A03358C0A788',
-    'Mabel1',
-    'Hidrogo Paisig1',
+    'Mabel',
+    'Hidrogo Paisig',
 	'mabel1@gmail.com',
 	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
-    '7180761B-0761-4AAB-9A86-A5089C4A2722', -- Utiliza directamente el identificador único
+    '849816D6-BF4C-4EA9-9D85-189BA2D8A15C', -- Utiliza directamente el identificador único
     1,
     GETDATE()
 );
@@ -146,7 +146,7 @@ go
 --drop table Clientes
 create table Clientes
 (
-idClientes int identity (1,1) primary key not null,
+idCliente int identity (1,1) primary key not null,
 idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 idDocumento varchar(1) not null,
 ruc varchar(11) not null,
@@ -178,7 +178,7 @@ select * from Clientes
 CREATE TABLE DireccionCompania (
     idDireccionCompania INT IDENTITY(1,1) PRIMARY KEY not null,
 	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-	idCompania int not null,
+	idCliente int not null,
 	ubigeo varchar(10) null,
 	codPais varchar(10) null,
     region varchar(50) NULL,
@@ -189,10 +189,10 @@ CREATE TABLE DireccionCompania (
 	referencia varchar(200) null,
 	codLocal varchar(10) null
 	
-	FOREIGN KEY (idCompania) REFERENCES Companias (idCompania),
+	FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
 );
 
-INSERT INTO Clientes (idEmpresa, idCompania, ubigeo, codPais, region, provincia, distrito, urbanizacion, direccion, referencia, codLocal)
+INSERT INTO Clientes (idEmpresa, idCliente, ubigeo, codPais, region, provincia, distrito, urbanizacion, direccion, referencia, codLocal)
 VALUES
 (
     '42099529-43C9-4B7F-921A-3D6FB946E93E',
@@ -680,7 +680,7 @@ CREATE TABLE Ventas
 	fEmision datetime not NULL,
 	fVencimiento datetime not NULL,
 	idDocumento varchar(1) not NULL,
-	idCompania int NULL,
+	idCliente int NULL,
 	idMoneda int NULL,
 	idMediosPago varchar(3) not NULL, --contado, deposito...
 	subTotal decimal(18, 2) NULL,
@@ -699,7 +699,7 @@ CREATE TABLE Ventas
 
 	FOREIGN KEY (idComprobante) REFERENCES Comprobantes (idComprobante),
 	FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
-	FOREIGN KEY (idCompania) REFERENCES Companias (idCompania),
+	FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
 	FOREIGN KEY (idMoneda) REFERENCES Moneda (idMoneda),
 	FOREIGN KEY (idMediosPago) REFERENCES MediosPago (idMediosPago),
 	FOREIGN KEY (idEstadoPago) REFERENCES EstadoPago (idEstadoPago),
@@ -717,7 +717,7 @@ INSERT INTO Ventas (
     fEmision,
     fVencimiento,
     idDocumento,
-    idCompania,
+    idCliente,
     idMoneda,
     idMediosPago,
     subTotal,
@@ -934,7 +934,7 @@ CREATE TABLE Cotizaciones(
 	fEmision datetime NULL,
 	fVencimiento datetime NULL,
 	idDocumento varchar(1) not NULL,
-	idCompania int not null,
+	idCliente int not null,
 	moneda varchar(20) NULL,
 	idCondicionPago int NULL,
 	total decimal (18, 2) NULL,
@@ -943,13 +943,13 @@ CREATE TABLE Cotizaciones(
 
 	FOREIGN KEY (idComprobante) REFERENCES Comprobantes (idComprobante),
 	FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
-	FOREIGN KEY (idCompania) REFERENCES Companias (idCompania),
+	FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
 	)
 
 	select * from cotizaciones
 
 
-	INSERT INTO Cotizaciones (idEmpresa,serieNumero,idComprobante,serie,numero,fEmision,fVencimiento,idDocumento,idCompania,moneda,idCondicionPago,total,idUsuario,Conversion)
+	INSERT INTO Cotizaciones (idEmpresa,serieNumero,idComprobante,serie,numero,fEmision,fVencimiento,idDocumento,idCliente,moneda,idCondicionPago,total,idUsuario,Conversion)
 VALUES (
     '42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
     'COT-00000001',
@@ -1037,7 +1037,7 @@ create table CuentasxPagar
 (
 idCuentaxPagar int identity(1,1) primary key not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-idCompania int not null,
+idCliente int not null,
 idCompra int not null,
 fEmision datetime not null,
 fVencimiento datetime not null,
@@ -1050,7 +1050,7 @@ ctaBanco varchar(50),
 Estado varchar(50),
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
-FOREIGN KEY (idCompania) REFERENCES Companias (idCompania),
+FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
 FOREIGN KEY (idCompra) REFERENCES Compras (idCompra),
 FOREIGN KEY (idPeriodo) REFERENCES Periodos (idPeriodo),
 )
@@ -1065,7 +1065,7 @@ idHistorialCXP int identity(1,1) not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 fecha datetime,
 idCuentaxPagar int not null,
-idCompania int not null,
+idCliente int not null,
 nroCuota int,
 nroDocpago varchar(13),
 responsable varchar(200),
@@ -1073,7 +1073,7 @@ total decimal(18,2),
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 FOREIGN KEY (idCuentaxPagar) REFERENCES CuentasxPagar (idCuentaxPagar),
-FOREIGN KEY (idCompania) REFERENCES Companias (idCompania),
+FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
 
 )
 
