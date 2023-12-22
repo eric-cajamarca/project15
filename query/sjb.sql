@@ -175,8 +175,8 @@ VALUES
 select * from Clientes
 
 
-CREATE TABLE DireccionCompania (
-    idDireccionCompania INT IDENTITY(1,1) PRIMARY KEY not null,
+CREATE TABLE DireccionClientes (
+    idDireccionClientes INT IDENTITY(1,1) PRIMARY KEY not null,
 	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 	idCliente int not null,
 	ubigeo varchar(10) null,

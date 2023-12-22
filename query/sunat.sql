@@ -142,7 +142,8 @@ insert into Leyenda values ('2001','Leyenda “BIENES TRANSFERIDOS EN LA AMAZON�
 MISMA"')
 insert into Leyenda values ('2002','Leyenda “SERVICIOS PRESTADOS EN LA AMAZONÍA REGIÓN SELVA PARA SER CONSUMIDOS EN LA
 MISMA”')
-insert into Leyenda values ('2003','Leyenda “CONTRATOS DE CONSTRUCCIÓN EJECUTADOS EN LA AMAZONÍA REGIÓN SELVA”')
+insert into Leyenda values ('2003','Leyenda “CONTRATOS DE CONSTRUCCIÓN EJECUTADOS EN LA AMAZONÍA REGIÓN SELVA”
+')
 insert into Leyenda values ('2004','Leyenda “Agencia de Viaje - Paquete turístico” ')
 insert into Leyenda values ('2005','Leyenda “Venta realizada por emisor itinerante”')
 insert into Leyenda values ('2006','Leyenda: Operación sujeta a detracción')
@@ -179,10 +180,12 @@ insert into tipoDoc values ('09','GUIA DE TEMISIÓN REMITENTE')
 insert into tipoDoc values ('12','TICKET DE MAQUINA REGISTRADORA')
 
 insert into tipoDoc values ('13','DOCUMENTO EMITIDO POR BANCOS, INSTITUCIONES FINANCIERAS, CREDITICIAS Y DE SEGUROS QUE
-SE ENCUENTREN BAJO EL CONTROL DE LA SUPERINTENDENCIA DE BANCA Y SEGUROS')
+SE ENCUENTREN BAJO EL CONTROL DE LA SUPERINTENDENCIA DE BANCA Y SEGUROS
+')
 insert into tipoDoc values ('14','RECIBO SERVICIOS PUBLICOS')
 insert into tipoDoc values ('16','BOLETO DE VIAJE EMITIDO POR LAS EMPRESAS DE TRANSPORTE PÚBLICO INTERPROVINCIAL DE
-PASAJEROS')
+PASAJEROS
+')
 insert into tipoDoc values ('18','DOCUMENTOS EMITIDOS POR LAS AFP')
 insert into tipoDoc values ('20','COMPROBANTE DE RETENCION')
 insert into tipoDoc values ('31','GUIA DE REMISIÓN TRANSPORTISTA')
@@ -298,7 +301,8 @@ insert into Leyenda values ('2001','Leyenda “BIENES TRANSFERIDOS EN LA AMAZON�
 MISMA"')
 insert into Leyenda values ('2002','Leyenda “SERVICIOS PRESTADOS EN LA AMAZONÍA REGIÓN SELVA PARA SER CONSUMIDOS EN LA
 MISMA”')
-insert into Leyenda values ('2003','Leyenda “CONTRATOS DE CONSTRUCCIÓN EJECUTADOS EN LA AMAZONÍA REGIÓN SELVA”')
+insert into Leyenda values ('2003','Leyenda “CONTRATOS DE CONSTRUCCIÓN EJECUTADOS EN LA AMAZONÍA REGIÓN SELVA”
+')
 insert into Leyenda values ('2004','Leyenda “Agencia de Viaje - Paquete turístico” ')
 insert into Leyenda values ('2005','Leyenda “Venta realizada por emisor itinerante”')
 insert into Leyenda values ('2006','Leyenda: Operación sujeta a detracción')
@@ -307,4 +311,4 @@ insert into Leyenda values ('2006','Leyenda: Operación sujeta a detracción')
 insert into Leyenda values ('3000','Código interno generado por el software de Facturación ')
 
 
---Catálogo No. 21: Documentos Relacionados - aplicable solo para la Guía de remisión electrónica
+--Catálogo No. 21: Documentos Relacionados - aplicable solo para la Guía de remisión electrónica
