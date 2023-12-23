@@ -94,7 +94,7 @@ VALUES
     'Ortiz Guevara',
 	'ericortizguevara@gmail.com',
 	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
-    '849816D6-BF4C-4EA9-9D85-189BA2D8A15C', -- Utiliza directamente el identificador único
+    '840DE92F-136E-4980-8B8B-057A62693A90', -- Utiliza directamente el identificador único
     1,
     GETDATE()
 );
