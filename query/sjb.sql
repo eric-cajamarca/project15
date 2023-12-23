@@ -160,7 +160,7 @@ go
 select * from Documentos
 --select * from Clientes_ruc
 
-INSERT INTO Clientes (idEmpresa, idDocumento, ruc, rSocial, direccion, referencia, distrito, ubigeo, celular, correo, condicion)
+INSERT INTO Clientes (idEmpresa, idDocumento, ruc, rSocial, correo,celular,  condicion)
 VALUES
 (
     '42099529-43C9-4B7F-921A-3D6FB946E93E',
@@ -175,6 +175,7 @@ VALUES
 select * from Clientes
 
 
+
 CREATE TABLE DireccionClientes (
     idDireccionClientes INT IDENTITY(1,1) PRIMARY KEY not null,
 	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
@@ -187,28 +188,30 @@ CREATE TABLE DireccionClientes (
 	urbanizacion varchar(100) null,
 	direccion VARCHAR(255) null,
 	referencia varchar(200) null,
-	codLocal varchar(10) null
+	codLocal varchar(10) null,
+	principal bit
 	
 	FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
 );
 
-INSERT INTO Clientes (idEmpresa, idCliente, ubigeo, codPais, region, provincia, distrito, urbanizacion, direccion, referencia, codLocal)
+INSERT INTO DireccionClientes (idEmpresa, idCliente, ubigeo, codPais, region, provincia, distrito, urbanizacion, direccion, referencia, codLocal, principal)
 VALUES
 (
     '42099529-43C9-4B7F-921A-3D6FB946E93E',
-	4,
-	'10456333538',
-    'Eric Ortiz Guevara',
-	'los jardines 119',
-	'por mar habierto',
-	'jaen',
+	1,
 	'060801',
-	'999999999',
-	'ericortizguevara@gmail.com',
-    'habido'
+    'PEN',
+	'CAJAMARCA',
+	'JAEN',
+	'jaen',
+	'0LOS OLIVOS',
+	'LOS JARDINES 1118',
+	'MAR ABIERTO',
+    'habido',
+	0
 );
 
-
+SELECT * FROM DireccionClientes
 
 --create table Proveedors
 --(
