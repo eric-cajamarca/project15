@@ -1,59 +1,152 @@
 <p>create-clientes works!</p>
 
 <div class="container">
+
     <form>
-        <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre">
+        <!-- Card -->
+        <div class="card">
+            <div class="card-header">
+  
+              <!-- Title -->
+              <h4 class="card-header-title">
+                Crear nuevo registro
+              </h4>
+  
+            </div>
+  
+            <div class="card-body">
+                <div class="form-group row" style="margin-bottom: 20px;">
+                    <label class="col-xl-3 col-lg-3 col-form-label">Tipo de documento</label>
+                    <div class="col-lg-9 col-xl-9">
+                        <select required name="idDocumento" [(ngModel)]="clientes.idDocumento" class="form-control">
+                            <option value="" selected disabled>Seleccionar documento...</option>
+                            <option *ngFor="let item of documento" [value]="documento.idDocumento">{{ item.nombre }}</option>
+                        </select>
+                    </div>
+                </div>
+
+              <div class="input-group input-group-merge">
+                <input type="text" class="form-control form-control-appended" placeholder="ingrese el Ruc o DNI" name="ruc"
+                  [(ngModel)]="clientes.ruc">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" (click)="filtrar()">
+                    Buscar
+                  </button>
+                </div>
+              </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="apellido" class="form-label">Apellido</label>
-            <input type="text" class="form-control" id="apellido" placeholder="Ingrese el apellido">
+
+        <div class="card" style="margin-bottom: 20px;">
+            
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="rSocial" class="form-label">Razón Social</label>
+                    <input type="text" class="form-control" name="rSocial" [(ngModel)]="clientes.rSocial" placeholder="Ingrese la razón social">
+                </div>
+        
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" name="correo" [(ngModel)]="clientes.correo" placeholder="Ingrese el email">
+                </div>
+                <div class="mb-3">
+                    <label for="telefono" class="form-label">Teléfono</label>
+                    <input type="tel" class="form-control" name="telefono" [(ngModel)]="clientes.telefono" placeholder="Ingrese el teléfono">
+                </div>
+                <div class="mb-3">
+                    <label for="condicion" class="form-label">Condición</label>
+                    <input type="text" class="form-control" name="condicion" [(ngModel)]="clientes.condicion" placeholder="Ingrese la condicion">
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Ingrese el email">
-        </div>
-        <div class="mb-3">
-            <label for="telefono" class="form-label">Teléfono</label>
-            <input type="tel" class="form-control" id="telefono" placeholder="Ingrese el teléfono">
-        </div>
+    
+        
+        <div class="card">
+            <div class="card-header">
+  
+              <!-- Title -->
+              <h4 class="card-header-title">
+                Dirección
+              </h4>
+  
+            </div>
+  
+            <div class="card-body">
+                
         <div class="mb-3">
             <label for="ubigeo" class="form-label">Ubigeo</label>
-            <input type="text" class="form-control" id="ubigeo" placeholder="Ingrese el ubigeo">
+            <input type="text" class="form-control" name="ubigeo" [(ngModel)]="direccionClientes.ubigeo" placeholder="Ingrese el ubigeo">
         </div>
         <div class="mb-3">
             <label for="codPais" class="form-label">Código de País</label>
-            <input type="text" class="form-control" id="codPais" placeholder="Ingrese el código de país">
+            <input type="text" class="form-control" name="codPais" [(ngModel)]="direccionClientes.codPais" >
         </div>
-        <div class="mb-3">
+
+        <div class="col-sm-6 form-group">
+            <label for="ac-fn">Región <sup>*<sup></sup></sup></label>
+            <select id="sl-region"  name="region" [(ngModel)]="direccionClientes.region" class="form-control" disabled (change)="select_region()" >
+                <option value="" selected disabled>Seleccionar</option>
+                <option value="{{item.id}}" *ngFor="let item of regiones">{{item.name}}</option>
+            </select>
+        </div>
+        <div class="col-sm-6 form-group">
+            <label for="ac-fn">Provincia <sup>*<sup></sup></sup></label>
+            <select id="sl-provincia" name="provincia" [(ngModel)]="direccionClientes.provincia" class="form-control" disabled (change)="select_provincia()">
+                <option value="" selected disabled>Seleccionar</option>
+                <option value="{{item.id}}" *ngFor="let item of provincias">{{item.name}}</option>
+            </select>
+        </div>
+        <div class="col-sm-6 form-group">
+            <label for="ac-fn">Distrito <sup>*<sup></sup></sup></label>
+            <select id="sl-distrito" name="distrito" [(ngModel)]="direccionClientes.distrito" class="form-control" disabled (change)="select_distrito($event)">
+                <option value="" selected disabled>Seleccionar</option>
+                <option value="{{item.id}}" *ngFor="let item of distritos" >{{item.name}}</option>
+            </select>
+        </div>
+
+        <!-- <div class="col-sm-6 form-group">
+            <label for="ac-fn">ZIP
+              
+            </label>
+            <input *ngIf="currency != 'PEN'" type="text" required class="form-control form-control-lg" name="zip" [(ngModel)]="direccion.zip" placeholder="Código postal">
+            <input *ngIf="currency == 'PEN'" type="text" class="form-control form-control-lg" name="zip" [(ngModel)]="direccion.zip" placeholder="Código postal">
+        </div> -->
+
+        <!-- <div class="mb-3">
             <label for="region" class="form-label">Región</label>
-            <input type="text" class="form-control" id="region" placeholder="Ingrese la región">
+            <input type="text" class="form-control" name="region" [(ngModel)]="direccionClientes.region" placeholder="Ingrese la región">
         </div>
         <div class="mb-3">
             <label for="provincia" class="form-label">Provincia</label>
-            <input type="text" class="form-control" id="provincia" placeholder="Ingrese la provincia">
+            <input type="text" class="form-control" name="provincia" [(ngModel)]="direccionClientes.provincia" placeholder="Ingrese la provincia">
         </div>
         <div class="mb-3">
             <label for="distrito" class="form-label">Distrito</label>
-            <input type="text" class="form-control" id="distrito" placeholder="Ingrese el distrito">
-        </div>
+            <input type="text" class="form-control" name="distrito" [(ngModel)]="direccionClientes.distrito" placeholder="Ingrese el distrito">
+        </div> -->
         <div class="mb-3">
             <label for="urbanizacion" class="form-label">Urbanización</label>
-            <input type="text" class="form-control" id="urbanizacion" placeholder="Ingrese la urbanización">
+            <input type="text" class="form-control" name="urbanizacion" [(ngModel)]="direccionClientes.urbanizacion" placeholder="Ingrese la urbanización">
         </div>
         <div class="mb-3">
             <label for="direccion" class="form-label">Dirección</label>
-            <input type="text" class="form-control" id="direccion" placeholder="Ingrese la dirección">
+            <input type="text" class="form-control" name="direccion" [(ngModel)]="direccionClientes.direccion" placeholder="Ingrese la dirección">
         </div>
         <div class="mb-3">
             <label for="referencia" class="form-label">Referencia</label>
-            <input type="text" class="form-control" id="referencia" placeholder="Ingrese la referencia">
+            <input type="text" class="form-control" name="referencia" [(ngModel)]="direccionClientes.referencia" placeholder="Ingrese la referencia">
         </div>
         <div class="mb-3">
             <label for="codLocal" class="form-label">Código Local</label>
-            <input type="text" class="form-control" id="codLocal" placeholder="Ingrese el código local">
+            <input type="text" class="form-control" name="codLocal" [(ngModel)]="direccionClientes.codLocal" placeholder="Ingrese el código local">
         </div>
+
+            </div>
+        </div>
+
+
+
+
         <button type="submit" class="btn btn-primary">Crear Cliente</button>
     </form>
 </div>

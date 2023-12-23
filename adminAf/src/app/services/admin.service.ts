@@ -129,6 +129,16 @@ export class AdminService {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
     return this._http.put(this.url + 'admin/' + id, data, { headers: headers });
   }
+
+  get_Regiones():Observable<any>{
+    return this._http.get('./assets/regiones.json');
+  }
+  get_Distritos():Observable<any>{
+    return this._http.get('./assets/distritos.json');
+  }
+  get_Procincias():Observable<any>{
+    return this._http.get('./assets/provincias.json');
+  }
 }
 
 
