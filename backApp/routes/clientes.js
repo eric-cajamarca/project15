@@ -5,9 +5,11 @@ var auth  = require('../middlewares/autenticate');
 
 // Rutas para el CRUD de clientes
 api.get('/clientes',auth.auth, clientesController.listarClientes);
-api.post('/clientes',auth.auth, clientesController.crearCliente);
-api.put('/clientes/:idCliente',auth.auth, clientesController.actualizarCliente);
-api.delete('/clientes/:idCliente',auth.auth, clientesController.eliminarCliente);
+api.get('/clientes/:id',auth.auth, clientesController.listarClientes_ruc);
+api.post('/clientes', auth.auth, clientesController.crearCliente);
+api.put('/clientes/:id',auth.auth, clientesController.actualizarCliente);
+api.put('/cambiar_estado_clientes/:id',auth.auth ,clientesController.cambiarCondicionCliente);
+api.delete('/clientes/:id',auth.auth, clientesController.eliminarCliente);
 
 module.exports = api;
 

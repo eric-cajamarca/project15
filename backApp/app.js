@@ -33,9 +33,10 @@ app.get('/database', async (req, res) => {
 
 
 // Middleware para manejar JSON
-// app.use(express.json());
+
 app.use(bodyparser.urlencoded({limit: '50mb',extended:true}));
 app.use(bodyparser.json({limit: '50mb', extended: true}));
+
 
 app.use(cors({
     origin: ['http://localhost:4200'],

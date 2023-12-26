@@ -12,9 +12,14 @@ const dbConfig = require('../dbconfig');
 //4. eliminarCliente
 
 //1. crea el metodo crearCliente segun los datos de la tabla
-async function crearCliente(req,res){
+const crearCliente = async function (req,res){
     const { idDocumento, ruc, rSocial,correo, celular, condicion,} = req.body;
 
+    //quiero extaer data del req para poder crear el registro
+
+    console.log('crearCliente - req.data', req.data);
+    console.log('crearCliente - req.body', req.body);
+    console.log('crearCliente- req.user', req.user);
 
     if (req.user) {
         if (req.user.rol == 'Administrador') {
@@ -33,25 +38,9 @@ async function crearCliente(req,res){
                     .input('condicion', sql.VarChar, condicion)
                     .query('insert into Clientes (idEmpresa,idDocumento,ruc,rSocial,correo,celular,condicion) values (@idEmpresa,@idDocumento,@ruc,@rSocial,@correo,@celular,@condicion)');
 
-                    //quiero extraer el idCliente del insertCliente
-                    let idCliente = insertCliente.recordset[0].idCliente
-
-                    //crear un registro con esta tabla CREATE TABLE DireccionClientes ( idDireccionClientes INT IDENTITY(1,1) PRIMARY KEY not null, idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE, idCliente int not null,ubigeo varchar(10) null,codPais varchar(10) null,region varchar(50) NULL,provincia varchar(50) NULL,distrito varchar(50) NULL,urbanizacion varchar(100) null,direccion VARCHAR(255) null,referencia varchar(200) null,codLocal varchar(10) null           )
-                    let insertDireccionCliente = await pool.request()
-                        .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
-                        .input('idCliente', sql.Int, idCliente)
-                        .input('ubigeo', sql.VarChar, null)
-                        .input('codPais', sql.VarChar, null)
-                        .input('region', sql.VarChar, null)
-                        .input('provincia', sql.VarChar, null)
-                        .input('distrito', sql.VarChar, null)
-                        .input('urbanizacion', sql.VarChar, null)
-                        .input('direccion', sql.VarChar, null)
-                        .input('referencia', sql.VarChar, null)
-                        .input('codLocal', sql.VarChar, null)
-                        .query('insert into DireccionClientes (idEmpresa,idCliente,ubigeo,codPais,region,provincia,distrito,urbanizacion,direccion,referencia,codLocal) values (@idEmpresa,@idCliente,@ubigeo,@codPais,@region,@provincia,@distrito,@urbanizacion,@direccion,@referencia,@codLocal)');
-                    
-                res.status(200).send({ message: 'Cliente creado', data: insertCliente.recordset });
+            
+                res.status(200).send({ message: 'Cliente creado', data: insertCliente.rowsAffected});
+                
             } catch (error) {
                 res.status(500).send({ message: error.message, data: undefined });
             }
@@ -75,6 +64,35 @@ async function listarClientes(req,res){
             try {
                 let pool = await sql.connect(dbConfig);
                 let clientes = await pool.request().query('select * from Clientes');
+                res.status(200).send({ message: 'Lista de clientes', data: clientes.recordset });
+            } catch (error) {
+                res.status(500).send({ message: error.message, data: undefined });
+            }
+        }
+        else {
+            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+        }
+    }
+    else {
+        res.status(500).send({ message: 'No Access' });
+    }
+}
+
+//2. crea el metodo listarClientes_id segun los datos de la tabla
+const listarClientes_ruc = async function (req,res){
+    const  ruc  = req.params.id;
+
+    console.log('listarClientes_ruc - req.data', req.body);
+    console.log('listarClientes_ruc - req.params', req.params);
+
+    if (req.user) {
+        if (req.user.rol == 'Administrador') {
+
+            try {
+                let pool = await sql.connect(dbConfig);
+                let clientes = await pool.request()
+                    .input('ruc', sql.VarChar, ruc)
+                    .query('select * from Clientes where ruc = @ruc');
                 res.status(200).send({ message: 'Lista de clientes', data: clientes.recordset });
             } catch (error) {
                 res.status(500).send({ message: error.message, data: undefined });
@@ -152,11 +170,58 @@ async function eliminarCliente(req,res){
 
 }
 
+//crear el metodo para cambiar condicion del cliente a inactivo
+//5. crea el metodo cambiarCondicionCliente segun los datos de la tabla
+async function cambiarCondicionCliente(req,res){
+    const idCliente = req.params.id;
+
+    const { condicion } = req.body;
+
+    console.log('cambiarCondicionCliente - req.body', req.body);
+    console.log('cambiarCondicionCliente - req.params', req.params);
+
+    if (req.user) {
+        if (req.user.rol == 'Administrador') {
+
+            try {
+                let pool = await sql.connect(dbConfig);
+                let deleteCliente = await pool.request()
+                    
+                    if (condicion == 'ACTIVO') {
+                        await pool.request()
+                        .input('idCliente', sql.Int, idCliente)
+                        .input('condicion', sql.VarChar, condicion)
+                        .query('update Clientes set condicion = "ACTIVO" where idCliente = @idCliente');
+                    }else{
+                        await pool.request()
+                        .input('idCliente', sql.Int, idCliente)
+                        .input('condicion', sql.VarChar, condicion)
+                        await pool.request().query('update Clientes set condicion = "INACTIVO" where idCliente = @idCliente');
+                    }
+                    
+                res.status(200).send({ message: 'Cliente eliminado', data: deleteCliente.rowsAffected });
+            } catch (error) {
+                res.status(500).send({ message: error.message, data: undefined });
+            }
+
+        }
+        else {
+            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+        }
+    }
+    else {
+        res.status(500).send({ message: 'No Access' });
+    }
+
+}
+
 
 
 module.exports={
     crearCliente,
     listarClientes,
     actualizarCliente,
-    eliminarCliente
+    eliminarCliente,
+    listarClientes_ruc,
+    cambiarCondicionCliente
 }

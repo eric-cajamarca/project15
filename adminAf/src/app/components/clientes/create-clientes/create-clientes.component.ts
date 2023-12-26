@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { AdminService } from 'src/app/services/admin.service';
+import { ApiperuService } from 'src/app/services/apiperu.service';
+import { ClienteService } from 'src/app/services/cliente.service';
 import { DocumentoService } from 'src/app/services/documento.service';
 
 
@@ -15,7 +18,11 @@ declare var iziToast: any;
 export class CreateClientesComponent implements OnInit {
 
   public filtro: any = "";
-  public clientes: any = [];
+  public clientes: any = {
+    correo: '',
+    celular: '',
+    condicion:'ACTIVO',
+  };
   public clienteruc: any = [];
   // public direccionClientes:any=[];
   public documento: any = [];
@@ -39,11 +46,16 @@ export class CreateClientesComponent implements OnInit {
     codLocal: '0',
     urbanizacion: '',
   };
+  public data: any = {};
 
   constructor(
     private _adminService: AdminService,
     private _cookieService: CookieService,
     private _documentosService: DocumentoService,
+    private _apiperuService: ApiperuService,
+    private _clientesService: ClienteService,
+    private _router: Router,
+    
   ) {
     this.token = this._cookieService.get('token');
 
@@ -103,7 +115,7 @@ export class CreateClientesComponent implements OnInit {
     try {
 
       if (this.clientes.ruc.length === 11 && this.clientes.idDocumento === '6') {
-        this._adminService.getRucInfo(this.filtro).subscribe(
+        this._apiperuService.getRucInfo(this.filtro).subscribe(
           response => {
             this.clienteruc = response;
             //divido los datos de la despuesta
@@ -139,7 +151,7 @@ export class CreateClientesComponent implements OnInit {
 
 
       if (this.clientes.ruc.length === 8 && this.clientes.idDocumento === '1') {
-        this._adminService.getDniInfo(this.filtro).subscribe(
+        this._apiperuService.getDniInfo(this.filtro).subscribe(
           response => {
             this.clienteruc = response;
             //divido los datos de la despuesta
@@ -274,15 +286,89 @@ export class CreateClientesComponent implements OnInit {
     console.log(this.direccionClientes.ubigeo);
   }
 
-  registrar(registroForm: any) {
+  registrar(registroForm: any){
 
     console.log('this.cliientes', this.clientes);
+    console.log('this.direccionClientes', this.direccionClientes);
 
-    if (registroForm.valid) {
+    // if (registroForm.valid) {
       this.btn_registrar = true;
+      this.data = this.clientes;
+      console.log('this.data', this.data);
+      //convertir array this.clientes a un objeto para pasarlo a mi servicio
+      //  this.data.forEach((element: { id: string | number; name: any; }) => {
+      //   this.data[element.id] = element.id;
+      //  });
+
+      //  console.log('this.data como objeto', this.data);
+      this._clientesService.crear_cliente(this.data, this.token).subscribe(
+        response => {
+          if(response.data != undefined){
+            this._clientesService.obtener_cliente_id(this.clientes.ruc,this.token).subscribe(
+              response => {
+                console.log('response.data', response.data);
+                this.direccionClientes.idCliente = response.data[0].idCliente;
+                console.log('this.direccionClientes con idCliente', this.direccionClientes);
+                if(response.data != undefined){
+                  this._clientesService.crear_direccionCliente(this.token, this.direccionClientes).subscribe(
+                      response => {
+                        if(response.data != undefined){
+                          iziToast.show({
+                            title: 'OK',
+                            titleColor: '#006064',
+                            color: '#FFF',
+                            class: 'text-success',
+                            position: 'topRight',
+                            message: 'Cliente creado correctamente'
+                          });
+                          this.btn_registrar = false;
+                          //quiero redirigir a la pagina de index-clientes
+                          this._router.navigate(['/cliente']);
+                        }
+                        
+                      },
+                      error => {
+                        console.log(<any>error);
+                        console.error('Error al crear el cliente:', error);
+                        this.btn_registrar = false;
+                      }
+                    )
+                }
+                
+              }
+            )
+          }
+          console.log(response.data);
+          this.btn_registrar = false;
+        },
+        error => {
+          console.log(<any>error);
+          console.error('Error al crear el cliente:', error);
+          this.btn_registrar = false;
+        }
+
+      )
+        //quiero agregar el campo ruc a direccionClientes
+        // this.direccionClientes.ruc = this.clientes.ruc;
+        // console.log('this.direccionClientes', this.direccionClientes);
+
+      // this._clientesService.crear_direccionCliente(this.token, this.direccionClientes).subscribe(
+      //   response => {
+      //     console.log(response.data);
+      //     this.btn_registrar = false;
+      //   },
+      //   error => {
+      //     console.log(<any>error);
+      //     console.error('Error al crear el cliente:', error);
+      //     this.btn_registrar = false;
+      //   }
+      // )
 
 
-    }
+    // } else {
+    //   console.error('El formulario no es válido');
+    //   // Lógica específica para manejar el caso en que el formulario no es válido
+    // }
   }
 
   onCheckboxChange(){

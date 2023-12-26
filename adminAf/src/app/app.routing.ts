@@ -53,7 +53,7 @@ const appRoute : Routes = [
 
     //clientes
     {path: 'cliente', component: IndexClientesComponent, canActivate: [AdminGuard]},
-    {path: 'cliente/create', component: CreateClientesComponent, canActivate: [AdminGuard]},
+    {path: 'cliente/create', component: CreateClientesComponent},
     {path: 'cliente/:id', component: UpdateClientesComponent, canActivate: [AdminGuard]},
     
 

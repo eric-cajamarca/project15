@@ -26,40 +26,51 @@ export class ClienteService {
   }
 
   //Metodo para obtener un cliente por id
-  obtener_cliente_id(token:any,id:any):Observable<any>{
+  obtener_cliente_id(id:any, token:any):Observable<any>{
+    console.log('obtener_cliente_id - id',id);
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
-    return this._http.get(this.url+'cliente/'+id,{headers:headers});
+    return this._http.get(this.url+'clientes/'+id,{headers:headers});
   }
 
   //Metodo para crear un cliente
-  crear_cliente(token:any,cliente:any):Observable<any>{
+  crear_cliente(data:any , token: any):Observable<any>{
+    console.log('crear_cliente - data',data);
+    console.log('crear_cliente - token',token);
+    console.log('crear_cliente - url',this.url + 'clientes'+ data);
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
-    return this._http.post(this.url+'cliente',cliente,{headers:headers});
+    return this._http.post(this.url + 'clientes', data,{headers:headers});
+    
   }
 
   //Metodo para editar un cliente
   editar_cliente(token:any,id:any,cliente:any):Observable<any>{
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
-    return this._http.put(this.url+'cliente/'+id,cliente,{headers:headers});
+    return this._http.put(this.url+'clientes/'+id,cliente,{headers:headers});
   }
 
   //Metodo para eliminar un cliente
   eliminar_cliente(token:any,id:any):Observable<any>{
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
-    return this._http.delete(this.url+'cliente/'+id,{headers:headers});
+    return this._http.delete(this.url+'clientes/'+id,{headers:headers});
   }
 
+
+  cambiar_estado_clientes(id: any, data: any, token: any): Observable<any> {
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.put(this.url + 'cambiar_estado_clientes/' + id, data, { headers: headers });
+  }
   ////////////////////////////////////////////////////////////////////////////////////////////
   //metodo para obtener direccionCliente
-  obtener_direccionCliente_id(token:any,id:any):Observable<any>{
+  obtener_direccionCliente_id(id:any,token:any):Observable<any>{
+    
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.get(this.url+'direccionClientes/'+id,{headers:headers});
   }
 
   //metodo para crear direccionCliente
-  crear_direccionCliente(token:any,direccionCliente:any):Observable<any>{
+  crear_direccionCliente(token:any,data:any):Observable<any>{
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
-    return this._http.post(this.url+'direccionClientes',direccionCliente,{headers:headers});
+    return this._http.post(this.url+'direccionClientes',data,{headers:headers});
   }
 
   //metodo para editar direccionCliente

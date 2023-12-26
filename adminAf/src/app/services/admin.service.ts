@@ -15,9 +15,7 @@ export class AdminService {
   public url: any;
   private _router: any;
   public idUser: any;
-  private apiUrlRuc = 'https://dniruc.apisperu.com/api/v1/ruc';
-  private apiUrlDni = 'https://dniruc.apisperu.com/api/v1/dni'
-
+  
   constructor(
     private _http: HttpClient,
     private cookieService: CookieService,
@@ -142,23 +140,7 @@ export class AdminService {
     return this._http.get('./assets/provincias.json');
   }
 
-  getRucInfo(filtro: string): Observable<any> {
-     console.log( 'getRucInfo',filtro);
-    // Puedes agregar más lógica aquí, como la manipulación de la URL, etc.
-    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImVyaWNvcnRpemd1ZXZhcmFAZ21haWwuY29tIn0.-cs9eKiQegcTM0bbaz7O-BT_sS7_BpV_6cndIqCeHfk'; // Reemplaza con tu token
-    const url = `${this.apiUrlRuc}/${filtro}?token=${token}`;
-
-    return this._http.get(url);
-  }
-
-  getDniInfo(filtro: string): Observable<any> {
-    console.log( 'getRucInfo',filtro);
-   // Puedes agregar más lógica aquí, como la manipulación de la URL, etc.
-   const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImVyaWNvcnRpemd1ZXZhcmFAZ21haWwuY29tIn0.-cs9eKiQegcTM0bbaz7O-BT_sS7_BpV_6cndIqCeHfk'; // Reemplaza con tu token
-   const url = `${this.apiUrlDni}/${filtro}?token=${token}`;
-
-   return this._http.get(url);
- }
+  
 
 }
 
