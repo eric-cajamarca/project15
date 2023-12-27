@@ -187,12 +187,12 @@ const eliminarCliente = async function (req, res) {
     if (req.user) {
         if (req.user.rol == 'Administrador') {
 
-            let pool = await sql.connect(dbConfig);
-            let eliminarDireccionCliente = await pool.request()
-                .input('idCliente', sql.Int, idCliente)
-                .query('delete from DireccionClientes where idCliente = @idCliente');
+            // let pool = await sql.connect(dbConfig);
+            // let eliminarDireccionCliente = await pool.request()
+            //     .input('idCliente', sql.Int, idCliente)
+            //     .query('delete from DireccionClientes where idCliente = @idCliente');
             
-            if (eliminarDireccionCliente.rowsAffected > 0) {
+            // if (eliminarDireccionCliente.rowsAffected > 0) {
                
                 try {
                     let pool = await sql.connect(dbConfig);
@@ -204,7 +204,7 @@ const eliminarCliente = async function (req, res) {
                     console.log('eliminarCliente - error', error);
                     res.status(500).send({ message: error.message, data: undefined });
                 }
-            }
+            // }
 
 
            

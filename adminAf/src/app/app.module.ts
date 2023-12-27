@@ -29,6 +29,13 @@ import { UpdateRolComponent } from './components/roles/update-rol/update-rol.com
 import { IndexClientesComponent } from './components/clientes/index-clientes/index-clientes.component';
 import { UpdateClientesComponent } from './components/clientes/update-clientes/update-clientes.component';
 import { CreateClientesComponent } from './components/clientes/create-clientes/create-clientes.component';
+import { IndexComprasComponent } from './components/compras/index-compras/index-compras.component';
+import { UpdateComprasComponent } from './components/compras/update-compras/update-compras.component';
+import { DetalleComprasComponent } from './components/compras/detalle-compras/detalle-compras.component';
+import { CreateComprasComponent } from './components/compras/create-compras/create-compras.component';
+import { IndexSucursalComponent } from './components/sucursal/index-sucursal/index-sucursal.component';
+import { UpdateSucursalComponent } from './components/sucursal/update-sucursal/update-sucursal.component';
+import { CreateSucursalComponent } from './components/sucursal/create-sucursal/create-sucursal.component';
 
 
 @NgModule({
@@ -53,7 +60,14 @@ import { CreateClientesComponent } from './components/clientes/create-clientes/c
     UpdateRolComponent,
     IndexClientesComponent,
     UpdateClientesComponent,
-    CreateClientesComponent
+    CreateClientesComponent,
+    IndexComprasComponent,
+    UpdateComprasComponent,
+    DetalleComprasComponent,
+    CreateComprasComponent,
+    IndexSucursalComponent,
+    UpdateSucursalComponent,
+    CreateSucursalComponent
   ],
   imports: [
     BrowserModule,

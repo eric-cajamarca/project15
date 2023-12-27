@@ -14,6 +14,11 @@ const rolRoutes = require('./routes/rol');
 const clientesRoutes = require('./routes/clientes');
 const direccionClientesRoutes = require('./routes/direccionClientes');
 const documentosRoutes = require('./routes/documentos');
+const productosRoutes = require('./routes/productos');
+const comprasRoutes = require('./routes/compras');
+const dcomprasRoutes = require('./routes/dcompras');
+const sucursalRoutes = require('./routes/sucursal');
+const tablasSunatRoutes = require('./routes/tablasSunat');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -65,6 +70,11 @@ app.use('/api', rolRoutes);
 app.use('/api', clientesRoutes);
 app.use('/api', direccionClientesRoutes);
 app.use('/api', documentosRoutes);
+app.use('/api', productosRoutes);
+app.use('/api', comprasRoutes);
+app.use('/api', dcomprasRoutes);
+app.use('/api', sucursalRoutes);
+app.use('/api', tablasSunatRoutes);
 
 
 // Escuchar en el puerto

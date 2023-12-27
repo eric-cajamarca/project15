@@ -1,0 +1,28 @@
+var express = require('express');
+var api = express.Router();
+var comprasController = require('../controllers/comprasController');
+var auth  = require('../middlewares/autenticate');
+
+// Rutas para el CRUD de compras
+
+api.get('/compras',auth.auth, comprasController.obtener_compras_todos);
+api.get('/compras/:id',auth.auth, comprasController.obtener_compras_id);
+
+api.get('/comprasempresa/:id',auth.auth, comprasController.obtener_compras_idCompra_idEmpresa);
+api.get('/comprasempresa',auth.auth, comprasController.obtener_compras_todos_idEmpresa);
+
+api.post('/compras', auth.auth, comprasController.crear_compra);
+api.put('/compras/:id',auth.auth, comprasController.actualizar_compra);
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+api.get('/borradorcompras',auth.auth, comprasController.obtener_borrador_compras_empresa);
+api.post('/borradorcompras', auth.auth, comprasController.crear_borrador_compras_empresa);
+api.put('/borradorcompras/:id',auth.auth, comprasController.editar_borrador_compras_empresa);
+api.delete('/borradorcompras/:id',auth.auth, comprasController.eliminar_borrador_compras_empresa);
+
+
+
+
+module.exports = api;

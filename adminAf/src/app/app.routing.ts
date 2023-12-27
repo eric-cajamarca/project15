@@ -21,6 +21,13 @@ import { CreateRolComponent } from "./components/roles/create-rol/create-rol.com
 import { IndexClientesComponent } from "./components/clientes/index-clientes/index-clientes.component";
 import { CreateClientesComponent } from "./components/clientes/create-clientes/create-clientes.component";
 import { UpdateClientesComponent } from "./components/clientes/update-clientes/update-clientes.component";
+import { IndexComprasComponent } from "./components/compras/index-compras/index-compras.component";
+import { CreateComprasComponent } from "./components/compras/create-compras/create-compras.component";
+import { UpdateComprasComponent } from "./components/compras/update-compras/update-compras.component";
+import { DetalleComprasComponent } from "./components/compras/detalle-compras/detalle-compras.component";
+import { IndexSucursalComponent } from "./components/sucursal/index-sucursal/index-sucursal.component";
+import { CreateSucursalComponent } from "./components/sucursal/create-sucursal/create-sucursal.component";
+import { UpdateSucursalComponent } from "./components/sucursal/update-sucursal/update-sucursal.component";
 
 const appRoute : Routes = [
     {path: '', component: InicioComponent, canActivate: [AdminGuard]},
@@ -55,7 +62,18 @@ const appRoute : Routes = [
     {path: 'cliente', component: IndexClientesComponent, canActivate: [AdminGuard]},
     {path: 'cliente/create', component: CreateClientesComponent},
     {path: 'cliente/:id', component: UpdateClientesComponent, canActivate: [AdminGuard]},
-    
+
+    //compras
+    {path: 'compras', component: IndexComprasComponent, canActivate: [AdminGuard]},
+    {path: 'compras/create', component: CreateComprasComponent, canActivate: [AdminGuard]},
+    {path: 'compras/:id', component: UpdateComprasComponent, canActivate: [AdminGuard]},
+    {path: 'compras/detalle/:id', component: DetalleComprasComponent, canActivate: [AdminGuard]},
+
+    //sucursales
+    {path: 'sucursal', component: IndexSucursalComponent, canActivate: [AdminGuard]},
+    {path: 'sucursal/create', component: CreateSucursalComponent, canActivate: [AdminGuard]},
+    {path: 'sucursal/:id', component: UpdateSucursalComponent, canActivate: [AdminGuard]},
+
 
 ]
 

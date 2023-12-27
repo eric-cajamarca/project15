@@ -65,20 +65,21 @@ simbolo varchar(3)
 --SELECT * FROM TipoCambio
 --go
 
-
+--drop table mediospago
 create table MediosPago
 (
-	idMediospago varchar(3) primary key not null,
+	idMediosPago int identity primary key not null,
+	codigo varchar(3)not null,
 	descripcion varchar(50) not null
 
 )
 go
-insert into MediosPago values	('001','DEP�SITO EN CUENTA');
+insert into MediosPago values	('001','DEPOSITO EN CUENTA');
 insert into MediosPago values	('003','TRANSFERENCIA DE FONDOS');
-insert into MediosPago values	('005','TARJETA D�BITO');
-insert into MediosPago values	('006','TARJETA CR�DITO');
+insert into MediosPago values	('005','TARJETA DEBITO');
+insert into MediosPago values	('006','TARJETA CREDITO');
 insert into MediosPago values	('009','CONTADO');
-insert into MediosPago values	('009','CR�DITO');
+insert into MediosPago values	('009','CREDITO');
 
 go
 select * from MediosPago

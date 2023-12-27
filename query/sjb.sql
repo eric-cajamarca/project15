@@ -172,13 +172,15 @@ VALUES
     'habido'
 );
 --truncate table Clientes
+--truncate table direccionclientes
 select * from Clientes
+SELECT * FROM DireccionClientes
 
 
-
+--drop table DireccionClientes
 CREATE TABLE DireccionClientes (
     idDireccionClientes INT IDENTITY(1,1) PRIMARY KEY not null,
-	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa),
 	idCliente int not null,
 	ubigeo varchar(10) null,
 	codPais varchar(10) null,
@@ -191,7 +193,7 @@ CREATE TABLE DireccionClientes (
 	codLocal varchar(10) null,
 	principal bit
 	
-	FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
+	FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente) ON DELETE CASCADE,
 );
 
 INSERT INTO DireccionClientes (idEmpresa, idCliente, ubigeo, codPais, region, provincia, distrito, urbanizacion, direccion, referencia, codLocal, principal)
@@ -356,11 +358,12 @@ VALUES
 	200,
 	0,
 	'SI',
-	'9B697C80-FFE8-4C91-9362-98FE4D5221D8',--id usuario
+	'082DC0B9-56AC-408D-BDD0-2AECF2F4443C',--id usuario
     GETDATE()
 );
 go
 select * from Productos
+select * from UsuarioWeb
 go
 
 create table PreciosV
@@ -420,18 +423,19 @@ VALUES
 	'42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
     'Fenix',
      'MAr abierto',
-	'9B697C80-FFE8-4C91-9362-98FE4D5221D8',--id usuario
+	'082DC0B9-56AC-408D-BDD0-2AECF2F4443C',--id usuario
     GETDATE()
 );
 go
 select * from Sucursal
 go
 
+
 --drop table StockSucursal
 create table StockSucursal
 (
 idStockSucursal int identity(1,1) primary key not null,
-idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal),
+idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal) ON DELETE CASCADE,
 idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 cantidad decimal(18,2) not null,
 ubicacion Varchar(20) null,
@@ -558,7 +562,7 @@ serie varchar(4) not null,
 numero varchar (8) not null,
 fEmision datetime not null,
 fVencimiento datetime null,
-idProveedor int not null,
+idCliente int not null,
 idMoneda int not null,
 idEstadoPago int not null,
 subTotal decimal(18,2),
@@ -574,7 +578,7 @@ idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not nul
 
 FOREIGN KEY (idComprobante) REFERENCES Comprobantes(idComprobante),
 FOREIGN KEY (idMoneda) REFERENCES Moneda (idMoneda),
-FOREIGN KEY (idProveedor) REFERENCES Proveedors (idProveedor),
+FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
 FOREIGN KEY (idMediosPago) REFERENCES MediosPago (idMediosPago),
 FOREIGN KEY (idEstadoPago) REFERENCES EstadoPago (idEstadoPago),
 )
@@ -614,8 +618,8 @@ select * from compras
 create table DetalleCompras
 (
 idDetalleCompra int identity(1,1) primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal), -- Nueva columna
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ,
+idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal) , -- Nueva columna
 idCompra int not null,
 cantidad decimal(18,3) not null,
 idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
@@ -624,7 +628,7 @@ pUnitario decimal(18,5),
 total decimal(18,2),
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
-FOREIGN KEY (idCompra) REFERENCES Compras (idCompra),
+FOREIGN KEY (idCompra) REFERENCES Compras (idCompra) ON DELETE CASCADE,
 FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
 )
 
