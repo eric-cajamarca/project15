@@ -1,18 +1,14 @@
 <app-top-nav></app-top-nav>
-<p>index-clientes works!</p>
 
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h1>Clientes</h1>
+            <h1>Nuevo registro de clientes y proveedores</h1>
             <hr>
             <div class="row">
                 <div class="col-md-6" style="margin-bottom: 20px;">
                     <a class="btn btn-primary" [routerLink]="['/cliente/create']" routerLinkActive="active">Nuevo Cliente</a>
                 </div>
-                <!-- <div class="col-md-6">
-                    <input type="text" class="form-control" placeholder="Buscar...">
-                </div> -->
                 <div class="input-group input-group-merge">
                     <input type="text" class="form-control form-control-appended" placeholder="Buscador general" name="filtro"
                       [(ngModel)]="filtro">
@@ -39,7 +35,10 @@
                         *ngFor="let item of clientes | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
                         <td>{{item.ruc}}</td>
                         <td>{{item.rSocial}}</td>
-                        <td>{{item.condicion}}</td>
+                        <td>
+                          <span class="badge bg-success" *ngIf="item.condicion === 'ACTIVO'">Activo</span>
+                          <span class="badge bg-danger" *ngIf="item.condicion === 'INACTIVO'">Inactivo</span>
+                        </td>
             
                         <td>
                             <!-- <a class="btn btn-outline-primary btn-sm" routerLink="/clientes/editar">Editar</a>
@@ -51,31 +50,35 @@
                                   Opciones
                                 </button>
                                 <ul class="dropdown-menu">
-                                  <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.condicion" data-bs-toggle="modal"
-                                    [attr.data-bs-target]="'#delete-'+item.idCliente">
+                                  <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.condicion === 'ACTIVO'" data-bs-toggle="modal"
+                                    [attr.data-bs-target]="'#update-'+item.idCliente">
                                     <i class="icon-1x text-dark-50 flaticon2-cross"></i> &nbsp; Desactivar
                                   </a>
-                                  <a style="cursor: pointer;" class="dropdown-item" *ngIf="!item.condicion" data-bs-toggle="modal"
-                                    [attr.data-bs-target]="'#delete-'+item.idCliente">
+                                  <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.condicion === 'INACTIVO'" data-bs-toggle="modal"
+                                    [attr.data-bs-target]="'#update-'+item.idCliente">
                                     <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Activar
                                   </a>
                                   <a class="dropdown-item" [routerLink]="['/cliente',item.idCliente]">
                                     <i class="icon-1x text-dark-50 flaticon-edit"></i> &nbsp; Editar
                                   </a>
+                                  <a style="cursor: pointer;" class="dropdown-item" data-bs-toggle="modal"
+                                    [attr.data-bs-target]="'#delete-'+item.idCliente">
+                                    <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Eliminar
+                                  </a>
                                 </ul>
                               </div>
 
-                              <div class="modal fade" id="delete-{{item.idCliente}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal fade" id="update-{{item.idCliente}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Cambio de estado del colaborador: {{item.nombres}} {{item.apellidos}} </h5>
+                                            <h5 class="modal-title" id="exampleModalLabel">Cambio de estado del registro: {{item.rSocial}} </h5>
                                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                                 <i aria-hidden="true" class="ki ki-close"></i>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>Está seguro que desea cambiar el estado del colaborador?.</p>
+                                            <p>Está seguro que desea cambiar el estado del registro?.</p>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-warning font-weight-bold" data-bs-dismiss="modal">Cerrar</button>
@@ -84,6 +87,31 @@
                                             <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
                                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                 Cambiando...
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                              <!-- modal eliminar -->
+                              <div class="modal fade" id="delete-{{item.idCliente}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar registro: {{item.rSocial}} </h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                <i aria-hidden="true" class="ki ki-close"></i>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Está seguro que desea eliminar el registro?.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-warning font-weight-bold" data-bs-dismiss="modal">Cerrar</button>
+                                            <button *ngIf="!load_estado" type="button" class="btn btn-danger font-weight-bold" (click)="eliminar(item.idCliente)">Sí, Eliminar</button>
+                            
+                                            <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
+                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                Eliminando...
                                             </button>
                                         </div>
                                     </div>

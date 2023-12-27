@@ -97,7 +97,49 @@ export class IndexClientesComponent implements OnInit{
         $('body').css('overflow-y', 'auto');
 
 
-        // this.init_data();
+         this.init_data();
+      }
+    );
+
+
+
+  }
+
+  eliminar(id: any) {
+    console.log($);
+    console.log('id', id);
+    
+    this.load_estado = true;
+    this._clientesService.eliminar_direccionCliente(id, this.token).subscribe(
+      response => {
+        console.log('response.data', response.data);
+      }
+    )
+
+    this._clientesService.eliminar_cliente(id, this.token).subscribe(
+      response => {
+        this.load_estado = false;
+        if(response.data != undefined){
+          iziToast.show({
+            title: 'success',
+            titleColor: '#00FF00',
+            color: '#FFF',
+            class: 'text-success',
+            position: 'topRight',
+            message: 'Cliente eliminado correctamente'
+          });
+
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+        //habilitar el scroll en el body en el componente
+        $('body').css('overflow-y', 'auto');
+
+
+         this.init_data();
+        }
+        //quiero cerrar el modal usando jquery sabiendo que el id="delete-{{item.id}}"
+
+        
       }
     );
 

@@ -304,7 +304,7 @@ export class CreateClientesComponent implements OnInit {
       this._clientesService.crear_cliente(this.data, this.token).subscribe(
         response => {
           if(response.data != undefined){
-            this._clientesService.obtener_cliente_id(this.clientes.ruc,this.token).subscribe(
+            this._clientesService.obtener_cliente_ruc(this.clientes.ruc,this.token).subscribe(
               response => {
                 console.log('response.data', response.data);
                 this.direccionClientes.idCliente = response.data[0].idCliente;
@@ -314,7 +314,7 @@ export class CreateClientesComponent implements OnInit {
                       response => {
                         if(response.data != undefined){
                           iziToast.show({
-                            title: 'OK',
+                            title: 'SUCCESS',
                             titleColor: '#006064',
                             color: '#FFF',
                             class: 'text-success',
@@ -337,6 +337,16 @@ export class CreateClientesComponent implements OnInit {
                 
               }
             )
+          }else{
+            iziToast.show({
+              title: 'ERROR',
+              titleColor: '#FF0000',
+              color: '#FFF',
+              class: 'text-danger',
+              position: 'topRight',
+              message: response.message,
+            });
+            this.btn_registrar = false;
           }
           console.log(response.data);
           this.btn_registrar = false;
@@ -348,27 +358,7 @@ export class CreateClientesComponent implements OnInit {
         }
 
       )
-        //quiero agregar el campo ruc a direccionClientes
-        // this.direccionClientes.ruc = this.clientes.ruc;
-        // console.log('this.direccionClientes', this.direccionClientes);
-
-      // this._clientesService.crear_direccionCliente(this.token, this.direccionClientes).subscribe(
-      //   response => {
-      //     console.log(response.data);
-      //     this.btn_registrar = false;
-      //   },
-      //   error => {
-      //     console.log(<any>error);
-      //     console.error('Error al crear el cliente:', error);
-      //     this.btn_registrar = false;
-      //   }
-      // )
-
-
-    // } else {
-    //   console.error('El formulario no es válido');
-    //   // Lógica específica para manejar el caso en que el formulario no es válido
-    // }
+        
   }
 
   onCheckboxChange(){

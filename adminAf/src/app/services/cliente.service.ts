@@ -25,6 +25,13 @@ export class ClienteService {
     return this._http.get(this.url+'clientes',{headers:headers});
   }
 
+   //Metodo para obtener un cliente por ruc
+   obtener_cliente_ruc(id:any, token:any):Observable<any>{
+    console.log('obtener_cliente_id - id',id);
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.get(this.url+'clientesruc/'+id,{headers:headers});
+  }
+
   //Metodo para obtener un cliente por id
   obtener_cliente_id(id:any, token:any):Observable<any>{
     console.log('obtener_cliente_id - id',id);
@@ -49,7 +56,7 @@ export class ClienteService {
   }
 
   //Metodo para eliminar un cliente
-  eliminar_cliente(token:any,id:any):Observable<any>{
+  eliminar_cliente(id:any,token:any):Observable<any>{
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.delete(this.url+'clientes/'+id,{headers:headers});
   }
@@ -65,6 +72,12 @@ export class ClienteService {
     
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.get(this.url+'direccionClientes/'+id,{headers:headers});
+  }
+
+  //metodo para obtener direccionCliente idCLiente
+  obtener_direccionesCliente_idCliente(id:any,token:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.get(this.url+'direccionesClientes/'+id,{headers:headers});
   }
 
   //metodo para crear direccionCliente

@@ -68,7 +68,7 @@ const crearDireccionCliente = async function (req, res) {
 
 
 //2. crea el metodo listarDireccionClientes segun los datos de la tabla
-async function listarDireccionClientes(req, res) {
+const listarDireccionClientes = async function (req, res) {
     if (req.user) {
         if (req.user.rol == 'Administrador') {
 
@@ -95,8 +95,42 @@ async function listarDireccionClientes(req, res) {
 
 }
 
+//2. crea el metodo listarDireccionClientes segun los datos de la tabla
+const listarDireccionesClientes_idCliente = async function (req, res) {
+    const idCliente = req.params.id;
+
+    console.log('listarDireccionesClientes_idCliente idCliente', idCliente);
+
+    if (req.user) {
+        if (req.user.rol == 'Administrador') {
+            //aqui permito que todas las empresas puedan ver las direcciones de los clientes
+            try {
+                // let idEmpresa = req.user.empresa;
+
+                let pool = await sql.connect(dbConfig);
+                let listaDireccionClientes = await pool.request()
+                    .input('idCliente', sql.Int, idCliente)
+                    .query('select * from DireccionClientes where idCliente = @idCliente');
+
+                res.status(200).send({ message: 'Lista de DireccionClientes', data: listaDireccionClientes.recordset });
+            } catch (error) {
+                console.log('listarDireccionesClientes_idCliente error', error);
+                res.status(500).send({ message: error.message, data: undefined });
+            }
+        }
+        else {
+            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+        }
+    }
+    else {
+        res.status(500).send({ message: 'No Access' });
+    }
+
+}
+
+
 //3. crea el metodo actualizarDireccionCliente segun los datos de la tabla
-async function actualizarDireccionCliente(req, res) {
+const actualizarDireccionCliente = async function (req, res) {
     const { idCliente, ubigeo, codPais, region, provincia, distrito, urbanizacion, direccion, referencia, codLocal } = req.body;
     const idDireccionCliente = req.params.idDireccionCliente;
 
@@ -135,7 +169,7 @@ async function actualizarDireccionCliente(req, res) {
 }
 
 //crea el metodo eliminarDireccionCliente segun los datos de la tabla
-async function eliminarDireccionCliente(req, res) {
+const eliminarDireccionCliente = async function (req, res) {
     const idDireccionCliente = req.params.idDireccionCliente;
 
     if (req.user) {
@@ -166,5 +200,6 @@ module.exports = {
     crearDireccionCliente,
     listarDireccionClientes,
     actualizarDireccionCliente,
-    eliminarDireccionCliente
+    eliminarDireccionCliente,
+    listarDireccionesClientes_idCliente
 }
