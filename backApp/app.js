@@ -19,6 +19,8 @@ const comprasRoutes = require('./routes/compras');
 const dcomprasRoutes = require('./routes/dcompras');
 const sucursalRoutes = require('./routes/sucursal');
 const tablasSunatRoutes = require('./routes/tablasSunat');
+const categoriaRoutes = require('./routes/categoria');
+const presentacionRoutes = require('./routes/presentacion');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -75,6 +77,8 @@ app.use('/api', comprasRoutes);
 app.use('/api', dcomprasRoutes);
 app.use('/api', sucursalRoutes);
 app.use('/api', tablasSunatRoutes);
+app.use('/api', categoriaRoutes);
+app.use('/api', presentacionRoutes);
 
 
 // Escuchar en el puerto

@@ -108,4 +108,18 @@ export class ComprasService {
       return this._http.put(this.url+'dcompras/'+id,dcompra,{headers:headers});
     }
 
+    /////////////////////////////////////////////////////////////////////////////
+    // api.get('/correlativos',auth.auth, comprasController.obtener_correlativos_empresa);
+    // api.put('/correlativos/:id',auth.auth, comprasController.editar_correlativos_empresa);
+
+    obtener_correlativos_empresa(token:any):Observable<any>{
+      let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+      return this._http.get(this.url+'correlativos',{headers:headers});
+    }
+
+    editar_correlativos_empresa(token:any,id:any,correlativo:any):Observable<any>{
+      let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+      return this._http.put(this.url+'correlativos/'+id,correlativo,{headers:headers});
+    }
+
 }

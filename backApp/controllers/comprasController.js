@@ -408,6 +408,73 @@ const eliminar_borrador_compras_empresa = async (req, res) => {
     
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+// create table Correlativos
+// (
+// idCorrelativo int identity (1,1) primary key not null,
+// idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+// numero int not null,
+// )
+
+const obtener_correlativos_empresa = async (req, res) => {
+    const idEmpresa = req.user.empresa;
+
+    if (req.user) {
+        if (req.user.rol == 'Administrador') { 
+
+            try {
+                let pool = await sql.connect(dbConfig);
+                let correlativos = await pool
+                .request()
+                .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
+                .query("SELECT * FROM Correlativos WHERE idEmpresa = @idEmpresa");
+                res.status(200).send({data:correlativos.recordset});
+            } catch (error) {
+                console.log('obterner correlativos error: ' + error);
+                res.status(500).send({ message: 'Error al obtener los correlativos', data: undefined });
+            }
+
+        } else {
+            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+        }
+    }
+    else {
+        res.status(500).send({ message: 'No Access', data: undefined });
+    } 
+    
+
+}
+
+const editar_correlativos_empresa = async (req, res) => {
+    const numero = req.params.id;
+
+    const idEmpresa = req.user.empresa;
+
+    if (req.user) {
+        if (req.user.rol == 'Administrador') { 
+
+            try {
+                let pool = await sql.connect(dbConfig);
+                let datoEditado = await pool
+                .request()
+                .input("idEmpresa", sql.UniqueIdentifier, idEmpresa)
+                .input("numero", sql.Int, numero)
+                .query("UPDATE Correlativos SET numero = @numero WHERE idEmpresa = @idEmpresa");
+                res.status(200).send({ message: 'Correlativo editado correctamente', data: datoEditado.rowsAffected });
+            } catch (error) {
+                console.log('obterner correlativos error: ' + error);
+                res.status(500).send({ message: 'Error al obtener los correlativos', data: undefined });
+            }
+
+        } else {
+            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+        }
+    }
+    else {
+        res.status(500).send({ message: 'No Access', data: undefined });
+    } 
+    
+}
 
 module.exports = {
     obtener_compras_todos,
@@ -417,10 +484,15 @@ module.exports = {
     crear_compra,
     editar_compra,
     eliminar_compra,
-
+    ///////////////////////////
     //borrador compras
     obtener_borrador_compras_empresa,
     crear_borrador_compras_empresa,
     editar_borrador_compras_empresa,
-    eliminar_borrador_compras_empresa
+    eliminar_borrador_compras_empresa,
+
+    /////////////////////////////
+    //correlativos
+    obtener_correlativos_empresa,
+    editar_correlativos_empresa
 }

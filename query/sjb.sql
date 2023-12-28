@@ -488,6 +488,7 @@ go
 
 
 select * from Comprobantes
+select * from Empresas
 go
 
 insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','01','Factura','F001','1')

@@ -13,7 +13,7 @@ async function obtener_comprobantes(req, res) {
             .request()
             .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
             .query('SELECT * FROM Comprobantes where idEmpresa = @idEmpresa');
-            console.log('resultado del result', result.recordset);
+            //console.log('resultado del result', result.recordset);
 
             res.status(200).send({data:result.recordset});
         } catch (error) {

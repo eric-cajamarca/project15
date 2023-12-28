@@ -22,7 +22,10 @@ api.post('/borradorcompras', auth.auth, comprasController.crear_borrador_compras
 api.put('/borradorcompras/:id',auth.auth, comprasController.editar_borrador_compras_empresa);
 api.delete('/borradorcompras/:id',auth.auth, comprasController.eliminar_borrador_compras_empresa);
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //correlativos
 
-
+api.get('/correlativos',auth.auth, comprasController.obtener_correlativos_empresa);
+api.put('/correlativos/:id',auth.auth, comprasController.editar_correlativos_empresa);
 
 module.exports = api;

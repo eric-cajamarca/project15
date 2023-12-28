@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
+import { CategoriaService } from 'src/app/services/categoria.service';
 import { ClienteService } from 'src/app/services/cliente.service';
 import { ComprasService } from 'src/app/services/compras.service';
 import { ComprobanteService } from 'src/app/services/comprobante.service';
 import { DocumentoService } from 'src/app/services/documento.service';
+import { PresentacionService } from 'src/app/services/presentacion.service';
 import { ProductoService } from 'src/app/services/producto.service';
 import { SucursalService } from 'src/app/services/sucursal.service';
+import { TablasSunatService } from 'src/app/services/tablas-sunat.service';
 
 @Component({
   selector: 'app-create-compras',
@@ -23,7 +26,11 @@ export class CreateComprasComponent implements OnInit{
   public stockSucursales: any = {};
   public filtro: any = {};
   public documento: any = {};
-
+  public moneda: any = [];
+  public estadoPago: any = [];
+  public mediosPago: any = [];
+  public categoria: any = [];
+  public presentacion: any = [];
 
   public token: any;
 
@@ -35,7 +42,10 @@ export class CreateComprasComponent implements OnInit{
     private _clientesService: ClienteService,
     private _productoService: ProductoService,
     private _sucursalService: SucursalService,
-    private _documentoService: DocumentoService
+    private _documentoService: DocumentoService,
+    private _tablasSunatService: TablasSunatService,
+    private _categoriaService: CategoriaService,
+    private _presentacionService: PresentacionService
     
   ) { 
     this.token = this._cookieService.get('token');
@@ -58,39 +68,65 @@ export class CreateComprasComponent implements OnInit{
       }
     );
     
-    // this._documentoService.obtener_documento(this.token).subscribe(
-    //   response => {
-    //     this.documento = response.data;
-    //   },
-    //   error => {
-    //     console.log(error);
-    //   }
-    // );
+    this._tablasSunatService.obtener_moneda(this.token).subscribe(
+      response => {
+        this.moneda = response.data;
+        console.log(this.moneda);
+      },
+      error => {
+        console.log(error);
+      }
+    );
 
-    // this._clientesService.obtener_cliente_ruc(this.filtro,this.token).subscribe(
-    //   response => {
-    //     this.clientes = response.data;
-    //   },
-    //   error => {
-    //     console.log(error);
-    //   }
-    // );
-    // this._productoService.obtener_productos_todos(this.token).subscribe(
-    //   response => {
-    //     this.productos = response.data;
-    //   },
-    //   error => {
-    //     console.log(error);
-    //   }
-    // );
-    // this._sucursalService.obtener_sucursal_idempresa(this.token).subscribe(
-    //   response => {
-    //     this.sucursales = response.data;
-    //   },
-    //   error => {
-    //     console.log(error);
-    //   }
-    // );
+    this._tablasSunatService.obtener_estado_pago(this.token).subscribe(
+      response => {
+        this.estadoPago = response.data;
+        console.log(this.estadoPago);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this._tablasSunatService.obtener_medios_pago(this.token).subscribe(
+      response => {
+        this.mediosPago = response.data;
+        console.log(this.mediosPago);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+    
+    this._categoriaService.obtener_categorias(this.token).subscribe(
+      response => {
+        this.categoria = response.data;
+        console.log('this.categoria',this.categoria);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+    
+    this._presentacionService.obtener_presentaciones(this.token).subscribe(
+      response => {
+        this.presentacion = response.data;
+        console.log('this.presentacion',this.presentacion);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this._sucursalService.obtener_sucursal_idempresa(this.token).subscribe(
+      response => {
+        this.sucursales = response.data;
+        console.log('this.sucursales',this.sucursales);
+      },
+      error => {
+        console.log(error);
+      }
+    );
 
   }
 
@@ -109,4 +145,17 @@ export class CreateComprasComponent implements OnInit{
     );
   }
   
+
+  quitar(idx:any,subtotal:any){
+    this.detalleCompras.splice(idx,1);
+    this.compras.total = this.compras.total - subtotal;
+  }
+
+  buscarDescripcion(){
+
+  }
+
+  buscarCodigo(){
+
+  }
 }
