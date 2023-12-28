@@ -62,7 +62,7 @@ export class ComprasService {
       return this._http.post(this.url+'compras',compra,{headers:headers});
     }
 
-    actualizar_compra(token:any,id:any,compra:any):Observable<any>{
+    editar_compra(token:any,id:any,compra:any):Observable<any>{
       let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
       return this._http.put(this.url+'compras/'+id,compra,{headers:headers});
     }
@@ -88,5 +88,24 @@ export class ComprasService {
       return this._http.delete(this.url+'borradorcompras/'+id,{headers:headers});
     }
 
+    /////////////////////////////////////////////////////////////////////////////
+    // api.get('/dcompras/:id',auth.auth, dcomprasController.obtener_detalle_compras_idcompra);
+    // api.post('/dcompras', auth.auth, dcomprasController.crear_detalle_compras_idcompra);
+    // api.put('/dcompras/:id',auth.auth, dcomprasController.editar_detalle_compras_idcompra);
+
+    obtener_detalle_compras_idcompra(token:any,id:any):Observable<any>{
+      let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+      return this._http.get(this.url+'dcompras/'+id,{headers:headers});
+    }
+
+    crear_detalle_compras_idcompra(token:any,dcompra:any):Observable<any>{
+      let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+      return this._http.post(this.url+'dcompras',dcompra,{headers:headers});
+    }
+
+    editar_detalle_compras_idcompra(token:any,id:any,dcompra:any):Observable<any>{
+      let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+      return this._http.put(this.url+'dcompras/'+id,dcompra,{headers:headers});
+    }
 
 }

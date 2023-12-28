@@ -35,7 +35,7 @@ const getAdmin = async function (req, res) {
         }
     }
     else {
-        res.status(500).send({ message: 'No Access' });
+        res.status(500).send({ message: 'No Access', data: undefined });
     }
 };
 

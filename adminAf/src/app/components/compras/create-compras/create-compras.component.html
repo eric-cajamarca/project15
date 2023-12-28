@@ -1,1 +1,196 @@
 <p>create-compras works!</p>
+<!-- crea aqui el html para registrar las compras de los productos, haz uso de los componentes de bootstrap para el formulario (compCompra, idComprobante, serie, numero, fEmision, fVencimiento, idProveedor, idMoneda, idEstadoPago, subTotal, igv, exonerado, gratuito, otrosCargos, descuentos, total, idMediosPago, compRelacionado, idUsuario) y la tabla de compras (idSucursal, idcompra,  Cantidad, idproducto, idPresentacion, pUnitario,total, idUsuario).-->
+
+<div class="container">
+    <h1>Registrar Compras</h1>
+    
+    <form>
+        <div class="cabecera">
+            
+            <div class="form-group row" style="margin-bottom: 20px;">
+                <label class="col-xl-3 col-lg-3 col-form-label">Tipo Comprobante</label>
+                <div class="col-lg-9 col-xl-9">
+                    <select required name="idComprobante" [(ngModel)]="compras.idComprobante" class="form-control">
+                        <option value="" selected disabled>Seleccionar documento...</option>
+                        <option *ngFor="let item of comprobantes" [value]="item.idComprobante">{{ item.nombre }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="compCompra">CompCompra</label>
+                <input type="text" class="form-control" id="compCompra" placeholder="Ingrese el compCompra">
+            </div>
+            
+            <div class="form-group">
+                <label for="serie">Serie</label>
+                <input type="text" class="form-control" id="serie" placeholder="Ingrese la serie">
+            </div>
+            
+            <div class="form-group">
+                <label for="numero">Numero</label>
+                <input type="text" class="form-control" id="numero" placeholder="Ingrese el numero">
+            </div>
+        </div>
+        
+        
+        <div class="form-group">
+            <label for="fEmision">Fecha de Emisión</label>
+            <input type="date" class="form-control" id="fEmision">
+        </div>
+        
+        <div class="form-group">
+            <label for="fVencimiento">Fecha de Vencimiento</label>
+            <input type="date" class="form-control" id="fVencimiento">
+        </div>
+        <div class="form-group row" style="margin-bottom: 20px;">
+            <label class="col-xl-3 col-lg-3 col-form-label">Tipo de documento</label>
+            <div class="col-lg-9 col-xl-9">
+                <select required name="idDocumento" [(ngModel)]="clientes.idDocumento" class="form-control">
+                    <option value="" selected disabled>Seleccionar documento...</option>
+                    <option *ngFor="let item of documento" [value]="item.idDocumento">{{ item.nombre }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <label for="ruc">Número de documento</label>
+        <div class="input-group input-group-merge">
+            
+            
+            <input type="text" class="form-control form-control-appended" placeholder="ingrese el número de RUC o DNI"
+                name="ruc" [(ngModel)]="clientes.ruc">
+            <div class="input-group-append">
+                <button class="btn btn-primary" (click)="buscar()">
+                    Buscar
+                </button>
+                <button class="btn btn-primary" [routerLink]="['/cliente/create']" routerLinkActive="active">
+                    Nuevo
+                </button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="idProveedor">Proveedor: {{clientes.rSocial}}</label>
+            
+        </div>
+        
+        <div class="form-group">
+            <label for="idMoneda">IdMoneda</label>
+            <input type="text" class="form-control" id="idMoneda" placeholder="Ingrese el idMoneda">
+        </div>
+        
+        <div class="form-group">
+            <label for="idEstadoPago">IdEstadoPago</label>
+            <input type="text" class="form-control" id="idEstadoPago" placeholder="Ingrese el idEstadoPago">
+        </div>
+        
+        <div class="form-group">
+            <label for="subTotal">SubTotal</label>
+            <input type="number" class="form-control" id="subTotal" placeholder="Ingrese el subTotal">
+        </div>
+        
+        <div class="form-group">
+            <label for="igv">IGV</label>
+            <input type="number" class="form-control" id="igv" placeholder="Ingrese el IGV">
+        </div>
+        
+        <div class="form-group">
+            <label for="exonerado">Exonerado</label>
+            <input type="number" class="form-control" id="exonerado" placeholder="Ingrese el exonerado">
+        </div>
+        
+        <div class="form-group">
+            <label for="gratuito">Gratuito</label>
+            <input type="number" class="form-control" id="gratuito" placeholder="Ingrese el gratuito">
+        </div>
+        
+        <div class="form-group">
+            <label for="otrosCargos">Otros Cargos</label>
+            <input type="number" class="form-control" id="otrosCargos" placeholder="Ingrese los otros cargos">
+        </div>
+        
+        <div class="form-group">
+            <label for="descuentos">Descuentos</label>
+            <input type="number" class="form-control" id="descuentos" placeholder="Ingrese los descuentos">
+        </div>
+        
+        <div class="form-group">
+            <label for="total">Total</label>
+            <input type="number" class="form-control" id="total" placeholder="Ingrese el total">
+        </div>
+        
+        <div class="form-group">
+            <label for="idMediosPago">IdMediosPago</label>
+            <input type="text" class="form-control" id="idMediosPago" placeholder="Ingrese el idMediosPago">
+        </div>
+        
+        <div class="form-group">
+            <label for="compRelacionado">CompRelacionado</label>
+            <input type="text" class="form-control" id="compRelacionado" placeholder="Ingrese el compRelacionado">
+        </div>
+        
+        <div class="form-group">
+            <label for="idUsuario">IdUsuario</label>
+            <input type="text" class="form-control" id="idUsuario" placeholder="Ingrese el idUsuario">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Registrar Compra</button>
+    </form>
+    
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>IdSucursal</th>
+                <th>IdCompra</th>
+                <th>Cantidad</th>
+                <th>IdProducto</th>
+                <th>IdPresentacion</th>
+                <th>Precio Unitario</th>
+                <th>Total</th>
+                <th>IdUsuario</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+</div> -->
+
+
+
+<!-- <div class="container">
+    <h1>Registrar Compras</h1>
+    
+    <form>
+        <div class="form-group">
+            <label for="producto">Producto</label>
+            <input type="text" class="form-control" id="producto" placeholder="Ingrese el nombre del producto">
+        </div>
+        
+        <div class="form-group">
+            <label for="cantidad">Cantidad</label>
+            <input type="number" class="form-control" id="cantidad" placeholder="Ingrese la cantidad comprada">
+        </div>
+        
+        <div class="form-group">
+            <label for="precio">Precio</label>
+            <input type="number" class="form-control" id="precio" placeholder="Ingrese el precio unitario">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Registrar Compra</button>
+    </form>
+    
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+</div> -->
+

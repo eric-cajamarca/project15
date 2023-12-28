@@ -12,7 +12,7 @@ api.get('/comprasempresa/:id',auth.auth, comprasController.obtener_compras_idCom
 api.get('/comprasempresa',auth.auth, comprasController.obtener_compras_todos_idEmpresa);
 
 api.post('/compras', auth.auth, comprasController.crear_compra);
-api.put('/compras/:id',auth.auth, comprasController.actualizar_compra);
+api.put('/compras/:id',auth.auth, comprasController.editar_compra);
 
 
 
