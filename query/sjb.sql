@@ -263,6 +263,7 @@ Multiplicador int null,
 go
 
 select * from Presentacion
+select * from Sucursal
 
 INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','BG','Bolsa',1)
 INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','CEN','Ciento',100)
@@ -347,9 +348,9 @@ VALUES
 (
     NEWID(),
 	'42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
-    '60000',
+    '62000',
      1, --idcategoria
-	'TOmacorriente triple',
+	'interruptor simple p/emp - bticino',
 	10, --idpresentacion
 	3.50,
 	GETDATE(),

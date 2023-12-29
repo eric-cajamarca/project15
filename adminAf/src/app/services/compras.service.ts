@@ -112,7 +112,7 @@ export class ComprasService {
     // api.get('/correlativos',auth.auth, comprasController.obtener_correlativos_empresa);
     // api.put('/correlativos/:id',auth.auth, comprasController.editar_correlativos_empresa);
 
-    obtener_correlativos_empresa(token:any):Observable<any>{
+    obtener_correlativo_empresa(token:any):Observable<any>{
       let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
       return this._http.get(this.url+'correlativos',{headers:headers});
     }

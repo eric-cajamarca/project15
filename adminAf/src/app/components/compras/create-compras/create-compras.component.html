@@ -16,7 +16,7 @@
                                 <label style="width: 300px;">Comprobante</label>
                                 <div class="col-lg-9 col-xl-9">
                                     <select required name="idComprobante" [(ngModel)]="compras.idComprobante"
-                                        class="form-control">
+                                    class="form-control">
                                         <option value="" selected disabled>Seleccionar...</option>
                                         <option *ngFor="let item of comprobantes" [value]="item.idComprobante">{{
                                             item.nombre }}
@@ -27,25 +27,25 @@
 
                             <div>
                                 <label for="compCompra">CompCompra</label>
-                                <input type="text" class="form-control" id="compCompra"
+                                <input type="text" class="form-control" name="compCompra" [(ngModel)]="compras.compCompra"
                                     placeholder="Ingrese el compCompra">
                             </div>
 
                             <div>
                                 <label for="serie">Serie</label>
-                                <input type="text" class="form-control" id="serie" placeholder="Ingrese la serie">
+                                <input type="text" class="form-control" name="serie" [(ngModel)]="compras.serie"  placeholder="Ingrese la serie">
                             </div>
 
                             <div>
                                 <label for="numero">Numero</label>
-                                <input type="text" class="form-control" id="numero" placeholder="Ingrese el numero">
+                                <input type="text" class="form-control" name="numero" [(ngModel)]="compras.numero" placeholder="Ingrese el numero">
                             </div>
 
                             <div>
 
                                 <label for="ruc">Número de documento</label>
                                 <input type="text" class="form-control form-control-appended"
-                                    placeholder="ingrese RUC o DNI" name="ruc" [(ngModel)]="clientes.ruc">
+                                    placeholder="ingrese RUC o DNI" name="ruc" [(ngModel)]="compras.ruc" >
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" (click)="buscar()">
                                         Buscar
@@ -66,12 +66,12 @@
                         <div class="col-sm-6 col-lg-6 col-md-6">
                             <div>
                                 <label for="fEmision">Fecha de Emisión</label>
-                                <input type="date" class="form-control" id="fEmision">
+                                <input type="date" class="form-control" name="fEmision" [(ngModel)]="compras.fEmision">
                             </div>
 
                             <div>
                                 <label for="fVencimiento">Fecha de Vencimiento</label>
-                                <input type="date" class="form-control" id="fVencimiento">
+                                <input type="date" class="form-control" name="fVencimiento" [(ngModel)]="compras.fVencimiento">
                             </div>
 
                             <div>
@@ -93,7 +93,7 @@
                                 <div class="form-group -row">
                                     <label style="width: 300px;">Estado de pago</label>
                                     <div class="col-lg-9 col-xl-9">
-                                        <select required name="idEstadoPago" [(ngModel)]="compras.idEstadoPago"
+                                        <select required name="idEstadoPago" [(ngModel)]="compras.idEstadoPago" 
                                             class="form-control">
                                             <option value="" selected disabled>Seleccionar...</option>
                                             <option *ngFor="let item of estadoPago" [value]="item.idEstadoPago">{{
@@ -122,7 +122,7 @@
 
                             <div class="form-group">
                                 <label for="compRelacionado">CompRelacionado</label>
-                                <input type="text" class="form-control" id="compRelacionado"
+                                <input type="text" class="form-control" name="compRelacionado" [(ngModel)]="compras.compRelacionado"
                                     placeholder="Ingrese el compRelacionado">
                             </div>
 
@@ -205,18 +205,10 @@
             <div class="card-header">
                 <div style="display: flex;">
                     <!-- crear aqui el html para (idProducto, idEmpresa, Codigo, idCategoria, descripcion, idPresentacion, cUnitario, fProduccion, fVencimiento, alertaMinimo, alertaMaximo, VecesVendidas, facturar, idUsuario, FIngreso) -->
-                    <div class="input-group input-group-merge" style="width: 350px; margin-right: 20px;">
-                        <input type="text" class="form-control form-control-appended" placeholder="Buscar por código"
-                            name="filtroCodigo">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" (click)="buscarCodigo()">
-                                Buscar
-                            </button>
-                        </div>
-                    </div>
+                    
                     <div class="input-group input-group-merge">
                         <input type="text" class="form-control form-control-appended"
-                            placeholder="Buscar por descripción" name="filtroDescripcion">
+                            placeholder="Buscar por descripción" name="filtroConsulta" [(ngModel)]="filtroConsulta">
                         <div class="input-group-append">
                             <button class="btn btn-primary" (click)="buscarDescripcion()">
                                 Buscar
@@ -237,16 +229,33 @@
                                     <th>Código</th>
                                     <th>Categoría</th>
                                     <th>Producto</th>
-                                    <th>Id Presentación</th>
+                                    <th>Presentación</th>
                                     <th>Cantidad</th>
-                                    <th>Fecha de Producción</th>
-                                    <th>Fecha de Vencimiento</th>
-                                    <th>Precio Unitario</th>
+                                    <th>F.Producción</th>
+                                    <th>F.Vencimiento</th>
+                                    <th>C.Unitario</th>
                                     <th>Sucursal</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <!-- Add table rows here -->
+                                <tr *ngFor="let item of productos; let idx = index">
+                                
+                                    <th scope="row">{{item.Codigo}}</th>
+                                    <td>{{item.Descripcion[0]}} </td>
+                                    <td>{{item.descripcion}} </td>
+                                    <td>{{item.codigo}}</td>
+                                    <td>cantidad</td>
+                                    <td>{{item.fProduccion}} </td>
+                                    <td>{{item.fVencimiento}} </td>
+                                    <td>{{item.cUnitario}} </td>
+                                    <td>sucursal</td>
+                                    <td>
+                                            <a style="cursor: pointer;" class="text-primary"
+
+                                            (click)="seleccionar(idx)">[Add]</a>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -271,18 +280,22 @@
                         <input type="text" class="form-control" id="idEmpresa" name="idEmpresa">
                     </div>
                 </div> -->
-
+                <div class="form-group">
+                    <label>
+                      <input type="checkbox" name="useCorrelativo"  [(ngModel)]="useCorrelativo" (change)="onCheckboxChange()"> Registrar dirección
+                    </label>
+                </div>
                 <div class="row form-group">
                     <div class="col-sm-6 col-lg-6 col-md-6">
                         <label for="Codigo">Código</label>
-                        <input type="text" class="form-control" id="Codigo" name="Codigo">
+                        <input type="text" class="form-control"  name="Codigo" [(ngModel)]="nuevoProducto.codigo">
                     </div>
 
 
                     <div class="col-sm-6 col-lg-6 col-md-6">
                         <label style="width: 300px;">Categoría</label>
                         <div class="col-lg-9 col-xl-9">
-                            <select required name="idCategoria" [(ngModel)]="compras.idCategoria" class="form-control">
+                            <select required name="idCategoria" [(ngModel)]="nuevoProducto.idCategoria" (ngModelChange)="onSelectCategoria($event)" class="form-control">
                                 <option value="" selected disabled>Seleccionar...</option>
                                 <option *ngFor="let item of categoria" [value]="item.idCategoria">{{
                                     item.Descripcion }}
@@ -296,15 +309,15 @@
                 <div class="row form-group">
                     <div class="col-sm-6 col-lg-6 col-md-6">
                         <label for="descripcion">Descripción</label>
-                        <input type="text" class="form-control" id="descripcion" name="descripcion">
+                        <input type="text" class="form-control" name="descripcion" [(ngModel)]="nuevoProducto.descripcion">
                     </div>
 
 
                     <div class="col-sm-6 col-lg-6 col-md-6">
                         <label style="width: 300px;">Presentación</label>
                         <div class="col-lg-9 col-xl-9">
-                            <select required name="idPresentacion" [(ngModel)]="compras.idPresentacion"
-                                class="form-control">
+                            <select required name="idPresentacion" [(ngModel)]="nuevoProducto.idPresentacion" 
+                            (ngModelChange)="onSelectPresentacion($event)" class="form-control">
                                 <option value="" selected disabled>Seleccionar...</option>
                                 <option *ngFor="let item of presentacion" [value]="item.idPresentacion">{{
                                     item.Descripcion }}
@@ -318,27 +331,27 @@
                 <div class="row form-group">
                     <div class="col-sm-6 col-lg-6 col-md-6">
                         <label for="cUnitario">Precio Unitario</label>
-                        <input type="text" class="form-control" id="cUnitario" name="cUnitario">
+                        <input type="text" class="form-control" name="cUnitario" [(ngModel)]="nuevoProducto.cUnitario">
                     </div>
                     <div class="col-sm-6 col-lg-6 col-md-6">
                         <label for="cantidad">Cantidad</label>
-                        <input type="text" class="form-control" name="cantidad">
+                        <input type="text" class="form-control" name="cantidad" [(ngModel)]="nuevoProducto.cantidad">
                     </div>
                 </div>
 
                 <div class="row form-group">
                     <div class="col-sm-6 col-lg-6 col-md-6">
                         <label for="fProduccion">Fecha de Producción</label>
-                        <input type="date" class="form-control" id="fProduccion" name="fProduccion">
+                        <input type="date" class="form-control"  name="fProduccion" [(ngModel)]="nuevoProducto.fProduccion">
                     </div>
                     <div class="col-sm-6 col-lg-6 col-md-6">
                         <label for="fVencimiento">Fecha de Vencimiento</label>
-                        <input type="date" class="form-control" id="fVencimiento" name="fVencimiento">
+                        <input type="date" class="form-control"  name="fVencimiento" [(ngModel)]="nuevoProducto.fVencimiento">
                     </div>
                     <div class="col-sm-6 col-lg-6 col-md-6">
                         <label style="width: 300px;">Sucursal</label>
                         <div class="col-lg-9 col-xl-9">
-                            <select required name="idSucursal" [(ngModel)]="compras.idSucursal" class="form-control">
+                            <select required name="idSucursal" [(ngModel)]="nuevoProducto.idSucursal" (ngModelChange)="onSelectSucursal($event)" class="form-control">
                                 <option value="" selected disabled>Seleccionar...</option>
                                 <option *ngFor="let item of sucursales" [value]="item.idSucursal">{{
                                     item.nombre }}
@@ -351,7 +364,7 @@
 
                 <div class="row form-group">
                     <div class="col-sm-6 col-lg-6 col-md-6">
-                        <button type="button" class="btn btn-primary">Agregar</button>
+                        <button type="button" class="btn btn-primary" (click)="agregarProductoNuevo()">Agregar</button>
                     </div>
                 </div>
 
@@ -374,31 +387,39 @@
                                 <th>Producto</th>
                                 <th>Id Presentación</th>
                                 <th>Cantidad</th>
+                                <th>Precio Unitario</th>
+                                <th>Sub Total</th>
                                 <th>Fecha de Producción</th>
                                 <th>Fecha de Vencimiento</th>
-                                <th>Precio Unitario</th>
+                                
                                 <th>Sucursal</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of detalleCompras; let idx = index">
-                                <th scope="row">{{item.titulo_producto}}</th>
-                                <td>{{item.titulo_variedad}}</td>
-                                <td>{{item.precio_und}}</td>
+                                <td>{{item.codigo}}</td>
+                                <td>{{item.categoria.Descripcion}}</td>
+                                <td>{{item.descripcion}}</td>
+                                <td>{{item.presentacion.Descripcion}}</td>
                                 <td>{{item.cantidad}}</td>
-                                <td>{{item.subtotal}}</td>
+                                <td>{{item.cUnitario}} </td>
+                                <td>{{item.subtotal}} </td>
+                                <td>{{item.fProduccion}} </td>
+                                <td>{{item.fVencimiento}} </td>
+                                
+                                <td>{{item.sucursal.nombre}}</td>
                                 <td>
                                     <a style="cursor: pointer;" class="text-danger"
                                         (click)="quitar(idx,item.subtotal)">[Delete]</a>
                                 </td>
                             </tr>
                         </tbody>
-                        <tfoot>
+                        <!-- <tfoot>
                             <tr>
                                 <td colspan="5"><b>Total</b></td>
                                 <td>{{compras.total}}</td>
                             </tr>
-                        </tfoot>
+                        </tfoot> -->
                     </table>
                 </div>
 
@@ -431,22 +452,22 @@
                     <div class="col-sm-6 col-lg-6 col-md-6">
                         <div>
                             <label for="igv">IGV</label>
-                            <input type="number" class="form-control" id="igv" placeholder="Ingrese el IGV">
+                            <input type="number" class="form-control" name="igv" [(ngModel)]="compras.igv" (change)="onInput()" placeholder="Ingrese el IGV">
                         </div>
     
                         <div>
                             <label for="exonerado">Exonerado</label>
-                            <input type="number" class="form-control" id="exonerado" placeholder="Ingrese el exonerado">
+                            <input type="number" class="form-control" name="exonerado" [(ngModel)]="compras.exonerado"  placeholder="Ingrese el exonerado">
                         </div>
     
                         <div>
                             <label for="gratuito">Gratuito</label>
-                            <input type="number" class="form-control" id="gratuito" placeholder="Ingrese el gratuito">
+                            <input type="number" class="form-control" name="gratuito" [(ngModel)]="compras.gratuito" placeholder="Ingrese el gratuito">
                         </div>
     
                         <div>
                             <label for="otrosCargos">Otros Cargos</label>
-                            <input type="number" class="form-control" id="otrosCargos"
+                            <input type="number" class="form-control" name="otrosCargos" [(ngModel)]="compras.otrosCargos" (change)="onInput()"
                                 placeholder="Ingrese los otros cargos">
                         </div>
 
@@ -456,20 +477,20 @@
 
                         <div>
                             <label for="subTotal">SubTotal</label>
-                            <input type="number" class="form-control" id="subTotal" placeholder="Ingrese el subTotal">
+                            <input type="number" class="form-control" name="subTotal" [(ngModel)]="compras.subTotal" placeholder="Ingrese el subTotal">
                         </div>
                         <div>
                             <label for="descuentos">Descuentos</label>
-                            <input type="number" class="form-control" id="descuentos" placeholder="Ingrese los descuentos">
+                            <input type="number" class="form-control" name="descuentos" [(ngModel)]="compras.descuentos" (change)="onInput()" placeholder="Ingrese los descuentos">
                         </div>
     
                         <div>
                             <label for="total">Total</label>
-                            <input type="number" class="form-control" id="total" placeholder="Ingrese el total">
+                            <input type="number" class="form-control" name="total" [(ngModel)]="compras.total" placeholder="Ingrese el total" disabled>
                         </div>
                         <div>
                             <div class="col-4">
-                                <label for="validationCustom01" class="form-label"><b>Total a pagar: (*)</b></label>
+                                <label for="validationCustom01" class="form-label"><b>Total a pagar: (*)</b> S/. {{compras.total}} </label>
             
                             </div>
                         </div>
@@ -487,7 +508,7 @@
    
 
 
-    <button type="submit" class="btn btn-primary">Registrar Compra</button>
+    <button type="submit" class="btn btn-primary" (click)="registrarCompras()">Registrar Compra</button>
 
 
 
