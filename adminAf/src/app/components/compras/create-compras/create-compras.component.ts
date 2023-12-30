@@ -30,7 +30,7 @@ export class CreateComprasComponent implements OnInit {
     fechaPago: '',
     total: 0,
     observacion: '',
-    
+
   };
   public detalleCompras: any = [];
   public comprobantes: any = [];
@@ -38,7 +38,7 @@ export class CreateComprasComponent implements OnInit {
   public productos: any = {};
   public productos_const: any = {};
   public sucursales: any = {};
-  public stockSucursales: any = {};
+  public stockSucursales: any = [];
   public filtro: any = {};
   public filtroConsulta: any = '';
   public documento: any = {};
@@ -57,10 +57,10 @@ export class CreateComprasComponent implements OnInit {
     categoria: {},
     presentacion: {},
     sucursal: {},
-    
+    useCorrelativo: false
   };
   public correlativo: any = '';
-  public useCorrelativo: boolean = false;
+  //public useCorrelativo: { checked: boolean; } | undefined;
 
   public token: any;
 
@@ -162,6 +162,7 @@ export class CreateComprasComponent implements OnInit {
       response => {
         console.log('response productos', response.data);
         if (response.data != undefined) {
+
           this.productos = response.data;
 
           // this.productos = response.data;
@@ -179,13 +180,41 @@ export class CreateComprasComponent implements OnInit {
     this._comprasService.obtener_correlativo_empresa(this.token).subscribe(
       response => {
         this.correlativo = response.data[0];
-                
+
         console.log('this.correlativo', this.correlativo);
       },
       error => {
         console.log(error);
       }
     );
+
+    this._sucursalService.obtener_stock_sucursales_idempresa(this.token).subscribe(
+      response => {
+        if (response.data != undefined) {
+          //quiero buscar en response.data el idProducto y traer todo el objeto del idProducto y agregarlo a this.stockSucursales
+          this.stockSucursales = response.data;
+          this.stockSucursales.forEach((element: any) => {
+            //buscar en this.productos el codigo y traer todo el objeto del codigo
+            const selectedObject = this.productos.find((item: any) => item.idProducto == element.idProducto);
+            element.producto = selectedObject;
+            // Ahora, selectedObject contiene toda la información del elemento seleccionado
+            //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
+            const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
+            element.sucursal = selectedObjectSucursal;
+
+
+
+          });
+
+
+          console.log('this.stockSucursales', this.stockSucursales);
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
 
   }
 
@@ -213,21 +242,25 @@ export class CreateComprasComponent implements OnInit {
 
   seleccionar(idx: any) {
     this.nuevoProducto.codigo = this.productos[idx].Codigo;
-
+   // this.nuevoProducto.idSucursal = this.productos[idx].sucursal;
+    
+    //console.log('this.nuevoProducto.idSucursal', this.productos[idx]);
     //buscar en this.productos el codigo y traer todo el objeto del codigo
     const selectedObject = this.productos.find((item: any) => item.Codigo == this.nuevoProducto.codigo);
+
     //this.nuevoProducto = selectedObject;
     console.log('selectedObject', selectedObject);
-    this.nuevoProducto.codigo = selectedObject.codigo;
-    this.nuevoProducto.idCategoria = selectedObject.idCategoria;
+    this.nuevoProducto.codigo = selectedObject.Codigo;
+    this.nuevoProducto.idCategoria = selectedObject.idCategoria[0];
     this.nuevoProducto.descripcion = selectedObject.descripcion;
-    this.nuevoProducto.idPresentacion = selectedObject.idPresentacion;
+    this.nuevoProducto.idPresentacion = selectedObject.idPresentacion[0];
     this.nuevoProducto.cUnitario = selectedObject.cUnitario;
     this.nuevoProducto.cantidad = 1;
     this.nuevoProducto.fProduccion = selectedObject.fProduccion;
     this.nuevoProducto.fVencimiento = selectedObject.fVencimiento;
-    this.nuevoProducto.idSucursal =  selectedObject.idSucursal;
+    this.nuevoProducto.idSucursal = selectedObject.idSucursal[0];
 
+    this.nuevoProducto.useCorrelativo = false;
 
   }
 
@@ -271,53 +304,53 @@ export class CreateComprasComponent implements OnInit {
   // }
 
   onSelectPresentacion(selectedValue: any) {
-    
+
     const selectedObject = this.presentacion.find((item: any) => item.idPresentacion == selectedValue);
     this.nuevoProducto.presentacion = selectedObject;
     // Ahora, selectedObject contiene toda la información del elemento seleccionado
-    console.log('selectedObject',selectedObject);
-    console.log('this.nuevoProducto',this.nuevoProducto);
+    console.log('selectedObject', selectedObject);
+    console.log('this.nuevoProducto', this.nuevoProducto);
 
   }
 
   onSelectCategoria(selectedValue: any) {
-    
+
     const selectedObject = this.categoria.find((item: any) => item.idCategoria == selectedValue);
     this.nuevoProducto.categoria = selectedObject;
     // Ahora, selectedObject contiene toda la información del elemento seleccionado
-    console.log('selectedObject',selectedObject);
-    console.log('this.nuevoProducto',this.nuevoProducto);
+    console.log('selectedObject', selectedObject);
+    console.log('this.nuevoProducto', this.nuevoProducto);
 
   }
 
-  onSelectSucursal(selectedValue: any){
+  onSelectSucursal(selectedValue: any) {
     const selectedObject = this.sucursales.find((item: any) => item.idSucursal == selectedValue);
     this.nuevoProducto.sucursal = selectedObject;
     // Ahora, selectedObject contiene toda la información del elemento seleccionado
-    console.log('selectedObject',selectedObject);
-    console.log('this.nuevoProducto',this.nuevoProducto);
+    console.log('selectedObject', selectedObject);
+    console.log('this.nuevoProducto', this.nuevoProducto);
   }
 
-  onCheckboxChange(){
-    if (this.useCorrelativo) {
-      
-      console.log('El checkbox está marcado.', this.useCorrelativo);
-      
+  onCheckboxChange() {
+    if (this.nuevoProducto.useCorrelativo) {
+
+      console.log('El checkbox está marcado.', this.nuevoProducto.useCorrelativo);
+
       // Realiza acciones cuando el checkbox está marcado
-      
+
       this.nuevoProducto.codigo = this.correlativo.numero;
 
     } else {
-      console.log('El checkbox está desmarcado.', this.useCorrelativo);
+      console.log('El checkbox está desmarcado.', this.nuevoProducto.useCorrelativo);
       // Realiza acciones cuando el checkbox NO está marcado
       this.nuevoProducto.codigo = '';
     }
-    
+
   }
 
   agregarProductoNuevo() {
-     //deseo multiplicar el precio por la cantidad de this.nuevoProducto
-      this.nuevoProducto.subtotal = this.nuevoProducto.cUnitario * this.nuevoProducto.cantidad;
+    //deseo multiplicar el precio por la cantidad de this.nuevoProducto
+    this.nuevoProducto.subtotal = this.nuevoProducto.cUnitario * this.nuevoProducto.cantidad;
 
     this.detalleCompras.push(this.nuevoProducto);
     console.log('this.detalleCompras', this.detalleCompras);
@@ -334,11 +367,11 @@ export class CreateComprasComponent implements OnInit {
     this.sumarFooterFactura();
 
 
-   
+
   }
 
   sumarFooterFactura() {
-    
+
     this.compras.igv = 0;
     this.compras.exonerado = 0;
     this.compras.gratuito = 0;
@@ -351,14 +384,14 @@ export class CreateComprasComponent implements OnInit {
     console.log('this.compras', this.compras);
   }
 
-  onInput(){
+  onInput() {
     this.compras.total = (this.compras.subTotal + this.compras.igv + this.compras.otrosCargos) - this.compras.descuentos;
 
   }
 
-  registrarCompras(){
-    console.log('this.compras',this.compras);
-    console.log('this.detalleCompras',this.detalleCompras);
+  registrarCompras() {
+    console.log('this.compras', this.compras);
+    console.log('this.detalleCompras', this.detalleCompras);
 
     // this._comprasService.crear_compra(this.token,this.compras).subscribe(
     //   response => {
@@ -385,7 +418,7 @@ export class CreateComprasComponent implements OnInit {
     //                               response => {
     //                                 console.log('response',response);
     //                                 if (response.status == 'success') {
-                                      
+
     //                                 }
     //                               },
     //                               error => {
@@ -393,7 +426,7 @@ export class CreateComprasComponent implements OnInit {
     //                               }
     //                             );
     //                           });
-                              
+
     //                         }
     //                       },
     //                       error => {
@@ -407,7 +440,7 @@ export class CreateComprasComponent implements OnInit {
     //                 }
     //               );
     //             });
-                
+
     //           }
     //         },
     //         error => {

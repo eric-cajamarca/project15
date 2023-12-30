@@ -436,6 +436,7 @@ go
 create table StockSucursal
 (
 idStockSucursal int identity(1,1) primary key not null,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa), 
 idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal) ON DELETE CASCADE,
 idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 cantidad decimal(18,2) not null,
@@ -443,23 +444,26 @@ ubicacion Varchar(20) null,
 fIngreso datetime null,
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
-
 )
 go
 
-INSERT INTO StockSucursal (idSucursal, idProducto, cantidad, ubicacion, fIngreso, idUsuario)
+INSERT INTO StockSucursal (idEmpresa,idSucursal, idProducto, cantidad, ubicacion, fIngreso, idUsuario)
 VALUES
 (
-    'E50017E1-B809-41FD-92F4-8AD9163D2E92', --idsucursal
-    '6C523685-D1FA-4B5F-822A-C052B3B49D6B', --idproducto
+	'42099529-43C9-4B7F-921A-3D6FB946E93E', --idempresa
+    '10647937-80AF-4EF6-B20E-42E34E85BCF2', --idsucursal
+    'BBFC45F9-A6A3-4F57-BF97-4660C7A1A074', --idproducto
 	30, --cantidad
 	'andamio1',
 	GETDATE(),
-	'9B697C80-FFE8-4C91-9362-98FE4D5221D8'--id usuario
+	'B5E9E176-7DE5-483D-A8BE-740BF79BBF90'--id usuario
 );
 go
-
+select * from Empresas
+select * from Sucursal
+select * from UsuarioWeb
 select * from StockSucursal
+select * from Productos
 
 --DROP TABLE ORDENESALIDA
 go

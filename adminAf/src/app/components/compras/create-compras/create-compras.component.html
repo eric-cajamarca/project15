@@ -239,17 +239,17 @@
                             </thead>
                             <tbody>
                                 <!-- Add table rows here -->
-                                <tr *ngFor="let item of productos; let idx = index">
+                                <tr *ngFor="let item of stockSucursales; let idx = index">
                                 
-                                    <th scope="row">{{item.Codigo}}</th>
-                                    <td>{{item.Descripcion[0]}} </td>
-                                    <td>{{item.descripcion}} </td>
-                                    <td>{{item.codigo}}</td>
-                                    <td>cantidad</td>
-                                    <td>{{item.fProduccion}} </td>
-                                    <td>{{item.fVencimiento}} </td>
-                                    <td>{{item.cUnitario}} </td>
-                                    <td>sucursal</td>
+                                    <th scope="row">{{item.producto.Codigo}}</th>
+                                    <td>{{item.producto.Descripcion[0]}} </td>
+                                    <td>{{item.producto.descripcion}} </td>
+                                    <td>{{item.producto.codigo}}</td>
+                                    <td>{{item.cantidad}}</td>
+                                    <td>{{item.producto.fProduccion}} </td>
+                                    <td>{{item.producto.fVencimiento}} </td>
+                                    <td>{{item.producto.cUnitario}} </td>
+                                    <td>{{item.sucursal.nombre}} </td>
                                     <td>
                                             <a style="cursor: pointer;" class="text-primary"
 
@@ -282,7 +282,7 @@
                 </div> -->
                 <div class="form-group">
                     <label>
-                      <input type="checkbox" name="useCorrelativo"  [(ngModel)]="useCorrelativo" (change)="onCheckboxChange()"> Registrar dirección
+                      <input type="checkbox" [(ngModel)]="nuevoProducto.useCorrelativo" name="useCorrelativo"  (change)="onCheckboxChange()"> Registrar dirección
                     </label>
                 </div>
                 <div class="row form-group">

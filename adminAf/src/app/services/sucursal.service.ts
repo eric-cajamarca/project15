@@ -53,10 +53,35 @@ export class SucursalService {
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
+// api.get('/stocksucursal',auth.auth, sucursalController.obtener_stock_sucursal_idProducto);
+// api.get('/stocksucursales/',auth.auth, sucursalController.obtener_stock_sucursales_idempresa);
+// api.post('/stocksucursal', auth.auth, sucursalController.crear_stock_sucursal_idEmpresa);
+// api.put('/stocksucursal/:id',auth.auth, sucursalController.editar_stock_sucursal);
+// api.delete('/stocksucursal/:id',auth.auth, sucursalController.eliminar_stock_sucursal);
 
   obtener_stock_sucursal_idProducto(id:any, token:any):Observable<any>{
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.get(this.url+'stocksucursal/'+id,{headers:headers});
+  }
+
+  obtener_stock_sucursales_idempresa(token:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.get(this.url+'stocksucursales/',{headers:headers});
+  }
+
+  crear_stock_sucursal_idEmpresa(token:any,stock:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.post(this.url+'stocksucursal',stock,{headers:headers});
+  }
+
+  editar_stock_sucursal(token:any,id:any,stock:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.put(this.url+'stocksucursal/'+id,stock,{headers:headers});
+  }
+
+  eliminar_stock_sucursal(token:any,id:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.delete(this.url+'stocksucursal/'+id,{headers:headers});
   }
 
 }

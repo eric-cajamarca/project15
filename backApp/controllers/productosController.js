@@ -35,7 +35,9 @@ const obtener_productos_todos = async (req, res) => {
                 //quiero traer todos los productos con sus tablas relacionadas (idCategoria, idPresentacion) de la base de datos usando inner join
                 let productos = await pool.request().query("SELECT * FROM Productos INNER JOIN Categorias ON Productos.idCategoria = Categorias.idCategoria INNER JOIN Presentacion ON Productos.idPresentacion = Presentacion.idPresentacion");
 
-                console.log('obtener productos: ', productos.recordset);
+                
+
+
                 // let productos = await pool.request().query("SELECT * FROM Productos");
                 res.status(200).send({data:productos.recordset});
             } catch (error) {
