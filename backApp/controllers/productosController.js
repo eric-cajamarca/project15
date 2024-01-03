@@ -19,7 +19,7 @@ const { v4: uuidv4 } = require('uuid');
 //     facturar varchar(2) null,
 //     idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 //     FIngreso datetime not null,
-    
+
 //     FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
 //     FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
 //     )
@@ -30,16 +30,29 @@ const obtener_productos_todos = async (req, res) => {
         if (req.user.rol == 'Administrador') {
             try {
                 let pool = await sql.connect(dbConfig);
-                //let productos = await pool.request().query("SELECT * FROM Productos");
+                let productos = await pool.request().query("SELECT * FROM Productos");
 
                 //quiero traer todos los productos con sus tablas relacionadas (idCategoria, idPresentacion) de la base de datos usando inner join
-                let productos = await pool.request().query("SELECT * FROM Productos INNER JOIN Categorias ON Productos.idCategoria = Categorias.idCategoria INNER JOIN Presentacion ON Productos.idPresentacion = Presentacion.idPresentacion");
-
+                //let productos = await pool.request().query("SELECT * FROM Productos INNER JOIN Categorias ON Productos.idCategoria = Categorias.idCategoria INNER JOIN Presentacion ON Productos.idPresentacion = Presentacion.idPresentacion");
                 
+                //quiero recorrer el array de productos.recordset y formatear la fecha de produccion y vencimiento por cada producto
+                // productos.recordset.forEach(element => {
+                //     let fProduccion = element.fProduccion;
+                //     // Ejemplo de uso
+                //     let fechaFormateada = convertirFormato(fProduccion);
+                //     element.fProduccion = fechaFormateada;
 
+                //     let fVencimiento = element.fVencimiento;
+                //     // Ejemplo de uso
+                //     let fechaFormateada2 = convertirFormato(fVencimiento);
+                //     element.fVencimiento = fechaFormateada2;
+                // });
 
-                // let productos = await pool.request().query("SELECT * FROM Productos");
-                res.status(200).send({data:productos.recordset});
+                //let data = productos.recordset;
+
+                //console.log('productos ', productos.recordset);
+
+                res.status(200).send({ data: productos.recordset});
             } catch (error) {
                 console.log('obterner productos error: ' + error);
                 res.status(500).send({ message: 'Error al obtener los productos', data: undefined });
@@ -50,8 +63,8 @@ const obtener_productos_todos = async (req, res) => {
     }
     else {
         res.status(500).send({ message: 'No Access', data: undefined });
-    } 
-    
+    }
+
 }
 
 const obtener_productos_id = async (req, res) => {
@@ -62,20 +75,20 @@ const obtener_productos_id = async (req, res) => {
             try {
                 let pool = await sql.connect(dbConfig);
                 let productos = await pool.request().query("SELECT * FROM Productos WHERE idProducto = '" + idProducto + "'");
-                res.status(200).send({data:productos.recordset});
+                res.status(200).send({ data: productos.recordset });
             } catch (error) {
                 console.log('obterner productos error: ' + error);
                 res.status(500).send({ message: 'Error al obtener los productos', data: undefined });
             }
-            
+
         } else {
             res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
         }
     }
     else {
         res.status(500).send({ message: 'No Access', data: undefined });
-    } 
-    
+    }
+
 }
 
 const crear_producto = async (req, res) => {
@@ -91,39 +104,39 @@ const crear_producto = async (req, res) => {
             try {
                 let pool = await sql.connect(dbConfig);
                 let productos = await pool
-                .request()
-                .input("idProducto", sql.UniqueIdentifier, idProducto)
-                .input("idEmpresa", sql.UniqueIdentifier, idEmpresa)
-                .input("Codigo", sql.VarChar, Codigo)
-                .input("idCategoria", sql.Int, idCategoria)
-                .input("descripcion", sql.VarChar, descripcion)
-                .input("idPresentacion", sql.Int, idPresentacion)
-                .input("cUnitario", sql.Decimal, cUnitario)
-                .input("fProduccion", sql.VarChar, fProduccion)
-                .input("fVencimiento", sql.VarChar, fVencimiento)
-                .input("alertaMinimo", sql.Decimal, alertaMinimo)
-                .input("alertaMaximo", sql.Decimal, alertaMaximo)
-                .input("VecesVendidas", sql.Int, VecesVendidas)
-                .input("facturar", sql.VarChar, facturar)
-                .input("idUsuario", sql.UniqueIdentifier, idUsuario)
-                .input("FIngreso", sql.DateTime, FIngreso)
-                .query("INSERT INTO Productos VALUES (@idProducto, @idEmpresa, @Codigo, @idCategoria, @descripcion, @idPresentacion, @cUnitario, @fProduccion, @fVencimiento, @alertaMinimo, @alertaMaximo, @VecesVendidas, @facturar, @idUsuario, @FIngreso)");
+                    .request()
+                    .input("idProducto", sql.UniqueIdentifier, idProducto)
+                    .input("idEmpresa", sql.UniqueIdentifier, idEmpresa)
+                    .input("Codigo", sql.VarChar, Codigo)
+                    .input("idCategoria", sql.Int, idCategoria)
+                    .input("descripcion", sql.VarChar, descripcion)
+                    .input("idPresentacion", sql.Int, idPresentacion)
+                    .input("cUnitario", sql.Decimal, cUnitario)
+                    .input("fProduccion", sql.VarChar, fProduccion)
+                    .input("fVencimiento", sql.VarChar, fVencimiento)
+                    .input("alertaMinimo", sql.Decimal, alertaMinimo)
+                    .input("alertaMaximo", sql.Decimal, alertaMaximo)
+                    .input("VecesVendidas", sql.Int, VecesVendidas)
+                    .input("facturar", sql.VarChar, facturar)
+                    .input("idUsuario", sql.UniqueIdentifier, idUsuario)
+                    .input("FIngreso", sql.DateTime, FIngreso)
+                    .query("INSERT INTO Productos VALUES (@idProducto, @idEmpresa, @Codigo, @idCategoria, @descripcion, @idPresentacion, @cUnitario, @fProduccion, @fVencimiento, @alertaMinimo, @alertaMaximo, @VecesVendidas, @facturar, @idUsuario, @FIngreso)");
 
-                
-                res.status(200).send({data:productos.recordset});
+
+                res.status(200).send({ data: productos.recordset });
             } catch (error) {
                 console.log('crear productos error: ' + error);
                 res.status(500).send({ message: 'Error al crear los productos', data: undefined });
             }
-            
+
         } else {
             res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
         }
     }
     else {
         res.status(500).send({ message: 'No Access', data: undefined });
-    } 
-    
+    }
+
 
 }
 
@@ -136,25 +149,25 @@ const actualizar_producto = async (req, res) => {
             try {
                 let pool = await sql.connect(dbConfig);
                 let productos = await pool
-                .request()
-                .input("idProducto", sql.UniqueIdentifier, idProducto)
-                .input("Codigo", sql.VarChar, Codigo)
-                .input("idCategoria", sql.Int, idCategoria)
-                .input("descripcion", sql.VarChar, descripcion)
-                .input("idPresentacion", sql.Int, idPresentacion)
-                .input("cUnitario", sql.Decimal, cUnitario)
-                .input("fProduccion", sql.VarChar, fProduccion)
-                .input("fVencimiento", sql.VarChar, fVencimiento)
-                .input("alertaMinimo", sql.Decimal, alertaMinimo)
-                .input("alertaMaximo", sql.Decimal, alertaMaximo)
-                .input("VecesVendidas", sql.Int, VecesVendidas)
-                .input("facturar", sql.VarChar, facturar)
-                .input("idUsuario", sql.UniqueIdentifier, idUsuario)
-                .input("FIngreso", sql.DateTime, FIngreso)
-                .query("UPDATE Productos SET Codigo = @Codigo, idCategoria = @idCategoria, descripcion = @descripcion, idPresentacion = @idPresentacion, cUnitario = @cUnitario, fProduccion = @fProduccion, fVencimiento = @fVencimiento, alertaMinimo = @alertaMinimo, alertaMaximo = @alertaMaximo, VecesVendidas = @VecesVendidas, facturar = @facturar, idUsuario = @idUsuario, FIngreso = @FIngreso WHERE idProducto = @idProducto");
+                    .request()
+                    .input("idProducto", sql.UniqueIdentifier, idProducto)
+                    .input("Codigo", sql.VarChar, Codigo)
+                    .input("idCategoria", sql.Int, idCategoria)
+                    .input("descripcion", sql.VarChar, descripcion)
+                    .input("idPresentacion", sql.Int, idPresentacion)
+                    .input("cUnitario", sql.Decimal, cUnitario)
+                    .input("fProduccion", sql.VarChar, fProduccion)
+                    .input("fVencimiento", sql.VarChar, fVencimiento)
+                    .input("alertaMinimo", sql.Decimal, alertaMinimo)
+                    .input("alertaMaximo", sql.Decimal, alertaMaximo)
+                    .input("VecesVendidas", sql.Int, VecesVendidas)
+                    .input("facturar", sql.VarChar, facturar)
+                    .input("idUsuario", sql.UniqueIdentifier, idUsuario)
+                    .input("FIngreso", sql.DateTime, FIngreso)
+                    .query("UPDATE Productos SET Codigo = @Codigo, idCategoria = @idCategoria, descripcion = @descripcion, idPresentacion = @idPresentacion, cUnitario = @cUnitario, fProduccion = @fProduccion, fVencimiento = @fVencimiento, alertaMinimo = @alertaMinimo, alertaMaximo = @alertaMaximo, VecesVendidas = @VecesVendidas, facturar = @facturar, idUsuario = @idUsuario, FIngreso = @FIngreso WHERE idProducto = @idProducto");
 
-                
-                res.status(200).send({data:productos.recordset});
+
+                res.status(200).send({ data: productos.recordset });
             } catch (error) {
                 console.log('actualizar productos error: ' + error);
                 res.status(500).send({ message: 'Error al actualizar los productos', data: undefined });
@@ -162,7 +175,7 @@ const actualizar_producto = async (req, res) => {
         } else {
             res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
         }
-    }else {
+    } else {
         res.status(500).send({ message: 'No Access', data: undefined });
     }
 }
@@ -187,6 +200,43 @@ const actualizar_producto = async (req, res) => {
 //         res.status(500).send({ message: 'No Access', data: undefined });
 //     }
 // }
+
+function convertirFormato(fechaString) {
+    // Mapea los nombres de los meses en español a sus equivalentes numéricos
+    const meses = {
+        Ene: '01',
+        Feb: '02',
+        Mar: '03',
+        Abr: '04',
+        May: '05',
+        Jun: '06',
+        Jul: '07',
+        Ago: '08',
+        Sep: '09',
+        Oct: '10',
+        Nov: '11',
+        Dic: '12'
+    };
+
+    // Divide la cadena en partes
+    console.log('fechaString ', fechaString);
+    const partes = fechaString.split(' ');
+
+    console.log('partes ', partes);
+    // Extrae el mes, día y año
+    const mes = meses[partes[0]];
+    const dia = partes[1].padStart(2, '0'); // Asegura que el día tenga dos dígitos
+    const ano = partes[2];
+
+    // Formatea la fecha
+    const fechaFormateada = `${ano}-${mes}-${dia}`;
+
+    return fechaFormateada;
+}
+
+
+
+
 
 module.exports = {
     obtener_productos_todos,

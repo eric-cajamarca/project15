@@ -36,9 +36,11 @@ export class CreateComprasComponent implements OnInit {
   public comprobantes: any = [];
   public clientes: any = {};
   public productos: any = {};
+  public prodSelecionado: any = {};
   public productos_const: any = {};
   public sucursales: any = {};
   public stockSucursales: any = [];
+  public stockSucursales_const: any = [];
   public filtro: any = {};
   public filtroConsulta: any = '';
   public documento: any = {};
@@ -190,25 +192,49 @@ export class CreateComprasComponent implements OnInit {
 
     this._sucursalService.obtener_stock_sucursales_idempresa(this.token).subscribe(
       response => {
+        this.stockSucursales = response.data;
         if (response.data != undefined) {
-          //quiero buscar en response.data el idProducto y traer todo el objeto del idProducto y agregarlo a this.stockSucursales
-          this.stockSucursales = response.data;
-          this.stockSucursales.forEach((element: any) => {
-            //buscar en this.productos el codigo y traer todo el objeto del codigo
-            const selectedObject = this.productos.find((item: any) => item.idProducto == element.idProducto);
-            element.producto = selectedObject;
-            // Ahora, selectedObject contiene toda la información del elemento seleccionado
-            //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
-            const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
-            element.sucursal = selectedObjectSucursal;
+          if (this.productos && this.sucursales && this.categoria && this.presentacion && this.stockSucursales) {
+            // Realizar operaciones con los arrays
+            console.log('this.productos', this.productos);
+            console.log('this.sucursales', this.sucursales);
+            console.log('this.categoria', this.categoria);
+            console.log('this.presentacion', this.presentacion);
+            console.log('this.stockSucursales', this.stockSucursales);
+
+            //quiero buscar en response.data el idProducto y traer todo el objeto del idProducto y agregarlo a this.stockSucursales
+            
+            this.stockSucursales.forEach((element: any) => {
+              //buscar en this.productos el codigo y traer todo el objeto del codigo
+              const selectedObject = this.productos.find((item: any) => item.idProducto == element.idProducto);
+              element.producto = selectedObject;
+              // Ahora, selectedObject contiene toda la información del elemento seleccionado
+              //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
+              const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
+              element.sucursal = selectedObjectSucursal;
+
+              //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
+              const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.producto.idCategoria);
+              element.categoria = selectedObjectCategoria;
+
+              //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
+              const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.producto.idPresentacion);
+              element.presentacion = selectedObjectPresentacion;
 
 
 
-          });
+            });
+          } else {
+            console.error('Uno de los arrays es undefined o está vacío.');
+          }
 
 
+          this.stockSucursales_const= this.stockSucursales;
           console.log('this.stockSucursales', this.stockSucursales);
+        } else {
+          this.stockSucursales = [];
         }
+
       },
       error => {
         console.log(error);
@@ -241,67 +267,58 @@ export class CreateComprasComponent implements OnInit {
   }
 
   seleccionar(idx: any) {
-    this.nuevoProducto.codigo = this.productos[idx].Codigo;
-   // this.nuevoProducto.idSucursal = this.productos[idx].sucursal;
+    //quiero agregar a this.nuevoProducto el objeto seleccionado
+    this.prodSelecionado = this.stockSucursales[idx];
+    console.log('this.prodSelecionado', this.prodSelecionado);
+
+    this.nuevoProducto.idProducto = this.prodSelecionado.idProducto;
+    this.nuevoProducto.codigo = this.prodSelecionado.producto.Codigo;
+    this.nuevoProducto.descripcion = this.prodSelecionado.producto.descripcion;
+    this.nuevoProducto.cUnitario = this.prodSelecionado.producto.cUnitario;
+    this.nuevoProducto.idCategoria = this.prodSelecionado.producto.idCategoria;
+    this.nuevoProducto.idPresentacion = this.prodSelecionado.producto.idPresentacion;
+    this.nuevoProducto.idSucursal = this.prodSelecionado.idSucursal;
+    this.nuevoProducto.cantidad = 0;
+    this.nuevoProducto.ubicacion = this.prodSelecionado.ubicacion;
+
+    this.nuevoProducto.fProduccion = this.prodSelecionado.producto.fProduccion.toString().substring(0, 10);
+    //quiero convertir la fecha de produccion a string en formato yyyy-mm-dd
     
-    //console.log('this.nuevoProducto.idSucursal', this.productos[idx]);
-    //buscar en this.productos el codigo y traer todo el objeto del codigo
-    const selectedObject = this.productos.find((item: any) => item.Codigo == this.nuevoProducto.codigo);
+    
 
-    //this.nuevoProducto = selectedObject;
-    console.log('selectedObject', selectedObject);
-    this.nuevoProducto.codigo = selectedObject.Codigo;
-    this.nuevoProducto.idCategoria = selectedObject.idCategoria[0];
-    this.nuevoProducto.descripcion = selectedObject.descripcion;
-    this.nuevoProducto.idPresentacion = selectedObject.idPresentacion[0];
-    this.nuevoProducto.cUnitario = selectedObject.cUnitario;
-    this.nuevoProducto.cantidad = 1;
-    this.nuevoProducto.fProduccion = selectedObject.fProduccion;
-    this.nuevoProducto.fVencimiento = selectedObject.fVencimiento;
-    this.nuevoProducto.idSucursal = selectedObject.idSucursal[0];
+    this.nuevoProducto.fVencimiento = this.prodSelecionado.producto.fVencimiento;
+    
 
-    this.nuevoProducto.useCorrelativo = false;
+
+    console.log('this.nuevoProducto', this.nuevoProducto);
 
   }
 
+  
+  
+  
+  
 
   buscarDescripcion() {
     console.log('this.filtroConsulta', this.filtroConsulta);
 
     if (this.filtroConsulta) {
-      //
+      // quiero bucar en this.stockSucursales el codigo o la descripcion que coincida con this.filtroConsulta
       var term = new RegExp(this.filtroConsulta, 'i');
-      this.productos = this.productos_const.filter((item: { descripcion: string; Codigo: string; }) => term.test(item.descripcion) || term.test(item.Codigo));
-      console.log('this.productos despues de la busqueda', this.productos);
+      this.stockSucursales = this.stockSucursales_const.filter((item: { producto: { descripcion: string; Codigo: string; }; }) => term.test(item.producto.descripcion) || term.test(item.producto.Codigo));
+      console.log('this.productos despues de la busqueda', this.stockSucursales);
+
+      //
+      // var term = new RegExp(this.filtroConsulta, 'i');
+      // this.stockSucursales = this.stockSucursales_const.filter((item: { descripcion: string; Codigo: string; }) => term.test(item.descripcion) || term.test(item.Codigo));
+      // console.log('this.productos despues de la busqueda', this.stockSucursales);
     }
-    // else {
-    //   this.productos = this.productos_const;
-    // }
+    else {
+      this.stockSucursales = this.stockSucursales_const;
+    }
   }
 
-  // onInputRuc(){
-  //   const selectedObject = this.clientes.find((item: any) => item.ruc == this.clientes.ruc);
-  //   this.compras.cliente = selectedObject;
-  //   // Ahora, selectedObject contiene toda la información del elemento seleccionado
-  //   console.log('selectedObject',selectedObject);
-  //   console.log('this.compras',this.compras);
-  // }
-
-  // onSelectMoneda(){
-  //   const selectedObject = this.moneda.find((item: any) => item.idMoneda == this.compras.idMoneda);
-  //   this.compras.idMoneda = selectedObject;
-  //   // Ahora, selectedObject contiene toda la información del elemento seleccionado
-  //   console.log('selectedObject',selectedObject);
-  //   console.log('this.compras',this.compras);
-  // }
-
-  // onSelectComprobante(){
-  //   const selectedObject = this.comprobantes.find((item: any) => item.idComprobante == this.compras.idComprobante);
-  //   this.compras.idComprobante = selectedObject;
-  //   // Ahora, selectedObject contiene toda la información del elemento seleccionado
-  //   console.log('selectedObject',selectedObject);
-  //   console.log('this.compras',this.compras);
-  // }
+  
 
   onSelectPresentacion(selectedValue: any) {
 
@@ -339,6 +356,9 @@ export class CreateComprasComponent implements OnInit {
       // Realiza acciones cuando el checkbox está marcado
 
       this.nuevoProducto.codigo = this.correlativo.numero;
+      this.nuevoProducto.idProducto = undefined;
+
+      console.log('this.nuevoProducto', this.nuevoProducto);
 
     } else {
       console.log('El checkbox está desmarcado.', this.nuevoProducto.useCorrelativo);
@@ -349,10 +369,61 @@ export class CreateComprasComponent implements OnInit {
   }
 
   agregarProductoNuevo() {
+    this.detalleCompras.push(this.nuevoProducto);
+    try {
+      if(this.detalleCompras.idProducto != undefined){
+        this.detalleCompras.forEach((element: any) => {
+          //buscar en this.productos el codigo y traer todo el objeto del codigo
+          const selectedObject = this.productos.find((item: any) => item.idProducto == element.idProducto);
+          element.producto = selectedObject;
+          // Ahora, selectedObject contiene toda la información del elemento seleccionado
+          //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
+          const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
+          element.sucursal = selectedObjectSucursal;
+  
+          //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
+          const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.producto.idCategoria);
+          element.categoria = selectedObjectCategoria;
+  
+          //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
+          const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.producto.idPresentacion);
+          element.presentacion = selectedObjectPresentacion;
+  
+  
+  
+        });
+      }else{
+        this.detalleCompras.forEach((element: any) => {
+          
+          //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
+          const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == this.nuevoProducto.idSucursal);
+          element.sucursal = selectedObjectSucursal;
+  
+          //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
+          const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == this.nuevoProducto.idCategoria);
+          element.categoria = selectedObjectCategoria;
+  
+          //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
+          const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == this.nuevoProducto.idPresentacion);
+          element.presentacion = selectedObjectPresentacion;
+  
+  
+  
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    
+
+    console.log('this.detalleCompras', this.detalleCompras);
+
+
     //deseo multiplicar el precio por la cantidad de this.nuevoProducto
     this.nuevoProducto.subtotal = this.nuevoProducto.cUnitario * this.nuevoProducto.cantidad;
+    console.log('this.nuevoProducto', this.nuevoProducto);
 
-    this.detalleCompras.push(this.nuevoProducto);
+    
     console.log('this.detalleCompras', this.detalleCompras);
 
     //deseo recorrer detalleCompras y sumar el subtotal y guardarlo en this.compras.total
@@ -390,8 +461,11 @@ export class CreateComprasComponent implements OnInit {
   }
 
   registrarCompras() {
+
+    this.compras.compCompra = this.compras.serie + '-' + this.compras.numero;
     console.log('this.compras', this.compras);
     console.log('this.detalleCompras', this.detalleCompras);
+
 
     // this._comprasService.crear_compra(this.token,this.compras).subscribe(
     //   response => {
