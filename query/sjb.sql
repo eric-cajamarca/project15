@@ -348,9 +348,9 @@ VALUES
 (
     NEWID(),
 	'42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
-    '62000',
+    '61000',
      1, --idcategoria
-	'interruptor simple p/emp - bticino',
+	'interruptor simple ',
 	10, --idpresentacion
 	3.50,
 	GETDATE(),
@@ -452,9 +452,9 @@ VALUES
 (
 	'42099529-43C9-4B7F-921A-3D6FB946E93E', --idempresa
     '10647937-80AF-4EF6-B20E-42E34E85BCF2', --idsucursal
-    'BBFC45F9-A6A3-4F57-BF97-4660C7A1A074', --idproducto
-	30, --cantidad
-	'andamio1',
+    '1CEB5F9A-9054-4573-A6DD-27566E3059D1', --idproducto
+	200, --cantidad
+	'andamio2',
 	GETDATE(),
 	'B5E9E176-7DE5-483D-A8BE-740BF79BBF90'--id usuario
 );

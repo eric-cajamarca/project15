@@ -34,12 +34,13 @@ export class ProductoService {
     return this._http.get(this.url+'productos/'+id,{headers:headers});
   }
 
-  crear_producto(token:any,producto:any):Observable<any>{
+  crear_producto(producto:any, token:any):Observable<any>{
+    console.log('producto',producto);
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.post(this.url+'productos',producto,{headers:headers});
   }
 
-  actualizar_producto(token:any,id:any,producto:any):Observable<any>{
+  actualizar_producto(id:any,producto:any, token:any):Observable<any>{
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.put(this.url+'productos/'+id,producto,{headers:headers});
   }

@@ -239,8 +239,9 @@ const crear_stock_sucursal_idEmpresa = async function (req, res) {
 
     const { idSucursal, idProducto, cantidad, ubicacion } = req.body;
     const idEmpresa = req.user.empresa;
-    const idUsuario = req.user.idUsuario;
+    const idUsuario = req.user.sub;
 
+    console.log('crear_stock_sucursal_idEmpresa: ', req.body);
 
     if (req.user) {
         if (req.user.rol == 'Administrador') {

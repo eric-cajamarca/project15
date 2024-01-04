@@ -92,12 +92,23 @@ const obtener_productos_id = async (req, res) => {
 }
 
 const crear_producto = async (req, res) => {
-    const { Codigo, idCategoria, descripcion, idPresentacion, cUnitario, fProduccion, fVencimiento, alertaMinimo, alertaMaximo, VecesVendidas, facturar, idUsuario, FIngreso } = req.body;
+    const { Codigo, idCategoria, descripcion, idPresentacion, cUnitario, fProduccion, fVencimiento, facturar } = req.body;
 
+    console.log('crear producto ', req.body);
     //crear id unico
     const idProducto = uuidv4();
     const idEmpresa = req.user.empresa;
+    const idUsuario = req.user.sub;
+    console.log('idUsuario ', idUsuario);
+   
+    //obtener fecha actual
+    var hoy = new Date();
+    var dd = hoy.getDate();
+    var mm = hoy.getMonth() + 1;
+    var yyyy = hoy.getFullYear();
 
+    //dar formato a la fecha datetime
+    const FIngreso = yyyy + '-' + mm + '-' + dd;
 
     if (req.user) {
         if (req.user.rol == 'Administrador') {
@@ -107,23 +118,26 @@ const crear_producto = async (req, res) => {
                     .request()
                     .input("idProducto", sql.UniqueIdentifier, idProducto)
                     .input("idEmpresa", sql.UniqueIdentifier, idEmpresa)
-                    .input("Codigo", sql.VarChar, Codigo)
+                    .input("Codigo", sql.VarChar, Codigo.toString())
                     .input("idCategoria", sql.Int, idCategoria)
                     .input("descripcion", sql.VarChar, descripcion)
                     .input("idPresentacion", sql.Int, idPresentacion)
                     .input("cUnitario", sql.Decimal, cUnitario)
                     .input("fProduccion", sql.VarChar, fProduccion)
                     .input("fVencimiento", sql.VarChar, fVencimiento)
-                    .input("alertaMinimo", sql.Decimal, alertaMinimo)
-                    .input("alertaMaximo", sql.Decimal, alertaMaximo)
-                    .input("VecesVendidas", sql.Int, VecesVendidas)
+                    .input("alertaMinimo", sql.Decimal, 5)
+                    .input("alertaMaximo", sql.Decimal, 50)
+                    .input("VecesVendidas", sql.Int, 0)
                     .input("facturar", sql.VarChar, facturar)
                     .input("idUsuario", sql.UniqueIdentifier, idUsuario)
                     .input("FIngreso", sql.DateTime, FIngreso)
                     .query("INSERT INTO Productos VALUES (@idProducto, @idEmpresa, @Codigo, @idCategoria, @descripcion, @idPresentacion, @cUnitario, @fProduccion, @fVencimiento, @alertaMinimo, @alertaMaximo, @VecesVendidas, @facturar, @idUsuario, @FIngreso)");
 
-
-                res.status(200).send({ data: productos.recordset });
+                    console.log('producto creado ', productos.rowsAffected);
+                    if(productos.rowsAffected == 1){
+                        res.status(200).send({ data: idProducto });
+                    }
+                
             } catch (error) {
                 console.log('crear productos error: ' + error);
                 res.status(500).send({ message: 'Error al crear los productos', data: undefined });
