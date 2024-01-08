@@ -40,6 +40,7 @@ const obtener_detalle_compras_idcompra = async (req, res) => {
 const crear_detalle_compras_idcompra = async (req, res) => {
     
     const { idEmpresa, idSucursal, idCompra, cantidad, idProducto, idPresentacion, pUnitario, total, idUsuario } = req.body;
+    console.log('crear_detalle_compras_idcompra: ' , req.body);
 
     if (req.user) {
         if (req.user.rol == 'Administrador') {
@@ -49,7 +50,7 @@ const crear_detalle_compras_idcompra = async (req, res) => {
                 .request()
                 .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
                 .input('idSucursal', sql.UniqueIdentifier, idSucursal)
-                .input('idCompra', sql.Int, idCompra)
+                .input('idCompra', sql.UniqueIdentifier, idCompra)
                 .input('cantidad', sql.Decimal, cantidad)
                 .input('idProducto', sql.UniqueIdentifier, idProducto)
                 .input('idPresentacion', sql.Int, idPresentacion)

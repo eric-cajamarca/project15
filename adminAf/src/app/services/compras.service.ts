@@ -57,7 +57,7 @@ export class ComprasService {
       return this._http.get(this.url+'comprasempresa',{headers:headers});
     }
 
-    crear_compra(token:any,compra:any):Observable<any>{
+    crear_compra(compra:any, token:any):Observable<any>{
       let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
       return this._http.post(this.url+'compras',compra,{headers:headers});
     }
@@ -98,7 +98,7 @@ export class ComprasService {
       return this._http.get(this.url+'dcompras/'+id,{headers:headers});
     }
 
-    crear_detalle_compras_idcompra(token:any,dcompra:any):Observable<any>{
+    crear_detalle_compras_idcompra(dcompra:any , token:any,):Observable<any>{
       let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
       return this._http.post(this.url+'dcompras',dcompra,{headers:headers});
     }

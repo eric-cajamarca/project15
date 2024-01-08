@@ -560,7 +560,7 @@ go
 --drop table Compras
 create table Compras
 (
-idcompra int identity (1,1) primary key not null,
+idcompra UNIQUEIDENTIFIER primary key not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
 compCompra char(13) not null,
 idComprobante int not null,
@@ -578,7 +578,7 @@ gratuito decimal(18,2),
 otrosCargos decimal(18,2),
 descuentos decimal(18,2),
 total decimal(18,2),
-idMediosPago varchar(3) not null, --el estado determinara pendiente o pagado
+idMediosPago int not null, --el estado determinara pendiente o pagado
 compRelacionado varchar(50),
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
@@ -626,7 +626,7 @@ create table DetalleCompras
 idDetalleCompra int identity(1,1) primary key not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ,
 idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal) , -- Nueva columna
-idCompra int not null,
+idCompra UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Compras (idCompra) ON DELETE CASCADE,
 cantidad decimal(18,3) not null,
 idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 idPresentacion int not null,
@@ -634,7 +634,7 @@ pUnitario decimal(18,5),
 total decimal(18,2),
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
-FOREIGN KEY (idCompra) REFERENCES Compras (idCompra) ON DELETE CASCADE,
+
 FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
 )
 
@@ -1049,9 +1049,9 @@ WHERE
 create table CuentasxPagar
 (
 idCuentaxPagar int identity(1,1) primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa),
 idCliente int not null,
-idCompra int not null,
+idCompra UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Compras (idCompra) ON DELETE CASCADE,
 fEmision datetime not null,
 fVencimiento datetime not null,
 total decimal(18,2),
@@ -1064,7 +1064,6 @@ Estado varchar(50),
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 FOREIGN KEY (idCliente) REFERENCES Clientes (idCliente),
-FOREIGN KEY (idCompra) REFERENCES Compras (idCompra),
 FOREIGN KEY (idPeriodo) REFERENCES Periodos (idPeriodo),
 )
 go

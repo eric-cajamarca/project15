@@ -1,5 +1,6 @@
 const sql = require('mssql');
 const dbConfig = require('../dbconfig');
+const { v4: uuidv4 } = require('uuid');
 
 // create table Compras
 // (
@@ -130,16 +131,24 @@ const obtener_compras_todos_idEmpresa = async (req, res) => {
 }
 
 const crear_compra = async (req, res) => {
-    const { compCompra, idComprobante, serie, numero, fEmision, fVencimiento, idProveedor, idMoneda, idEstadoPago, subTotal, igv, exonerado, gratuito, otrosCargos, descuentos, total, idMediosPago, compRelacionado, idUsuario } = req.body;
+    const { idCliente, compCompra, idComprobante, serie, numero, fEmision, fVencimiento, idMoneda, idEstadoPago, subTotal, igv, exonerado, gratuito, otrosCargos, descuentos, total, idMediosPago, compRelacionado } = req.body;
+    
+    console.log('crear_compra ',req.body);
 
-    const idEmpresa = req.user.idEmpresa;
+    const idEmpresa = req.user.empresa;
+    const idUsuario = req.user.sub;
+    //generar el id de la compra
+
+
+    const idCompra = uuidv4();
 
     if (req.user) {
         if (req.user.rol == 'Administrador') {
             try {
                 let pool = await sql.connect(dbConfig);
-                await pool
+                let regCompra = await pool
                 .request()
+                .input("idCompra", sql.UniqueIdentifier, idCompra)
                 .input("idEmpresa", sql.UniqueIdentifier, idEmpresa)
                 .input("compCompra", sql.Char, compCompra)
                 .input("idComprobante", sql.Int, idComprobante)
@@ -147,7 +156,7 @@ const crear_compra = async (req, res) => {
                 .input("numero", sql.VarChar, numero)
                 .input("fEmision", sql.DateTime, fEmision)
                 .input("fVencimiento", sql.DateTime, fVencimiento)
-                .input("idProveedor", sql.Int, idProveedor)
+                .input("idCliente", sql.Int, idCliente)
                 .input("idMoneda", sql.Int, idMoneda)
                 .input("idEstadoPago", sql.Int, idEstadoPago)
                 .input("subTotal", sql.Decimal, subTotal)
@@ -160,8 +169,13 @@ const crear_compra = async (req, res) => {
                 .input("idMediosPago", sql.VarChar, idMediosPago)
                 .input("compRelacionado", sql.VarChar, compRelacionado)
                 .input("idUsuario", sql.UniqueIdentifier, idUsuario)
-                .query("INSERT INTO Compras VALUES (@idEmpresa, @compCompra, @idComprobante, @serie, @numero, @fEmision, @fVencimiento, @idProveedor, @idMoneda, @idEstadoPago, @subTotal, @igv, @exonerado, @gratuito, @otrosCargos, @descuentos, @total, @idMediosPago, @compRelacionado, @idUsuario)");
-                res.status(200).send({ message: 'Compra creada correctamente', data: undefined });
+                .query('INSERT INTO Compras VALUES (@idCompra,@idEmpresa, @compCompra, @idComprobante, @serie, @numero, @fEmision, @fVencimiento, @idCliente, @idMoneda, @idEstadoPago, @subTotal, @igv, @exonerado, @gratuito, @otrosCargos, @descuentos, @total, @idMediosPago, @compRelacionado, @idUsuario) SELECT SCOPE_IDENTITY() AS idCompra;');
+
+                if(regCompra.rowsAffected[0] == 1){
+                    console.log('compra creada ', idCompra);
+                    res.status(200).send({data: idCompra });
+                }
+                
             } catch (error) {
                 console.log('crear compras error: ' + error);
                 res.status(500).send({ message: 'Error al crear la compra', data: undefined });
@@ -176,7 +190,7 @@ const crear_compra = async (req, res) => {
 
 const editar_compra = async (req, res) => {
     const { compCompra, idComprobante, serie, numero, fEmision, fVencimiento, idProveedor, idMoneda, idEstadoPago, subTotal, igv, exonerado, gratuito, otrosCargos, descuentos, total, idMediosPago, compRelacionado, idUsuario } = req.body;
-
+    console.log(req.body);
     const idEmpresa = req.user.idEmpresa;
 
     if (req.user) {

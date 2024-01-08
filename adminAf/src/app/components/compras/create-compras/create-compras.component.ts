@@ -33,8 +33,8 @@ export class CreateComprasComponent implements OnInit {
     fechaPago: '',
     total: 0,
     observacion: '',
-
   };
+
   public detalleCompras: any = [];
   public comprobantes: any = [];
   public clientes: any = {};
@@ -531,10 +531,44 @@ export class CreateComprasComponent implements OnInit {
       );
 
 
-
     });
 
+    console.log('this.compras', this.compras);
+    //aqui preparo los datos que iran a crear una compra nueva
+    this._comprasService.crear_compra(this.compras, this.token).subscribe(
+      response => {
+        if (response.data != undefined) {
+          console.log('response.data', response.data);
 
+          //aqui agrego el idcompra de la compra recien creada a cada detalle de compra
+          this.detalleCompras.idCompra = response.data;
+          console.log('this.detalleCompras', this.detalleCompras);
+
+
+          this._comprasService.crear_detalle_compras_idcompra(this.detalleCompras, this.token).subscribe(
+            response => {
+              if (response.data != undefined) {
+                console.log('response.data', response.data);
+                iziToast.show({
+                  title: 'SUCCESS',
+                  titleColor: '#1DC74C',
+                  color: '#FFF',
+                  class: 'text-success',
+                  position: 'topRight',
+                  message: 'El detalle de la compra se registró correctamente.'
+                });
+              }
+            }, error => {
+              console.log(error);
+            }
+          );
+        }
+
+      }
+      ,error=>{
+        console.log(error);
+      }
+    );
   }
 
 }
