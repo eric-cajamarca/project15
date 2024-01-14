@@ -39,8 +39,11 @@ const obtener_detalle_compras_idcompra = async (req, res) => {
 
 const crear_detalle_compras_idcompra = async (req, res) => {
     
-    const { idEmpresa, idSucursal, idCompra, cantidad, idProducto, idPresentacion, pUnitario, total, idUsuario } = req.body;
+    const { idSucursal, idCompra, cantidad, idProducto, idPresentacion, pUnitario, total } = req.body;
     console.log('crear_detalle_compras_idcompra: ' , req.body);
+
+    const idUsuario = req.user.sub;
+    const idEmpresa = req.user.empresa;
 
     if (req.user) {
         if (req.user.rol == 'Administrador') {

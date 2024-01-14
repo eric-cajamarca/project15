@@ -460,10 +460,12 @@ const obtener_correlativos_empresa = async (req, res) => {
 }
 
 const editar_correlativos_empresa = async (req, res) => {
-    const numero = req.params.id;
+    const idCorrelativo= req.params.id;
+    const { numero } = req.body;
 
     const idEmpresa = req.user.empresa;
 
+    console.log('editar_correlativos_empresa ', numero);
     if (req.user) {
         if (req.user.rol == 'Administrador') { 
 
@@ -471,9 +473,10 @@ const editar_correlativos_empresa = async (req, res) => {
                 let pool = await sql.connect(dbConfig);
                 let datoEditado = await pool
                 .request()
-                .input("idEmpresa", sql.UniqueIdentifier, idEmpresa)
+                .input("idCorrelativo", sql.Int, idCorrelativo)
                 .input("numero", sql.Int, numero)
-                .query("UPDATE Correlativos SET numero = @numero WHERE idEmpresa = @idEmpresa");
+                .query("UPDATE Correlativos SET numero = @numero WHERE idCorrelativo = @idCorrelativo");
+                
                 res.status(200).send({ message: 'Correlativo editado correctamente', data: datoEditado.rowsAffected });
             } catch (error) {
                 console.log('obterner correlativos error: ' + error);

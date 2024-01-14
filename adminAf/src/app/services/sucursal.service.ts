@@ -75,7 +75,7 @@ export class SucursalService {
     return this._http.post(this.url+'stocksucursal',stock,{headers:headers});
   }
 
-  editar_stock_sucursal(token:any,id:any,stock:any):Observable<any>{
+  editar_stock_sucursal(id:any,stock:any, token:any):Observable<any>{
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.put(this.url+'stocksucursal/'+id,stock,{headers:headers});
   }
