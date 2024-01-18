@@ -1,3 +1,25 @@
+
+--inserto un nuevo registro con el idproducto creado
+-- Crear un trigger AFTER INSERT
+--drop trigger trgAfterInsertProductos
+CREATE TRIGGER trgAfterInsertProductos
+ON Productos
+AFTER INSERT
+AS
+BEGIN
+    -- Insertar un nuevo registro en la tabla PreciosV con los valores predeterminados
+    INSERT INTO PreciosV (idProducto, cUnitario, mayorista, cliente, transeunte)
+    SELECT idProducto, inserted.cUnitario, 0.0, 0.0, 0.0 -- Puedes ajustar el valor del idUsuario según tu lógica
+    FROM inserted;
+END;
+
+select * from preciosV
+select * from Productos
+
+
+
+
+
 --disminuyo la cantidad vendida en stocksucursal
 --drop trigger TR_DescuentoStockSucursal
 

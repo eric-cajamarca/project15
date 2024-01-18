@@ -28,4 +28,8 @@ api.delete('/borradorcompras/:id',auth.auth, comprasController.eliminar_borrador
 api.get('/correlativos',auth.auth, comprasController.obtener_correlativos_empresa);
 api.put('/correlativos/:id',auth.auth, comprasController.editar_correlativos_empresa);
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+//comprobnates
+api.get('/comprasCliente/:id',auth.auth, comprasController.buscar_comprobante_idCliente);
+
 module.exports = api;

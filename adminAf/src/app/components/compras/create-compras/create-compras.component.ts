@@ -64,10 +64,11 @@ export class CreateComprasComponent implements OnInit {
     categoria: {},
     presentacion: {},
     sucursal: {},
-    useCorrelativo: false
+    useCorrelativo: false,
+    ubicacion: '',
   };
-  public correlativo:any = {};
-  
+  public correlativo: any = '';
+
 
   public token: any;
 
@@ -324,7 +325,45 @@ export class CreateComprasComponent implements OnInit {
     }
   }
 
+  onInputChangesCompCompras() {
+    this.compras.compCompra = this.compras.serie + '-' + this.compras.numero;
+    console.log('ejecuto una funcion onInputChangesCompCompras');
+    console.log('this.compras.compCompra', this.compras.compCompra);
+    console.log('this.compras.idCliente', this.compras.idCliente);
 
+    let idCliente = {};
+    idCliente = this.compras.idCliente;
+
+    this._comprasService.buscar_comprobante_idCliente(idCliente, this.token).subscribe(
+      response => {
+        if (response.data != undefined) {
+          console.log('response.data', response.data);
+
+          //quiero buscar this.compras.compCompra en response.data y si existe mostrar un mensaje que el comprobante ya existe
+          const selectedObject = response.data.find((item: any) => item.compCompra == this.compras.compCompra);
+          console.log('selectedObject', selectedObject);
+          if (selectedObject) {
+            iziToast.show({
+              title: 'ERROR',
+              titleColor: '#FF0000',
+              color: '#FFF',
+              class: 'text-danger',
+              position: 'topRight',
+              message: 'El comprobante ya existe.'
+            });
+            this.compras.numero = '';
+          }
+          
+          
+
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+  }
 
   onSelectPresentacion(selectedValue: any) {
 
@@ -484,6 +523,14 @@ export class CreateComprasComponent implements OnInit {
 
   }
 
+  buscarFactura() {
+    this.compras.compCompra = this.compras.serie + '-' + this.compras.numero;
+    this.compras.idCliente = this.clientes.idCliente;
+
+    
+  }
+
+
   registrarCompras() {
 
     this.compras.compCompra = this.compras.serie + '-' + this.compras.numero;
@@ -493,13 +540,166 @@ export class CreateComprasComponent implements OnInit {
     this._comprasService.crear_compra(this.compras, this.token).subscribe(
       response => {
         if (response.data != undefined) {
-          console.log('response.data', response.data);
-
           //aqui agrego el idcompra de la compra recien creada a cada detalle de compra
           this.idCompra = response.data;
           console.log('this.idCompra', this.idCompra);
 
-          
+
+          //una vez registrada la compra prepato para registrar los productos y el detalle de compras
+
+          this.nuevoProducto = {};
+          this.nuevoDetalleCompra = {};
+          //aqui preparo los datos que iran a crear un producto nuevo
+          this.detalleCompras.forEach((element: any) => {
+            this.nuevoProducto.idProducto = element.idProducto;
+            this.nuevoProducto.Codigo = element.codigo;
+            this.nuevoProducto.idCategoria = element.idCategoria;
+            this.nuevoProducto.descripcion = element.descripcion;
+            this.nuevoProducto.idPresentacion = element.idPresentacion;
+            this.nuevoProducto.cUnitario = element.cUnitario;
+            this.nuevoProducto.fProduccion = element.fProduccion;
+            this.nuevoProducto.fVencimiento = element.fVencimiento;
+            this.nuevoProducto.cantidad = element.cantidad;
+            this.nuevoProducto.facturar = 'SI';
+
+            this.nuevoProducto.idSucursal = element.idSucursal;
+            this.nuevoProducto.ubicacion = element.ubicacion;
+
+
+            // .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
+            //           .input('idSucursal', sql.UniqueIdentifier, idSucursal)
+            //           .input('idCompra', sql.UniqueIdentifier, idCompra)
+            //           .input('cantidad', sql.Decimal, cantidad)
+            //           .input('idProducto', sql.UniqueIdentifier, idProducto)
+            //           .input('idPresentacion', sql.Int, idPresentacion)
+            //           .input('pUnitario', sql.Decimal, pUnitario)
+            //           .input('total', sql.Decimal, total)
+            //           .input('idUsuario', sql.UniqueIdentifier, idUsuario)}
+
+            this.nuevoDetalleCompra.idSucursal = element.idSucursal;
+            this.nuevoDetalleCompra.idCompra = this.idCompra;
+            this.nuevoDetalleCompra.cantidad = element.cantidad;
+
+            this.nuevoDetalleCompra.idPresentacion = element.idPresentacion;
+            this.nuevoDetalleCompra.pUnitario = element.cUnitario;
+            this.nuevoDetalleCompra.total = element.subtotal;
+
+            console.log('this.nuevoProducto', this.nuevoProducto);
+
+            //aqui identifico si el producto no existe, entonces lo creo y si existe, solo actualizo el stock
+            if (element.idProducto == undefined) {
+              console.log('el producto es nuevo');
+              //como el codigo es nuevo, entonces creo un producto nuevo
+              this._productoService.crear_producto(this.nuevoProducto, this.token).subscribe(
+                response => {
+                  if (response.data != undefined) {
+                    iziToast.show({
+                      title: 'SUCCESS',
+                      titleColor: '#1DC74C',
+                      color: '#FFF',
+                      class: 'text-success',
+                      position: 'topRight',
+                      message: 'El producto se registró correctamente.'
+                    });
+                  }
+                  // this.nuevoProducto = {};
+                  this.nuevoProducto.idProducto = response.data;
+                  console.log('this.nuevoProducto', this.nuevoProducto);
+
+                  //aqui preparo los datos que iran a crear un stock nuevo      
+                  console.log('aqui preparo los datos que iran this.nuevodetalleCompras', this.detalleCompras);
+                  this._sucursalService.crear_stock_sucursal_idEmpresa(this.nuevoProducto, this.token).subscribe(
+                    response => {
+                      if (response.data != undefined) {
+                        iziToast.show({
+                          title: 'SUCCESS',
+                          titleColor: '#1DC74C',
+                          color: '#FFF',
+                          class: 'text-success',
+                          position: 'topRight',
+                          message: 'El stock se registró correctamente.'
+                        });
+                      }
+                    },
+                    error => {
+                      console.log(error);
+                    }
+                  );
+
+
+
+                  console.log(' this.nuevoDetalleCompra listo para el backend', this.nuevoDetalleCompra);
+                  console.log('idcompra antes de detalle compra', this.idCompra);
+
+                  this.nuevoDetalleCompra.idProducto = this.nuevoProducto.idProducto;
+
+                  this._comprasService.crear_detalle_compras_idcompra(this.nuevoDetalleCompra, this.token).subscribe(
+                    response => {
+                      if (response.data != undefined) {
+                        iziToast.show({
+                          title: 'SUCCESS',
+                          titleColor: '#1DC74C',
+                          color: '#FFF',
+                          class: 'text-success',
+                          position: 'topRight',
+                          message: 'El detalle de compra se registró correctamente.'
+                        });
+                      }
+                    },
+                    error => {
+                      console.log(error);
+                    }
+                  );
+
+
+                },
+                error => {
+                  console.log(error);
+                }
+              );
+
+
+
+            } else {
+              //como el codigo ya existe, entonces actualizo el producto y stock
+              this._productoService.actualizar_producto(this.nuevoProducto.idProducto, this.nuevoProducto, this.token).subscribe(
+                response => {
+                  if (response.data != undefined) {
+                    iziToast.show({
+                      title: 'SUCCESS',
+                      titleColor: '#1DC74C',
+                      color: '#FFF',
+                      class: 'text-success',
+                      position: 'topRight',
+                      message: 'El producto se actualizó correctamente.'
+                    });
+                  }
+                },
+                error => {
+                  console.log(error);
+                }
+              );
+
+              this._sucursalService.editar_stock_sucursal(this.nuevoProducto.idProducto, this.nuevoProducto, this.token).subscribe(
+                response => {
+                  if (response.data != undefined) {
+                    iziToast.show({
+                      title: 'SUCCESS',
+                      titleColor: '#1DC74C',
+                      color: '#FFF',
+                      class: 'text-success',
+                      position: 'topRight',
+                      message: 'El stock se actualizó correctamente.'
+                    });
+                  }
+                },
+                error => {
+                  console.log(error);
+                }
+              );
+            }
+
+          });
 
 
 
@@ -512,166 +712,10 @@ export class CreateComprasComponent implements OnInit {
       }
     );
 
-    //una vez registrada la compra prepato para registrar los productos y el detalle de compras
-
-
-    this.nuevoProducto = {};
-    this.nuevoDetalleCompra = {};
-    //aqui preparo los datos que iran a crear un producto nuevo
-    this.detalleCompras.forEach((element: any) => {
-      this.nuevoProducto.idProducto = element.idProducto;
-      this.nuevoProducto.Codigo = element.codigo;
-      this.nuevoProducto.idCategoria = element.idCategoria;
-      this.nuevoProducto.descripcion = element.descripcion;
-      this.nuevoProducto.idPresentacion = element.idPresentacion;
-      this.nuevoProducto.cUnitario = element.cUnitario;
-      this.nuevoProducto.fProduccion = element.fProduccion;
-      this.nuevoProducto.fVencimiento = element.fVencimiento;
-      this.nuevoProducto.cantidad = element.cantidad;
-      this.nuevoProducto.facturar = 'SI';
-
-      this.nuevoProducto.idSucursal = element.idSucursal;
-      this.nuevoProducto.ubicacion = element.ubicacion;
-
-
-      // .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
-      //           .input('idSucursal', sql.UniqueIdentifier, idSucursal)
-      //           .input('idCompra', sql.UniqueIdentifier, idCompra)
-      //           .input('cantidad', sql.Decimal, cantidad)
-      //           .input('idProducto', sql.UniqueIdentifier, idProducto)
-      //           .input('idPresentacion', sql.Int, idPresentacion)
-      //           .input('pUnitario', sql.Decimal, pUnitario)
-      //           .input('total', sql.Decimal, total)
-      //           .input('idUsuario', sql.UniqueIdentifier, idUsuario)}
-      
-      this.nuevoDetalleCompra.idSucursal = element.idSucursal;
-      this.nuevoDetalleCompra.idCompra = this.idCompra;
-      this.nuevoDetalleCompra.cantidad = element.cantidad;
-      
-      this.nuevoDetalleCompra.idPresentacion = element.idPresentacion;
-      this.nuevoDetalleCompra.pUnitario = element.cUnitario;
-      this.nuevoDetalleCompra.total = element.subtotal;
-
-      console.log('this.nuevoProducto', this.nuevoProducto);
-
-      //aqui identifico si el producto no existe, entonces lo creo y si existe, solo actualizo el stock
-      if (element.idProducto == undefined) {
-
-        //como el codigo es nuevo, entonces creo un producto nuevo
-        this._productoService.crear_producto(this.nuevoProducto, this.token).subscribe(
-          response => {
-            if (response.data != undefined) {
-              iziToast.show({
-                title: 'SUCCESS',
-                titleColor: '#1DC74C',
-                color: '#FFF',
-                class: 'text-success',
-                position: 'topRight',
-                message: 'El producto se registró correctamente.'
-              });
-            }
-            // this.nuevoProducto = {};
-            this.nuevoProducto.idProducto = response.data;
-            console.log('this.nuevoProducto', this.nuevoProducto);
-
-            //aqui preparo los datos que iran a crear un stock nuevo      
-            console.log('aqui preparo los datos que iran this.nuevodetalleCompras', this.detalleCompras);
-            this._sucursalService.crear_stock_sucursal_idEmpresa(this.nuevoProducto, this.token).subscribe(
-              response => {
-                if (response.data != undefined) {
-                  iziToast.show({
-                    title: 'SUCCESS',
-                    titleColor: '#1DC74C',
-                    color: '#FFF',
-                    class: 'text-success',
-                    position: 'topRight',
-                    message: 'El stock se registró correctamente.'
-                  });
-                }
-              },
-              error => {
-                console.log(error);
-              }
-            );
-
-
-
-            console.log(' this.nuevoDetalleCompra listo para el backend', this.nuevoDetalleCompra);
-            console.log('idcompra antes de detalle compra', this.idCompra);
-
-            this.nuevoDetalleCompra.idProducto = this.nuevoProducto.idProducto;
-            
-            this._comprasService.crear_detalle_compras_idcompra(this.nuevoDetalleCompra, this.token).subscribe(
-              response => {
-                if (response.data != undefined) {
-                  iziToast.show({
-                    title: 'SUCCESS',
-                    titleColor: '#1DC74C',
-                    color: '#FFF',
-                    class: 'text-success',
-                    position: 'topRight',
-                    message: 'El detalle de compra se registró correctamente.'
-                  });
-                }
-              },
-              error => {
-                console.log(error);
-              }
-            );
-
-
-          },
-          error => {
-            console.log(error);
-          }
-        );
-
-
-
-      } else {
-        //como el codigo ya existe, entonces actualizo el producto y stock
-        this._productoService.actualizar_producto(this.nuevoProducto.idProducto, this.nuevoProducto, this.token).subscribe(
-          response => {
-            if (response.data != undefined) {
-              iziToast.show({
-                title: 'SUCCESS',
-                titleColor: '#1DC74C',
-                color: '#FFF',
-                class: 'text-success',
-                position: 'topRight',
-                message: 'El producto se actualizó correctamente.'
-              });
-            }
-          },
-          error => {
-            console.log(error);
-          }
-        );
-
-        this._sucursalService.editar_stock_sucursal(this.nuevoProducto.idProducto, this.nuevoProducto, this.token).subscribe(
-          response => {
-            if (response.data != undefined) {
-              iziToast.show({
-                title: 'SUCCESS',
-                titleColor: '#1DC74C',
-                color: '#FFF',
-                class: 'text-success',
-                position: 'topRight',
-                message: 'El stock se actualizó correctamente.'
-              });
-            }
-          },
-          error => {
-            console.log(error);
-          }
-        );
-      }
-
-    });
-
+      console.log('this.correlativo.numero', this.correlativo);
 
     //despues de agregar todos los productos, quiero actualizar el correlativo
-    this._comprasService.editar_correlativos_empresa(this.correlativo.idCorrelativo, this.correlativo.numero, this.token).subscribe(
+    this._comprasService.editar_correlativos_empresa(this.correlativo.idCorrelativo, this.correlativo, this.token).subscribe(
       response => {
         if (response.data != undefined) {
           iziToast.show({

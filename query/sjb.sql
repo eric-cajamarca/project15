@@ -367,14 +367,15 @@ select * from Productos
 select * from UsuarioWeb
 go
 
+--drop table PreciosV
 create table PreciosV
 (
 idPreciosV int identity (1,1) not null,
 idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
+cUnitario decimal(18,4) null,
 mayorista decimal(18,4) null,
 cliente decimal(18,4) null,
 transeunte decimal(18,4) null,
-idUSuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 
 )
 go
@@ -390,6 +391,7 @@ VALUES
 );
 go
 select * from PreciosV
+select * from Productos
 --create table HistorialProductos
 --(
 --idHistorialP int identity(1,1) primary key not null,
@@ -652,6 +654,13 @@ VALUES
 	'9B697C80-FFE8-4C91-9362-98FE4D5221D8'--id usuario
 );
 go
+select * from compras
+SELECT * FROM Productos
+select * from PreciosV
+select * from Correlativos
+--UPDATE Correlativos SET numero = 500050 WHERE idCorrelativo = 1;
+
+
 select * from DetalleCompras
 SELECT * FROM StockSucursal
 go

@@ -99,7 +99,7 @@ const crear_producto = async (req, res) => {
     const idProducto = uuidv4();
     const idEmpresa = req.user.empresa;
     const idUsuario = req.user.sub;
-    console.log('idUsuario ', idUsuario);
+    //console.log('idUsuario ', idUsuario);
    
     //obtener fecha actual
     var hoy = new Date();
@@ -133,10 +133,13 @@ const crear_producto = async (req, res) => {
                     .input("FIngreso", sql.DateTime, FIngreso)
                     .query("INSERT INTO Productos VALUES (@idProducto, @idEmpresa, @Codigo, @idCategoria, @descripcion, @idPresentacion, @cUnitario, @fProduccion, @fVencimiento, @alertaMinimo, @alertaMaximo, @VecesVendidas, @facturar, @idUsuario, @FIngreso)");
 
-                    console.log('producto creado ', productos.rowsAffected);
-                    if(productos.rowsAffected == 1){
+                    
+                    //if(productos.rowsAffected == 1){
                         res.status(200).send({ data: idProducto });
-                    }
+                    // }else{
+                    //     res.status(500).send({ message: 'Error al crear los productos', data: undefined });
+                    // }
+                    console.log('producto creado ', productos.recordset);
                 
             } catch (error) {
                 console.log('crear productos error: ' + error);
@@ -144,10 +147,12 @@ const crear_producto = async (req, res) => {
             }
 
         } else {
+            console.log('no tiene permisos');
             res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
         }
     }
     else {
+        console.log('no tiene acceso');
         res.status(500).send({ message: 'No Access', data: undefined });
     }
 
