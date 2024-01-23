@@ -163,6 +163,8 @@ const actualizar_producto = async (req, res) => {
     const { idProducto } = req.params.id;
     const { Codigo, idCategoria, descripcion, idPresentacion, cUnitario, fProduccion, fVencimiento, alertaMinimo, alertaMaximo, VecesVendidas, facturar, idUsuario, FIngreso } = req.body;
 
+        console.log('actualizar producto ', req.body);
+
     if (req.user) {
         if (req.user.rol == 'Administrador') {
             try {
@@ -177,14 +179,7 @@ const actualizar_producto = async (req, res) => {
                     .input("cUnitario", sql.Decimal, cUnitario)
                     .input("fProduccion", sql.VarChar, fProduccion)
                     .input("fVencimiento", sql.VarChar, fVencimiento)
-                    .input("alertaMinimo", sql.Decimal, alertaMinimo)
-                    .input("alertaMaximo", sql.Decimal, alertaMaximo)
-                    .input("VecesVendidas", sql.Int, VecesVendidas)
-                    .input("facturar", sql.VarChar, facturar)
-                    .input("idUsuario", sql.UniqueIdentifier, idUsuario)
-                    .input("FIngreso", sql.DateTime, FIngreso)
-                    .query("UPDATE Productos SET Codigo = @Codigo, idCategoria = @idCategoria, descripcion = @descripcion, idPresentacion = @idPresentacion, cUnitario = @cUnitario, fProduccion = @fProduccion, fVencimiento = @fVencimiento, alertaMinimo = @alertaMinimo, alertaMaximo = @alertaMaximo, VecesVendidas = @VecesVendidas, facturar = @facturar, idUsuario = @idUsuario, FIngreso = @FIngreso WHERE idProducto = @idProducto");
-
+                    .query("UPDATE Productos SET Codigo = @Codigo, idCategoria = @idCategoria, descripcion = @descripcion, idPresentacion = @idPresentacion, cUnitario = @cUnitario, fProduccion = @fProduccion, fVencimiento = @fVencimiento WHERE idProducto = @idProducto");
 
                 res.status(200).send({ data: productos.recordset });
             } catch (error) {

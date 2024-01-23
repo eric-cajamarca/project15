@@ -274,11 +274,14 @@ const crear_stock_sucursal_idEmpresa = async function (req, res) {
 
 const editar_stock_sucursal = async function (req, res) {
 
-    const { idEmpresa, idSucursal, idProducto, cantidad, ubicacion } = req.body;
+    const { idEmpresa, idSucursal, idStockSucursal, cantidad, ubicacion } = req.body;
     
-    const idUsuario = req.user.idUsuario;
+    const idUsuario = req.user.sub;
 
-    const idStockSucursal = req.params.id;
+    const idProducto = req.params.id;
+
+    console.log('editar_stock_sucursal: ', req.body);
+    console.log('idProducto: ', idProducto);
 
     if (req.user) {
         if (req.user.rol == 'Administrador') {

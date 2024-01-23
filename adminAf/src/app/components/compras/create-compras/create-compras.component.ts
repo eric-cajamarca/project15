@@ -12,6 +12,7 @@ import { TablasSunatService } from 'src/app/services/tablas-sunat.service';
 
 declare var iziToast: any;
 declare var $: any;
+const FORMATO_FECHA = 'dd/MM/yyyy';
 
 @Component({
   selector: 'app-create-compras',
@@ -66,9 +67,11 @@ export class CreateComprasComponent implements OnInit {
     sucursal: {},
     useCorrelativo: false,
     ubicacion: '',
+    fproduccion: new Date(),
+    fvencimiento: new Date(),
   };
   public correlativo: any = '';
-
+  // FORMATO_FECHA = FORMATO_FECHA;
 
   public token: any;
 
@@ -273,27 +276,31 @@ export class CreateComprasComponent implements OnInit {
     this.compras.total = this.compras.total - subtotal;
   }
 
-  seleccionar(idx: any) {
+  seleccionar(idx: number) {
     //quiero agregar a this.nuevoProducto el objeto seleccionado
-    this.prodSelecionado = this.stockSucursales[idx];
-    console.log('this.prodSelecionado', this.prodSelecionado);
+    if (idx >= 0 && idx < this.stockSucursales.length) {
 
-    this.nuevoProducto.idProducto = this.prodSelecionado.idProducto;
-    this.nuevoProducto.codigo = this.prodSelecionado.producto.Codigo;
-    this.nuevoProducto.descripcion = this.prodSelecionado.producto.descripcion;
-    this.nuevoProducto.cUnitario = this.prodSelecionado.producto.cUnitario;
-    this.nuevoProducto.idCategoria = this.prodSelecionado.producto.idCategoria;
-    this.nuevoProducto.idPresentacion = this.prodSelecionado.producto.idPresentacion;
-    this.nuevoProducto.idSucursal = this.prodSelecionado.idSucursal;
-    this.nuevoProducto.cantidad = 0;
-    this.nuevoProducto.ubicacion = this.prodSelecionado.ubicacion;
+      this.prodSelecionado = this.stockSucursales[idx];
+      console.log('this.prodSelecionado', this.prodSelecionado);
 
-    this.nuevoProducto.fProduccion = this.prodSelecionado.producto.fProduccion.toString().substring(0, 10);
-    //quiero convertir la fecha de produccion a string en formato yyyy-mm-dd
+      this.nuevoProducto.idProducto = this.prodSelecionado.idProducto;
+      this.nuevoProducto.codigo = this.prodSelecionado.producto.Codigo;
+      this.nuevoProducto.descripcion = this.prodSelecionado.producto.descripcion;
+      this.nuevoProducto.cUnitario = this.prodSelecionado.producto.cUnitario;
+      this.nuevoProducto.idCategoria = this.prodSelecionado.producto.idCategoria;
+      this.nuevoProducto.idPresentacion = this.prodSelecionado.producto.idPresentacion;
+      this.nuevoProducto.idSucursal = this.prodSelecionado.idSucursal;
+      this.nuevoProducto.cantidad = 0;
+      this.nuevoProducto.ubicacion = this.prodSelecionado.ubicacion;
+
+      this.nuevoProducto.fProduccion = this.prodSelecionado.producto.fProduccion;
+      //quiero convertir la fecha de produccion a string en formato yyyy-mm-dd
 
 
 
-    this.nuevoProducto.fVencimiento = this.prodSelecionado.producto.fVencimiento;
+      this.nuevoProducto.fVencimiento = this.prodSelecionado.producto.fVencimiento;
+    }
+
 
 
 
@@ -353,8 +360,8 @@ export class CreateComprasComponent implements OnInit {
             });
             this.compras.numero = '';
           }
-          
-          
+
+
 
         }
       },
@@ -416,6 +423,14 @@ export class CreateComprasComponent implements OnInit {
   agregarProductoNuevo() {
 
     //quiero agregar la condicion di idProducto, idpresentacion, idcategoria y idsucursal no estan vacios
+
+    if (!this.nuevoProducto.fProduccion) {
+      this.nuevoProducto.fProduccion = undefined;
+    }
+
+    if (!this.nuevoProducto.fVencimiento) {
+      this.nuevoProducto.fVencimiento = undefined;
+    }
 
     if (this.nuevoProducto.idPresentacion != undefined && this.nuevoProducto.idCategoria != undefined && this.nuevoProducto.idSucursal != undefined) {
       this.detalleCompras.push(this.nuevoProducto);
@@ -527,7 +542,7 @@ export class CreateComprasComponent implements OnInit {
     this.compras.compCompra = this.compras.serie + '-' + this.compras.numero;
     this.compras.idCliente = this.clientes.idCliente;
 
-    
+
   }
 
 
@@ -651,6 +666,27 @@ export class CreateComprasComponent implements OnInit {
                     }
                   );
 
+                  console.log('this.correlativo.numero', this.correlativo);
+
+                  //despues de agregar todos los productos, quiero actualizar el correlativo
+                  this._comprasService.editar_correlativos_empresa(this.correlativo.idCorrelativo, this.correlativo, this.token).subscribe(
+                    response => {
+                      if (response.data != undefined) {
+                        iziToast.show({
+                          title: 'SUCCESS',
+                          titleColor: '#1DC74C',
+                          color: '#FFF',
+                          class: 'text-success',
+                          position: 'topRight',
+                          message: 'El correlativo se actualizó correctamente.'
+                        });
+                      }
+                    },
+                    error => {
+                      console.log(error);
+                    }
+                  );
+
 
                 },
                 error => {
@@ -712,26 +748,7 @@ export class CreateComprasComponent implements OnInit {
       }
     );
 
-      console.log('this.correlativo.numero', this.correlativo);
 
-    //despues de agregar todos los productos, quiero actualizar el correlativo
-    this._comprasService.editar_correlativos_empresa(this.correlativo.idCorrelativo, this.correlativo, this.token).subscribe(
-      response => {
-        if (response.data != undefined) {
-          iziToast.show({
-            title: 'SUCCESS',
-            titleColor: '#1DC74C',
-            color: '#FFF',
-            class: 'text-success',
-            position: 'topRight',
-            message: 'El correlativo se actualizó correctamente.'
-          });
-        }
-      },
-      error => {
-        console.log(error);
-      }
-    );
   }
 
 }

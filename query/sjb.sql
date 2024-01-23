@@ -49,6 +49,7 @@ select * from DireccionEmpresa
 go
 
 --drop table Rol
+--truncate table rol
 create table Rol
 (
 idRol UNIQUEIDENTIFIER primary key NOT NULL,
@@ -94,7 +95,7 @@ VALUES
     'Ortiz Guevara',
 	'ericortizguevara@gmail.com',
 	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
-    '840DE92F-136E-4980-8B8B-057A62693A90', -- Utiliza directamente el identificador único
+    'FA018CD9-F8ED-428B-96AD-EE97313E9896', -- Utiliza directamente el identificador único
     1,
     GETDATE()
 );
@@ -426,11 +427,12 @@ VALUES
 	'42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
     'Fenix',
      'MAr abierto',
-	'082DC0B9-56AC-408D-BDD0-2AECF2F4443C',--id usuario
+	'5C4491C7-D15D-4EAE-9610-3F999EA40F56',--id usuario
     GETDATE()
 );
 go
 select * from Sucursal
+select * from UsuarioWeb
 go
 
 
@@ -564,7 +566,7 @@ create table Compras
 (
 idcompra UNIQUEIDENTIFIER primary key not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-compCompra char(13) not null,
+compCompra varchar(13) not null,
 idComprobante int not null,
 serie varchar(4) not null,
 numero varchar (8) not null,
@@ -619,7 +621,7 @@ VALUES
 );
 go
 select * from compras
-
+select * from Productos
 
 
 --drop table DetalleCompras

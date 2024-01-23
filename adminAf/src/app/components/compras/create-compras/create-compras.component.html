@@ -182,11 +182,11 @@
                                     <th>Código</th>
                                     <th>Categoría</th>
                                     <th>Producto</th>
-                                    <th>Presentación</th>
+                                    <th>Present.</th>
                                     <th>Cantidad</th>
-                                    <th>F.Producción</th>
-                                    <th>F.Vencimiento</th>
                                     <th>C.Unitario</th>
+                                    <th>F.Producción</th>
+                                    <th>F.Vencimiento</th>  
                                     <th>Sucursal</th>
                                     <th>Acción</th>
                                 </tr>
@@ -198,12 +198,13 @@
                                     <th scope="row">{{item.producto.Codigo}}</th>
                                     <td>{{item.categoria.Descripcion}} </td>
                                     <td>{{item.producto.descripcion}} </td>
-                                    <td>{{item.presentacion.codigo}}</td>
-                                    <td>{{item.cantidad}}</td>
-                                    <td>{{item.producto.fProduccion}} </td>
-                                    <td>{{item.producto.fVencimiento}} </td>
-                                    <td>{{item.producto.cUnitario}} </td>
-                                    <td>{{item.sucursal.nombre}} </td>
+                                    <td style="width: 60px; text-align: center;">{{item.presentacion.codigo}}</td>
+                                    <td style="width: 60px; text-align: right;">{{item.cantidad}}</td>
+                                    <td style="width: 60px; text-align: right;">{{item.producto.cUnitario | number:'1.2-2'}} </td>
+                                    <td style="width: 60px; text-align: center;">{{item.producto.fProduccion}} </td>
+                                    <td style="width: 60px; text-align: center;">{{item.producto.fVencimiento}} </td>
+                                    
+                                    <td style="width: 60px; text-align: center;">{{item.sucursal.nombre}} </td>
                                     <td>
                                         <a style="cursor: pointer;" class="text-primary"
                                             (click)="seleccionar(idx)">[Add]</a>
@@ -337,14 +338,15 @@
                                 <th>Código</th>
                                 <th>Categoría</th>
                                 <th>Producto</th>
-                                <th>Id Presentación</th>
+                                <th>Present.</th>
                                 <th>Cantidad</th>
-                                <th>Precio Unitario</th>
+                                <th>P.Unitario</th>
                                 <th>Sub Total</th>
-                                <th>Fecha de Producción</th>
-                                <th>Fecha de Vencimiento</th>
+                                <th>F.Producción</th>
+                                <th>F.Vencimiento</th>
 
                                 <th>Sucursal</th>
+                                <th>Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -352,14 +354,14 @@
                                 <td>{{item.codigo}}</td>
                                 <td>{{item.categoria.Descripcion}}</td>
                                 <td>{{item.descripcion}}</td>
-                                <td>{{item.presentacion.Descripcion}}</td>
-                                <td>{{item.cantidad}}</td>
-                                <td>{{item.cUnitario}} </td>
-                                <td>{{item.subtotal}} </td>
-                                <td>{{item.fProduccion}} </td>
-                                <td>{{item.fVencimiento}} </td>
+                                <td style="width: 60px; text-align: center;">{{item.presentacion.Descripcion}}</td>
+                                <td style="width: 60px; text-align: right;">{{item.cantidad}}</td>
+                                <td style="width: 60px; text-align: right;">{{item.cUnitario | number:'1.2-2'}} </td>
+                                <td style="width: 60px; text-align: right;">{{item.subtotal | number:'1.2-2'}} </td>
+                                <td style="width: 60px; text-align: center;">{{item.fProduccion}} </td>
+                                <td style="width: 60px; text-align: center;">{{item.fVencimiento}} </td>
 
-                                <td>{{item.sucursal.nombre}}</td>
+                                <td style="width: 60px; text-align: center;">{{item.sucursal.nombre}}</td>
                                 <td>
                                     <a style="cursor: pointer;" class="text-danger"
                                         (click)="quitar(idx,item.subtotal)">[Delete]</a>
