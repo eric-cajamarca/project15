@@ -291,7 +291,10 @@ export class CreateComprasComponent implements OnInit {
       this.nuevoProducto.idPresentacion = this.prodSelecionado.producto.idPresentacion;
       this.nuevoProducto.idSucursal = this.prodSelecionado.idSucursal;
       this.nuevoProducto.cantidad = 0;
+      this.nuevoProducto.cantidadAnterior = this.prodSelecionado.cantidad;
       this.nuevoProducto.ubicacion = this.prodSelecionado.ubicacion;
+      this.nuevoProducto.idStockSucursal = this.prodSelecionado.idStockSucursal;
+      this.nuevoProducto.idEmpresa = this.prodSelecionado.idEmpresa;
 
       this.nuevoProducto.fProduccion = this.prodSelecionado.producto.fProduccion;
       //quiero convertir la fecha de produccion a string en formato yyyy-mm-dd
@@ -575,8 +578,10 @@ export class CreateComprasComponent implements OnInit {
             this.nuevoProducto.fProduccion = element.fProduccion;
             this.nuevoProducto.fVencimiento = element.fVencimiento;
             this.nuevoProducto.cantidad = element.cantidad;
+            this.nuevoProducto.cantidadAnterior = element.cantidadAnterior;
             this.nuevoProducto.facturar = 'SI';
-
+            this.nuevoProducto.idStockSucursal = element.idStockSucursal;
+            this.nuevoProducto.idEmpresa = element.idEmpresa;
             this.nuevoProducto.idSucursal = element.idSucursal;
             this.nuevoProducto.ubicacion = element.ubicacion;
 
@@ -666,28 +671,7 @@ export class CreateComprasComponent implements OnInit {
                     }
                   );
 
-                  console.log('this.correlativo.numero', this.correlativo);
-
-                  //despues de agregar todos los productos, quiero actualizar el correlativo
-                  this._comprasService.editar_correlativos_empresa(this.correlativo.idCorrelativo, this.correlativo, this.token).subscribe(
-                    response => {
-                      if (response.data != undefined) {
-                        iziToast.show({
-                          title: 'SUCCESS',
-                          titleColor: '#1DC74C',
-                          color: '#FFF',
-                          class: 'text-success',
-                          position: 'topRight',
-                          message: 'El correlativo se actualizó correctamente.'
-                        });
-                      }
-                    },
-                    error => {
-                      console.log(error);
-                    }
-                  );
-
-
+                  
                 },
                 error => {
                   console.log(error);
@@ -710,6 +694,7 @@ export class CreateComprasComponent implements OnInit {
                       message: 'El producto se actualizó correctamente.'
                     });
                   }
+                  console.log('response.data producto actualizado', response.data);
                 },
                 error => {
                   console.log(error);
@@ -748,7 +733,26 @@ export class CreateComprasComponent implements OnInit {
       }
     );
 
+    console.log('this.correlativo.numero', this.correlativo);
 
+                  //despues de agregar todos los productos, quiero actualizar el correlativo
+                  this._comprasService.editar_correlativos_empresa(this.correlativo.idCorrelativo, this.correlativo, this.token).subscribe(
+                    response => {
+                      if (response.data != undefined) {
+                        iziToast.show({
+                          title: 'SUCCESS',
+                          titleColor: '#1DC74C',
+                          color: '#FFF',
+                          class: 'text-success',
+                          position: 'topRight',
+                          message: 'El correlativo se actualizó correctamente.'
+                        });
+                      }
+                    },
+                    error => {
+                      console.log(error);
+                    }
+                  );
   }
 
 }

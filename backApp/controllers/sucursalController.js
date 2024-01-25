@@ -215,11 +215,11 @@ const obtener_stock_sucursales_idempresa = async function (req, res) {
                     .request()
                     .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
                     .query("SELECT * FROM StockSucursal WHERE idEmpresa = @idEmpresa");
-                    //quiero consultar todas las stockSucursales de una empresa uniendo las tablas Sucursales con inner join y productos con inner join
-                    //.query("SELECT * FROM StockSucursal inner join Sucursal on StockSucursal.idSucursal = Sucursal.idSucursal inner join Productos on StockSucursal.idProducto = Productos.idProducto WHERE StockSucursal.idEmpresa = @idEmpresa");
-                
-                    
-                    
+                //quiero consultar todas las stockSucursales de una empresa uniendo las tablas Sucursales con inner join y productos con inner join
+                //.query("SELECT * FROM StockSucursal inner join Sucursal on StockSucursal.idSucursal = Sucursal.idSucursal inner join Productos on StockSucursal.idProducto = Productos.idProducto WHERE StockSucursal.idEmpresa = @idEmpresa");
+
+
+
                 res.status(200).send({ data: stockSucursal.recordset });
             } catch (error) {
                 console.log('obterner stockSucursal error: ' + error);
@@ -274,14 +274,22 @@ const crear_stock_sucursal_idEmpresa = async function (req, res) {
 
 const editar_stock_sucursal = async function (req, res) {
 
-    const { idEmpresa, idSucursal, idStockSucursal, cantidad, ubicacion } = req.body;
-    
+    const { idEmpresa, idSucursal, idStockSucursal, cantidad, cantidadAnterior, ubicacion } = req.body;
+
     const idUsuario = req.user.sub;
 
     const idProducto = req.params.id;
 
+    console.log('cantidadAnterior: ', cantidadAnterior);
+    //quiero sumar la cantidad anterior con la cantidad que se va a editar
+    let cantidadTotal = parseInt(cantidadAnterior) + parseInt(cantidad);
+
+    //let cantidadTotal = cantidadAnterior + cantidad;
+
     console.log('editar_stock_sucursal: ', req.body);
     console.log('idProducto: ', idProducto);
+    console.log('cantidadTotal: ', cantidadTotal);
+
 
     if (req.user) {
         if (req.user.rol == 'Administrador') {
@@ -294,7 +302,7 @@ const editar_stock_sucursal = async function (req, res) {
                     .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
                     .input('idSucursal', sql.UniqueIdentifier, idSucursal)
                     .input('idProducto', sql.UniqueIdentifier, idProducto)
-                    .input('cantidad', sql.Decimal, cantidad)
+                    .input('cantidad', sql.Decimal, cantidadTotal)
                     .input('ubicacion', sql.VarChar, ubicacion)
                     .input('idUsuario', sql.UniqueIdentifier, idUsuario)
                     .query("UPDATE StockSucursal SET idEmpresa = @idEmpresa, idSucursal = @idSucursal, idProducto = @idProducto, cantidad = @cantidad, ubicacion = @ubicacion, fIngreso = GETDATE(), idUsuario = @idUsuario WHERE idStockSucursal = @idStockSucursal");

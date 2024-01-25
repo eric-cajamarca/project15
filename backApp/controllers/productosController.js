@@ -160,13 +160,14 @@ const crear_producto = async (req, res) => {
 }
 
 const actualizar_producto = async (req, res) => {
-    const { idProducto } = req.params.id;
-    const { Codigo, idCategoria, descripcion, idPresentacion, cUnitario, fProduccion, fVencimiento, alertaMinimo, alertaMaximo, VecesVendidas, facturar, idUsuario, FIngreso } = req.body;
+    const idProducto = req.params.id;
+    const { Codigo, idCategoria, descripcion, idPresentacion, cUnitario, fProduccion, fVencimiento } = req.body;
 
         console.log('actualizar producto ', req.body);
+        console.log('idProducto ', req.params.id)
 
     if (req.user) {
-        if (req.user.rol == 'Administrador') {
+        //if (req.user.rol == 'Administrador') {
             try {
                 let pool = await sql.connect(dbConfig);
                 let productos = await pool
@@ -180,15 +181,16 @@ const actualizar_producto = async (req, res) => {
                     .input("fProduccion", sql.VarChar, fProduccion)
                     .input("fVencimiento", sql.VarChar, fVencimiento)
                     .query("UPDATE Productos SET Codigo = @Codigo, idCategoria = @idCategoria, descripcion = @descripcion, idPresentacion = @idPresentacion, cUnitario = @cUnitario, fProduccion = @fProduccion, fVencimiento = @fVencimiento WHERE idProducto = @idProducto");
-
-                res.status(200).send({ data: productos.recordset });
+                    
+                console.log('productosresult ', productos.rowsAffected);
+                res.status(200).send({ data: productos.rowsAffected });
             } catch (error) {
                 console.log('actualizar productos error: ' + error);
-                res.status(500).send({ message: 'Error al actualizar los productos', data: undefined });
+                res.status(200).send({ message: 'Error al actualizar los productos', data: undefined });
             }
-        } else {
-            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
-        }
+        // } else {
+        //     res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+        // }
     } else {
         res.status(500).send({ message: 'No Access', data: undefined });
     }

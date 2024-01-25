@@ -365,6 +365,7 @@ VALUES
 );
 go
 select * from Productos
+SELECT * FROM StockSucursal
 select * from UsuarioWeb
 go
 
