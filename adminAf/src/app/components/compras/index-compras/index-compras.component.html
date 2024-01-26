@@ -1,30 +1,107 @@
-<p>index-compras works!</p>
+<app-top-nav></app-top-nav>
+<div class="container" style="background-color: white; margin-top: 20px; margin-bottom: 20px;">
+  <div class="card">
+    <div class="card-header">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Fecha</th>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Aquí se generará dinámicamente cada fila de la tabla -->
-        <!-- BEGIN: abpxx6d04wxr -->
-        <tr>
-            <td>1</td>
-            <td>2022-01-01</td>
-            <td>Producto 1</td>
-            <td>5</td>
+      <!-- Title -->
+      <h4 class="card-header-title">
+        Mostrando todas tus compras
+      </h4>
+
+      <button class="btn btn-primary" [routerLink]="['/compras/create']" routerLinkActive="active"
+                  style="text-align: right; margin-bottom: 20px;">crear nueva compra</button>
+    </div>
+
+    
+
+    <div class="card-body">
+      <div class="input-group input-group-merge">
+        <input type="text" class="form-control form-control-appended" placeholder="Buscador general" name="filtro"
+          [(ngModel)]="filtro">
+        <div class="input-group-append">
+          <button class="btn btn-primary" (click)="filtrar()">
+            Buscar
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>Comprobante</th>
+            <th>F.Emisión</th>
+            <th>Proveedor</th>
+            <th>Estado</th>
+            <th>Total</th>
+            <th>Acción</th>
+
+          </tr>
+        </thead>
+        <tbody class="font-size-base">
+          <tr *ngFor="let item of compras | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
             <td>
-                <select class="form-select">
-                    <option value="editar">Editar</option>
-                    <option value="detalles">Ver detalles</option>
-                </select>
+
+              <span>
+                {{item.compCompra}}
+              </span>
             </td>
-        </tr>
-        <!-- END: abpxx6d04wxr -->
-    </tbody>
-</table>
+
+            <td>
+              <span>{{item.fEmision}}</span>
+            </td>
+            <td>
+              <span>{{item.rSocial}}</span>
+              <br>
+              <span class="badge bg-success" *ngIf="item.condicion === 'ACTIVO'">Activo</span>
+              <span class="badge bg-danger" *ngIf="item.condicion != 'ACTIVO'">No Activo</span>
+            </td>
+            <td>
+              <span>{{item.descripcion}}</span>
+
+            </td>
+            <td>
+              {{item.total}}
+            </td>
+            <td>
+
+
+              <!-- Example single danger button -->
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  Opciones
+                </button>
+                <ul class="dropdown-menu">
+                  <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.estado" data-bs-toggle="modal"
+                    [attr.data-bs-target]="'#delete-'+item.idUsuario">
+                    <i class="icon-1x text-dark-50 flaticon2-cross"></i> &nbsp; Desactivar
+                  </a>
+                  <a style="cursor: pointer;" class="dropdown-item" *ngIf="!item.estado" data-bs-toggle="modal"
+                    [attr.data-bs-target]="'#delete-'+item.idUsuario">
+                    <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Activar
+                  </a>
+                  <a class="dropdown-item" [routerLink]="['/colaborador',item.idUsuario]">
+                    <i class="icon-1x text-dark-50 flaticon-edit"></i> &nbsp; Editar
+                  </a>
+                </ul>
+              </div>
+
+
+
+
+
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+  <ngb-pagination *ngIf="compras.length >= 1" [(page)]="page" [pageSize]="pageSize" [maxSize]="10" [rotate]="true"
+    [boundaryLinks]="true" [collectionSize]="compras.length">
+  </ngb-pagination>
+
+</div>

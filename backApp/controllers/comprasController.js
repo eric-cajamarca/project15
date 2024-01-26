@@ -29,11 +29,24 @@ const { v4: uuidv4 } = require('uuid');
 
 // crea un crud para la tabla compras de la base de datos
 const obtener_compras_todos = async (req, res) => {
+    console.log('obtener_compras_todos req.user ');
     if (req.user) {
         if (req.user.rol == 'Administrador') {
             try {
                 let pool = await sql.connect(dbConfig);
-                let compras = await pool.request().query("SELECT * FROM Compras");
+                let compras = await pool.request()
+                //quiero obtener todas las compras con las columnas con la informacion de las tablas relacionadas como idCliente y idEstadoPago
+                .query("SELECT * FROM Compras INNER JOIN Clientes ON Compras.idCliente = Clientes.idCliente INNER JOIN EstadoPago ON Compras.idEstadoPago = EstadoPago.idEstadoPago");
+                // .query("SELECT * FROM Compras INNER JOIN Clientes ON Compras.idCliente = Clientes.idCliente");
+                // .query("SELECT * FROM Compras");
+
+                //quiero convertir el formato de fecha de las compras
+                 for (let i = 0; i < compras.recordset.length; i++) {
+                        compras.recordset[i].fEmision = compras.recordset[i].fEmision.toISOString().split('T')[0];
+                        compras.recordset[i].fVencimiento = compras.recordset[i].fVencimiento.toISOString().split('T')[0];
+                    }
+                //
+                console.log('obtener_compras_todos ', compras.recordset);
                 res.status(200).send({ data: compras.recordset });
             } catch (error) {
                 console.log('obterner compras error: ' + error);
