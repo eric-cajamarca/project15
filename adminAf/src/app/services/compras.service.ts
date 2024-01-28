@@ -93,7 +93,7 @@ export class ComprasService {
   // api.post('/dcompras', auth.auth, dcomprasController.crear_detalle_compras_idcompra);
   // api.put('/dcompras/:id',auth.auth, dcomprasController.editar_detalle_compras_idcompra);
 
-  obtener_detalle_compras_idcompra(token: any, id: any): Observable<any> {
+  obtener_detalle_compras_idcompra(id: any, token: any): Observable<any> {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
     return this._http.get(this.url + 'dcompras/' + id, { headers: headers });
   }

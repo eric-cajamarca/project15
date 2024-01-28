@@ -15,14 +15,22 @@ const dbConfig = require('../dbconfig');
 // idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 // )
 
-const obtener_detalle_compras_idcompra = async (req, res) => {
-    const { idCompra } = req.params.id;
-
+const obtener_detalle_compras_idcompra = async function (req, res){
+    const idCompra = req.params.id;
+    console.log('obtener_detalle_compras_idcompra: ' , idCompra);
     if (req.user) {
         if (req.user.rol == 'Administrador') {
             try {
                 let pool = await sql.connect(dbConfig);
-                let detallecompras = await pool.request().query("SELECT * FROM DetalleCompras WHERE idCompra = '" + idCompra + "'");
+                let detallecompras = await pool
+                .request()
+                .input('idCompra', sql.UniqueIdentifier, idCompra)
+                //quiero conssultar el detalle de una compra con idcompra trayendo los datos de las columnas relacionadas con inner join idSucursal, idProducto, idPresentacion y idUsuario
+                .query("SELECT * FROM DetalleCompras INNER JOIN Sucursal ON DetalleCompras.idSucursal = Sucursal.idSucursal INNER JOIN Productos ON DetalleCompras.idProducto = Productos.idProducto INNER JOIN Presentacion ON DetalleCompras.idPresentacion = Presentacion.idPresentacion INNER JOIN UsuarioWeb ON DetalleCompras.idUsuario = UsuarioWeb.idUsuario WHERE idCompra = @idCompra");
+
+
+
+                //.query("SELECT * FROM DetalleCompras  WHERE idCompra = @idCompra");
                 res.status(200).send({data:detallecompras.recordset});
             } catch (error) {
                 console.log('obterner detallecompras error: ' + error);

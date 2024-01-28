@@ -57,11 +57,13 @@
               <span class="badge bg-danger" *ngIf="item.condicion != 'ACTIVO'">No Activo</span>
             </td>
             <td>
-              <span>{{item.descripcion}}</span>
+              <!-- <span>{{item.descripcion}}</span> -->
+              <span class="badge bg-success" *ngIf="item.descripcion === 'Pagado'"> Pagado</span>
+              <span class="badge bg-warning" *ngIf="item.descripcion === 'Pendiente'"> Pendiente</span>
 
             </td>
-            <td>
-              {{item.total}}
+            <td style="width: 60px; text-align: right;">
+              {{item.total | number:'1.2-2'}}
             </td>
             <td>
 
@@ -73,22 +75,117 @@
                   Opciones
                 </button>
                 <ul class="dropdown-menu">
-                  <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.estado" data-bs-toggle="modal"
-                    [attr.data-bs-target]="'#delete-'+item.idUsuario">
-                    <i class="icon-1x text-dark-50 flaticon2-cross"></i> &nbsp; Desactivar
+                  
+                  <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.compCompra" data-bs-toggle="modal"
+                    [attr.data-bs-target]="'#consulta-'+item.compCompra"   (click)="consultaCompCompra(item.idcompra)">
+                    <i></i> &nbsp; Ver detalles
                   </a>
-                  <a style="cursor: pointer;" class="dropdown-item" *ngIf="!item.estado" data-bs-toggle="modal"
-                    [attr.data-bs-target]="'#delete-'+item.idUsuario">
-                    <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Activar
+                  <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.idcompra" data-bs-toggle="modal"
+                    [attr.data-bs-target]="'#delete-'+item.idcompra">
+                    <i class="icon-1x text-dark-50 flaticon2-cross"></i> &nbsp; Eliminar
                   </a>
-                  <a class="dropdown-item" [routerLink]="['/colaborador',item.idUsuario]">
+                  <!-- <a class="dropdown-item" [routerLink]="['/colaborador',item.compCompra]">
                     <i class="icon-1x text-dark-50 flaticon-edit"></i> &nbsp; Editar
-                  </a>
+                  </a> -->
                 </ul>
               </div>
 
+              <div class="modal fade modal-fullscreen" id="consulta-{{item.compCompra}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Detalles de la factura: {{item.compCompra}} {{item.rSocial}} </h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <i aria-hidden="true" class="ki ki-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Está seguro que desea cambiar el estado del colaborador?.</p>
 
+                            <div class="table-responsive">
+                              <table class="table table table-striped">
+                                <thead class="table-dark">
+                                  <tr>
+                                    <th>Codigo</th>
+                                    <th>Descripción</th>
+                                    <th>Presentación</th>
+                                    <th>Cantidad</th>
+                                    <th>P.Unitario</th>
+                                    <th>F.Producción</th>
+                                    <th>F.Vencimiento</th>
+                                    <th>Subtotal</th>
+                                    
+                        
+                                  </tr>
+                                </thead>
+                                <tbody class="font-size-base">
+                                  <tr *ngFor="let item of detCompras | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+                                    <td>
+                        
+                                      <span>
+                                        {{item.Codigo}}
+                                      </span>
+                                    </td>
+                        
+                                    <td>
+                                      <span>{{item.descripcion}}</span>
+                                    </td>
+                                    <td>
+                                      <span>{{item.codigo}}</span>
+                                      
+                                    </td>
+                                    <td>
+                                      <span>{{item.cantidad}}</span>
+                                                              
+                                    </td>
+                                    <td style="width: 60px; text-align: right;">
+                                      {{item.cUnitario | number:'1.2-2'}}
+                                    </td>
+                                    <td>
+                                      <span>{{item.fProduccion}}</span>
+                                    </td>
+                                    <td>
+                                      <span>{{item.fVencimiento}}</span>
+                                    </td>
+                                    <td>
+                                      <span>{{item.nombre}} </span>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                                    
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-warning font-weight-bold" data-bs-dismiss="modal">Cerrar</button>
+                            
+                        </div>
+                    </div>
+                </div>
+              </div>
 
+              <div class="modal fade" id="delete-{{item.idcompra}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ventana de eliminación: {{item.idcompra}} </h5>
+                            
+                        </div>
+                        <div class="modal-body">
+                            <p>Está seguro que desea esta compra?.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-warning font-weight-bold" data-bs-dismiss="modal">Cerrar</button>
+                            <button *ngIf="!load_estado" type="button" class="btn btn-danger font-weight-bold" (click)="set_eliminar(item.idcompra)">Sí, Eliminar</button>
+            
+                            <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Cambiando...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+              </div>
 
 
             </td>

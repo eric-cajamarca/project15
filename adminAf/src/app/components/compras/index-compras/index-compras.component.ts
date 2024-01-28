@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { AdminService } from 'src/app/services/admin.service';
 import { ComprasService } from 'src/app/services/compras.service';
+import { SucursalService } from 'src/app/services/sucursal.service';
 
 declare var $: any;
 declare var iziToast: any;
@@ -12,7 +13,7 @@ declare var iziToast: any;
   templateUrl: './index-compras.component.html',
   styleUrls: ['./index-compras.component.css']
 })
-export class IndexComprasComponent {
+export class IndexComprasComponent implements OnInit{
   public clientes: Array<any> = [];
   public clientes_const: Array<any> = [];
   public token: any = "";
@@ -22,6 +23,7 @@ export class IndexComprasComponent {
   public filtro = '';
   public compras: Array<any> = [];
   public compras_const: Array<any> = [];
+  public detCompras: Array<any> = [];
 
   public load_estado = false;
 
@@ -31,6 +33,7 @@ export class IndexComprasComponent {
     private _router: Router,
     private _comprasService: ComprasService,
     private _cookieService: CookieService,
+    private _sucursalService: SucursalService,
   ) { 
     this.token = this._cookieService.get('token');
   }
@@ -76,5 +79,43 @@ export class IndexComprasComponent {
     }
   }
 
+  consultaCompCompra(id: any,) {
+    // this.load_estado = true;
+    console.log('aqui consultaCompCompra', id);
+    this._comprasService.obtener_detalle_compras_idcompra(id, this.token).subscribe(
+      response => {
+        console.log('response.data');
+        console.log(response.data);
+        if (response.data == undefined) {
+          iziToast.show({
+            title: 'ERROR',
+            titleColor: '#FF0000',
+            color: '#FFF',
+            class: 'text-danger',
+            position: 'topRight',
+            message: 'Usted no tiene acceso a compras'
+          });
+          
+        } else {
+          this.detCompras = response.data;
+          
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
 
+    
+    
+  }
+
+
+  set_eliminar(id: any) {
+    console.log('aqui set_eliminar', id);
+
+    
+
+    
+  }
 }
