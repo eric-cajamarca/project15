@@ -17,18 +17,27 @@
 .tabla-busqueda .card{
     width: 100%;
     display: flex;
-    background-color: #1b5e20;
+    background-color: #7a7c7a;
     color: white;
     /* padding: 10px; */
     /* margin-bottom: 10px; */
     border-radius: 5px;
 }
 
+
 .card{
     margin-bottom: 20px;
 }
 
-
+.tabla-detalle .card{
+    width: 100%;
+    display: flex;
+    background-color: #7a7c7a;
+    color: white;
+    /* padding: 10px; */
+    /* margin-bottom: 10px; */
+    border-radius: 5px;
+}
 /* label {
     
     display: block;

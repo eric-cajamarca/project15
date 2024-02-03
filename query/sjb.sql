@@ -657,13 +657,13 @@ VALUES
 	'9B697C80-FFE8-4C91-9362-98FE4D5221D8'--id usuario
 );
 go
-select * from compras
+
 SELECT * FROM Productos
 select * from PreciosV
 select * from Correlativos
 --UPDATE Correlativos SET numero = 500050 WHERE idCorrelativo = 1;
 
-
+select * from compras
 select * from DetalleCompras
 SELECT * FROM StockSucursal
 go

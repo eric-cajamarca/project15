@@ -259,14 +259,26 @@ export class CreateComprasComponent implements OnInit {
 
     this._clientesService.obtener_cliente_ruc(this.compras.ruc, this.token).subscribe(
       response => {
-        this.clientes = response.data[0];
-        this.compras.idCliente = this.clientes.idCliente;
-        this.compras.idDocumento = this.clientes.idDocumento;
-        console.log(this.clientes);
+        if (response.data && response.data.length > 0) {
+          
+          this.clientes = response.data[0];
+          this.compras.idCliente = this.clientes.idCliente;
+          this.compras.idDocumento = this.clientes.idDocumento;
+          console.log(this.clientes);
+        }else{
+          iziToast.show({
+            title: 'ERROR',
+            titleColor: '#FF0000',
+            color: '#FFF',
+            class: 'text-danger',
+            position: 'topRight',
+            message: 'El cliente no existe.'
+          });
+        }
       },
-      error => {
-        console.log(error);
-      }
+      // error => {
+      //   console.log(error);
+      // }
     );
   }
 
@@ -671,7 +683,7 @@ export class CreateComprasComponent implements OnInit {
                     }
                   );
 
-                  
+
                 },
                 error => {
                   console.log(error);
@@ -735,24 +747,24 @@ export class CreateComprasComponent implements OnInit {
 
     console.log('this.correlativo.numero', this.correlativo);
 
-                  //despues de agregar todos los productos, quiero actualizar el correlativo
-                  this._comprasService.editar_correlativos_empresa(this.correlativo.idCorrelativo, this.correlativo, this.token).subscribe(
-                    response => {
-                      if (response.data != undefined) {
-                        iziToast.show({
-                          title: 'SUCCESS',
-                          titleColor: '#1DC74C',
-                          color: '#FFF',
-                          class: 'text-success',
-                          position: 'topRight',
-                          message: 'El correlativo se actualizó correctamente.'
-                        });
-                      }
-                    },
-                    error => {
-                      console.log(error);
-                    }
-                  );
+    //despues de agregar todos los productos, quiero actualizar el correlativo
+    this._comprasService.editar_correlativos_empresa(this.correlativo.idCorrelativo, this.correlativo, this.token).subscribe(
+      response => {
+        if (response.data != undefined) {
+          iziToast.show({
+            title: 'SUCCESS',
+            titleColor: '#1DC74C',
+            color: '#FFF',
+            class: 'text-success',
+            position: 'topRight',
+            message: 'El correlativo se actualizó correctamente.'
+          });
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
 }
