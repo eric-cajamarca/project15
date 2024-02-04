@@ -44,7 +44,7 @@ export class CreateComprasComponent implements OnInit {
   public productos: any = {};
   public prodSelecionado: any = {};
   public productos_const: any = {};
-  public sucursales: any = {};
+  public sucursales: any = [];
   public stockSucursales: any = [];
   public stockSucursales_const: any = [];
   public filtro: any = {};
@@ -54,7 +54,7 @@ export class CreateComprasComponent implements OnInit {
   public estadoPago: any = [];
   public mediosPago: any = [];
   public categoria: any = [];
-  public presentacion: any = {};
+  public presentacion: any = [];
   public nuevoProducto: any = {
     idProducto: '',
     codigo: '',

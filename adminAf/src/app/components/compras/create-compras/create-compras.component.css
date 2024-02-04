@@ -1,23 +1,17 @@
-/* .cabecera-compras{
-    display: inline-flex;
-    width: 100%;
-} */
+h3{
+    margin-left: 20px;
+}
 
-
-/* .cabecera-compra .card{
-    width: 45%;
-    height: 450px;
-    display: flex;
-    background-color: #1b5e20;
+.btn-primary{
+    background-color: #e3672e;
     color: white;
-   
-    border-radius: 5px;
-} */
+    border:  #94847c 1px solid;
+}
 
 .tabla-busqueda .card{
     width: 100%;
     display: flex;
-    background-color: #7a7c7a;
+    background-color: #94847c;
     color: white;
     /* padding: 10px; */
     /* margin-bottom: 10px; */
@@ -32,7 +26,7 @@
 .tabla-detalle .card{
     width: 100%;
     display: flex;
-    background-color: #7a7c7a;
+    background-color: #94847c;
     color: white;
     /* padding: 10px; */
     /* margin-bottom: 10px; */

@@ -1,0 +1,9 @@
+.color1 { #e3672e };
+.color2 { #f4a461 };
+.color3 { #742f0f };
+.color4 { #94847c };
+.color5 { #bcbcc4 };
+
+https://paletadecolores.com.mx/colores/
+
+https://color.adobe.com/es/search?type=image

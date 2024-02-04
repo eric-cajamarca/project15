@@ -73,7 +73,7 @@ export class IndexComprasComponent implements OnInit{
     if (this.filtro) {
       //
       var term = new RegExp(this.filtro, 'i');
-      this.compras = this.compras_const.filter(item => term.test(item.nombres) || term.test(item.apellidos) || term.test(item.email) || term.test(item.n_doc));
+      this.compras = this.compras_const.filter(item => term.test(item.compCompra) || term.test(item.rSocial) || term.test(item.total) || term.test(item.fEmision) || term.test(item.descripcion));
     } else {
       this.compras = this.compras_const;
     }

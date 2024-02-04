@@ -1,0 +1,60 @@
+h3{
+    margin-left: 20px;
+}
+
+.btn-primary{
+    background-color: #e3672e;
+    color: white;
+    border:  #94847c 1px solid;
+}
+
+.cabecera-compra .card{
+    width: 100%;
+    display: flex;
+    background-color: #94847c;
+    color: white;
+    
+    border-radius: 5px;
+}
+
+.tabla-busqueda .card{
+    width: 100%;
+    display: flex;
+    background-color: #94847c;
+    color: white;
+    /* padding: 10px; */
+    /* margin-bottom: 10px; */
+    border-radius: 5px;
+}
+
+.nuevo-producto .card{
+    width: 100%;
+    display: flex;
+    background-color: #94847c;
+    color: white;
+    
+    border-radius: 5px;
+}
+
+.totales .card{
+    width: 100%;
+    display: flex;
+    background-color: #94847c;
+    color: white;
+    
+    border-radius: 5px;
+}
+
+.card{
+    margin-bottom: 20px;
+}
+
+.tabla-detalle .card{
+    width: 100%;
+    display: flex;
+    background-color: #94847c;
+    color: white;
+    /* padding: 10px; */
+    /* margin-bottom: 10px; */
+    border-radius: 5px;
+}

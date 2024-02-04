@@ -70,15 +70,17 @@
 
               <!-- Example single danger button -->
               <div class="btn-group">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-                  aria-expanded="false">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #e3672e !important; border-color: #bcbcc4;">
                   Opciones
                 </button>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                   
                   <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.compCompra" data-bs-toggle="modal"
                     [attr.data-bs-target]="'#consulta-'+item.compCompra"   (click)="consultaCompCompra(item.idcompra)">
                     <i></i> &nbsp; Ver detalles
+                  </a>
+                  <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.compCompra"  [routerLink]="['/compras',item.idcompra]">
+                    <i></i> &nbsp; Editar
                   </a>
                   <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.idcompra" data-bs-toggle="modal"
                     [attr.data-bs-target]="'#delete-'+item.idcompra">
@@ -100,7 +102,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>Está seguro que desea cambiar el estado del colaborador?.</p>
+                            <p>Aqui se muestra lista de productos de la compra.</p>
 
                             <div class="table-responsive">
                               <table class="table table table-striped">
@@ -113,7 +115,7 @@
                                     <th>P.Unitario</th>
                                     <th>F.Producción</th>
                                     <th>F.Vencimiento</th>
-                                    <th>Subtotal</th>
+                                    <th>Sucursal</th>
                                     
                         
                                   </tr>
