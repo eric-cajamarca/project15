@@ -28,6 +28,8 @@ import { DetalleComprasComponent } from "./components/compras/detalle-compras/de
 import { IndexSucursalComponent } from "./components/sucursal/index-sucursal/index-sucursal.component";
 import { CreateSucursalComponent } from "./components/sucursal/create-sucursal/create-sucursal.component";
 import { UpdateSucursalComponent } from "./components/sucursal/update-sucursal/update-sucursal.component";
+import { IndexProductoComponent } from "./components/productos/index-producto/index-producto.component";
+import { UpdateProductoComponent } from "./components/productos/update-producto/update-producto.component";
 
 const appRoute : Routes = [
     {path: '', component: InicioComponent, canActivate: [AdminGuard]},
@@ -73,6 +75,10 @@ const appRoute : Routes = [
     {path: 'sucursal', component: IndexSucursalComponent, canActivate: [AdminGuard]},
     {path: 'sucursal/create', component: CreateSucursalComponent, canActivate: [AdminGuard]},
     {path: 'sucursal/:id', component: UpdateSucursalComponent, canActivate: [AdminGuard]},
+
+    //productos
+    {path: 'productos', component: IndexProductoComponent, canActivate: [AdminGuard]},
+    {path: 'productos/:id', component: UpdateProductoComponent, canActivate: [AdminGuard]},
 
 
 ]

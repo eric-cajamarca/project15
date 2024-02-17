@@ -71,6 +71,7 @@ export class CreateComprasComponent implements OnInit {
     fvencimiento: new Date(),
   };
   public correlativo: any = '';
+  public loadButton: boolean = false;
   // FORMATO_FECHA = FORMATO_FECHA;
 
   public token: any;
@@ -564,6 +565,7 @@ export class CreateComprasComponent implements OnInit {
   registrarCompras() {
 
     this.compras.compCompra = this.compras.serie + '-' + this.compras.numero;
+    this.loadButton = true;
 
     console.log('this.compras', this.compras);
     //aqui preparo los datos que iran a crear una compra nueva
@@ -690,7 +692,7 @@ export class CreateComprasComponent implements OnInit {
                 }
               );
 
-
+              this.loadButton = false;
 
             } else {
               //como el codigo ya existe, entonces actualizo el producto y stock
@@ -730,6 +732,8 @@ export class CreateComprasComponent implements OnInit {
                   console.log(error);
                 }
               );
+
+              this.loadButton = false;
             }
 
           });

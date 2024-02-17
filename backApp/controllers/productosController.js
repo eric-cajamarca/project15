@@ -196,26 +196,32 @@ const actualizar_producto = async (req, res) => {
     }
 }
 
-// const eliminar_producto = async (req, res) => {
-//     const { idProducto } = req.params.id;
+const eliminar_producto = async function(req, res) {
+    const idProducto = req.params.id;
+    let idEmpresa = req.user.empresa;
 
-//     if (req.user) {
-//         if (req.user.rol == 'Administrador') {
-//             try {
-//                 let pool = await sql.connect(dbConfig);
-//                 let productos = await pool.request().query("DELETE FROM Productos WHERE idProducto = '" + idProducto + "'");
-//                 res.status(200).send({data:productos.recordset});
-//             } catch (error) {
-//                 console.log('eliminar productos error: ' + error);
-//                 res.status(500).send({ message: 'Error al eliminar los productos', data: undefined });
-//             }
-//         } else {
-//             res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
-//         }
-//     }else {
-//         res.status(500).send({ message: 'No Access', data: undefined });
-//     }
-// }
+    if (req.user) {
+        if (req.user.rol == 'Administrador') {
+            try {
+                let pool = await sql.connect(dbConfig);
+                let productos = await pool
+                .request()
+                .input("idProducto", sql.UniqueIdentifier, idProducto)
+                .input("idEmpresa", sql.UniqueIdentifier, idEmpresa)
+                .query("DELETE FROM Productos WHERE idProducto = @idProducto AND idEmpresa = @idEmpresa");
+                
+                res.status(200).send({data:productos.rowsAffected});
+            } catch (error) {
+                console.log('eliminar productos error: ' + error);
+                res.status(500).send({ message: 'Error al eliminar los productos', data: undefined });
+            }
+        } else {
+            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+        }
+    }else {
+        res.status(500).send({ message: 'No Access', data: undefined });
+    }
+}
 
 function convertirFormato(fechaString) {
     // Mapea los nombres de los meses en español a sus equivalentes numéricos
@@ -258,6 +264,7 @@ module.exports = {
     obtener_productos_todos,
     obtener_productos_id,
     crear_producto,
-    actualizar_producto
+    actualizar_producto,
+    eliminar_producto
 
 }

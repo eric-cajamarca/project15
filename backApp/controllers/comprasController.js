@@ -35,16 +35,16 @@ const obtener_compras_todos = async (req, res) => {
             try {
                 let pool = await sql.connect(dbConfig);
                 let compras = await pool.request()
-                //quiero obtener todas las compras con las columnas con la informacion de las tablas relacionadas como idCliente y idEstadoPago
-                .query("SELECT * FROM Compras INNER JOIN Clientes ON Compras.idCliente = Clientes.idCliente INNER JOIN EstadoPago ON Compras.idEstadoPago = EstadoPago.idEstadoPago");
+                    //quiero obtener todas las compras con las columnas con la informacion de las tablas relacionadas como idCliente y idEstadoPago
+                    .query("SELECT * FROM Compras INNER JOIN Clientes ON Compras.idCliente = Clientes.idCliente INNER JOIN EstadoPago ON Compras.idEstadoPago = EstadoPago.idEstadoPago");
                 // .query("SELECT * FROM Compras INNER JOIN Clientes ON Compras.idCliente = Clientes.idCliente");
                 // .query("SELECT * FROM Compras");
 
                 //quiero convertir el formato de fecha de las compras
-                 for (let i = 0; i < compras.recordset.length; i++) {
-                        compras.recordset[i].fEmision = compras.recordset[i].fEmision.toISOString().split('T')[0];
-                        compras.recordset[i].fVencimiento = compras.recordset[i].fVencimiento.toISOString().split('T')[0];
-                    }
+                for (let i = 0; i < compras.recordset.length; i++) {
+                    compras.recordset[i].fEmision = compras.recordset[i].fEmision.toISOString().split('T')[0];
+                    compras.recordset[i].fVencimiento = compras.recordset[i].fVencimiento.toISOString().split('T')[0];
+                }
                 //
                 console.log('obtener_compras_todos ', compras.recordset);
                 res.status(200).send({ data: compras.recordset });
@@ -62,15 +62,30 @@ const obtener_compras_todos = async (req, res) => {
 
 }
 
-const obtener_compras_id = async (req, res) => {
-    const { idCompra } = req.params.id;
-
+const obtener_compras_id = async function (req, res) {
+    const idCompra = req.params.id;
+    console.log('obtener_compras_id req.params', req.params);
     if (req.user) {
         if (req.user.rol == 'Administrador') {
             try {
                 let pool = await sql.connect(dbConfig);
-                let compras = await pool.request().query("SELECT * FROM Compras WHERE idCompra = '" + idCompra + "'");
+                let compras = await pool
+                    .request()
+                    .input('idCompra', sql.UniqueIdentifier, idCompra)
+                    //quiero traer la compra con las columnas con la informacion de las tablas relacionadas como idCliente
+                    .query("SELECT * FROM Compras INNER JOIN Clientes ON Compras.idCliente = Clientes.idCliente WHERE idCompra = @idCompra");
+
+                //.query("SELECT * FROM Compras WHERE idCompra = '" + idCompra + "'");
+
+                for (let i = 0; i < compras.recordset.length; i++) {
+                    compras.recordset[i].fEmision = compras.recordset[i].fEmision.toISOString().split('T')[0];
+                    compras.recordset[i].fVencimiento = compras.recordset[i].fVencimiento.toISOString().split('T')[0];
+                }
+                console.log('obtener_compras_id ', compras.recordset);
+
                 res.status(200).send({ data: compras.recordset });
+
+
             } catch (error) {
                 console.log('obterner compras error: ' + error);
                 res.status(500).send({ message: 'Error al obtener las compras', data: undefined });
@@ -247,21 +262,25 @@ const editar_compra = async (req, res) => {
     }
 }
 
-const eliminar_compra = async (req, res) => {
-    const { compCompra } = req.body;
+const eliminar_idcompra_empresa = async function (req, res) {
+    const idCompra = req.params.id;
 
-    const idEmpresa = req.user.idEmpresa;
+    console.log('eliminar_idcompra_empresa req.params', req.params);
+    console.log('eliminar_idcompra_empresa req.params', req.body);
+    const idEmpresa = req.user.empresa;
 
     if (req.user) {
         if (req.user.rol == 'Administrador') {
             try {
                 let pool = await sql.connect(dbConfig);
-                await pool
+                let regCompra = await pool
                     .request()
                     .input("idEmpresa", sql.UniqueIdentifier, idEmpresa)
-                    .input("compCompra", sql.Char, compCompra)
-                    .query("DELETE FROM Compras WHERE idEmpresa = @idEmpresa AND compCompra = @compCompra");
-                res.status(200).send({ message: 'Compra eliminada correctamente', data: undefined });
+                    .input("idCompra", sql.UniqueIdentifier, idCompra)
+                    .query("DELETE FROM Compras WHERE idEmpresa = @idEmpresa AND idCompra = @idCompra");
+
+                //.query("DELETE FROM Compras WHERE idEmpresa = @idEmpresa AND compCompra = @compCompra");
+                res.status(200).send({ message: 'Compra eliminada correctamente', data: regCompra.rowsAffected });
             } catch (error) {
                 console.log('eliminar compras error: ' + error);
                 res.status(500).send({ message: 'Error al eliminar la compra', data: undefined });
@@ -274,15 +293,15 @@ const eliminar_compra = async (req, res) => {
     }
 }
 
-const buscar_comprobante_idCliente = async function(req, res) {
+const buscar_comprobante_idCliente = async function (req, res) {
     const idCliente = req.params.id;
 
-   const idEmpresa = req.user.empresa;
+    const idEmpresa = req.user.empresa;
 
-   console.log('buscar_comprobante_idCliente req.params', req.params);
+    console.log('buscar_comprobante_idCliente req.params', req.params);
 
-    if(req.user){
-        if(req.user.rol == 'Administrador'){
+    if (req.user) {
+        if (req.user.rol == 'Administrador') {
             try {
                 let pool = await sql.connect(dbConfig);
                 let compras = await pool
@@ -290,18 +309,18 @@ const buscar_comprobante_idCliente = async function(req, res) {
                     .input('idCliente', sql.Int, idCliente)
                     .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
                     .query("SELECT compCompra FROM Compras WHERE idCliente = @idCliente AND idEmpresa = @idEmpresa");
-                    
-                    
+
+
                 res.status(200).send({ data: compras.recordset });
             } catch (error) {
                 console.log('obterner compras error: ' + error);
                 res.status(500).send({ message: 'Error al obtener las compras', data: undefined });
             }
-        }else{
+        } else {
             res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
         }
     }
-    else{
+    else {
         res.status(500).send({ message: 'No Access', data: undefined });
     }
 }
@@ -523,7 +542,7 @@ const editar_correlativos_empresa = async function (req, res) {
                 .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
                 .input("numero", sql.Int, numero)
                 .query("UPDATE Correlativos SET numero = @numero WHERE idEmpresa = @idEmpresa AND idCorrelativo = @idCorrelativo");
-                //.query("UPDATE Correlativos SET numero = @numero WHERE idEmpresa = @idEmpresa");
+            //.query("UPDATE Correlativos SET numero = @numero WHERE idEmpresa = @idEmpresa");
 
             res.status(200).send({ message: 'Correlativo editado correctamente', data: datoEditado.rowsAffected });
         } catch (error) {
@@ -546,7 +565,7 @@ module.exports = {
     obtener_compras_todos_idEmpresa,
     crear_compra,
     editar_compra,
-    eliminar_compra,
+    eliminar_idcompra_empresa,
     ///////////////////////////
     //borrador compras
     obtener_borrador_compras_empresa,

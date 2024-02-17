@@ -36,6 +36,8 @@ import { CreateComprasComponent } from './components/compras/create-compras/crea
 import { IndexSucursalComponent } from './components/sucursal/index-sucursal/index-sucursal.component';
 import { UpdateSucursalComponent } from './components/sucursal/update-sucursal/update-sucursal.component';
 import { CreateSucursalComponent } from './components/sucursal/create-sucursal/create-sucursal.component';
+import { IndexProductoComponent } from './components/productos/index-producto/index-producto.component';
+import { UpdateProductoComponent } from './components/productos/update-producto/update-producto.component';
 
 
 @NgModule({
@@ -67,7 +69,9 @@ import { CreateSucursalComponent } from './components/sucursal/create-sucursal/c
     CreateComprasComponent,
     IndexSucursalComponent,
     UpdateSucursalComponent,
-    CreateSucursalComponent
+    CreateSucursalComponent,
+    IndexProductoComponent,
+    UpdateProductoComponent
   ],
   imports: [
     BrowserModule,

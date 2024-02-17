@@ -1,39 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { AdminService } from 'src/app/services/admin.service';
 import { ComprasService } from 'src/app/services/compras.service';
+import { ProductoService } from 'src/app/services/producto.service';
 import { SucursalService } from 'src/app/services/sucursal.service';
 
-declare var $: any;
 declare var iziToast: any;
+declare var $: any;
 
 @Component({
-  selector: 'app-index-compras',
-  templateUrl: './index-compras.component.html',
-  styleUrls: ['./index-compras.component.css']
+  selector: 'app-index-producto',
+  templateUrl: './index-producto.component.html',
+  styleUrls: ['./index-producto.component.css']
 })
-export class IndexComprasComponent implements OnInit {
-  public clientes: Array<any> = [];
-  public clientes_const: Array<any> = [];
+export class IndexProductoComponent {
+
+  public productos: Array<any> = [];
+  public productos_const: Array<any> = [];
   public token: any = "";
 
   public page = 1;
   public pageSize = 10;
   public filtro = '';
-  public compras: Array<any> = [];
-  public compras_const: Array<any> = [];
-  public detCompras: Array<any> = [];
+  
 
   public load_estado = false;
 
 
   constructor(
-    private _adminService: AdminService,
+    
     private _router: Router,
     private _comprasService: ComprasService,
     private _cookieService: CookieService,
     private _sucursalService: SucursalService,
+    private _productoService: ProductoService,
   ) {
     this.token = this._cookieService.get('token');
   }
@@ -44,7 +45,7 @@ export class IndexComprasComponent implements OnInit {
   }
 
   initData() {
-    this._comprasService.obtener_compras_todos(this.token).subscribe(
+    this._productoService.obtener_productos_todos(this.token).subscribe(
       response => {
         console.log('response.data');
         console.log(response.data);
@@ -59,8 +60,8 @@ export class IndexComprasComponent implements OnInit {
           });
           this._router.navigate(['/']);
         } else {
-          this.compras = response.data;
-          this.compras_const = response.data;
+          this.productos = response.data;
+          this.productos_const = response.data;
         }
       },
       error => {
@@ -73,38 +74,15 @@ export class IndexComprasComponent implements OnInit {
     if (this.filtro) {
       //
       var term = new RegExp(this.filtro, 'i');
-      this.compras = this.compras_const.filter(item => term.test(item.compCompra) || term.test(item.rSocial) || term.test(item.total) || term.test(item.fEmision) || term.test(item.descripcion));
+      this.productos = this.productos_const.filter(item => term.test(item.compCompra) || term.test(item.rSocial) || term.test(item.total) || term.test(item.fEmision) || term.test(item.descripcion));
     } else {
-      this.compras = this.compras_const;
+      this.productos = this.productos_const;
     }
   }
 
-  consultaCompCompra(id: any,) {
+  consultaidProducto(id: any,) {
     // this.load_estado = true;
-    console.log('aqui consultaCompCompra', id);
-    this._comprasService.obtener_detalle_compras_idcompra(id, this.token).subscribe(
-      response => {
-        console.log('response.data');
-        console.log(response.data);
-        if (response.data == undefined) {
-          iziToast.show({
-            title: 'ERROR',
-            titleColor: '#FF0000',
-            color: '#FFF',
-            class: 'text-danger',
-            position: 'topRight',
-            message: 'Usted no tiene acceso a compras'
-          });
-
-        } else {
-          this.detCompras = response.data;
-
-        }
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    
 
 
 
@@ -113,7 +91,7 @@ export class IndexComprasComponent implements OnInit {
 
   set_eliminar(id: any) {
     console.log('aqui set_eliminar', id);
-    this._comprasService.eliminar_idcompra_empresa(id, this.token).subscribe(
+    this._productoService.eliminar_producto(id, this.token).subscribe(
       response => {
         console.log('response.data');
         console.log(response.data);
@@ -124,19 +102,11 @@ export class IndexComprasComponent implements OnInit {
             color: '#FFF',
             class: 'text-danger',
             position: 'topRight',
-            message: 'Usted no tiene acceso a compras'
+            message: 'Error al eliminar el producto'
           });
-
+          
         } else {
           this.initData();
-          iziToast.show({
-            title: 'OK',
-            titleColor: '#008000',
-            color: '#FFF',
-            class: 'text-success',
-            position: 'topRight',
-            message: 'Se elimino correctamente'
-          });
 
           $('body').removeClass('modal-open');
           $('.modal-backdrop').remove();
@@ -144,8 +114,7 @@ export class IndexComprasComponent implements OnInit {
           $('body').css('overflow-y', 'auto');
 
         }
-
-
+       
       },
       error => {
         console.log(error);
@@ -156,4 +125,5 @@ export class IndexComprasComponent implements OnInit {
 
 
   }
+
 }

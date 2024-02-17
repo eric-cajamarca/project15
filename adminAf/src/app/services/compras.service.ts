@@ -67,6 +67,13 @@ export class ComprasService {
     return this._http.put(this.url + 'compras/' + id, compra, { headers: headers });
   }
 
+  //api.delete('/compras/:id',auth.auth, comprasController.eliminar_compra);
+
+  eliminar_idcompra_empresa(id: any, token: any): Observable<any> {
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.delete(this.url + 'compras/' + id, { headers: headers });
+  }
+
   // ////////////////////////////////////////////////////////////////////////////////////////////////////////
   obtener_borrador_compras_empresa(token: any): Observable<any> {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });

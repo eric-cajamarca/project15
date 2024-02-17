@@ -153,5 +153,50 @@ END;
 
 
 
-select * from caja
-select * from ventas
+select * from StockSucursal
+select * from DetalleCompras
+
+
+
+---------------------------------------------
+CREATE TRIGGER DespuesDeEliminarDetalleCompra
+ON DetalleCompras
+AFTER DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @IdCompra UNIQUEIDENTIFIER, @IdProducto UNIQUEIDENTIFIER, @CantidadEliminada DECIMAL, @IdEmpresa UNIQUEIDENTIFIER;
+
+    -- Obtén los valores afectados por la operación de eliminación
+    SELECT @IdCompra = IdCompra, @IdProducto = IdProducto, @CantidadEliminada = Cantidad, @IdEmpresa=idEmpresa
+    FROM DELETED;
+
+    -- Actualiza el stock en el inventario
+    UPDATE StockSucursal
+    SET cantidad = cantidad - @CantidadEliminada
+    WHERE idProducto = @IdProducto and idEmpresa = @IdEmpresa;
+END;
+
+
+CREATE TRIGGER DespuesDeModificarDetalleCompra
+ON DetalleCompras
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @IdCompra UNIQUEIDENTIFIER, @IdProducto UNIQUEIDENTIFIER, @CantidadAntigua DECIMAL, @CantidadNueva DECIMAL, @IdEmpresa UNIQUEIDENTIFIER;
+
+    -- Obtén los valores afectados por la operación de actualización
+    SELECT @IdCompra = IdCompra, @IdProducto = IdProducto, @CantidadAntigua = Cantidad FROM DELETED;
+    SELECT @CantidadNueva = Cantidad FROM INSERTED;
+
+    -- Calcula la diferencia en la cantidad
+    DECLARE @DiferenciaCantidad INT = @CantidadNueva - @CantidadAntigua;
+
+    -- Actualiza el stock en el inventario
+    UPDATE StockSucursal
+    SET cantidad = cantidad + @DiferenciaCantidad
+    WHERE IdProducto = @IdProducto;
+END;

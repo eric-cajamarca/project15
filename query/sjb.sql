@@ -317,7 +317,7 @@ insert into Correlativos values('5615C329-F8B6-4634-B0EF-C02B9F2315B3',700000)
 go
 select * from Correlativos
 
---truncate table Productos
+truncate table Productos
 go 
 --drop table Productos
 create table Productos   
@@ -369,6 +369,7 @@ SELECT * FROM StockSucursal
 select * from UsuarioWeb
 go
 
+--truncate table preciosV
 --drop table PreciosV
 create table PreciosV
 (
@@ -436,7 +437,7 @@ select * from Sucursal
 select * from UsuarioWeb
 go
 
-
+--truncate table stockSucursal
 --drop table StockSucursal
 create table StockSucursal
 (
@@ -562,6 +563,7 @@ go
 --------------------------------.
 --COMPRAS
 ---------------------------------
+truncate table compras
 --drop table Compras
 create table Compras
 (
@@ -624,7 +626,7 @@ go
 select * from compras
 select * from Productos
 
-
+--truncate table DetalleCompras
 --drop table DetalleCompras
 create table DetalleCompras
 (

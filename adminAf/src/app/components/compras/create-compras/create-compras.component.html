@@ -453,7 +453,11 @@
                             </div>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-success" (click)="registrarCompras()">Registrar Compra</button>
+                            <button *ngIf="!loadButton" type="button" class="btn btn-success" (click)="registrarCompras()">Registrar Compra</button>
+                            <button *ngIf="loadButton" type="button" class="btn btn-success" disabled>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Registrando...
+                            </button>
                         </div>
                     </div>
 

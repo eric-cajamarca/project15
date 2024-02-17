@@ -8,6 +8,7 @@ api.get('/productos',auth.auth, productosController.obtener_productos_todos);
 api.get('/productos/:id',auth.auth, productosController.obtener_productos_id);
 api.post('/productos', auth.auth, productosController.crear_producto);
 api.put('/productos/:id',auth.auth, productosController.actualizar_producto);
+api.delete('/productos/:id',auth.auth, productosController.eliminar_producto);
 
 
 module.exports = api;

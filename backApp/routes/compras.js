@@ -13,6 +13,7 @@ api.get('/comprasempresa',auth.auth, comprasController.obtener_compras_todos_idE
 
 api.post('/compras', auth.auth, comprasController.crear_compra);
 api.put('/compras/:id',auth.auth, comprasController.editar_compra);
+api.delete('/compras/:id',auth.auth, comprasController.eliminar_idcompra_empresa);
 
 
 
