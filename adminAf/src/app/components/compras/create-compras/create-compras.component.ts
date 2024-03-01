@@ -29,7 +29,7 @@ export class CreateComprasComponent implements OnInit {
     idDocumento: '',
     idMoneda: '',
     idEstadoPago: '',
-    idMedioPago: '',
+    idMediosPago: '',
     fechaEmision: '',
     fechaPago: '',
     total: 0,
@@ -261,12 +261,12 @@ export class CreateComprasComponent implements OnInit {
     this._clientesService.obtener_cliente_ruc(this.compras.ruc, this.token).subscribe(
       response => {
         if (response.data && response.data.length > 0) {
-          
+
           this.clientes = response.data[0];
           this.compras.idCliente = this.clientes.idCliente;
           this.compras.idDocumento = this.clientes.idDocumento;
           console.log(this.clientes);
-        }else{
+        } else {
           iziToast.show({
             title: 'ERROR',
             titleColor: '#FF0000',
@@ -453,8 +453,9 @@ export class CreateComprasComponent implements OnInit {
       console.log('si hay datos que guardar')
 
       try {
-        if (this.detalleCompras.idProducto != undefined) {
-          this.detalleCompras.forEach((element: any) => {
+        this.detalleCompras.forEach((element: any) => {
+          if (element.idProducto != undefined) {
+            // ... Resto del código que maneja los datos cuando idProducto está definido
             //buscar en this.productos el codigo y traer todo el objeto del codigo
             const selectedObject = this.productos.find((item: any) => item.idProducto == element.idProducto);
             element.producto = selectedObject;
@@ -470,30 +471,28 @@ export class CreateComprasComponent implements OnInit {
             //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
             const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.producto.idPresentacion);
             element.presentacion = selectedObjectPresentacion;
+          } else {
+            // ... Resto del código que maneja los datos cuando idProducto no está definido
+            this.detalleCompras.forEach((element: any) => {
+
+              //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
+              const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
+              element.sucursal = selectedObjectSucursal;
 
 
+              //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
+              const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.idCategoria);
+              element.categoria = selectedObjectCategoria;
 
-          });
-        } else {
-          this.detalleCompras.forEach((element: any) => {
+              //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
+              const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.idPresentacion);
+              element.presentacion = selectedObjectPresentacion;
 
-            //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
-            const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == this.nuevoProducto.idSucursal);
-            element.sucursal = selectedObjectSucursal;
-
-            //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
-            const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == this.nuevoProducto.idCategoria);
-            element.categoria = selectedObjectCategoria;
-
-            //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
-            const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == this.nuevoProducto.idPresentacion);
-            element.presentacion = selectedObjectPresentacion;
-
-
-
-          });
-        }
-      } catch (error) {
+            })
+          }
+        });
+      }
+      catch (error) {
         console.log(error);
       }
 
@@ -583,6 +582,11 @@ export class CreateComprasComponent implements OnInit {
           this.nuevoDetalleCompra = {};
           //aqui preparo los datos que iran a crear un producto nuevo
           this.detalleCompras.forEach((element: any) => {
+
+            // Crear una nueva instancia de nuevoProducto en cada iteración
+            this.nuevoProducto = {};
+            this.nuevoProducto.idProducto = element.idProducto;
+
             this.nuevoProducto.idProducto = element.idProducto;
             this.nuevoProducto.Codigo = element.codigo;
             this.nuevoProducto.idCategoria = element.idCategoria;
@@ -610,6 +614,8 @@ export class CreateComprasComponent implements OnInit {
             //           .input('total', sql.Decimal, total)
             //           .input('idUsuario', sql.UniqueIdentifier, idUsuario)}
 
+            this.nuevoDetalleCompra = {};
+            this.nuevoDetalleCompra.idEmpresa = element.idEmpresa;            
             this.nuevoDetalleCompra.idSucursal = element.idSucursal;
             this.nuevoDetalleCompra.idCompra = this.idCompra;
             this.nuevoDetalleCompra.cantidad = element.cantidad;

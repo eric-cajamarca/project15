@@ -33,11 +33,11 @@ body {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: auto;
-    color: blue;
+    color: #bcbcc4;
 
     border-radius: 10px !important;
     border: 0.1px solid #012ffa57 !important;
-    background-color:  #94847c !important;
+    background-color:  #e3672e !important;
 }
 .form-signin {
     width: 100%;
