@@ -216,26 +216,47 @@ const crear_compra = async (req, res) => {
     }
 }
 
-const editar_compra = async (req, res) => {
-    const { compCompra, idComprobante, serie, numero, fEmision, fVencimiento, idProveedor, idMoneda, idEstadoPago, subTotal, igv, exonerado, gratuito, otrosCargos, descuentos, total, idMediosPago, compRelacionado, idUsuario } = req.body;
-    console.log(req.body);
-    const idEmpresa = req.user.idEmpresa;
+const editar_compra = async function (req, res) {
+    console.log("editar_compra req.body", req.body);
+    console.log("editar_compra req.params", req.params);
+    const { compCompra, serie, numero, idCliente, idMoneda, idEstadoPago, subTotal, igv, exonerado, gratuito, otrosCargos, descuentos, total, idMediosPago, compRelacionado, idUsuario } = req.body;
+    //quiero convertir fEmision y fVencimiento a formato de fecha DateTime
+
+
+    const idcompra = req.params.id;
+    const idEmpresa = req.user.empresa;
+
+    // Supongamos que tienes una fecha en formato '2024-03-09'
+    const fechaOriginalE = req.body.fEmision;
+    // Convertir la cadena a un objeto Date
+    const fechaObjetoE = new Date(fechaOriginalE);
+    // Formatear la fecha en el nuevo formato '2024-03-01 00:00:00.000'
+    const fechaFormateadaE = fechaObjetoE.toISOString().slice(0, 19).replace('T', ' ') + '.000';
+    const fEmision = fechaFormateadaE;
+
+    // Supongamos que tienes una fecha en formato '2024-03-09'
+    const fechaOriginal = req.body.fVencimiento;
+    // Convertir la cadena a un objeto Date
+    const fechaObjeto = new Date(fechaOriginal);
+    // Formatear la fecha en el nuevo formato '2024-03-01 00:00:00.000'
+    const fechaFormateada = fechaObjeto.toISOString().slice(0, 19).replace('T', ' ') + '.000';
+    const fVencimiento = fechaFormateada;
 
     if (req.user) {
         if (req.user.rol == 'Administrador') {
             //solo quiero editar los datos modificcados
             try {
                 let pool = await sql.connect(dbConfig);
-                await pool
+                let editarCompra = await pool
                     .request()
                     .input("idEmpresa", sql.UniqueIdentifier, idEmpresa)
                     .input("compCompra", sql.VarChar, compCompra)
-                    .input("idComprobante", sql.Int, idComprobante)
+                    .input("idcompra", sql.UniqueIdentifier, idcompra)
                     .input("serie", sql.VarChar, serie)
                     .input("numero", sql.VarChar, numero)
                     .input("fEmision", sql.DateTime, fEmision)
                     .input("fVencimiento", sql.DateTime, fVencimiento)
-                    .input("idProveedor", sql.Int, idProveedor)
+                    .input("idCliente", sql.Int, idCliente)
                     .input("idMoneda", sql.Int, idMoneda)
                     .input("idEstadoPago", sql.Int, idEstadoPago)
                     .input("subTotal", sql.Decimal, subTotal)
@@ -245,11 +266,12 @@ const editar_compra = async (req, res) => {
                     .input("otrosCargos", sql.Decimal, otrosCargos)
                     .input("descuentos", sql.Decimal, descuentos)
                     .input("total", sql.Decimal, total)
-                    .input("idMediosPago", sql.VarChar, idMediosPago)
+                    .input("idMediosPago", sql.Int, idMediosPago)
                     .input("compRelacionado", sql.VarChar, compRelacionado)
                     .input("idUsuario", sql.UniqueIdentifier, idUsuario)
-                    .query("UPDATE Compras SET idComprobante = @idComprobante, serie = @serie, numero = @numero, fEmision = @fEmision, fVencimiento = @fVencimiento, idProveedor = @idProveedor, idMoneda = @idMoneda, idEstadoPago = @idEstadoPago, subTotal = @subTotal, igv = @igv, exonerado = @exonerado, gratuito = @gratuito, otrosCargos = @otrosCargos, descuentos = @descuentos, total = @total, idMediosPago = @idMediosPago, compRelacionado = @compRelacionado, idUsuario = @idUsuario WHERE idEmpresa = @idEmpresa AND compCompra = @compCompra");
-                res.status(200).send({ message: 'Compra editada correctamente', data: undefined });
+                    .query("UPDATE Compras SET compCompra=@compCompra,serie = @serie, numero = @numero, fEmision = @fEmision, fVencimiento = @fVencimiento, idCliente = @idCliente, idMoneda = @idMoneda, idEstadoPago = @idEstadoPago, subTotal = @subTotal, igv = @igv, exonerado = @exonerado, gratuito = @gratuito, otrosCargos = @otrosCargos, descuentos = @descuentos, total = @total, idMediosPago = @idMediosPago, compRelacionado = @compRelacionado, idUsuario = @idUsuario WHERE idEmpresa = @idEmpresa AND idcompra = @idcompra");
+
+                res.status(200).send({ message: 'Compra editada correctamente', data: editarCompra.rowsAffected });
             } catch (error) {
                 console.log('editar compras error: ' + error);
                 res.status(500).send({ message: 'Error al editar la compra', data: undefined });

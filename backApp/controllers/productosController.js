@@ -139,7 +139,7 @@ const crear_producto = async (req, res) => {
                     // }else{
                     //     res.status(500).send({ message: 'Error al crear los productos', data: undefined });
                     // }
-                    console.log('producto creado ', productos.recordset);
+                    console.log('producto creado ', idProducto);
                 
             } catch (error) {
                 console.log('crear productos error: ' + error);

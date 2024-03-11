@@ -62,7 +62,9 @@ export class ComprasService {
     return this._http.post(this.url + 'compras', compra, { headers: headers });
   }
 
-  editar_compra(token: any, id: any, compra: any): Observable<any> {
+  editar_compra(id: any, compra: any,token: any): Observable<any> {
+    console.log('id en el servicio', id);
+    console.log('compra en el servicio', compra);
     let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
     return this._http.put(this.url + 'compras/' + id, compra, { headers: headers });
   }
