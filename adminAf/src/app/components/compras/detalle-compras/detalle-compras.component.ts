@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./detalle-compras.component.css']
 })
 export class DetalleComprasComponent {
-
+  public loadDetalleCompras = false;
+  
 }

@@ -42,6 +42,7 @@ export class UpdateComprasComponent {
   public comprobantes: any = [];
   public clientes: any = {};
   public productos: any = {};
+  
   public prodSelecionado: any = {};
   public productos_const: any = {};
   public sucursales: any = [];

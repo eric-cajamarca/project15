@@ -38,6 +38,7 @@ import { UpdateSucursalComponent } from './components/sucursal/update-sucursal/u
 import { CreateSucursalComponent } from './components/sucursal/create-sucursal/create-sucursal.component';
 import { IndexProductoComponent } from './components/productos/index-producto/index-producto.component';
 import { UpdateProductoComponent } from './components/productos/update-producto/update-producto.component';
+import { PrincipalInventarioComponent } from './components/inventario/principal-inventario/principal-inventario.component';
 
 
 @NgModule({
@@ -71,7 +72,8 @@ import { UpdateProductoComponent } from './components/productos/update-producto/
     UpdateSucursalComponent,
     CreateSucursalComponent,
     IndexProductoComponent,
-    UpdateProductoComponent
+    UpdateProductoComponent,
+    PrincipalInventarioComponent
   ],
   imports: [
     BrowserModule,

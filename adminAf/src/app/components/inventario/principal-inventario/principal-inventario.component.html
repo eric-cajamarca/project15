@@ -1,170 +1,20 @@
 <app-top-nav></app-top-nav>
-<!-- crea aqui el html para registrar las compras de los productos, haz uso de los componentes de bootstrap para el formulario (compCompra, idComprobante, serie, numero, fEmision, fVencimiento, idProveedor, idMoneda, idEstadoPago, subTotal, igv, exonerado, gratuito, otrosCargos, descuentos, total, idMediosPago, compRelacionado, idUsuario) y la tabla de compras (idSucursal, idcompra,  Cantidad, idproducto, idPresentacion, pUnitario,total, idUsuario).-->
+<div class="container" style="margin-top: 20px; margin-bottom: 20px;">
+    <div class="card">
+        <h1>Ventana principal de Inventarios</h1>
 
-<div class="container">
-    
-
-
-    <div class="cabecera-compra" style="margin-top: 20px;">
-        <div class="card" style="border: #94847c 1px solid !important; border-radius: 5px;">
-            <h3>Registrar  nueva Compra</h3>
-            <div class="card-body">
-                <div class="cabecera">
-                    <div class="row form-group">
-                        <hr>
-                        <!-- buscador dni/ruc -->
-                        <div style="margin-bottom: 20px;">
-
-                            <label for="ruc">Número de documento</label>
-                            <div class="input-group-append" style="display: flex;">
-                                <input type="text" class="form-control form-control-appended"
-                                    placeholder="ingrese RUC o DNI" name="ruc" [(ngModel)]="compras.ruc"
-                                    style="width: 40%;">
-
-                                <button class="btn btn-primary" (click)="buscar()" style="margin-left: 10px;">
-                                    Buscar
-                                </button>
-                                <button class="btn btn-primary" [routerLink]="['/cliente/create']"
-                                    routerLinkActive="active" style="margin-left: 10px;">
-                                    Nuevo
-                                </button>
-
-                            </div>
-                            <ng-container>
-                                <div *ngIf="compras.idCliente">
-                                    <label for="idProveedor"
-                                        style="color: rgb(221, 221, 224); margin-top: 20px;">Proveedor:
-                                        <strong>{{clientes.rSocial}}</strong></label>
-                                </div>
-                                <!-- <div *ngIf="!clientes">
-                                    <h3 style="color: rgb(241, 26, 11); margin-top: 20px;">El Cliente no existe </h3>
-                                </div> -->
-                            </ng-container>
-
-                        </div>
-
-
-                        <!-- fin buscador dni/ruc -->
-                        <hr />
-                        <ng-container *ngIf="compras.idCliente">
-                            <div class="col-sm-6 col-lg-3 col-md-6">
-                                <div>
-                                    <label style="width: 300px;">Comprobante</label>
-                                    <div class="col-lg-9 col-xl-9">
-                                        <select required name="idComprobante" [(ngModel)]="compras.idComprobante"
-                                            class="form-control">
-                                            <option value="" selected disabled>Seleccionar...</option>
-                                            <option *ngFor="let item of comprobantes" [value]="item.idComprobante">{{
-                                                item.nombre }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-    
-                                <!-- <div>
-                                    <label for="compCompra">CompCompra</label>
-                                    <input type="text" class="form-control" name="compCompra"
-                                        [(ngModel)]="compras.compCompra" placeholder="Ingrese el compCompra">
-                                </div> -->
-    
-                                <div style="width: 80px;">
-                                    <label for="serie">Serie</label>
-                                    <input type="text" class="form-control" name="serie" [(ngModel)]="compras.serie"
-                                        placeholder="F001">
-                                </div>
-    
-                                <div style="width: 100px;">
-                                    <label for="numero">Número</label>
-                                    <input type="text" class="form-control" name="numero" [(ngModel)]="compras.numero"
-                                        placeholder="00000001" (change)="onInputChangesCompCompras()">
-                                </div>
-    
-                            </div>
-                            <div class="col-sm-6 col-lg-3 col-md-6">
-                                <div>
-                                    <label for="fEmision">Fecha de Emisión</label>
-                                    <input type="date" class="form-control" name="fEmision" [(ngModel)]="compras.fEmision">
-                                </div>
-    
-                                <div>
-                                    <label for="fVencimiento">Fecha de Vencimiento</label>
-                                    <input type="date" class="form-control" name="fVencimiento"
-                                        [(ngModel)]="compras.fVencimiento">
-                                </div>
-    
-    
-    
-    
-                            </div>
-                            <div class="col-sm-6 col-lg-3 col-md-6">
-                                <div>
-                                    <div>
-                                        <label style="width: 300px;">Moneda</label>
-                                        <div class="col-lg-9 col-xl-9">
-                                            <select required name="idMoneda" [(ngModel)]="compras.idMoneda"
-                                                class="form-control">
-                                                <option value="" selected disabled>Seleccionar...</option>
-                                                <option *ngFor="let item of moneda" [value]="item.idMoneda">{{
-                                                    item.descripcion }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-    
-                                <div>
-                                    <div class="form-group -row">
-                                        <label style="width: 300px;">Estado de pago</label>
-                                        <div class="col-lg-9 col-xl-9">
-                                            <select required name="idEstadoPago" [(ngModel)]="compras.idEstadoPago"
-                                                class="form-control">
-                                                <option value="" selected disabled>Seleccionar...</option>
-                                                <option *ngFor="let item of estadoPago" [value]="item.idEstadoPago">{{
-                                                    item.descripcion }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-    
-                            </div>
-                            <div class="col-sm-6 col-lg-3 col-md-6">
-                                <div>
-    
-                                    <label style="width: 300px;">Medios de pago</label>
-                                    <div class="col-lg-9 col-xl-9">
-                                        <select required name="idMediosPago" [(ngModel)]="compras.idMediosPago"
-                                            class="form-control">
-                                            <option value="" selected disabled>Seleccionar...</option>
-                                            <option *ngFor="let item of mediosPago" [value]="item.idMediosPago">{{
-                                                item.descripcion }}
-                                            </option>
-                                        </select>
-                                    </div>
-    
-                                </div>
-    
-    
-                                <div class="form-group">
-                                    <label for="compRelacionado">CompRelacionado</label>
-                                    <input type="text" class="form-control" name="compRelacionado"
-                                        [(ngModel)]="compras.compRelacionado" placeholder="Ingrese el compRelacionado">
-                                </div>
-                            </div>
-                        </ng-container>
-                        
-
-
-                    </div>
-
-                </div>
-            </div>
-
+        <div class="card-header">
+            <h4 class="card-header-title">
+                Mostrando todos los productos
+            </h4>
+            <button class="btn btn-primary" [routerLink]="['/productos/create']" routerLinkActive="active"
+                style="text-align: right; margin-bottom: 20px;">crear nuevo producto</button>
         </div>
-
-
+        
     </div>
-    <ng-container *ngIf="compras.numero">
+
+   
+    <ng-container>
         <div class="tabla-busqueda">
             <div class="card" style="width: 100%;">
                 <div class="card-header">
@@ -478,6 +328,4 @@
             </div>
         </div>
     </ng-container>
-
-
 </div>

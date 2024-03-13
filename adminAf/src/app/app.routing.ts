@@ -30,6 +30,7 @@ import { CreateSucursalComponent } from "./components/sucursal/create-sucursal/c
 import { UpdateSucursalComponent } from "./components/sucursal/update-sucursal/update-sucursal.component";
 import { IndexProductoComponent } from "./components/productos/index-producto/index-producto.component";
 import { UpdateProductoComponent } from "./components/productos/update-producto/update-producto.component";
+import { PrincipalInventarioComponent } from "./components/inventario/principal-inventario/principal-inventario.component";
 
 const appRoute : Routes = [
     {path: '', component: InicioComponent, canActivate: [AdminGuard]},
@@ -69,7 +70,7 @@ const appRoute : Routes = [
     {path: 'compras', component: IndexComprasComponent, canActivate: [AdminGuard]},
     {path: 'compras/create', component: CreateComprasComponent, canActivate: [AdminGuard]},
     {path: 'compras/:id', component: UpdateComprasComponent, canActivate: [AdminGuard]},
-    {path: 'compras/detalle/:id', component: DetalleComprasComponent, canActivate: [AdminGuard]},
+    {path: 'compras/detalle/:id', component: DetalleComprasComponent,canActivate: [AdminGuard]},
 
     //sucursales
     {path: 'sucursal', component: IndexSucursalComponent, canActivate: [AdminGuard]},
@@ -79,6 +80,9 @@ const appRoute : Routes = [
     //productos
     {path: 'productos', component: IndexProductoComponent, canActivate: [AdminGuard]},
     {path: 'productos/:id', component: UpdateProductoComponent, canActivate: [AdminGuard]},
+
+    //inventario
+    {path: 'inventario', component: PrincipalInventarioComponent, canActivate: [AdminGuard]},
 
 
 ]

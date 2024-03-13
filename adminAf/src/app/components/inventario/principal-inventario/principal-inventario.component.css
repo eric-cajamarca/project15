@@ -1,0 +1,86 @@
+h3{
+    margin-left: 20px;
+}
+
+.btn-primary{
+    background-color: #e3672e;
+    color: white;
+    border:  #797776 1px solid;
+}
+
+.cabecera-compra .card{
+    width: 100%;
+    display: flex;
+    background-color: #858585;
+    color: white;
+    
+    border-radius: 5px;
+}
+
+.tabla-busqueda .card{
+    width: 100%;
+    display: flex;
+    background-color: #858585;
+    color: white;
+    /* padding: 10px; */
+    /* margin-bottom: 10px; */
+    border-radius: 5px;
+}
+
+.nuevo-producto .card{
+    width: 100%;
+    display: flex;
+    background-color: #858585;
+    color: white;
+    
+    border-radius: 5px;
+}
+
+.totales .card{
+    width: 100%;
+    display: flex;
+    background-color: #858585;
+    color: white;
+    
+    border-radius: 5px;
+}
+
+.card{
+    margin-bottom: 20px;
+}
+
+.tabla-detalle .card{
+    width: 100%;
+    display: flex;
+    background-color: #858585;
+    color: white;
+    /* padding: 10px; */
+    /* margin-bottom: 10px; */
+    border-radius: 5px;
+}
+/* label {
+    
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+} */
+/* 
+@media screen and (max-width: 768px) {
+    .cabecera-compras{
+        display: flex;
+        width: 100%;
+    }
+    .cabecera-compra .card {
+        width: 100%;
+    }
+
+    
+}
+
+@media screen and (min-width: 769px) {
+    .cabecera-compra .card {
+        display: inline-block;
+        width: 40%;
+        margin-right: 10px;
+    } */
+
