@@ -42,8 +42,14 @@ const obtener_compras_todos = async (req, res) => {
 
                 //quiero convertir el formato de fecha de las compras
                 for (let i = 0; i < compras.recordset.length; i++) {
-                    compras.recordset[i].fEmision = compras.recordset[i].fEmision.toISOString().split('T')[0];
-                    compras.recordset[i].fVencimiento = compras.recordset[i].fVencimiento.toISOString().split('T')[0];
+                    if (compras.recordset[i].fEmision !== null) {
+                        compras.recordset[i].fEmision = compras.recordset[i].fEmision.toISOString().split('T')[0];
+                    }
+                    
+                    if (compras.recordset[i].fVencimiento !== null) {
+                        compras.recordset[i].fVencimiento = compras.recordset[i].fVencimiento.toISOString().split('T')[0];
+                    }
+                    
                 }
                 //
                 console.log('obtener_compras_todos ', compras.recordset);

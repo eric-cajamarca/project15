@@ -20,7 +20,20 @@ declare var $: any;
 })
 export class PrincipalInventarioComponent {
 
-  public compras: any = {};
+  public compras: any = {
+    idEmpresa: '',
+    idSucursal: '',
+    idComprobante: '',
+    idCliente: '',
+    idDocumento: '',
+    idMoneda: '',
+    idEstadoPago: '',
+    idMediosPago: '',
+    fechaEmision: '',
+    fechaPago: '',
+    total: 0,
+    observacion: '',
+  };
   public detalleCompras: any = [];
   public nuevoDetalleCompra: any = {};
   public comprobantes: any = [];
@@ -43,7 +56,7 @@ export class PrincipalInventarioComponent {
     idProducto: '',
     codigo: '',
     descripcion: '',
-    cUnitario: 0,
+    pUnitario: 0,
     cantidad: 0,
     subtotal: 0,
     categoria: {},
@@ -71,11 +84,169 @@ export class PrincipalInventarioComponent {
     private _tablasSunatService: TablasSunatService,
     private _categoriaService: CategoriaService,
     private _presentacionService: PresentacionService
-  ) { }
-
-  ngOnInit(): void {
+  ) { 
+    this.token = this._cookieService.get('token');
   }
 
+  ngOnInit(): void {
+    this.initData();
+  }
+
+  initData() {
+
+    this._comprobanteService.obtener_comprobantes(this.token).subscribe(
+      response => {
+        this.comprobantes = response.data;
+        console.log(this.comprobantes);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this._tablasSunatService.obtener_moneda(this.token).subscribe(
+      response => {
+        this.moneda = response.data;
+        console.log(this.moneda);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this._tablasSunatService.obtener_estado_pago(this.token).subscribe(
+      response => {
+        this.estadoPago = response.data;
+        console.log(this.estadoPago);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this._tablasSunatService.obtener_medios_pago(this.token).subscribe(
+      response => {
+        this.mediosPago = response.data;
+        console.log(this.mediosPago);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this._categoriaService.obtener_categorias(this.token).subscribe(
+      response => {
+        this.categoria = response.data;
+        console.log('this.categoria', this.categoria);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this._presentacionService.obtener_presentaciones(this.token).subscribe(
+      response => {
+        this.presentacion = response.data;
+        console.log('this.presentacion', this.presentacion);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this._sucursalService.obtener_sucursal_idempresa(this.token).subscribe(
+      response => {
+        this.sucursales = response.data;
+        console.log('this.sucursales', this.sucursales);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this._productoService.obtener_productos_todos(this.token).subscribe(
+      response => {
+        console.log('response productos', response.data);
+        if (response.data != undefined) {
+
+          this.productos = response.data;
+
+          // this.productos = response.data;
+          // console.log('this.productos como objeto',this.productos);
+
+        }
+        this.productos_const = this.productos;
+        console.log('this.productos', this.productos);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this._comprasService.obtener_correlativo_empresa(this.token).subscribe(
+      response => {
+        this.correlativo = response.data[0];
+
+        console.log('this.correlativo', this.correlativo);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this._sucursalService.obtener_stock_sucursales_idempresa(this.token).subscribe(
+      response => {
+        this.stockSucursales = response.data;
+        if (response.data != undefined) {
+          if (this.productos && this.sucursales && this.categoria && this.presentacion && this.stockSucursales) {
+            // Realizar operaciones con los arrays
+            console.log('this.productos', this.productos);
+            console.log('this.sucursales', this.sucursales);
+            console.log('this.categoria', this.categoria);
+            console.log('this.presentacion', this.presentacion);
+            console.log('this.stockSucursales', this.stockSucursales);
+
+            //quiero buscar en response.data el idProducto y traer todo el objeto del idProducto y agregarlo a this.stockSucursales
+
+            this.stockSucursales.forEach((element: any) => {
+              //buscar en this.productos el codigo y traer todo el objeto del codigo
+              const selectedObject = this.productos.find((item: any) => item.idProducto == element.idProducto);
+              element.producto = selectedObject;
+              // Ahora, selectedObject contiene toda la información del elemento seleccionado
+              //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
+              const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
+              element.sucursal = selectedObjectSucursal;
+
+              //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
+              const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.producto.idCategoria);
+              element.categoria = selectedObjectCategoria;
+
+              //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
+              const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.producto.idPresentacion);
+              element.presentacion = selectedObjectPresentacion;
+
+
+
+            });
+          } else {
+            console.error('Uno de los arrays es undefined o está vacío.');
+          }
+
+
+          this.stockSucursales_const = this.stockSucursales;
+          console.log('this.stockSucursales', this.stockSucursales);
+        } else {
+          this.stockSucursales = [];
+        }
+
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+
+  }
 
   buscar() {
     console.log('this.filtro', this.filtro);
@@ -384,211 +555,7 @@ export class PrincipalInventarioComponent {
   }
 
 
-  // registrarCompras() {
-
-  //   this.compras.compCompra = this.compras.serie + '-' + this.compras.numero;
-  //   this.loadButton = true;
-
-  //   console.log('this.compras', this.compras);
-  //   //aqui preparo los datos que iran a crear una compra nueva
-  //   this._comprasService.crear_compra(this.compras, this.token).subscribe(
-  //     response => {
-  //       if (response.data != undefined) {
-  //         //aqui agrego el idcompra de la compra recien creada a cada detalle de compra
-  //         this.idCompra = response.data;
-  //         console.log('this.idCompra', this.idCompra);
-
-
-  //         //una vez registrada la compra prepato para registrar los productos y el detalle de compras
-
-  //         this.nuevoProducto = {};
-  //         this.nuevoDetalleCompra = {};
-  //         //aqui preparo los datos que iran a crear un producto nuevo
-  //         this.detalleCompras.forEach((element: any) => {
-
-  //           // Crear una nueva instancia de nuevoProducto en cada iteración
-  //           this.nuevoProducto = {};
-  //           this.nuevoDetalleCompra = {};
-
-  //           this.nuevoProducto.idProducto = element.idProducto;
-  //           this.nuevoProducto.Codigo = element.codigo;
-  //           this.nuevoProducto.idCategoria = element.idCategoria;
-  //           this.nuevoProducto.descripcion = element.descripcion;
-  //           this.nuevoProducto.idPresentacion = element.idPresentacion;
-  //           this.nuevoProducto.cUnitario = element.cUnitario;
-  //           this.nuevoProducto.fProduccion = element.fProduccion;
-  //           this.nuevoProducto.fVencimiento = element.fVencimiento;
-  //           this.nuevoProducto.cantidad = element.cantidad;
-  //           this.nuevoProducto.cantidadAnterior = element.cantidadAnterior;
-  //           this.nuevoProducto.facturar = 'SI';
-  //           this.nuevoProducto.idStockSucursal = element.idStockSucursal;
-  //           this.nuevoProducto.idEmpresa = element.idEmpresa;
-  //           this.nuevoProducto.idSucursal = element.idSucursal;
-  //           this.nuevoProducto.ubicacion = element.ubicacion;
-
-            
-  //           this.nuevoDetalleCompra.idEmpresa = element.idEmpresa;            
-  //           this.nuevoDetalleCompra.idSucursal = element.idSucursal;
-  //           this.nuevoDetalleCompra.idCompra = this.idCompra;
-  //           this.nuevoDetalleCompra.cantidad = element.cantidad;
-
-  //           this.nuevoDetalleCompra.idPresentacion = element.idPresentacion;
-  //           this.nuevoDetalleCompra.pUnitario = element.cUnitario;
-  //           this.nuevoDetalleCompra.total = element.subtotal;
-
-  //           console.log('this.nuevoProducto', this.nuevoProducto);
-
-  //           //aqui identifico si el producto no existe, entonces lo creo y si existe, solo actualizo el stock
-  //           if (element.idProducto == undefined) {
-  //             console.log('el producto es nuevo');
-  //             //como el codigo es nuevo, entonces creo un producto nuevo
-  //             this._productoService.crear_producto(this.nuevoProducto, this.token).subscribe(
-  //               response => {
-  //                 if (response.data != undefined) {
-  //                   iziToast.show({
-  //                     title: 'SUCCESS',
-  //                     titleColor: '#1DC74C',
-  //                     color: '#FFF',
-  //                     class: 'text-success',
-  //                     position: 'topRight',
-  //                     message: 'El producto se registró correctamente.'
-  //                   });
-  //                 }
-  //                 // this.nuevoProducto = {};
-  //                 this.nuevoProducto.idProducto = response.data;
-  //                 console.log('this.nuevoProducto', this.nuevoProducto);
-
-  //                 //aqui preparo los datos que iran a crear un stock nuevo      
-  //                 console.log('aqui preparo los datos que iran this.nuevodetalleCompras', this.detalleCompras);
-  //                 this._sucursalService.crear_stock_sucursal_idEmpresa(this.nuevoProducto, this.token).subscribe(
-  //                   response => {
-  //                     if (response.data != undefined) {
-  //                       iziToast.show({
-  //                         title: 'SUCCESS',
-  //                         titleColor: '#1DC74C',
-  //                         color: '#FFF',
-  //                         class: 'text-success',
-  //                         position: 'topRight',
-  //                         message: 'El stock se registró correctamente.'
-  //                       });
-  //                     }
-  //                   },
-  //                   error => {
-  //                     console.log(error);
-  //                   }
-  //                 );
-
-
-
-  //                 console.log(' this.nuevoDetalleCompra listo para el backend', this.nuevoDetalleCompra);
-  //                 console.log('idcompra antes de detalle compra', this.idCompra);
-
-  //                 this.nuevoDetalleCompra.idProducto = this.nuevoProducto.idProducto;
-
-  //                 this._comprasService.crear_detalle_compras_idcompra(this.nuevoDetalleCompra, this.token).subscribe(
-  //                   response => {
-  //                     if (response.data != undefined) {
-  //                       iziToast.show({
-  //                         title: 'SUCCESS',
-  //                         titleColor: '#1DC74C',
-  //                         color: '#FFF',
-  //                         class: 'text-success',
-  //                         position: 'topRight',
-  //                         message: 'El detalle de compra se registró correctamente.'
-  //                       });
-  //                     }
-  //                   },
-  //                   error => {
-  //                     console.log(error);
-  //                   }
-  //                 );
-
-
-  //               },
-  //               error => {
-  //                 console.log(error);
-  //               }
-  //             );
-
-  //             this.loadButton = false;
-
-  //           } else {
-  //             //como el codigo ya existe, entonces actualizo el producto y stock
-  //             this._productoService.actualizar_producto(this.nuevoProducto.idProducto, this.nuevoProducto, this.token).subscribe(
-  //               response => {
-  //                 if (response.data != undefined) {
-  //                   iziToast.show({
-  //                     title: 'SUCCESS',
-  //                     titleColor: '#1DC74C',
-  //                     color: '#FFF',
-  //                     class: 'text-success',
-  //                     position: 'topRight',
-  //                     message: 'El producto se actualizó correctamente.'
-  //                   });
-  //                 }
-  //                 console.log('response.data producto actualizado', response.data);
-  //               },
-  //               error => {
-  //                 console.log(error);
-  //               }
-  //             );
-
-  //             this._sucursalService.editar_stock_sucursal(this.nuevoProducto.idProducto, this.nuevoProducto, this.token).subscribe(
-  //               response => {
-  //                 if (response.data != undefined) {
-  //                   iziToast.show({
-  //                     title: 'SUCCESS',
-  //                     titleColor: '#1DC74C',
-  //                     color: '#FFF',
-  //                     class: 'text-success',
-  //                     position: 'topRight',
-  //                     message: 'El stock se actualizó correctamente.'
-  //                   });
-  //                 }
-  //               },
-  //               error => {
-  //                 console.log(error);
-  //               }
-  //             );
-
-  //             this.loadButton = false;
-  //           }
-
-  //         });
-
-
-
-
-  //       }
-
-  //     }
-  //     , error => {
-  //       console.log(error);
-  //     }
-  //   );
-
-  //   console.log('this.correlativo.numero', this.correlativo);
-
-  //   //despues de agregar todos los productos, quiero actualizar el correlativo
-  //   this._comprasService.editar_correlativos_empresa(this.correlativo.idCorrelativo, this.correlativo, this.token).subscribe(
-  //     response => {
-  //       if (response.data != undefined) {
-  //         iziToast.show({
-  //           title: 'SUCCESS',
-  //           titleColor: '#1DC74C',
-  //           color: '#FFF',
-  //           class: 'text-success',
-  //           position: 'topRight',
-  //           message: 'El correlativo se actualizó correctamente.'
-  //         });
-  //       }
-  //     },
-  //     error => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }
-
+  
   registrarCompras() {}
 
 }

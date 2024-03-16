@@ -427,8 +427,8 @@ VALUES
 (
 	NEWID(),
 	'42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
-    'Fenix',
-     'MAr abierto',
+    'Linderos',
+     'Linderos',
 	'5C4491C7-D15D-4EAE-9610-3F999EA40F56',--id usuario
     GETDATE()
 );
@@ -470,6 +470,9 @@ select * from Sucursal
 select * from UsuarioWeb
 select * from StockSucursal
 select * from Productos
+SELECT * FROM PreciosV
+SELECT * FROM DetalleCompras
+select * from compras
 
 --DROP TABLE ORDENESALIDA
 go

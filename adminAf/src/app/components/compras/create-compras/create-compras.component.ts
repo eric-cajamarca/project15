@@ -806,7 +806,7 @@ export class CreateComprasComponent implements OnInit {
               idCompra: this.idCompra,
               cantidad: element.cantidad,
               idPresentacion: element.idPresentacion,
-              pUnitario: element.cUnitario,
+              pUnitario: parseFloat(element.cUnitario),
               total: element.subtotal,
               idProducto: null, // Aún no conocemos el idProducto, se actualizará después de crearlo o encontrarlo
             };

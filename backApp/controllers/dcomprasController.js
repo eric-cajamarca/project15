@@ -56,6 +56,9 @@ const crear_detalle_compras_idcompra = async function (req, res) {
     if (req.user) {
         if (req.user.rol == 'Administrador') {
             try {
+                // Formatear pUnitario a dos decimales
+                const pUnitarioFormateado = parseFloat(pUnitario).toFixed(2);
+
                 let pool = await sql.connect(dbConfig);
                 let detalleCompra = await pool
                 .request()
@@ -65,7 +68,7 @@ const crear_detalle_compras_idcompra = async function (req, res) {
                 .input('cantidad', sql.Decimal, cantidad)
                 .input('idProducto', sql.UniqueIdentifier, idProducto)
                 .input('idPresentacion', sql.Int, idPresentacion)
-                .input('pUnitario', sql.Decimal, pUnitario)
+                .input('pUnitario', sql.Decimal, pUnitarioFormateado)
                 .input('total', sql.Decimal, total)
                 .input('idUsuario', sql.UniqueIdentifier, idUsuario)
                 .query("INSERT INTO DetalleCompras (idEmpresa, idSucursal, idCompra, cantidad, idProducto, idPresentacion, pUnitario, total, idUsuario) VALUES (@idEmpresa, @idSucursal, @idCompra, @cantidad, @idProducto, @idPresentacion, @pUnitario, @total, @idUsuario)");
