@@ -122,7 +122,7 @@ const crear_producto = async (req, res) => {
                     .input("idCategoria", sql.Int, idCategoria)
                     .input("descripcion", sql.VarChar, descripcion)
                     .input("idPresentacion", sql.Int, idPresentacion)
-                    .input("cUnitario", sql.Decimal, cUnitario)
+                    .input("cUnitario", sql.Decimal(18,5), cUnitario)
                     .input("fProduccion", sql.VarChar, fProduccion)
                     .input("fVencimiento", sql.VarChar, fVencimiento)
                     .input("alertaMinimo", sql.Decimal, 5)
@@ -177,7 +177,7 @@ const actualizar_producto = async (req, res) => {
                     .input("idCategoria", sql.Int, idCategoria)
                     .input("descripcion", sql.VarChar, descripcion)
                     .input("idPresentacion", sql.Int, idPresentacion)
-                    .input("cUnitario", sql.Decimal, cUnitario)
+                    .input("cUnitario", sql.Decimal(18,5), cUnitario)
                     .input("fProduccion", sql.VarChar, fProduccion)
                     .input("fVencimiento", sql.VarChar, fVencimiento)
                     .query("UPDATE Productos SET Codigo = @Codigo, idCategoria = @idCategoria, descripcion = @descripcion, idPresentacion = @idPresentacion, cUnitario = @cUnitario, fProduccion = @fProduccion, fVencimiento = @fVencimiento WHERE idProducto = @idProducto");

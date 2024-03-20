@@ -252,7 +252,7 @@ const crear_stock_sucursal_idEmpresa = async function (req, res) {
                     .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
                     .input('idSucursal', sql.UniqueIdentifier, idSucursal)
                     .input('idProducto', sql.UniqueIdentifier, idProducto)
-                    .input('cantidad', sql.Decimal, cantidad)
+                    .input('cantidad', sql.Decimal(18,2), cantidad)
                     .input('ubicacion', sql.VarChar, ubicacion)
                     .input('idUsuario', sql.UniqueIdentifier, idUsuario)
                     .query("INSERT INTO StockSucursal ( idEmpresa, idSucursal, idProducto, cantidad, ubicacion, fIngreso, idUsuario) VALUES ( @idEmpresa, @idSucursal, @idProducto, @cantidad, @ubicacion, GETDATE(), @idUsuario)");
@@ -302,7 +302,7 @@ const editar_stock_sucursal = async function (req, res) {
                     .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
                     .input('idSucursal', sql.UniqueIdentifier, idSucursal)
                     .input('idProducto', sql.UniqueIdentifier, idProducto)
-                    .input('cantidad', sql.Decimal, cantidadTotal)
+                    .input('cantidad', sql.Decimal(18,2), cantidadTotal)
                     .input('ubicacion', sql.VarChar, ubicacion)
                     .input('idUsuario', sql.UniqueIdentifier, idUsuario)
                     .query("UPDATE StockSucursal SET idEmpresa = @idEmpresa, idSucursal = @idSucursal, idProducto = @idProducto, cantidad = @cantidad, ubicacion = @ubicacion, fIngreso = GETDATE(), idUsuario = @idUsuario WHERE idStockSucursal = @idStockSucursal");

@@ -57,7 +57,9 @@ const crear_detalle_compras_idcompra = async function (req, res) {
         if (req.user.rol == 'Administrador') {
             try {
                 // Formatear pUnitario a dos decimales
-                const pUnitarioFormateado = parseFloat(pUnitario).toFixed(2);
+                const pUnitarioFormateado = parseFloat(pUnitario);
+
+                console.log('pUnitarioFormateado: ' , pUnitarioFormateado);
 
                 let pool = await sql.connect(dbConfig);
                 let detalleCompra = await pool
@@ -65,11 +67,11 @@ const crear_detalle_compras_idcompra = async function (req, res) {
                 .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
                 .input('idSucursal', sql.UniqueIdentifier, idSucursal)
                 .input('idCompra', sql.UniqueIdentifier, idCompra)
-                .input('cantidad', sql.Decimal, cantidad)
+                .input('cantidad', sql.Decimal(18,3), cantidad)
                 .input('idProducto', sql.UniqueIdentifier, idProducto)
                 .input('idPresentacion', sql.Int, idPresentacion)
-                .input('pUnitario', sql.Decimal, pUnitarioFormateado)
-                .input('total', sql.Decimal, total)
+                .input('pUnitario', sql.Decimal(18,5), pUnitarioFormateado)
+                .input('total', sql.Decimal(18,2), total)
                 .input('idUsuario', sql.UniqueIdentifier, idUsuario)
                 .query("INSERT INTO DetalleCompras (idEmpresa, idSucursal, idCompra, cantidad, idProducto, idPresentacion, pUnitario, total, idUsuario) VALUES (@idEmpresa, @idSucursal, @idCompra, @cantidad, @idProducto, @idPresentacion, @pUnitario, @total, @idUsuario)");
 
@@ -102,11 +104,11 @@ const editar_detalle_compras_idcompra = async (req, res) => {
                 .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
                 .input('idSucursal', sql.UniqueIdentifier, idSucursal)
                 .input('idCompra', sql.Int, idCompra)
-                .input('cantidad', sql.Decimal, cantidad)
+                .input('cantidad', sql.Decimal(18,3), cantidad)
                 .input('idProducto', sql.UniqueIdentifier, idProducto)
                 .input('idPresentacion', sql.Int, idPresentacion)
-                .input('pUnitario', sql.Decimal, pUnitario)
-                .input('total', sql.Decimal, total)
+                .input('pUnitario', sql.Decimal(18,5), pUnitario)
+                .input('total', sql.Decimal(18,2), total)
                 .input('idUsuario', sql.UniqueIdentifier, idUsuario)
                 .query("UPDATE DetalleCompras SET idEmpresa = @idEmpresa, idSucursal = @idSucursal, idCompra = @idCompra, cantidad = @cantidad, idProducto = @idProducto, idPresentacion = @idPresentacion, pUnitario = @pUnitario, total = @total, idUsuario = @idUsuario WHERE idCompra = '" + idCompra + "'");
 

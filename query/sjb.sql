@@ -652,14 +652,14 @@ INSERT INTO DetalleCompras (idEmpresa,idSucursal, idcompra,  Cantidad,idproducto
 VALUES
 (
 	'42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
-    'E50017E1-B809-41FD-92F4-8AD9163D2E92',--id sucursal
-	1,
-	50.0, --cantidad
-    '6C523685-D1FA-4B5F-822A-C052B3B49D6B', --idproducto
+    '1B6CF05D-7AA9-4BDF-9D49-9D9893503E53',--id sucursal
+	'298F840A-55BA-451E-BCED-1A28B85E6F77',
+	50.5, --cantidad
+    'F7EAEDFB-E8DB-4E56-BD3B-00696C93D9A7', --idproducto
 	10,
 	3.5,
-	175.00,
-	'9B697C80-FFE8-4C91-9362-98FE4D5221D8'--id usuario
+	176.75,
+	'5C4491C7-D15D-4EAE-9610-3F999EA40F56'--id usuario
 );
 go
 
@@ -667,10 +667,12 @@ SELECT * FROM Productos
 select * from PreciosV
 select * from Correlativos
 --UPDATE Correlativos SET numero = 500050 WHERE idCorrelativo = 1;
-
+--delete from DetalleCompras Where idDetalleCompra =15
 select * from compras
+select * from Sucursal
 select * from DetalleCompras
 SELECT * FROM StockSucursal
+SELECT * FROM UsuarioWeb
 go
 
 create table BorradorCompras

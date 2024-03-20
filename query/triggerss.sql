@@ -57,6 +57,7 @@ select * from detalleventas
 
 go
 --sumar stock enla sucursal por la compra
+--drop trigger TR_SumarStockSucursal
 CREATE TRIGGER TR_SumarStockSucursal
 ON DetalleCompras
 AFTER INSERT
