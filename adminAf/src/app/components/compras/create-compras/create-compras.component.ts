@@ -465,11 +465,11 @@ export class CreateComprasComponent implements OnInit {
             element.sucursal = selectedObjectSucursal;
 
             //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
-            const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.producto.idCategoria);
+            const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.idCategoria);
             element.categoria = selectedObjectCategoria;
 
             //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
-            const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.producto.idPresentacion);
+            const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.idPresentacion);
             element.presentacion = selectedObjectPresentacion;
           } else {
             // ... Resto del código que maneja los datos cuando idProducto no está definido
