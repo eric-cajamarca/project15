@@ -84,6 +84,7 @@ CREATE TABLE UsuarioWeb
  )
 GO
 select * from UsuarioWeb
+select * from Rol
 
 
 INSERT INTO UsuarioWeb (idUsuario, idEmpresa, nombres, apellidos, email, password, idRol, estado, fregistro)
@@ -95,7 +96,7 @@ VALUES
     'Ortiz Guevara',
 	'ericortizguevara@gmail.com',
 	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
-    'FA018CD9-F8ED-428B-96AD-EE97313E9896', -- Utiliza directamente el identificador único
+    '055A2720-44D9-4A4B-AD95-D6E902E6ABD1', -- Utiliza directamente el identificador único
     1,
     GETDATE()
 );
@@ -250,7 +251,14 @@ SELECT * FROM DireccionClientes
 --);
 --select * from Proveedors
 
+create table Marcas
+(
+idMarca int identity(1,1) primary key not null,
+Nombre varchar(50) not null,
+idProveedor int not null
 
+FOREIGN KEY (idProveedor) REFERENCES Clientes (idCliente),
+)
 --DROP TABLE presentacion
 create table Presentacion
 (
@@ -317,8 +325,8 @@ insert into Correlativos values('5615C329-F8B6-4634-B0EF-C02B9F2315B3',700000)
 go
 select * from Correlativos
 
-truncate table Productos
-go 
+--truncate table Productos
+--go 
 --drop table Productos
 create table Productos   
 (
@@ -327,6 +335,7 @@ idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE
 Codigo varchar(20) not null,
 idCategoria int not null,
 descripcion varchar(200) not null,
+idMarca int null,
 idPresentacion int not null,
 cUnitario decimal(18,5) not null,
 fProduccion varchar(10) null,
@@ -340,6 +349,7 @@ FIngreso datetime not null,
 
 FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
 FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
+FOREIGN KEY (idMarca) REFERENCES Marcas (idMarca),
 )
 
 go
@@ -364,6 +374,10 @@ VALUES
     GETDATE()
 );
 go
+
+ALTER TABLE productos add Marca varchar(50);
+
+
 select * from Productos
 SELECT * FROM StockSucursal
 select * from UsuarioWeb
@@ -427,9 +441,9 @@ VALUES
 (
 	NEWID(),
 	'42099529-43C9-4B7F-921A-3D6FB946E93E',--idempresa
-    'Linderos',
+    'Fenix',
      'Linderos',
-	'5C4491C7-D15D-4EAE-9610-3F999EA40F56',--id usuario
+	'57E478AF-618C-43DC-A37F-820A844F3E96',--id usuario
     GETDATE()
 );
 go

@@ -79,6 +79,8 @@ export class UpdateComprasComponent {
   // public idProductoEliminar: any ={};
   public token: any;
   public editardetalle: boolean = false;
+  public updateDetalleCompra: any = 0;
+  public updatecompra: any = 0;
 
 
   constructor(
@@ -188,7 +190,8 @@ export class UpdateComprasComponent {
 
   initData() {
 
-
+    this.updateDetalleCompra = 0;
+    this.updatecompra = 0;
 
     this._comprobanteService.obtener_comprobantes(this.token).subscribe(
       response => {
@@ -518,6 +521,8 @@ export class UpdateComprasComponent {
       }
     );
 
+    this.updatecompra++;
+
   }
 
   onSelectPresentacion(selectedValue: any) {
@@ -648,43 +653,43 @@ export class UpdateComprasComponent {
     else {
       //aqui quiero editar el detalle de compras utilizando el indice de la fila seleccionada
       console.log('Aquí quiero editar el detalle de compras utilizando el índice de la fila seleccionada');
-console.log('this.nuevoProducto', this.nuevoProducto);
-console.log('this.detalleCompras', this.detalleCompras);
+      console.log('this.nuevoProducto', this.nuevoProducto);
+      console.log('this.detalleCompras', this.detalleCompras);
 
-// Buscar el elemento correspondiente en detalleCompras
-const index = this.detalleCompras.findIndex((element: any) => element.idProducto === this.nuevoProducto.idProducto);
+      // Buscar el elemento correspondiente en detalleCompras
+      const index = this.detalleCompras.findIndex((element: any) => element.idProducto === this.nuevoProducto.idProducto);
 
-if (index !== -1) { // Si se encuentra el elemento en detalleCompras
-    const element = this.detalleCompras[index];
-    // Actualizar los campos del elemento con los datos del nuevo producto
-    element.idProducto = this.nuevoProducto.idProducto;
-    element.codigo = this.nuevoProducto.codigo;
-    element.descripcion = this.nuevoProducto.descripcion;
-    element.cUnitario = this.nuevoProducto.cUnitario;
-    element.cantidad = this.nuevoProducto.cantidad;
-    element.subtotal = this.nuevoProducto.cUnitario * this.nuevoProducto.cantidad;
-    element.idCategoria = this.nuevoProducto.idCategoria;
-    element.idPresentacion = this.nuevoProducto.idPresentacion;
-    element.idSucursal = this.nuevoProducto.idSucursal;
-    element.ubicacion = this.nuevoProducto.ubicacion;
-    element.fProduccion = this.nuevoProducto.fProduccion;
-    element.fVencimiento = this.nuevoProducto.fVencimiento;
+      if (index !== -1) { // Si se encuentra el elemento en detalleCompras
+        const element = this.detalleCompras[index];
+        // Actualizar los campos del elemento con los datos del nuevo producto
+        element.idProducto = this.nuevoProducto.idProducto;
+        element.codigo = this.nuevoProducto.codigo;
+        element.descripcion = this.nuevoProducto.descripcion;
+        element.cUnitario = this.nuevoProducto.cUnitario;
+        element.cantidad = this.nuevoProducto.cantidad;
+        element.subtotal = this.nuevoProducto.cUnitario * this.nuevoProducto.cantidad;
+        element.idCategoria = this.nuevoProducto.idCategoria;
+        element.idPresentacion = this.nuevoProducto.idPresentacion;
+        element.idSucursal = this.nuevoProducto.idSucursal;
+        element.ubicacion = this.nuevoProducto.ubicacion;
+        element.fProduccion = this.nuevoProducto.fProduccion;
+        element.fVencimiento = this.nuevoProducto.fVencimiento;
 
 
-     //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
-     const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
-     element.sucursal = selectedObjectSucursal;
+        //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
+        const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
+        element.sucursal = selectedObjectSucursal;
 
-     //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
-     const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.idCategoria);
-     element.categoria = selectedObjectCategoria;
+        //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
+        const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.idCategoria);
+        element.categoria = selectedObjectCategoria;
 
-     //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
-     const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.idPresentacion);
-     element.presentacion = selectedObjectPresentacion;
-}
+        //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
+        const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.idPresentacion);
+        element.presentacion = selectedObjectPresentacion;
+      }
 
-this.editardetalle = false;
+      this.editardetalle = false;
 
 
 
@@ -738,7 +743,7 @@ this.editardetalle = false;
     this.correlativo.numero = this.correlativo.numero + 1;
     this.sumarFooterFactura();
 
-
+    this.updateDetalleCompra++;
 
   }
 
@@ -754,6 +759,7 @@ this.editardetalle = false;
     this.compras.total = (this.compras.subTotal + this.compras.igv + this.compras.otrosCargos) - this.compras.descuentos;
 
     console.log('this.compras', this.compras);
+    this.updatecompra++;
   }
 
   onInput() {
@@ -768,36 +774,36 @@ this.editardetalle = false;
 
   }
 
-  sonIguales(objeto1: any, objeto2: any): boolean {
-    // Si ambos son arrays
-    if (Array.isArray(objeto1) && Array.isArray(objeto2)) {
-        // Verificar si ambos arrays tienen la misma longitud
-        if (objeto1.length !== objeto2.length) {
-            return false;
-        }
-        // Verificar si todos los elementos de objeto1 son iguales a los elementos correspondientes de objeto2
-        return objeto1.every((element, index) => element === objeto2[index]);
-    }
+  // sonIguales(objeto1: any, objeto2: any): boolean {
+  //   // Si ambos son arrays
+  //   if (Array.isArray(objeto1) && Array.isArray(objeto2)) {
+  //     // Verificar si ambos arrays tienen la misma longitud
+  //     if (objeto1.length !== objeto2.length) {
+  //       return false;
+  //     }
+  //     // Verificar si todos los elementos de objeto1 son iguales a los elementos correspondientes de objeto2
+  //     return objeto1.every((element, index) => element === objeto2[index]);
+  //   }
 
-    // Si ambos son objetos
-      if (typeof objeto1 === 'object' && objeto1 !== null && typeof objeto2 === 'object' && objeto2 !== null) {
-          const keys1 = Object.keys(objeto1);
-          const keys2 = Object.keys(objeto2);
+  //   // Si ambos son objetos
+  //   if (typeof objeto1 === 'object' && objeto1 !== null && typeof objeto2 === 'object' && objeto2 !== null) {
+  //     const keys1 = Object.keys(objeto1);
+  //     const keys2 = Object.keys(objeto2);
 
-          // Verificar si ambos objetos tienen las mismas claves
-          if (!this.sonArraysIguales(keys1, keys2)) {
-              return false;
-          }
+  //     // Verificar si ambos objetos tienen las mismas claves
+  //     if (!this.sonArraysIguales(keys1, keys2)) {
+  //       return false;
+  //     }
 
-          // Verificar si todos los valores de las claves de objeto1 son iguales a los valores correspondientes de objeto2
-          return keys1.every(key => objeto1[key] === objeto2[key]);
-      }
+  //     // Verificar si todos los valores de las claves de objeto1 son iguales a los valores correspondientes de objeto2
+  //     return keys1.every(key => objeto1[key] === objeto2[key]);
+  //   }
 
-    
 
-    // Si no son ni arrays ni objetos, simplemente comparar los valores
-    return objeto1 === objeto2;
-  }
+
+  //   // Si no son ni arrays ni objetos, simplemente comparar los valores
+  //   return objeto1 === objeto2;
+  // }
 
   sonArraysIguales(array1: any[], array2: any[]): boolean {
     if (array1.length !== array2.length) {
@@ -806,7 +812,7 @@ this.editardetalle = false;
     return array1.every((element, index) => element === array2[index]);
   }
 
-  
+
 
   ActualizarCompras() {
 
@@ -860,214 +866,106 @@ this.editardetalle = false;
             console.log('idProducto: element.idProducto', nuevoDetalleCompra.idProducto);
 
             ////////////////////////////////////////////
-            // Verificar si los arreglos son idénticos (mismo orden y mismos valores)
-            const sonIguales = this.sonIguales(this.detalleCompras, this.detalleCompras_const);
-            if (sonIguales) {
-              console.log("Los arreglos tienen la misma longitud y los mismos elementos.");
+
+            // Identifico si el producto no existe, entonces lo creo, y si existe, solo actualizo el stock
+            if (element.idProducto == undefined) {
+              console.log('El producto es nuevo');
+              this._productoService.crear_producto(nuevoProducto, this.token).subscribe(
+                productoResponse => {
+                  if (productoResponse.data != undefined) {
+                    iziToast.show({
+                      title: 'SUCCESS',
+                      titleColor: '#1DC74C',
+                      color: '#FFF',
+                      class: 'text-success',
+                      position: 'topRight',
+                      message: 'El producto se registró correctamente.',
+                    });
+
+                    // Actualizo el idProducto en nuevoDetalleCompra
+                    nuevoDetalleCompra.idProducto = productoResponse.data;
+                    nuevoProducto.idProducto = productoResponse.data;
+                    // Registro el stock del nuevo producto
+                    this._sucursalService.crear_stock_sucursal_idEmpresa(nuevoProducto, this.token).subscribe(
+                      stockResponse => {
+                        if (stockResponse.data != undefined) {
+                          iziToast.show({
+                            title: 'SUCCESS',
+                            titleColor: '#1DC74C',
+                            color: '#FFF',
+                            class: 'text-success',
+                            position: 'topRight',
+                            message: 'El stock se registró correctamente.',
+                          });
+                        }
+                      },
+                      stockError => {
+                        console.log(stockError);
+                      }
+                    );
+
+                    // Registro el detalle de compra
+                    this._comprasService.crear_detalle_compras_idcompra(nuevoDetalleCompra, this.token).subscribe(
+                      detalleResponse => {
+                        if (detalleResponse.data != undefined) {
+                          iziToast.show({
+                            title: 'SUCCESS',
+                            titleColor: '#1DC74C',
+                            color: '#FFF',
+                            class: 'text-success',
+                            position: 'topRight',
+                            message: 'El detalle de compra se registró correctamente.',
+                          });
+                        }
+                      },
+                      detalleError => {
+                        console.log(detalleError);
+                      }
+                    );
+                  }
+                },
+                productoError => {
+                  console.log(productoError);
+                }
+              );
             } else {
-              console.log("Los arreglos son diferentes.");
-              // Identifico si el producto no existe, entonces lo creo, y si existe, solo actualizo el stock
-              if (element.idProducto == undefined) {
-                console.log('El producto es nuevo');
-                this._productoService.crear_producto(nuevoProducto, this.token).subscribe(
-                  productoResponse => {
-                    if (productoResponse.data != undefined) {
-                      iziToast.show({
-                        title: 'SUCCESS',
-                        titleColor: '#1DC74C',
-                        color: '#FFF',
-                        class: 'text-success',
-                        position: 'topRight',
-                        message: 'El producto se registró correctamente.',
-                      });
-
-                      // Actualizo el idProducto en nuevoDetalleCompra
-                      nuevoDetalleCompra.idProducto = productoResponse.data;
-                      nuevoProducto.idProducto = productoResponse.data;
-                      // Registro el stock del nuevo producto
-                      this._sucursalService.crear_stock_sucursal_idEmpresa(nuevoProducto, this.token).subscribe(
-                        stockResponse => {
-                          if (stockResponse.data != undefined) {
-                            iziToast.show({
-                              title: 'SUCCESS',
-                              titleColor: '#1DC74C',
-                              color: '#FFF',
-                              class: 'text-success',
-                              position: 'topRight',
-                              message: 'El stock se registró correctamente.',
-                            });
-                          }
-                        },
-                        stockError => {
-                          console.log(stockError);
-                        }
-                      );
-
-                      // Registro el detalle de compra
-                      this._comprasService.crear_detalle_compras_idcompra(nuevoDetalleCompra, this.token).subscribe(
-                        detalleResponse => {
-                          if (detalleResponse.data != undefined) {
-                            iziToast.show({
-                              title: 'SUCCESS',
-                              titleColor: '#1DC74C',
-                              color: '#FFF',
-                              class: 'text-success',
-                              position: 'topRight',
-                              message: 'El detalle de compra se registró correctamente.',
-                            });
-                          }
-                        },
-                        detalleError => {
-                          console.log(detalleError);
-                        }
-                      );
-                    }
-                  },
-                  productoError => {
-                    console.log(productoError);
+              // El código ya existe, entonces actualizo el producto y stock
+              this._productoService.actualizar_producto(element.idProducto, nuevoProducto, this.token).subscribe(
+                response => {
+                  if (response.data != undefined) {
+                    iziToast.show({
+                      title: 'SUCCESS',
+                      titleColor: '#1DC74C',
+                      color: '#FFF',
+                      class: 'text-success',
+                      position: 'topRight',
+                      message: 'El producto se actualizó correctamente.',
+                    });
                   }
-                );
-              } else {
-                // El código ya existe, entonces actualizo el producto y stock
-                this._productoService.actualizar_producto(element.idProducto, nuevoProducto, this.token).subscribe(
-                  response => {
-                    if (response.data != undefined) {
-                      iziToast.show({
-                        title: 'SUCCESS',
-                        titleColor: '#1DC74C',
-                        color: '#FFF',
-                        class: 'text-success',
-                        position: 'topRight',
-                        message: 'El producto se actualizó correctamente.',
-                      });
-                    }
-                  },
-                  error => {
-                    console.log(error);
-                  }
-                );
+                },
+                error => {
+                  console.log(error);
+                }
+              );
 
-                this._sucursalService.editar_stock_sucursal(element.idProducto, nuevoProducto, this.token).subscribe(
-                  response => {
-                    if (response.data != undefined) {
-                      iziToast.show({
-                        title: 'SUCCESS',
-                        titleColor: '#1DC74C',
-                        color: '#FFF',
-                        class: 'text-success',
-                        position: 'topRight',
-                        message: 'El stock se actualizó correctamente.',
-                      });
-                    }
-                  },
-                  error => {
-                    console.log(error);
+              this._sucursalService.editar_stock_sucursal(element.idProducto, nuevoProducto, this.token).subscribe(
+                response => {
+                  if (response.data != undefined) {
+                    iziToast.show({
+                      title: 'SUCCESS',
+                      titleColor: '#1DC74C',
+                      color: '#FFF',
+                      class: 'text-success',
+                      position: 'topRight',
+                      message: 'El stock se actualizó correctamente.',
+                    });
                   }
-                );
-              }
+                },
+                error => {
+                  console.log(error);
+                }
+              );
             }
-
-
-
-            // // Identifico si el producto no existe, entonces lo creo, y si existe, solo actualizo el stock
-            // if (element.idProducto == undefined) {
-            //   console.log('El producto es nuevo');
-            //   this._productoService.crear_producto(nuevoProducto, this.token).subscribe(
-            //     productoResponse => {
-            //       if (productoResponse.data != undefined) {
-            //         iziToast.show({
-            //           title: 'SUCCESS',
-            //           titleColor: '#1DC74C',
-            //           color: '#FFF',
-            //           class: 'text-success',
-            //           position: 'topRight',
-            //           message: 'El producto se registró correctamente.',
-            //         });
-
-            //         // Actualizo el idProducto en nuevoDetalleCompra
-            //         nuevoDetalleCompra.idProducto = productoResponse.data;
-            //         nuevoProducto.idProducto = productoResponse.data;
-            //         // Registro el stock del nuevo producto
-            //         this._sucursalService.crear_stock_sucursal_idEmpresa(nuevoProducto, this.token).subscribe(
-            //           stockResponse => {
-            //             if (stockResponse.data != undefined) {
-            //               iziToast.show({
-            //                 title: 'SUCCESS',
-            //                 titleColor: '#1DC74C',
-            //                 color: '#FFF',
-            //                 class: 'text-success',
-            //                 position: 'topRight',
-            //                 message: 'El stock se registró correctamente.',
-            //               });
-            //             }
-            //           },
-            //           stockError => {
-            //             console.log(stockError);
-            //           }
-            //         );
-
-            //         // Registro el detalle de compra
-            //         this._comprasService.crear_detalle_compras_idcompra(nuevoDetalleCompra, this.token).subscribe(
-            //           detalleResponse => {
-            //             if (detalleResponse.data != undefined) {
-            //               iziToast.show({
-            //                 title: 'SUCCESS',
-            //                 titleColor: '#1DC74C',
-            //                 color: '#FFF',
-            //                 class: 'text-success',
-            //                 position: 'topRight',
-            //                 message: 'El detalle de compra se registró correctamente.',
-            //               });
-            //             }
-            //           },
-            //           detalleError => {
-            //             console.log(detalleError);
-            //           }
-            //         );
-            //       }
-            //     },
-            //     productoError => {
-            //       console.log(productoError);
-            //     }
-            //   );
-            // } else {
-            //   // El código ya existe, entonces actualizo el producto y stock
-            //   this._productoService.actualizar_producto(element.idProducto, nuevoProducto, this.token).subscribe(
-            //     response => {
-            //       if (response.data != undefined) {
-            //         iziToast.show({
-            //           title: 'SUCCESS',
-            //           titleColor: '#1DC74C',
-            //           color: '#FFF',
-            //           class: 'text-success',
-            //           position: 'topRight',
-            //           message: 'El producto se actualizó correctamente.',
-            //         });
-            //       }
-            //     },
-            //     error => {
-            //       console.log(error);
-            //     }
-            //   );
-
-            //   this._sucursalService.editar_stock_sucursal(element.idProducto, nuevoProducto, this.token).subscribe(
-            //     response => {
-            //       if (response.data != undefined) {
-            //         iziToast.show({
-            //           title: 'SUCCESS',
-            //           titleColor: '#1DC74C',
-            //           color: '#FFF',
-            //           class: 'text-success',
-            //           position: 'topRight',
-            //           message: 'El stock se actualizó correctamente.',
-            //         });
-            //       }
-            //     },
-            //     error => {
-            //       console.log(error);
-            //     }
-            //   );
-            // }
           });
 
           // Después de agregar todos los productos, actualizo el correlativo

@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./index-sucursal.component.css']
 })
 export class IndexSucursalComponent {
+public sucursales: Array<any> = [];
 
+  constructor() { }
+
+  ngOnInit(): void {
+  }
 }

@@ -10,12 +10,13 @@ insert into EstadoPago values	('Pendiente');
 insert into EstadoPago values	('Pagado');
 go
 select * from EstadoPago
-
+go
 
 create table EstadosPedidos(
 idEstadoPEdido int identity(1,1) primary key,
 descripcion varchar(50) not null
 )
+go
 select * from EstadosPedidos
 go
 
@@ -24,7 +25,7 @@ insert into EstadosPedidos values	('Programado');
 insert into EstadosPedidos values	('Enviado');
 insert into EstadosPedidos values	('Entregado');
 
-
+go
 
 create table Periodos
 (

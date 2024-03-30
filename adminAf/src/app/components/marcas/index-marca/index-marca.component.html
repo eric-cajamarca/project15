@@ -5,26 +5,26 @@
   
         <!-- Title -->
         <h4 class="card-header-title">
-          Mostrando todos las sucursales
+          Mostrando todos los registros
         </h4>
   
         <!-- <button class="btn btn-primary" [routerLink]="['/compras/create']" routerLinkActive="active"
                     style="text-align: right; margin-bottom: 20px;">crear nueva compra</button> -->
       </div>
   
-      <ng-container *ngIf="sucursales.length === 0">
+      <ng-container *ngIf="marcas.length === 0">
         <div class="row">
           <div class="col-12">
             <div class="alert alert-danger" role="alert">
               <div class="alert-text">
-                <p>No tienes sucursales registradas</p>
+                <p>No tienes marcas registradas</p>
               </div>
             </div>
           </div>
         </div>
       </ng-container>
 
-      <ng-container *ngIf="sucursales.length > 0">
+      <ng-container *ngIf="marcas.length > 0">
 
       </ng-container>
     </div>

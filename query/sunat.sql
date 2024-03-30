@@ -173,6 +173,7 @@ create table tipoDoc
 	descripcion varchar(max) not null
 )
 
+select * from tipoDoc
 insert into tipoDoc values ('01','FACTURA')
 insert into tipoDoc values ('03','BOLETA DE VENTA')
 insert into tipoDoc values ('07','NOTA DE CREDITO')
