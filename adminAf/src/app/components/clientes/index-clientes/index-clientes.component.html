@@ -1,135 +1,156 @@
 <app-top-nav></app-top-nav>
 
 <div class="container" style="background-color: white;">
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Nuevo registro de clientes y proveedores</h1>
-            <hr>
-            <div class="row">
-                <div class="col-md-6" style="margin-bottom: 20px;">
-                    <a class="btn btn-primary" [routerLink]="['/cliente/create']" routerLinkActive="active">Nuevo Cliente</a>
-                </div>
-                <div class="input-group input-group-merge">
-                    <input type="text" class="form-control form-control-appended" placeholder="Buscador general" name="filtro"
-                      [(ngModel)]="filtro">
-                    <div class="input-group-append">
-                      <button class="btn btn-primary" (click)="filtrar()">
-                        Buscar
-                      </button>
-                    </div>
-                  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Nuevo registro de clientes y proveedores</h1>
+        <hr>
+      <div class="col-md-6" style="margin-bottom: 20px;">
+        <a class="btn btn-primary" [routerLink]="['/cliente/create']" routerLinkActive="active">Nuevo Cliente</a>
+      </div>
+
+      <ng-container *ngIf="clientes.length === 0">
+        <div class="row">
+          <div class="col-12">
+            <div class="alert alert-danger" role="alert">
+              <div class="alert-text">
+                <p>No tienes clientes registrados</p>
+              </div>
             </div>
-            <hr>
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Ruc/Dni</th>
-                        <th>Razón Social</th>
-                        <th>Condición</th>
-                        
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody class="font-size-base">
-                    <tr
-                        *ngFor="let item of clientes | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
-                        <td>{{item.ruc}}</td>
-                        <td>{{item.rSocial}}</td>
-                        <td>
-                          <span class="badge bg-success" *ngIf="item.condicion === 'ACTIVO'">Activo</span>
-                          <span class="badge bg-danger" *ngIf="item.condicion === 'INACTIVO'">Inactivo</span>
-                        </td>
-            
-                        <td>
-                            <!-- <a class="btn btn-outline-primary btn-sm" routerLink="/clientes/editar">Editar</a>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="clientes.length > 0">
+        
+        <div class="row">
+          
+          <div class="input-group input-group-merge">
+            <input type="text" class="form-control form-control-appended" placeholder="Buscador general" name="filtro"
+              [(ngModel)]="filtro">
+            <div class="input-group-append">
+              <button class="btn btn-primary" (click)="filtrar()">
+                Buscar
+              </button>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Ruc/Dni</th>
+              <th>Razón Social</th>
+              <th>Condición</th>
+
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="font-size-base">
+            <tr *ngFor="let item of clientes | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+              <td>{{item.ruc}}</td>
+              <td>{{item.rSocial}}</td>
+              <td>
+                <span class="badge bg-success" *ngIf="item.condicion === 'ACTIVO'">Activo</span>
+                <span class="badge bg-danger" *ngIf="item.condicion === 'INACTIVO'">Inactivo</span>
+              </td>
+
+              <td>
+                <!-- <a class="btn btn-outline-primary btn-sm" routerLink="/clientes/editar">Editar</a>
                             <a class="btn btn-outline-danger btn-sm" style="margin-left: 10px;">Eliminar</a> -->
 
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-                                  aria-expanded="false">
-                                  Opciones
-                                </button>
-                                <ul class="dropdown-menu">
-                                  <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.condicion === 'ACTIVO'" data-bs-toggle="modal"
-                                    [attr.data-bs-target]="'#update-'+item.idCliente">
-                                    <i class="icon-1x text-dark-50 flaticon2-cross"></i> &nbsp; Desactivar
-                                  </a>
-                                  <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.condicion === 'INACTIVO'" data-bs-toggle="modal"
-                                    [attr.data-bs-target]="'#update-'+item.idCliente">
-                                    <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Activar
-                                  </a>
-                                  <a class="dropdown-item" [routerLink]="['/cliente',item.idCliente]">
-                                    <i class="icon-1x text-dark-50 flaticon-edit"></i> &nbsp; Editar
-                                  </a>
-                                  <a style="cursor: pointer;" class="dropdown-item" data-bs-toggle="modal"
-                                    [attr.data-bs-target]="'#delete-'+item.idCliente">
-                                    <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Eliminar
-                                  </a>
-                                </ul>
-                              </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Opciones
+                  </button>
+                  <ul class="dropdown-menu">
+                    <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.condicion === 'ACTIVO'"
+                      data-bs-toggle="modal" [attr.data-bs-target]="'#update-'+item.idCliente">
+                      <i class="icon-1x text-dark-50 flaticon2-cross"></i> &nbsp; Desactivar
+                    </a>
+                    <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.condicion === 'INACTIVO'"
+                      data-bs-toggle="modal" [attr.data-bs-target]="'#update-'+item.idCliente">
+                      <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Activar
+                    </a>
+                    <a class="dropdown-item" [routerLink]="['/cliente',item.idCliente]">
+                      <i class="icon-1x text-dark-50 flaticon-edit"></i> &nbsp; Editar
+                    </a>
+                    <a style="cursor: pointer;" class="dropdown-item" data-bs-toggle="modal"
+                      [attr.data-bs-target]="'#delete-'+item.idCliente">
+                      <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Eliminar
+                    </a>
+                  </ul>
+                </div>
 
-                              <div class="modal fade" id="update-{{item.idCliente}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Cambio de estado del registro: {{item.rSocial}} </h5>
-                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                <i aria-hidden="true" class="ki ki-close"></i>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Está seguro que desea cambiar el estado del registro?.</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-warning font-weight-bold" data-bs-dismiss="modal">Cerrar</button>
-                                            <button *ngIf="!load_estado" type="button" class="btn btn-danger font-weight-bold" (click)="set_state(item.idCliente,item.condicion)">Sí, Cambiar</button>
-                            
-                                            <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
-                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                Cambiando...
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                              </div>
-                              <!-- modal eliminar -->
-                              <div class="modal fade" id="delete-{{item.idCliente}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar registro: {{item.rSocial}} </h5>
-                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                <i aria-hidden="true" class="ki ki-close"></i>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Está seguro que desea eliminar el registro?.</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-warning font-weight-bold" data-bs-dismiss="modal">Cerrar</button>
-                                            <button *ngIf="!load_estado" type="button" class="btn btn-danger font-weight-bold" (click)="eliminar(item.idCliente)">Sí, Eliminar</button>
-                            
-                                            <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
-                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                Eliminando...
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                              </div>
-                        </td>
-                        
-                    </tr>
-                </tbody>
+                <div class="modal fade" id="update-{{item.idCliente}}" tabindex="-1" role="dialog"
+                  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Cambio de estado del registro: {{item.rSocial}}
+                        </h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                          <i aria-hidden="true" class="ki ki-close"></i>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Está seguro que desea cambiar el estado del registro?.</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-warning font-weight-bold"
+                          data-bs-dismiss="modal">Cerrar</button>
+                        <button *ngIf="!load_estado" type="button" class="btn btn-danger font-weight-bold"
+                          (click)="set_state(item.idCliente,item.condicion)">Sí, Cambiar</button>
 
-            </table>
-            
-        </div>
-        <ngb-pagination *ngIf="clientes.length >= 1" 
-            [(page)]="page" 
-            [pageSize]="pageSize"
-            [maxSize]="10"
-            [rotate]="true" [boundaryLinks]="true" [collectionSize]="clientes.length">
-          </ngb-pagination>
+                        <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
+                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                          Cambiando...
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- modal eliminar -->
+                <div class="modal fade" id="delete-{{item.idCliente}}" tabindex="-1" role="dialog"
+                  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Eliminar registro: {{item.rSocial}} </h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                          <i aria-hidden="true" class="ki ki-close"></i>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Está seguro que desea eliminar el registro?.</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-warning font-weight-bold"
+                          data-bs-dismiss="modal">Cerrar</button>
+                        <button *ngIf="!load_estado" type="button" class="btn btn-danger font-weight-bold"
+                          (click)="eliminar(item.idCliente)">Sí, Eliminar</button>
+
+                        <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
+                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                          Eliminando...
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+            </tr>
+          </tbody>
+
+        </table>
+      </ng-container>
+
+
     </div>
+    <ngb-pagination *ngIf="clientes.length >= 1" [(page)]="page" [pageSize]="pageSize" [maxSize]="10" [rotate]="true"
+      [boundaryLinks]="true" [collectionSize]="clientes.length">
+    </ngb-pagination>
+  </div>
 </div>

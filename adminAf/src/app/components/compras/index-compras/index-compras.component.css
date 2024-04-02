@@ -4,3 +4,8 @@
     color: white;
     border:  #94847c 1px solid;
 }
+.btn-primary:hover{
+    background-color: #9c9b9a;
+    color: white;
+    border:  #e3672e 1px solid;
+}

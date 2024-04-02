@@ -39,6 +39,8 @@ CREATE TABLE DireccionEmpresa (
 	codLocal varchar(10) null
 );
 
+go
+
 insert into DireccionEmpresa values ('42099529-43C9-4B7F-921A-3D6FB946E93E', '060801','PEN','CAJAMARCA','JAEN','JAEN','URB. LOS OLIVOS','PJ. LOS OLIVOS NRO. C-02 URB. H.U PALESTINA (FRENTE AL PARQUE LOS OLIVOS)','');
 insert into DireccionEmpresa values ('BA51C992-7D05-459E-B419-A03358C0A788','060801','PEN','CAJAMARCA','JAEN','JAEN' ,'URB. LOS OLIVOS','PJ. LOS OLIVOS C-1 NRO. SN URB. PALESTINA (1ER PISO)','');
 insert into DireccionEmpresa values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','060801','PEN','CAJAMARCA','JAEN','JAEN','URB. LOS OLIVOS','PSJE. LOS OLIVOS S/N URB. LOS OLIVOSPSJE. LOS OLIVOS S/N URB. LOS OLIVOS','');
@@ -96,7 +98,7 @@ VALUES
     'Ortiz Guevara',
 	'ericortizguevara@gmail.com',
 	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
-    '055A2720-44D9-4A4B-AD95-D6E902E6ABD1', -- Utiliza directamente el identificador único
+    '10CDC34E-33BD-4EE2-B1C9-629F6C640EA5', -- Utiliza directamente el identificador único
     1,
     GETDATE()
 );
@@ -146,6 +148,7 @@ select * from Usuarios
 go
 
 --drop table Clientes
+--truncate table clientes
 create table Clientes
 (
 idCliente int identity (1,1) primary key not null,
@@ -162,21 +165,21 @@ go
 select * from Documentos
 --select * from Clientes_ruc
 
-INSERT INTO Clientes (idEmpresa, idDocumento, ruc, rSocial, correo,celular,  condicion)
-VALUES
-(
-    '42099529-43C9-4B7F-921A-3D6FB946E93E',
-	4,
-	'10456333538',
-    'Eric Ortiz Guevara',
-	'ericortizguevara@gmail.com',
-	'999999999',
-    'habido'
-);
---truncate table Clientes
---truncate table direccionclientes
-select * from Clientes
-SELECT * FROM DireccionClientes
+--INSERT INTO Clientes (idEmpresa, idDocumento, ruc, rSocial, correo,celular,  condicion)
+--VALUES
+--(
+--    '42099529-43C9-4B7F-921A-3D6FB946E93E',
+--	4,
+--	'10456333538',
+--    'Eric Ortiz Guevara',
+--	'ericortizguevara@gmail.com',
+--	'999999999',
+--    'habido'
+--);
+----truncate table Clientes
+----truncate table direccionclientes
+--select * from Clientes
+--SELECT * FROM DireccionClientes
 
 
 --drop table DireccionClientes
@@ -251,14 +254,18 @@ SELECT * FROM DireccionClientes
 --);
 --select * from Proveedors
 
+--drop table marcas
 create table Marcas
 (
 idMarca int identity(1,1) primary key not null,
-Nombre varchar(50) not null,
-idProveedor int not null
-
-FOREIGN KEY (idProveedor) REFERENCES Clientes (idCliente),
+nombre varchar(50) not null,
+descripcion varchar(200) null,
+contacto varchar(100) null,
+paginaWeb varchar(100) null,
+estado bit
 )
+
+go
 --DROP TABLE presentacion
 create table Presentacion
 (

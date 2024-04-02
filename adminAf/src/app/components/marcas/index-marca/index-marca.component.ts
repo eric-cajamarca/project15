@@ -13,4 +13,8 @@ export class IndexMarcaComponent {
   ngOnInit(): void {
   }
 
+  deleteMarca(id: number) {
+    console.log('Eliminar marca con id: ', id);
+  }
+
 }

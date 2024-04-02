@@ -1,3 +1,27 @@
+--se registrara un nuevo registro por cada nuevo producto que se agrege a los productos
+
+CREATE TRIGGER InsertarUnidadesPorCaja
+ON Productos
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Insertar un nuevo registro en UnidadesPorCaja para cada producto insertado
+    INSERT INTO UnidadesPorCaja (idProducto, interior, maestro, PxUnidad, PxCaja, fxCaja, fxArticulo)
+    SELECT
+        idProducto,
+        0, -- Valor inicial para interior
+        0, -- Valor inicial para maestro
+        0.00, -- Valor inicial para PxUnidad
+        0.00, -- Valor inicial para PxCaja
+        0.00, -- Valor inicial para fxCaja
+        0.00 -- Valor inicial para fxArticulo
+    FROM
+        inserted;
+END;
+
+
 
 --inserto un nuevo registro con el idproducto creado
 -- Crear un trigger AFTER INSERT
