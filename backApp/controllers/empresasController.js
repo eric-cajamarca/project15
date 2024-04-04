@@ -4,6 +4,19 @@ const bcrypt = require('bcryptjs');
 const moment = require('moment');
 const jwt = require('../helpers/jwt');
 
+// CREATE TABLE Empresas(
+// 	idEmpresa UNIQUEIDENTIFIER primary key NOT NULL,
+// 	ruc varchar(11) NULL,
+// 	razon_Social varchar(200) NULL,
+// 	nombreComercial varchar(200) null,
+// 	rubro varchar(200) NULL,
+// 	celular varchar(11) NULL,
+// 	whatsapp varchar(11) NULL,
+// 	correo varchar(100) NULL,
+// 	logo varbinary(max) NULL,
+// 	alias varchar(10) NULL,
+// 	estado bit NOT NULL
+// )
 
 const getEmpresas = async function (req, res) {
 
@@ -12,7 +25,9 @@ const getEmpresas = async function (req, res) {
         console.log('req.user.rol');
         try {
             const pool = await sql.connect(dbConfig);
-            const result = await pool.request().query('SELECT * FROM Empresa');
+            const result = await pool
+            .request()
+            .query('SELECT * FROM Empresa');
             // res.json(result.recordset);
             // console.log('result.recordset');
             // console.log(result.recordset);
@@ -101,7 +116,7 @@ const createEmpresa = async (req, res) => {
                 .input('Correo', sql.VarChar, Correo)
                 .input('Logo', sql.VarBinary, base64String)
                 .input('Alias', sql.VarChar, Alias)
-                .query('INSERT INTO Empresa (Ruc, Razon_Social, Rubro, Direccion, Distrito, Region, Provincia, Celular, Whatsapp, Correo, Logo, Alias) VALUES (@Ruc, @Razon_Social, @Rubro, @Direccion, @Distrito, @Region, @Provincia, @Celular, @Whatsapp, @Correo, @Logo, @Alias)');
+                .query('INSERT INTO Empresa (Ruc, Razon_Social, Rubro, Direccion, Distrito, Region, Provincia, Celular, Whatsapp, Correo, Logo, Alias) VALUES (@Ruc, @Razon_Social, @Rubro, @Direccion, @Distrito, @Region, @Provincia, @Celular, @Whatsapp, @Correo, @Logo, @Alias, 1)');
             // res.json({ message: 'Usuario creado correctamente' });}
             console.log('valor de result:', result.rowsAffected);
             let data = result.rowsAffected
@@ -119,37 +134,68 @@ const updateEmpresa = async (req, res) => {
     //   const { name, apellidos, email, password, rol, estado } = req.body;
     const { name, apellidos, password, rol } = req.body;
     const { id } = req.params;
-    try {
+    if (req.user) {
+        try {
 
 
-        console.log('cuando viene sin password');
-
-        const pool = await sql.connect(dbConfig);
-        const result = await pool
-            .request()
-            .input('Ruc', sql.VarChar, Ruc)
-            .input('Razon_Social', sql.VarChar, Razon_Social)
-            .input('Rubro', sql.VarChar, Rubro)
-            .input('Direccion', sql.VarChar, Direccion)
-            .input('Distrito', sql.VarChar, Distrito)
-            .input('Region', sql.VarChar, Region)
-            .input('Provincia', sql.VarChar, Provincia)
-            .input('Celular', sql.VarChar, Celular)
-            .input('Whatsapp', sql.VarChar, Whatsapp)
-            .input('Correo', sql.VarChar, Correo)
-            .input('Logo', sql.Image, Logo)
-            .input('Alias', sql.VarChar, Alias)
-
-            .query('UPDATE Empresa SET Razon_Social = @Razon_Social, Rubro = @Rubro, Direccion = @Direccion, Distrito = @Distrito, Region = @Region, Provincia = @Provincia, Celular = @Celular, Whatsapp = @Whatsapp, Correo = @Correo, Logo = @Logo, Alias = @Alias WHERE id = @id');
-        res.status(200).send({ message: 'Empresa actualizado  correctamente', data: result.rowsAffected });
-
-
-
-    } catch (error) {
-        console.error('Error al actualizar un usuario:', error);
-        res.status(500).send('Error al actualizar un usuario');
+            console.log('cuando viene sin password');
+    
+            const pool = await sql.connect(dbConfig);
+            const result = await pool
+                .request()
+                .input('Ruc', sql.VarChar, Ruc)
+                .input('Razon_Social', sql.VarChar, Razon_Social)
+                .input('Rubro', sql.VarChar, Rubro)
+                .input('Direccion', sql.VarChar, Direccion)
+                .input('Distrito', sql.VarChar, Distrito)
+                .input('Region', sql.VarChar, Region)
+                .input('Provincia', sql.VarChar, Provincia)
+                .input('Celular', sql.VarChar, Celular)
+                .input('Whatsapp', sql.VarChar, Whatsapp)
+                .input('Correo', sql.VarChar, Correo)
+                .input('Logo', sql.Image, Logo)
+                .input('Alias', sql.VarChar, Alias)
+    
+                .query('UPDATE Empresa SET Razon_Social = @Razon_Social, Rubro = @Rubro, Direccion = @Direccion, Distrito = @Distrito, Region = @Region, Provincia = @Provincia, Celular = @Celular, Whatsapp = @Whatsapp, Correo = @Correo, Logo = @Logo, Alias = @Alias WHERE id = @id');
+            res.status(200).send({ message: 'Empresa actualizado  correctamente', data: result.rowsAffected });
+    
+    
+    
+        } catch (error) {
+            console.error('Error al actualizar un usuario:', error);
+            res.status(500).send('Error al actualizar un usuario');
+        }
+    }else{
+        res.status(401).send({ message: 'No Access' });
     }
+    
 };
+
+//cambiar estado de la empresa
+const cambiar_estado_empresa = async function (req, res) {
+    if (req.user) {
+        let idEmpresa = req.params['id'];
+        const {estado} = req.body;
+        
+        if(!estado){
+            nuevo_estado = true;
+        }else{
+            nuevo_estado = false;
+        }
+
+        try {
+            const pool = await sql.connect(dbConfig);
+            const result = await pool
+                .request()
+                .input('idEmpresa', sql.Int, idEmpresa)
+                .input('estado', sql.Bit, nuevo_estado)
+                .query('UPDATE Empresa SET estado = @estado WHERE idEmpresa = @idEmpresa');
+        } catch (error) {
+            
+        }
+
+    }
+}
 
 const obtener_datos_colaborador_admin = async (req, res) => {
     const { id } = req.params;
@@ -286,6 +332,7 @@ module.exports = {
     getEmpresas,
     createEmpresa,
     updateEmpresa,
+    cambiar_estado_empresa,
     deleteAdmin,
     // admin_login,
     cambiar_estado_colaborador_admin,

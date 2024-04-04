@@ -1,5 +1,24 @@
---se registrara un nuevo registro por cada nuevo producto que se agrege a los productos
+--crear correlativo cada vez que se agregue una nueva empresa
+CREATE TRIGGER TR_CrearCorrelativo
+ON Empresas
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @idEmpresa UNIQUEIDENTIFIER;
+    DECLARE @numero int;
 
+    -- Obtener el idEmpresa y el número deseado para el nuevo registro de Correlativos
+    SELECT @idEmpresa = idEmpresa, @numero = 10000 FROM inserted;
+
+    -- Insertar el nuevo registro en Correlativos
+    INSERT INTO Correlativos (idEmpresa, numero)
+    VALUES (@idEmpresa, @numero);
+END;
+
+
+
+--se registrara un nuevo registro por cada nuevo producto que se agrege a los productos
+--drop trigger InsertarUnidadesPorCaja
 CREATE TRIGGER InsertarUnidadesPorCaja
 ON Productos
 AFTER INSERT
@@ -8,15 +27,12 @@ BEGIN
     SET NOCOUNT ON;
 
     -- Insertar un nuevo registro en UnidadesPorCaja para cada producto insertado
-    INSERT INTO UnidadesPorCaja (idProducto, interior, maestro, PxUnidad, PxCaja, fxCaja, fxArticulo)
+    INSERT INTO UnidadesPorCaja (idProducto, unidxCaja, pesoUnidad, pesoCaja)
     SELECT
         idProducto,
-        0, -- Valor inicial para interior
-        0, -- Valor inicial para maestro
-        0.00, -- Valor inicial para PxUnidad
-        0.00, -- Valor inicial para PxCaja
-        0.00, -- Valor inicial para fxCaja
-        0.00 -- Valor inicial para fxArticulo
+        0, -- unidades x caja
+        0.00, -- Valor peso x Unidad
+        0.00 -- Valor peso x Caja
     FROM
         inserted;
 END;
@@ -26,7 +42,7 @@ END;
 --inserto un nuevo registro con el idproducto creado
 -- Crear un trigger AFTER INSERT
 --drop trigger trgAfterInsertProductos
-CREATE TRIGGER trgAfterInsertProductos
+CREATE TRIGGER InsertProductosPreciosV
 ON Productos
 AFTER INSERT
 AS
@@ -114,6 +130,7 @@ select * from Sucursal
 select * from StockSucursal
 select * from DetalleCompras
 
+go
 --------------------------------------------------------------------------
 --aumentar el numero de comprobante cada vez que se haga una venta
 
@@ -143,7 +160,8 @@ END;
 
 select * from Comprobantes
 
-----------------------------------------------------------------------------
+go
+---go-------------------------------------------------------------------------
 
 ----------------------------------------------------
 --drop trigger TR_ActualizarCajaDespuesDeVentas
@@ -176,13 +194,13 @@ BEGIN
         AND fecha = @fecha;
 END;
 
-
+go
 
 select * from StockSucursal
 select * from DetalleCompras
 
 
-
+go
 ---------------------------------------------
 CREATE TRIGGER DespuesDeEliminarDetalleCompra
 ON DetalleCompras
@@ -203,6 +221,7 @@ BEGIN
     WHERE idProducto = @IdProducto and idEmpresa = @IdEmpresa;
 END;
 
+go
 
 CREATE TRIGGER DespuesDeModificarDetalleCompra
 ON DetalleCompras

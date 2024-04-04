@@ -2,6 +2,8 @@ const express = require('express');
 var bodyparser = require('body-parser');
 const cors = require('cors');
 const { connectDB } = require('./dbConnection'); // Asegúrate de que la importación sea correcta
+const xss = require('xss');
+
 
 const detalleVentasRoutes = require('./routes/detalleventas'); // Importa el enrutador de detalleventas
 const adminRoutes = require('./routes/admin');
@@ -21,6 +23,9 @@ const sucursalRoutes = require('./routes/sucursal');
 const tablasSunatRoutes = require('./routes/tablasSunat');
 const categoriaRoutes = require('./routes/categoria');
 const presentacionRoutes = require('./routes/presentacion');
+const marcaRoutes = require('./routes/marcas');
+const unidporcajaRoutes = require('./routes/unidporcaja');
+
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -43,6 +48,17 @@ app.get('/database', async (req, res) => {
 
 app.use(bodyparser.urlencoded({limit: '50mb',extended:true}));
 app.use(bodyparser.json({limit: '50mb', extended: true}));
+
+// Middleware para sanitizar el cuerpo de la solicitud
+app.use((req, res, next) => {
+  // Sanitizar campos del cuerpo de la solicitud
+  if (req.body) {
+    Object.keys(req.body).forEach(key => {
+      req.body[key] = xss(req.body[key]);
+    });
+  }
+  next();
+});
 
 
 app.use(cors({
@@ -79,6 +95,8 @@ app.use('/api', sucursalRoutes);
 app.use('/api', tablasSunatRoutes);
 app.use('/api', categoriaRoutes);
 app.use('/api', presentacionRoutes);
+app.use('/api', marcaRoutes);
+app.use('/api', unidporcajaRoutes);
 
 
 // Escuchar en el puerto

@@ -20,7 +20,7 @@ const getAdmin = async function (req, res) {
                 .request()
                 .input('empresa', sql.UniqueIdentifier, req.user.empresa)
                 .query('SELECT * FROM UsuarioWeb UW INNER JOIN Rol R ON UW.idRol = R.idRol WHERE UW.idEmpresa = @empresa')
-//.query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol where UsuarioWeb.estado = 1 and idEmpresa = @empresa');
+                //.query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol where UsuarioWeb.estado = 1 and idEmpresa = @empresa');
                 // res.json(result.recordset);
                 // console.log('result.recordset');
                 // console.log(result.recordset);

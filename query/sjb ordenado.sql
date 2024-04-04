@@ -28,6 +28,7 @@ rSocial varchar(200) not null,
 correo varchar(100) null,
 celular varchar (50) null,
 condicion varchar(50) null,
+estado bit not null
 FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
 )
 go
@@ -135,27 +136,29 @@ select * from Categorias
 
 go
 
---drop table marcas
+--drop table Marcas
 create table Marcas
 (
 idMarca int identity(1,1) primary key not null,
+idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE not null,
 nombre varchar(50) not null,
 descripcion varchar(200) null,
 contacto varchar(100) null,
 paginaWeb varchar(100) null,
-estado bit
+estado bit not null
 )
 
+insert into Marcas values('42099529-43C9-4B7F-921A-3D6FB946E93E','TRUPER','HERRAMIENTAS Y ACCESORIOS', 'VENDEDOR ROJER', 'WWW.TRUPER.COM',1)
+
 select * from marcas
+select * from empresas
 go
 --TRUNCATE TABLE CORRELATIVO
 create table Correlativos
 (
 idCorrelativo int identity (1,1) primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE not null,
 numero int not null,
-
-
 )
 go
 
@@ -170,7 +173,7 @@ go
 create table Productos   
 (
 idProducto UNIQUEIDENTIFIER primary key not null,
-idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE not null,
 Codigo varchar(20) not null,
 idCategoria int not null,
 descripcion varchar(200) not null,
@@ -185,6 +188,7 @@ VecesVendidas int null,
 facturar varchar(2) null,
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 FIngreso datetime not null,
+estado bit not null
 
 FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
 FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
@@ -200,7 +204,7 @@ go
 create table PreciosV
 (
 idPreciosV int identity (1,1) not null,
-idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
+idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto) not null,
 cUnitario decimal(18,4) null,
 mayorista decimal(18,4) null,
 cliente decimal(18,4) null,
@@ -212,7 +216,7 @@ go
 
 CREATE TABLE UndPorCaja (
     idUndPorCaja INT PRIMARY KEY IDENTITY(1,1),
-    idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto) ON DELETE CASCADE,
+    idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto) ON DELETE CASCADE not null,
     unidadesxCaja int not null,
     pesoUnidad DECIMAL(10,2) NOT NULL, -- Peso por unidad del producto
     pesoCaja DECIMAL(10,2) NOT NULL, -- Peso total por caja o bulto
@@ -232,11 +236,12 @@ go
 create table Sucursal
 (
 idSucursal UNIQUEIDENTIFIER primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE not null,
 nombre varchar(20) not null,
 direccion varchar(200) null,
 idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
-fregistro datetime not null
+fregistro datetime not null,
+estado bit not null
 )
 
 
@@ -250,9 +255,9 @@ go
 create table StockSucursal
 (
 idStockSucursal int identity(1,1) primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa), 
-idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal) ON DELETE CASCADE,
-idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) not null, 
+idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal) ON DELETE CASCADE not null,
+idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto)  not null,
 cantidad decimal(18,2) not null,
 ubicacion Varchar(20) null,
 fIngreso datetime null,
@@ -315,7 +320,7 @@ go
 create table Compras
 (
 idcompra UNIQUEIDENTIFIER primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE not null,
 compCompra varchar(13) not null,
 idComprobante int not null,
 serie varchar(4) not null,
@@ -350,9 +355,9 @@ go
 create table DetalleCompras
 (
 idDetalleCompra int identity(1,1) primary key not null,
-idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ,
-idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal) , -- Nueva columna
-idCompra UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Compras (idCompra) ON DELETE CASCADE,
+idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) not null ,
+idSucursal UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Sucursal(idSucursal) not null, -- Nueva columna
+idCompra UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Compras (idCompra) ON DELETE CASCADE not null,
 cantidad decimal(18,3) not null,
 idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto),
 idPresentacion int not null,
@@ -367,3 +372,14 @@ FOREIGN KEY (idPresentacion) REFERENCES Presentacion (idPresentacion),
 
 go
 
+--drop table UndPorCaja
+CREATE TABLE UndPorCaja (
+    idUndPorCaja INT PRIMARY KEY IDENTITY(1,1) not null,
+	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE not null,
+    idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto) not null,
+    unidxCaja int not null,
+    pesoUnidad DECIMAL(10,2) NOT NULL, -- Peso por unidad del producto
+    pesoCaja DECIMAL(10,2) NOT NULL, -- Peso total por caja o bulto
+);
+
+select * from UndPorCaja

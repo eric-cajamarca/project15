@@ -15,12 +15,13 @@ CREATE TABLE Empresas(
 	correo varchar(100) NULL,
 	logo varbinary(max) NULL,
 	alias varchar(10) NULL,
+	estado bit NOT NULL
 )
 go
 
-insert into Empresas values ('42099529-43C9-4B7F-921A-3D6FB946E93E','20611688564','EMPRESA FERRETERA AVE FENIX SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','968073361','',CONVERT(varbinary(max),''),'Fenix');
-insert into Empresas values ('BA51C992-7D05-459E-B419-A03358C0A788','20611658495','GRUPO OLITOR SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','968073361','',CONVERT(varbinary(max),''),'Olitor');
-insert into Empresas values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','10426524541','TORRES NUÑEZ LUCILA','','VENTA AL POR MAYOR Y MENOR DE MATERIALES DE CONSTRUCCIÓN Y ARTÍCULOS DE FERRETERÍA','966818231','966818231','lucilatorressjb@gmail.com',CONVERT(varbinary(max),''),'Lucila');
+insert into Empresas values ('42099529-43C9-4B7F-921A-3D6FB946E93E','20611688564','EMPRESA FERRETERA AVE FENIX SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','968073361','',CONVERT(varbinary(max),''),'Fenix',1);
+insert into Empresas values ('BA51C992-7D05-459E-B419-A03358C0A788','20611658495','GRUPO OLITOR SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','968073361','',CONVERT(varbinary(max),''),'Olitor',1);
+insert into Empresas values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','10426524541','TORRES NUÑEZ LUCILA','','VENTA AL POR MAYOR Y MENOR DE MATERIALES DE CONSTRUCCIÓN Y ARTÍCULOS DE FERRETERÍA','966818231','966818231','lucilatorressjb@gmail.com',CONVERT(varbinary(max),''),'Lucila',0);
 
 go 
 select * from Empresas
@@ -98,7 +99,7 @@ VALUES
     'Ortiz Guevara',
 	'ericortizguevara@gmail.com',
 	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
-    '10CDC34E-33BD-4EE2-B1C9-629F6C640EA5', -- Utiliza directamente el identificador único
+    'D653DB53-F6A6-4503-A35C-34DA59F30F31', -- Utiliza directamente el identificador único
     1,
     GETDATE()
 );
@@ -416,6 +417,20 @@ VALUES
 go
 select * from PreciosV
 select * from Productos
+
+
+CREATE TABLE UndPorCaja (
+    idUndPorCaja INT PRIMARY KEY IDENTITY(1,1),
+    idProducto UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Productos (idProducto) ON DELETE CASCADE,
+    unidadesxCaja int not null,
+    pesoUnidad DECIMAL(10,2) NOT NULL, -- Peso por unidad del producto
+    pesoCaja DECIMAL(10,2) NOT NULL, -- Peso total por caja o bulto
+    
+    
+);
+
+
+
 --create table HistorialProductos
 --(
 --idHistorialP int identity(1,1) primary key not null,
