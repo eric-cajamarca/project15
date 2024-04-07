@@ -50,15 +50,15 @@ app.use(bodyparser.urlencoded({limit: '50mb',extended:true}));
 app.use(bodyparser.json({limit: '50mb', extended: true}));
 
 // Middleware para sanitizar el cuerpo de la solicitud
-app.use((req, res, next) => {
-  // Sanitizar campos del cuerpo de la solicitud
-  if (req.body) {
-    Object.keys(req.body).forEach(key => {
-      req.body[key] = xss(req.body[key]);
-    });
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   // Sanitizar campos del cuerpo de la solicitud
+//   if (req.body) {
+//     Object.keys(req.body).forEach(key => {
+//       req.body[key] = xss(req.body[key]);
+//     });
+//   }
+//   next();
+// });
 
 
 app.use(cors({

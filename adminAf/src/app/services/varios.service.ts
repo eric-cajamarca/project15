@@ -23,6 +23,7 @@ export class variosService {
 
         // Rutas para el CRUD de marca
         // api.get('/marcas', auth.auth, marcaController.obtenerMarcas);
+        //api.get('/marcas/:id',auth.auth, marcaController.obtenerMarcaPorId);
         // api.post('/marcas', auth.auth, marcaController.crearMarca);
         // api.put('/marcas/:id', auth.auth, marcaController.editarMarca);
         // api.put('/marcasestado/:id', auth.auth, marcaController.editarEstadoMarca);
@@ -32,6 +33,11 @@ export class variosService {
         return this._http.get(this.url + 'marcas', { headers: headers });
     }
 
+    obtenerMarcaPorId(id: any, token: any): Observable<any> {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+        return this._http.get(this.url + 'marcas/' + id, { headers: headers });
+    }
+
     crearMarca(marca: any, token: any): Observable<any> {
         let params = JSON.stringify(marca);
         console.log('marca.id', marca._id);
@@ -39,16 +45,22 @@ export class variosService {
         return this._http.post(this.url + 'marcas', params, { headers: headers });
     }
 
-    editarMarca(marca: any, token: any): Observable<any> {
+    editarMarca(id:any, marca: any, token: any): Observable<any> {
         let params = JSON.stringify(marca);
         let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
-        return this._http.put(this.url + 'marcas/' + marca._id, params, { headers: headers });
+        return this._http.put(this.url + 'marcas/' + marca, params, { headers: headers });
     }
 
-    editarEstadoMarca(marca: any, token: any): Observable<any> {
-        let params = JSON.stringify(marca);
+    // eliminar_stock_sucursal(token:any,id:any):Observable<any>{
+    //     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    //     return this._http.delete(this.url+'stocksucursal/'+id,{headers:headers});
+    //   }
+
+    editarEstadoMarca(id:any, estado:any, token:any): Observable<any>{
+        console.log('id', id);
+        let params = JSON.stringify(estado);
         let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
-        return this._http.put(this.url + 'marcasestado/' + marca._id, params, { headers: headers });
+        return this._http.put(this.url + 'marcasestado/'+id,{estado},{headers:headers});
     }
 
     // Rutas para el CRUD de unidporcaja

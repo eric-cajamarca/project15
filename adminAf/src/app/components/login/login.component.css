@@ -4,6 +4,13 @@
     margin: 0;
 }
 
+.container-fluid {
+    /* Asegúrate de reemplazar 'ruta/a/tu/imagen.jpg' con la ruta a tu imagen de fondo */
+    background-image: url('src/assets/construccion.jpg');
+    background-size: cover; /* Asegura que la imagen cubra todo el contenedor */
+    background-position: center; /* Centra la imagen en el contenedor */
+}
+  
 
 body {
     height: 100%;
@@ -37,7 +44,8 @@ body {
 
     border-radius: 10px !important;
     border: 0.1px solid #012ffa57 !important;
-    background-color:  #e3672e !important;
+    background-color:  rgba(227,103,46,0.80) !important;
+    /* background-color:  #e3672e !important; */
 }
 .form-signin {
     width: 100%;
@@ -103,4 +111,27 @@ body {
         font-size: 3.5rem;
 
     }
+}
+
+.btn-primary{
+    background-color: #7a7978;
+    color: white;
+    border:  #b6b3b3 1px solid;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    
+}
+.btn-primary:hover{
+    background-color: #9c9b9a;
+    color: white;
+    border:  #e3672e 1px solid;
+}
+
+
+.form-floating label{
+    color: #8b8a89 !important;
+}
+
+h1{
+    color: #252525 !important;
 }

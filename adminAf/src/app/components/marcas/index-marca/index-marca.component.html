@@ -32,6 +32,7 @@
               <tr>
                 <th scope="col">Nombre</th>
                 <th scope="col">Descripción</th>
+                <th scope="col">Estado</th>
                 <th scope="col">Acciones</th>
               </tr>
             </thead>
@@ -39,6 +40,9 @@
               <tr *ngFor="let marca of marcas">
                 <td>{{ marca.nombre }}</td>
                 <td>{{ marca.descripcion }}</td>
+                <td>
+                  <span class="badge bg-success" *ngIf="marca.estado">Activo</span>
+                  <span class="badge bg-danger" *ngIf="!marca.estado">Desactivado</span>
                 <td>
                   <div class="btn-group">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
@@ -54,8 +58,8 @@
                         [attr.data-bs-target]="'#delete-'+marca.idMarca">
                         <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Activar
                       </a>
-                      <a style="cursor: pointer;" class="dropdown-item" data-bs-toggle="modal"
-                        [attr.data-bs-target]="'#editar-'+marca.idMarca">
+                      <a style="cursor: pointer;" class="dropdown-item" (click)="seleccionar(marca.idMarca)"
+                        data-bs-toggle="modal" [attr.data-bs-target]="'#editar-'+marca.idMarca">
                         <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Editar
                       </a>
                     </ul>
@@ -66,7 +70,8 @@
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Ventana de cambio de estado de la marca: {{marca.nombre}}
+                          <h5 class="modal-title" id="exampleModalLabel">Ventana de cambio de estado de la marca:
+                            {{marca.nombre}}
                           </h5>
 
                         </div>
@@ -77,7 +82,8 @@
                           <button type="button" class="btn btn-warning font-weight-bold"
                             data-bs-dismiss="modal">Cerrar</button>
                           <button *ngIf="!load_estado" type="button" class="btn btn-danger font-weight-bold"
-                            (click)="set_eliminar(marca.idMarca)">Sí, cambiar</button>
+                            (click)="cambiarEstado(marca?.idMarca, marca?.estado)" data-bs-dismiss="modal">Sí,
+                            cambiar</button>
 
                           <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -92,46 +98,52 @@
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Ventana para editar la marca: {{marca.nombre}}
+                          <h5 class="modal-title" id="exampleModalLabel">Ventana para editar la marca:
+                            {{marca.nombre}}
                           </h5>
 
                         </div>
                         <div class="modal-body">
                           <p>Está seguro que desea editar la marca?.</p>
-                          
-                          <div class="col-12">
-                            <div>
+                          <div>
+                            <div class="col-12">
+                              <div>
                                 <label for="nombre">Nombre</label>
-                                <input type="text" class="form-control" name="nombre" [(ngModel)]="marca.nombre">
-                            </div>
+                                <input type="text" class="form-control" name="nombre"
+                                  [(ngModel)]="prod_Modificar.nombre">
+                              </div>
 
-                            <div>
+                              <div>
                                 <label for="descripcion">Descripción</label>
                                 <input type="text" class="form-control" name="descripcion"
-                                    [(ngModel)]="marca.descripcion">
+                                  [(ngModel)]="prod_Modificar.descripcion">
+                              </div>
                             </div>
-                          </div>
 
-                          <div class="col-12">
-                            <div>
+                            <div class="col-12">
+                              <div>
                                 <label for="contacto">Contato</label>
-                                <input type="text" class="form-control" name="contacto" [(ngModel)]="marca.contacto">
-                            </div>
+                                <input type="text" class="form-control" name="contacto"
+                                  [(ngModel)]="prod_Modificar.contacto">
+                              </div>
 
-                            <div>
+                              <div>
                                 <label for="paginaWeb">Pagina Web</label>
                                 <input type="text" class="form-control" name="paginaWeb"
-                                    [(ngModel)]="marca.paginaWeb">
+                                  [(ngModel)]="prod_Modificar.paginaWeb">
+                              </div>
                             </div>
                           </div>
 
+
                         </div>
-                        
+
                         <div class="modal-footer">
                           <button type="button" class="btn btn-warning font-weight-bold"
                             data-bs-dismiss="modal">Cerrar</button>
-                          <button *ngIf="!load_estado" type="button" class="btn btn-danger font-weight-bold"
-                            (click)="set_eliminar(marca.idMarca)">Sí, Modificar</button>
+                          <button *ngIf="!load_estado" type="button" class="btn btn-primary font-weight-bold"
+                            (click)="editarMarca(prod_Modificar.idMarca)" data-bs-dismiss="modal">Sí, guardar
+                            cambios</button>
 
                           <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
