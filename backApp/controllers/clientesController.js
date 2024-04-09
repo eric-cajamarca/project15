@@ -1,6 +1,19 @@
 const sql = require('mssql');
 const dbConfig = require('../dbconfig');
 
+// create table Clientes
+// (
+// idCliente int identity (1,1) primary key not null,
+// idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+// idDocumento varchar(1) not null,
+// ruc varchar(11) not null,
+// rSocial varchar(200) not null,
+// correo varchar(100) null,
+// celular varchar (50) null,
+// condicion varchar(50) null,
+// estado bit not null
+
+// )
 
 
 //1. crea el metodo crearCliente segun los datos de la tabla
@@ -40,7 +53,7 @@ const crearCliente = async function (req, res) {
                         .input('correo', sql.VarChar, correo)
                         .input('celular', sql.VarChar, celular)
                         .input('condicion', sql.VarChar, condicion)
-                        .query('insert into Clientes (idEmpresa,idDocumento,ruc,rSocial,correo,celular,condicion) values (@idEmpresa,@idDocumento,@ruc,@rSocial,@correo,@celular,@condicion)');
+                        .query('insert into Clientes (idEmpresa,idDocumento,ruc,rSocial,correo,celular,condicion,estado) values (@idEmpresa,@idDocumento,@ruc,@rSocial,@correo,@celular,@condicion,1)');
     
     
                     res.status(200).send({ message: 'Cliente creado', data: insertCliente.rowsAffected });
@@ -269,6 +282,52 @@ const cambiarCondicionCliente = async function (req, res) {
 
 }
 
+const cambiarEstadoCliente = async function (req, res) {
+    const idCliente = req.params.id;
+
+    const { estado } = req.body;
+
+    console.log('cambiarCondicionCliente - req.params', idCliente);
+    console.log('cambiarCondicionCliente - estado', estado, req.body);
+    let nuevoEstado = '';
+
+    if (estado) {
+        nuevoEstado = 0;
+    } else {
+        nuevoEstado = 1;
+    }
+
+    if (req.user) {
+        if (req.user.rol == 'Administrador') {
+
+
+            console.log('cambiarCondicionCliente - nuevacondicion antes de editar', nuevoEstado);
+
+            try {
+                let pool = await sql.connect(dbConfig);
+                let editCliente = await pool.request()
+                    .input('idCliente', sql.Int, idCliente)
+                    .input('estado', sql.Bit, nuevoEstado)
+                    .query('update Clientes set estado = @estado where idCliente = @idCliente');
+
+                console.log('cambiarCondicionCliente - deleteCliente', editCliente.rowsAffected);
+                res.status(200).send({ message: 'Cliente eliminado', data: editCliente.rowsAffected });
+            } catch (error) {
+                console.log('cambiarCondicionCliente - error', error);
+                res.status(500).send({ message: error.message, data: undefined });
+            }
+
+        }
+        else {
+            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+        }
+    }
+    else {
+        res.status(500).send({ message: 'No Access' });
+    }
+
+}
+
 
 
 module.exports = {
@@ -277,7 +336,8 @@ module.exports = {
     actualizarCliente,
     eliminarCliente,
     listarClientes_ruc,
-    cambiarCondicionCliente,
+    // cambiarCondicionCliente,
+    cambiarEstadoCliente,
     listarClientes_id
 
 }

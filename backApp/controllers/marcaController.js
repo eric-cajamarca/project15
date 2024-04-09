@@ -82,8 +82,10 @@ const crearMarca = async function (req, res) {
 
 //editar marca
 const editarMarca = async function (req, res) {
+    console.log('req.params', req.params.id);
+    console.log('req.body', req.body);
     const { nombre, descripcion, contacto, paginaWeb } = req.body;
-    const idMarca = req.params;
+    const idMarca = req.params.id;
     const idEmpresa = req.user.empresa;
 
     if (req.user) {

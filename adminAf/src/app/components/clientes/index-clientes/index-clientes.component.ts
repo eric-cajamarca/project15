@@ -11,7 +11,7 @@ declare var iziToast: any;
   templateUrl: './index-clientes.component.html',
   styleUrls: ['./index-clientes.component.css']
 })
-export class IndexClientesComponent implements OnInit{
+export class IndexClientesComponent implements OnInit {
   public clientes: Array<any> = [];
   public clientes_const: Array<any> = [];
   public token: any = "";
@@ -19,8 +19,8 @@ export class IndexClientesComponent implements OnInit{
   public page = 1;
   public pageSize = 10;
   public filtro = '';
- 
-  
+
+
   public load_estado = false;
 
   constructor(
@@ -30,16 +30,16 @@ export class IndexClientesComponent implements OnInit{
   ) {
     this.token = this._cookieService.get('token');
   }
-  
 
- 
+
+
 
   ngOnInit(): void {
 
     this.init_data();
 
-   
-    
+
+
   }
 
   init_data() {
@@ -81,34 +81,61 @@ export class IndexClientesComponent implements OnInit{
     }
   }
 
-  set_state(id: any, condicion: any) {
+  //aqui se hace el cambio del estado habido y no habido
+  // set_state(id: any, condicion: any) {
+  //   console.log($);
+  //   console.log('id', id);
+  //   console.log('condicion', condicion);
+  //   this.load_estado = true;
+  //   this._clientesService.cambiar_estado_clientes(id, { condicion: condicion }, this.token).subscribe(
+  //     response => {
+  //       this.load_estado = false;
+  //       //quiero cerrar el modal usando jquery sabiendo que el id="delete-{{item.id}}"
+
+  //       $('body').removeClass('modal-open');
+  //       $('.modal-backdrop').remove();
+  //       //habilitar el scroll en el body en el componente
+  //       $('body').css('overflow-y', 'auto');
+
+
+  //        this.init_data();
+  //     }
+  //   );
+
+
+  //aqui hago el cambio de estado de activo o inactivo
+  set_state(id: any, estado: any) {
     console.log($);
     console.log('id', id);
-    console.log('condicion', condicion);
+    console.log('condicion', estado);
     this.load_estado = true;
-    this._clientesService.cambiar_estado_clientes(id, { condicion: condicion }, this.token).subscribe(
+    this._clientesService.cambiar_estado_clientes(id, { estado: estado }, this.token).subscribe(
       response => {
-        this.load_estado = false;
-        //quiero cerrar el modal usando jquery sabiendo que el id="delete-{{item.id}}"
+        if (response.data != undefined) {
+          this.load_estado = false;
 
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
-        //habilitar el scroll en el body en el componente
-        $('body').css('overflow-y', 'auto');
+          this.init_data();
+          //quiero cerrar el modal usando jquery sabiendo que el id="delete-{{item.id}}"
 
-
-         this.init_data();
+          // $('body').removeClass('modal-open');
+          // $('.modal-backdrop').remove();
+          // //habilitar el scroll en el body en el componente
+          // $('body').css('overflow-y', 'auto');
+        }
+        
+      },
+      error=>{
+        console.log('error',error);
       }
     );
-
-
+    
 
   }
 
   eliminar(id: any) {
     console.log($);
     console.log('id', id);
-    
+
     this.load_estado = true;
     this._clientesService.eliminar_direccionCliente(id, this.token).subscribe(
       response => {
@@ -119,7 +146,7 @@ export class IndexClientesComponent implements OnInit{
     this._clientesService.eliminar_cliente(id, this.token).subscribe(
       response => {
         this.load_estado = false;
-        if(response.data != undefined){
+        if (response.data != undefined) {
           iziToast.show({
             title: 'success',
             titleColor: '#00FF00',
@@ -129,17 +156,17 @@ export class IndexClientesComponent implements OnInit{
             message: 'Cliente eliminado correctamente'
           });
 
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
-        //habilitar el scroll en el body en el componente
-        $('body').css('overflow-y', 'auto');
+          $('body').removeClass('modal-open');
+          $('.modal-backdrop').remove();
+          //habilitar el scroll en el body en el componente
+          $('body').css('overflow-y', 'auto');
 
 
-         this.init_data();
+          this.init_data();
         }
         //quiero cerrar el modal usando jquery sabiendo que el id="delete-{{item.id}}"
 
-        
+
       }
     );
 

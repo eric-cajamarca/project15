@@ -63,6 +63,7 @@ export class ClienteService {
 
 
   cambiar_estado_clientes(id: any, data: any, token: any): Observable<any> {
+    console.log('cambiar_estado_clientes - id', id, data);
     let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
     return this._http.put(this.url + 'cambiar_estado_clientes/' + id, data, { headers: headers });
   }

@@ -48,7 +48,7 @@ export class variosService {
     editarMarca(id:any, marca: any, token: any): Observable<any> {
         let params = JSON.stringify(marca);
         let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
-        return this._http.put(this.url + 'marcas/' + marca, params, { headers: headers });
+        return this._http.put(this.url + 'marcas/' + id, params, { headers: headers });
     }
 
     // eliminar_stock_sucursal(token:any,id:any):Observable<any>{

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import * as e from 'cors';
 import { CookieService } from 'ngx-cookie-service';
 
 import { AdminService } from 'src/app/services/admin.service';
@@ -118,7 +119,33 @@ export class IndexMarcaComponent {
 
   
   editarMarca(id: number) {
-    console.log('Editar marca con id: ', id);
+    console.log('Editar marca con id: ', id , this.prod_Modificar);
+    this._marcaService.editarMarca(id, this.prod_Modificar, this.token).subscribe(
+      response=>{
+        
+        console.log('response.data', response.data);
+        if(response.data == undefined){
+          console.log('No hay datos');
+        }else{
+          this.marcas = response.data;
+          iziToast.show({
+            title: 'SUCCESS',
+            titleColor: '#008000',
+            color: '#FFF',
+            class: 'text-success',
+            position: 'topRight',
+            message: 'La marca ha sido editada correctamente',
+          });
+          this.initData();
+          $('#modalModificar').modal('hide');
+        }
+      
+      },
+      error => {
+        console.log('Error al obtener marcas');
+        console.log(<any>error);
+      }
+    );
 
   }
 

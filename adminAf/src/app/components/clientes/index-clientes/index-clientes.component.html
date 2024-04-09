@@ -3,7 +3,7 @@
 <div class="container" style="background-color: white;">
   <div class="row">
     <div class="col-md-12">
-      <h1>Nuevo registro de clientes y proveedores</h1>
+      <h3> Ventana de clientes y proveedores</h3>
         <hr>
       <div class="col-md-6" style="margin-bottom: 20px;">
         <a class="btn btn-primary" [routerLink]="['/cliente/create']" routerLinkActive="active">Nuevo Cliente</a>
@@ -42,7 +42,7 @@
               <th>Ruc/Dni</th>
               <th>Razón Social</th>
               <th>Condición</th>
-
+              <th>Estado</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -51,10 +51,13 @@
               <td>{{item.ruc}}</td>
               <td>{{item.rSocial}}</td>
               <td>
-                <span class="badge bg-success" *ngIf="item.condicion === 'ACTIVO'">Activo</span>
-                <span class="badge bg-danger" *ngIf="item.condicion === 'INACTIVO'">Inactivo</span>
+                <span class="badge bg-success" *ngIf="item.condicion === 'ACTIVO'">Habido</span>
+                <span class="badge bg-danger" *ngIf="item.condicion === 'INACTIVO'">No habido</span>
               </td>
-
+              <td>
+                <span class="badge bg-success" *ngIf="item.estado === true">Activo</span>
+                <span class="badge bg-danger" *ngIf="item.estado === false">Inactivo</span>
+              </td>
               <td>
                 <!-- <a class="btn btn-outline-primary btn-sm" routerLink="/clientes/editar">Editar</a>
                             <a class="btn btn-outline-danger btn-sm" style="margin-left: 10px;">Eliminar</a> -->
@@ -65,11 +68,11 @@
                     Opciones
                   </button>
                   <ul class="dropdown-menu">
-                    <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.condicion === 'ACTIVO'"
+                    <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.estado === true"
                       data-bs-toggle="modal" [attr.data-bs-target]="'#update-'+item.idCliente">
                       <i class="icon-1x text-dark-50 flaticon2-cross"></i> &nbsp; Desactivar
                     </a>
-                    <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.condicion === 'INACTIVO'"
+                    <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.estado === false"
                       data-bs-toggle="modal" [attr.data-bs-target]="'#update-'+item.idCliente">
                       <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Activar
                     </a>
@@ -101,7 +104,7 @@
                         <button type="button" class="btn btn-warning font-weight-bold"
                           data-bs-dismiss="modal">Cerrar</button>
                         <button *ngIf="!load_estado" type="button" class="btn btn-danger font-weight-bold"
-                          (click)="set_state(item.idCliente,item.condicion)">Sí, Cambiar</button>
+                          (click)="set_state(item.idCliente,item.estado)" data-bs-dismiss="modal">Sí, Cambiar</button>
 
                         <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
                           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
