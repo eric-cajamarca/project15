@@ -33,6 +33,8 @@ import { UpdateProductoComponent } from "./components/productos/update-producto/
 import { PrincipalInventarioComponent } from "./components/inventario/principal-inventario/principal-inventario.component";
 import { IndexMarcaComponent } from "./components/marcas/index-marca/index-marca.component";
 import { CreateMarcaComponent } from "./components/marcas/create-marca/create-marca.component";
+import { IndexEmpresaComponent } from "./components/empresas/index-empresa/index-empresa.component";
+import { CreateEmpresaComponent } from "./components/empresas/create-empresa/create-empresa.component";
 
 const appRoute : Routes = [
     {path: '', component: InicioComponent, canActivate: [AdminGuard]},
@@ -89,6 +91,10 @@ const appRoute : Routes = [
     //marcas
     {path: 'marcas', component: IndexMarcaComponent, canActivate: [AdminGuard]},
     {path: 'marcas/create', component: CreateMarcaComponent, canActivate: [AdminGuard]},
+
+    //empresas
+    {path: 'empresa', component: IndexEmpresaComponent, canActivate: [AdminGuard]},
+    {path: 'empresa/create', component: CreateEmpresaComponent, canActivate: [AdminGuard]},
 ]
 
 export const appRoutingProviders : any[]=[];

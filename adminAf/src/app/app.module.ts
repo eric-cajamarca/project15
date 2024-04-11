@@ -41,6 +41,8 @@ import { UpdateProductoComponent } from './components/productos/update-producto/
 import { PrincipalInventarioComponent } from './components/inventario/principal-inventario/principal-inventario.component';
 import { IndexMarcaComponent } from './components/marcas/index-marca/index-marca.component';
 import { CreateMarcaComponent } from './components/marcas/create-marca/create-marca.component';
+import { IndexEmpresaComponent } from './components/empresas/index-empresa/index-empresa.component';
+import { CreateEmpresaComponent } from './components/empresas/create-empresa/create-empresa.component';
 
 
 @NgModule({
@@ -77,7 +79,9 @@ import { CreateMarcaComponent } from './components/marcas/create-marca/create-ma
     UpdateProductoComponent,
     PrincipalInventarioComponent,
     IndexMarcaComponent,
-    CreateMarcaComponent
+    CreateMarcaComponent,
+    IndexEmpresaComponent,
+    CreateEmpresaComponent
   ],
   imports: [
     BrowserModule,

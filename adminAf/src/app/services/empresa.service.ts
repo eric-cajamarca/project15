@@ -20,7 +20,7 @@ export class EmpresaService {
   getEmpresas(token:any):Observable<any>{
     
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
-    return this._http.get(this.url + 'empresa',{headers:headers});
+    return this._http.get(this.url +'empresa',{headers:headers});
   }
 
   getEmpresas_id(id:any,token:any):Observable<any>{

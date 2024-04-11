@@ -21,21 +21,26 @@ const jwt = require('../helpers/jwt');
 const getEmpresas = async function (req, res) {
 
     if (req.user) {
-        //  if(req.user.rol=='Administrador'){
-        console.log('req.user.rol');
-        try {
-            const pool = await sql.connect(dbConfig);
-            const result = await pool
-            .request()
-            .query('SELECT * FROM Empresa');
-            // res.json(result.recordset);
-            // console.log('result.recordset');
-            // console.log(result.recordset);
-            res.status(200).send({ data: result.recordset });
-        } catch (error) {
-            // console.error('Error al obtener los usuarios:', error);
-            res.status(200).send({ data: undefined });
+        if (req.user.rol == 'Administrador') {
+            console.log('req.user.rol');
+            try {
+                const pool = await sql.connect(dbConfig);
+                const result = await pool
+                    .request()
+                    .query('SELECT * FROM Empresas');
+                // res.json(result.recordset);
+                // console.log('result.recordset');
+                // console.log(result.recordset);
+                console.log('result:', result.recordset);
+                res.status(200).send({ data: result.recordset });
+            } catch (error) {
+                console.error('Error al obtener las epresas:', error);
+                res.status(200).send({ data: undefined });
+            }
+        }else{
+            res.status(500).send({ message: 'No Access' });
         }
+
 
 
     }
@@ -58,7 +63,7 @@ const getEmpresasById = async function (req, res) {
                 .input('id', sql.Int, id)
                 .query('SELECT * FROM Empresa WHERE id = @id');
 
-                console.log('result:', result.recordset);
+            console.log('result:', result.recordset);
             res.json(result.recordset);
             // res.status(200).send({ data: result.recordset });
         } catch (error) {
@@ -75,7 +80,8 @@ const getEmpresasById = async function (req, res) {
 
 
 
-const createEmpresa = async (req, res) => {
+const createEmpresa = async function (req, res) {
+    console.log('entro a createEmpresa');
     const { Ruc, Razon_Social, Rubro, Direccion, Distrito, Region, Provincia, Celular, Whatsapp, Correo, Logo, Alias } = req.body;
 
     // const currentDate = moment().format('YYYY-MM-DD');
@@ -139,7 +145,7 @@ const updateEmpresa = async (req, res) => {
 
 
             console.log('cuando viene sin password');
-    
+
             const pool = await sql.connect(dbConfig);
             const result = await pool
                 .request()
@@ -155,31 +161,31 @@ const updateEmpresa = async (req, res) => {
                 .input('Correo', sql.VarChar, Correo)
                 .input('Logo', sql.Image, Logo)
                 .input('Alias', sql.VarChar, Alias)
-    
+
                 .query('UPDATE Empresa SET Razon_Social = @Razon_Social, Rubro = @Rubro, Direccion = @Direccion, Distrito = @Distrito, Region = @Region, Provincia = @Provincia, Celular = @Celular, Whatsapp = @Whatsapp, Correo = @Correo, Logo = @Logo, Alias = @Alias WHERE id = @id');
             res.status(200).send({ message: 'Empresa actualizado  correctamente', data: result.rowsAffected });
-    
-    
-    
+
+
+
         } catch (error) {
             console.error('Error al actualizar un usuario:', error);
             res.status(500).send('Error al actualizar un usuario');
         }
-    }else{
+    } else {
         res.status(401).send({ message: 'No Access' });
     }
-    
+
 };
 
 //cambiar estado de la empresa
 const cambiar_estado_empresa = async function (req, res) {
     if (req.user) {
         let idEmpresa = req.params['id'];
-        const {estado} = req.body;
-        
-        if(!estado){
+        const { estado } = req.body;
+
+        if (!estado) {
             nuevo_estado = true;
-        }else{
+        } else {
             nuevo_estado = false;
         }
 
@@ -191,7 +197,7 @@ const cambiar_estado_empresa = async function (req, res) {
                 .input('estado', sql.Bit, nuevo_estado)
                 .query('UPDATE Empresa SET estado = @estado WHERE idEmpresa = @idEmpresa');
         } catch (error) {
-            
+
         }
 
     }
