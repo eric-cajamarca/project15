@@ -333,6 +333,155 @@ const deleteAdmin = async (req, res) => {
     }
 };
 
+// CREATE TABLE DireccionEmpresa (
+//     idDireccionEmpresa INT IDENTITY(1,1) PRIMARY KEY not null,
+// 	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+//     ubigeo varchar(10) null,
+// 	codPais varchar(10) null,
+//     region varchar(50) NULL,
+// 	provincia varchar(50) NULL,
+// 	distrito varchar(50) NULL,
+// 	urbanizacion varchar(100) null,
+// 	direccion VARCHAR(255) null,
+// 	codLocal varchar(10) null
+//  principal bit no null
+// );
+
+const createDireccionEmpresa = async function (req, res) {
+    console.log('crearDireccionEmpresa req.body', req.body);
+    console.log('req.user', req.user);
+
+    if (req.user) {
+        if (req.user.rol == 'Administrador') {
+
+            try {
+                let idEmpresa = req.user.empresa;
+                let ubigeo = req.body.ubigeo;
+                let codPais = req.body.codpais;
+                let region = req.body.region;
+                let provincia = req.body.provincia;
+                let distrito = req.body.distrito;
+                let urbanizacion = req.body.urbanizacion;
+                let direccion = req.body.direccion;
+                let codLocal = req.body.codLocal;
+                let principal = true;
+
+                let pool = await sql.connect(dbConfig);
+                let insertDireccionEmpresa = await pool.request()
+                    .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
+                    .input('ubigeo', sql.VarChar, ubigeo)
+                    .input('codPais', sql.VarChar, codPais)
+                    .input('region', sql.VarChar, region)
+                    .input('provincia', sql.VarChar, provincia)
+                    .input('distrito', sql.VarChar, distrito)
+                    .input('urbanizacion', sql.VarChar, urbanizacion)
+                    .input('direccion', sql.VarChar, direccion)
+                    .input('codLocal', sql.VarChar, codLocal)
+                    .input('principal', sql.Bit, principal)
+                    .query('insert into DireccionEmpresa (idEmpresa,ubigeo,codPais,region,provincia,distrito,urbanizacion,direccion,codLocal, principal) values (@idEmpresa,@ubigeo,@codPais,@region,@provincia,@distrito,@urbanizacion,@direccion,@codLocal,@principal)');
+
+
+                res.status(200).send({ data: insertDireccionEmpresa.rowsAffected });
+            } catch (error) {
+                console.log('error', error);
+                res.status(500).send({ message: error.message, data: undefined });
+
+            }
+
+        }
+        else {
+            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+        }
+    }
+    else {
+        res.status(500).send({ message: 'No Access' });
+    }
+
+}
+
+const updateDireccionEmpresa = async function (req, res){
+    console.log('entro a updateDireccionEmpresa');
+    const { ubigeo, codPais, region, provincia, distrito, urbanizacion, direccion, codLocal, principal } = req.body;
+    const { id } = req.params;
+    if (req.user) {
+        if(req.user.rol == 'Administrador'){
+            try {
+                const pool = await sql.connect(dbConfig);
+                const result = await pool
+                    .request()
+                    .input('ubigeo', sql.VarChar, ubigeo)
+                    .input('codPais', sql.VarChar, codPais)
+                    .input('region', sql.VarChar, region)
+                    .input('provincia', sql.VarChar, provincia)
+                    .input('distrito', sql.VarChar, distrito)
+                    .input('urbanizacion', sql.VarChar, urbanizacion)
+                    .input('direccion', sql.VarChar, direccion)
+                    .input('codLocal', sql.VarChar, codLocal)
+                    .input('principal', sql.Bit, principal)
+                    .query('UPDATE DireccionEmpresa SET ubigeo = @ubigeo, codPais = @codPais, region = @region, provincia = @provincia, distrito = @distrito, urbanizacion = @urbanizacion, direccion = @direccion, codLocal = @codLocal, principal = @principal WHERE idDireccionEmpresa = @id');
+                res.status(200).send({ data: result.rowsAffected });
+            } catch (error) {
+                console.error('Error al actualizar un DireccionEmpresa:', error);
+                res.status(500).send('Error al actualizar un DireccionEmpresa');
+            }
+        }
+        else {
+            res.status(401).send({ message: 'No Access' });
+        }
+    } else {
+        res.status(401).send({ message: 'No Access' });
+    }
+}
+
+const getDireccionEmpresa_id = async function (req, res) {
+    const { id } = req.params;
+    if (req.user) {
+        if (req.user.rol == 'Administrador') {
+            try {
+                const pool = await sql.connect(dbConfig);
+                const result = await pool
+                    .request()
+                    .input('id', sql.Int, id)
+                    .query('SELECT * FROM DireccionEmpresa WHERE idDireccionEmpresa = @id');
+                res.json(result.recordset);
+            } catch (error) {
+                console.error('Error al obtener las direcciones de la empresa:', error);
+                res.status(500).send('Error al obtener las direcciones de la empresa');
+            }
+        }
+        else {
+            res.status(401).send({ message: 'No Access' });
+        }
+        
+    } else {
+        res.status(401).send({ message: 'No Access' });
+    }
+}
+
+
+// const getDireccionEmpresa = async function (req, res) {
+//     if (req.user) {
+//         if (req.user.rol == 'Administrador') {
+//             try {
+//                 const pool = await sql.connect(dbConfig);
+//                 const result = await pool
+//                     .request()
+//                     .query('SELECT * FROM DireccionEmpresa');
+//                 res.json(result.recordset);
+//             } catch (error) {
+//                 console.error('Error al obtener las direcciones de la empresa:', error);
+//                 res.status(500).send('Error al obtener las direcciones de la empresa');
+//             }
+//         }
+//         else {
+//             res.status(401).send({ message: 'No Access' });
+//         }
+        
+//     } else {
+//         res.status(401).send({ message: 'No Access' });
+//     }
+// }
+
 
 module.exports = {
     getEmpresas,
@@ -343,5 +492,13 @@ module.exports = {
     // admin_login,
     cambiar_estado_colaborador_admin,
     obtener_datos_colaborador_admin,
-    getEmpresasById
+    getEmpresasById,
+    getDireccionEmpresa_id,
+    createDireccionEmpresa,
+    updateDireccionEmpresa
+
+    //direcciones de la empresa
+    
+
+
 };

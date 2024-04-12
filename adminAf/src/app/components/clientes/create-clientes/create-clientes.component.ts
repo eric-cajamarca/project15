@@ -22,6 +22,7 @@ export class CreateClientesComponent implements OnInit {
     correo: '',
     celular: '',
     condicion:'ACTIVO',
+    idDocumento: '',
   };
   public clienteruc: any = [];
   // public direccionClientes:any=[];

@@ -28,4 +28,42 @@ export class EmpresaService {
     return this._http.get(this.url+'empresa/'+id,{headers:headers});
   }
 
+  // api.post('/empresa',auth.auth, empresasController.createEmpresa);
+  // api.put('/empresa/:id',auth.auth, empresasController.updateEmpresa);
+
+  createEmpresa(empresa:any,token:any):Observable<any>{
+    let params = JSON.stringify(empresa);
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.post(this.url+'empresa',params,{headers:headers});
+  }
+
+  updateEmpresa(empresa:any,token:any):Observable<any>{
+    let params = JSON.stringify(empresa);
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.put(this.url+'empresa/'+empresa._id,params,{headers:headers});
+  }
+
+  // api.get('/direccion_empresa/:id',auth.auth, empresasController.getDireccionEmpresa_id);
+  // api.post('/direccion_empresa',auth.auth, empresasController.createDireccionEmpresa);
+  // api.put('/direccion_empresa/:id',auth.auth, empresasController.updateDireccionEmpresa);
+
+  getDireccionEmpresa_id(id:any,token:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.get(this.url+'direccion_empresa/'+id,{headers:headers});
+  }
+
+  createDireccionEmpresa(direccion:any,token:any):Observable<any>{
+    let params = JSON.stringify(direccion);
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.post(this.url+'direccion_empresa',params,{headers:headers});
+  }
+
+  updateDireccionEmpresa(direccion:any,token:any):Observable<any>{
+    let params = JSON.stringify(direccion);
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.put(this.url+'direccion_empresa/'+direccion._id,params,{headers:headers});
+  }
+  
+
+
 }
