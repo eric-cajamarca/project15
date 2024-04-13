@@ -95,6 +95,7 @@ const appRoute : Routes = [
     //empresas
     {path: 'empresa', component: IndexEmpresaComponent, canActivate: [AdminGuard]},
     {path: 'empresa/create', component: CreateEmpresaComponent, canActivate: [AdminGuard]},
+    {path: 'empresa/:id', component: UpdateComprasComponent, canActivate: [AdminGuard]},
 ]
 
 export const appRoutingProviders : any[]=[];

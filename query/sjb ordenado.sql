@@ -1,4 +1,64 @@
-﻿create table Documentos
+﻿CREATE TABLE Empresas(
+	idEmpresa UNIQUEIDENTIFIER primary key NOT NULL,
+	idDocumento varchar(1) not null,
+	ruc varchar(11) NULL,
+	razon_Social varchar(200) NULL,
+	nombreComercial varchar(200) null,
+	rubro varchar(200) NULL,
+	celular varchar(11) NULL,
+	whatsapp varchar(11) NULL,
+	correo varchar(100) NULL,
+	logo varbinary(max) NULL,
+	alias varchar(10) NULL,
+	condicion varchar(20) null,
+	estSunat varchar(20) null,
+	estado bit NOT NULL
+
+
+	FOREIGN KEY (idDocumento) REFERENCES Documentos (idDocumento),
+)
+go
+
+insert into Empresas values ('42099529-43C9-4B7F-921A-3D6FB946E93E','6','20611688564','EMPRESA FERRETERA AVE FENIX SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','968073361','',CONVERT(varbinary(max),''),'Fenix','Activo','Habido',1);
+insert into Empresas values ('BA51C992-7D05-459E-B419-A03358C0A788','6','20611658495','GRUPO OLITOR SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','968073361','',CONVERT(varbinary(max),''),'Olitor','Activo','Habido',1);
+insert into Empresas values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','6','10426524541','TORRES NUÑEZ LUCILA','','VENTA AL POR MAYOR Y MENOR DE MATERIALES DE CONSTRUCCIÓN Y ARTÍCULOS DE FERRETERÍA','966818231','966818231','lucilatorressjb@gmail.com',CONVERT(varbinary(max),''),'Lucila','Activo','Habido',0);
+
+go 
+select * from Empresas
+
+-- Tabla para la dirección (reutilizable varias direcciones para varias empresas)
+CREATE TABLE DireccionEmpresa (
+    idDireccionEmpresa INT IDENTITY(1,1) PRIMARY KEY not null,
+	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+    ubigeo varchar(10) null,
+	codPais varchar(10) null,
+    region varchar(50) NULL,
+	provincia varchar(50) NULL,
+	distrito varchar(50) NULL,
+	urbanizacion varchar(100) null,
+	direccion VARCHAR(255) null,
+	codLocal varchar(10) null,
+	principal bit
+
+);
+
+go
+
+insert into DireccionEmpresa values ('42099529-43C9-4B7F-921A-3D6FB946E93E', '060801','PEN','CAJAMARCA','JAEN','JAEN','URB. LOS OLIVOS','PJ. LOS OLIVOS NRO. C-02 URB. H.U PALESTINA (FRENTE AL PARQUE LOS OLIVOS)','',1);
+insert into DireccionEmpresa values ('BA51C992-7D05-459E-B419-A03358C0A788','060801','PEN','CAJAMARCA','JAEN','JAEN' ,'URB. LOS OLIVOS','PJ. LOS OLIVOS C-1 NRO. SN URB. PALESTINA (1ER PISO)','',1);
+insert into DireccionEmpresa values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','060801','PEN','CAJAMARCA','JAEN','JAEN','URB. LOS OLIVOS','PSJE. LOS OLIVOS S/N URB. LOS OLIVOSPSJE. LOS OLIVOS S/N URB. LOS OLIVOS','',1);
+
+
+select * from DireccionEmpresa
+
+
+
+
+
+
+
+
+create table Documentos
 (
 idDocumento varchar(1) primary key not null,
 nombre varchar(20) not null,
@@ -169,6 +229,59 @@ go
 select * from Correlativos
 
 go
+
+--drop table Rol
+--truncate table rol
+create table Rol
+(
+idRol UNIQUEIDENTIFIER primary key NOT NULL,
+idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+descripcion varchar(50) not null,
+)
+go
+select * from Rol
+insert into Rol values
+(NEWID(),'42099529-43C9-4B7F-921A-3D6FB946E93E','Contador'),
+ (NEWID(),'42099529-43C9-4B7F-921A-3D6FB946E93E','Almacen'),
+ (NEWID(),'42099529-43C9-4B7F-921A-3D6FB946E93E','Despacho'),
+ (NEWID(),'42099529-43C9-4B7F-921A-3D6FB946E93E','Administrador'),
+(NEWID(),'42099529-43C9-4B7F-921A-3D6FB946E93E','Vendedor');
+
+go
+select * from rol
+
+CREATE TABLE UsuarioWeb
+(
+	idUsuario UNIQUEIDENTIFIER primary key NOT NULL,
+	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
+	nombres varchar(50) NOT NULL,
+	apellidos varchar(100) NOT NULL,
+	email varchar(100) NOT NULL,
+	password text NOT NULL,
+	idRol UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Rol(idRol) not null, 
+	estado bit NOT NULL,
+	fregistro datetime NOT NULL,
+	
+ )
+GO
+select * from UsuarioWeb
+select * from Rol
+
+
+INSERT INTO UsuarioWeb (idUsuario, idEmpresa, nombres, apellidos, email, password, idRol, estado, fregistro)
+VALUES
+(
+    NEWID(),
+	'42099529-43C9-4B7F-921A-3D6FB946E93E',
+    'Eric',
+    'Ortiz Guevara',
+	'ericortizguevara@gmail.com',
+	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
+    '33210C97-A42A-4AA3-AFF9-57F70823CCC9', -- Utiliza directamente el identificador único
+    1,
+    GETDATE()
+);
+
 
 create table Productos   
 (

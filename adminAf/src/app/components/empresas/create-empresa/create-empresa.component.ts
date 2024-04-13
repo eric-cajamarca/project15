@@ -17,14 +17,28 @@ declare var $: any;
 })
 export class CreateEmpresaComponent {
 
-  public empresa: any = {};
-
-  public filtro: any = "";
+  public encontrado: any = false;
   public empresas: any = {
-    correo: '',
-    celular: '',
-    condicion:'ACTIVO',
+    ruc: '',
+    rSocial: '',
     idDocumento: '',
+    condicion: '',
+    email: '',
+    password: '',
+    repitPassword: '',
+    direccion: '',
+    telefono: '',
+    celular: '',
+    idCliente: '',
+    idDireccion: '',
+    idEmpresa: '',
+  }; public filtro: any = "";
+  public empresa: any = {
+    ruc: '',
+    email: '',
+    password: '',
+    repitPassword: '',
+
   };
   public clienteruc: any = [];
   // public direccionEmpresas:any=[];
@@ -58,121 +72,123 @@ export class CreateEmpresaComponent {
     private _apiperuService: ApiperuService,
     private _empresasService: EmpresaService,
     private _router: Router,
-    
+
   ) {
     this.token = this._cookieService.get('token');
-
-    this.direccionEmpresas.codpais = 'PEN';
-
-
-    this._adminService.get_Regiones().subscribe(
-      response => {
-        this.regiones = response;
-        console.log('this.regiones', this.regiones);
-      }
-    );
-
-    this._adminService.get_Procincias().subscribe(
-      response => {
-        this.provincias = response;
-        console.log('this.provincias', this.provincias);
-      }
-    );
-
-    this._adminService.get_Distritos().subscribe(
-      response => {
-        this.distritos = response;
-        console.log('this.distritos', this.distritos);
-      }
-    );
-
-    console.log('this.direccionEmpresas', this.direccionEmpresas);
   }
 
   ngOnInit() {
-    this._documentosService.obtener_documento(this.token).subscribe(
-      response => {
-        this.documento = response.data;
-        console.log('this.documento', this.documento);
 
-        //convertir array de lista de roles this.roles a un objeto par usarlo en mi formulario
-        //  this.documento.forEach((element: { id: string | number; name: any; }) => {
-        //   this.documento[element.id] = element.id;
-        //  });
-
-      }
-    );
-
-    this.select_pais();
   }
 
-  //https://dniruc.apisperu.com/api/v1/dni/45633353?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImVyaWNvcnRpemd1ZXZhcmFAZ21haWwuY29tIn0.-cs9eKiQegcTM0bbaz7O-BT_sS7_BpV_6cndIqCeHfk
 
-  buscar() {
-    this.contBuscar = 1;
-    console.log('veo que cod comprobante', this.empresas.idDocumento)
+  buscar(ruc: any) {
+    console.log('ingreso a buscar en la api', ruc);
+    // this.contBuscar = 1;
+    // console.log('veo que cod comprobante', this.empresa.idDocumento)
 
-    console.log('filtro', this.empresas.ruc);
-    this.filtro = this.empresas.ruc;
+    // console.log('filtro', this.empresa.ruc);
+    this.filtro = this.empresa.ruc;
 
     try {
 
-      if (this.empresas.ruc.length === 11 && this.empresas.idDocumento === '6') {
+      if (this.empresa.ruc.length === 11) {
         this._apiperuService.getRucInfo(this.filtro).subscribe(
           response => {
-            this.clienteruc = response;
-            //divido los datos de la despuesta
-            this.empresas.rSocial = response.razonSocial;
-            this.empresas.condicion = response.estado
-  
-  
-            ///////////
-            this.direccionEmpresas.codpais = "PEN";
-            this.direccionEmpresas.ubigeo = response.ubigeo;
-            this.direccionEmpresas.region = response.departamento;
-            this.direccionEmpresas.provincia = response.provincia;
-            this.direccionEmpresas.distrito = response.distrito;
-            this.direccionEmpresas.direccion = response.direccion;
-  
-            console.log('this.clienteruc: ', this.clienteruc);
+            if(response.success == false) {
+              console.log('response', response);
+
+              iziToast.show({
+                title: 'ERROR',
+                titleColor: '#FF0000',
+                color: '#FFF',
+                class: 'text-danger',
+                position: 'topRight',
+                message: 'Error al realizar la validación'
+              });
+              this.encontrado = false;
+            }else {
+              this.clienteruc = response;
+              //divido los datos de la despuesta
+              this.empresa.rSocial = response.razonSocial;
+              this.empresa.condicion = response.estado
+
+
+              ///////////
+              this.direccionEmpresas.codpais = "PEN";
+              this.direccionEmpresas.ubigeo = response.ubigeo;
+              this.direccionEmpresas.region = response.departamento;
+              this.direccionEmpresas.provincia = response.provincia;
+              this.direccionEmpresas.distrito = response.distrito;
+              this.direccionEmpresas.direccion = response.direccion;
+
+              console.log('this.clienteruc: ', this.clienteruc);
+              this.encontrado = true;
+            }
+              
           },
           error => {
+            
             iziToast.show({
               title: 'ERROR',
               titleColor: '#FF0000',
               color: '#FFF',
               class: 'text-danger',
               position: 'topRight',
-              message: 'Error al realizar la consulta por falta de datos'
+              message: 'Error al realizar la validación'
             });
-          });
+
+            this.encontrado = false;
+          }
+        );
 
       }
-      
 
 
 
 
-      if (this.empresas.ruc.length === 8 && this.empresas.idDocumento === '1') {
+
+      if (this.empresa.ruc.length === 8) {
         this._apiperuService.getDniInfo(this.filtro).subscribe(
           response => {
-            this.clienteruc = response;
-            //divido los datos de la despuesta
-            this.empresas.rSocial = response.apellidoPaterno + ' ' + response.apellidoMaterno + ', ' + response.nombres;
+            if(response.success == false) {
+              iziToast.show({
+                title: 'ERROR',
+                titleColor: '#FF0000',
+                color: '#FFF',
+                class: 'text-danger',
+                position: 'topRight',
+                message: 'Error al realizar la validación'
+              });
+              this.encontrado = false;
+            }else {
+              this.clienteruc = response;
+              //divido los datos de la despuesta
+              this.empresa.rSocial = response.apellidoPaterno + ' ' + response.apellidoMaterno + ', ' + response.nombres;
+  
+  
+              console.log('this.clienteruc: ', this.clienteruc);
+              this.encontrado = true;
+            }
 
-
-            console.log('this.clienteruc: ', this.clienteruc);
           },
           error => {
+            
             iziToast.show({
               title: 'ERROR',
               titleColor: '#FF0000',
               color: '#FFF',
               class: 'text-danger',
               position: 'topRight',
-              message: 'Error al realizar la consulta por falta de datos '
+              message: 'Error al realizar la validación'
             });
-          });
+
+            this.encontrado = false;
+          }
+        );
+
+
+
 
       }
     } catch (error) {
@@ -187,196 +203,84 @@ export class CreateEmpresaComponent {
     }
 
 
-
-
-
   }
 
 
-  select_pais() {
+  registrar(loginForm: any) {
 
-
-    let pais = 'Perú';
-    // this.direccionEmpresas.pais = pais;
-
-
-    if (this.direccionEmpresas.codpais == 'PEN') {
-      setTimeout(() => {
-        $('#sl-region').prop('disabled', false);
-      }, 50);
-      this._adminService.get_Regiones().subscribe(
-        response => {
-          console.log(response);
-          response.forEach((element: any) => {
-            this.regiones.push({
-              id: element.id,
-              name: element.name
-            });
-          });
-
-        }
-      );
-    } else {
-      setTimeout(() => {
-        $('#sl-region').prop('disabled', true);
-        $('#sl-provincia').prop('disabled', true);
-        $('#sl-distrito').prop('disabled', true);
-      }, 50);
-      this.regiones = [];
-      this.provincias = [];
-      this.distritos = [];
-
-      this.direccionEmpresas.region = '';
-      this.direccionEmpresas.provincia = '';
-      this.direccionEmpresas.distrito = '';
-
-    }
-  }
-
-
-  select_region() {
-
-    this.provincias = [];
-    setTimeout(() => {
-      $('#sl-provincia').prop('disabled', false);
-      $('#sl-distrito').prop('disabled', true);
-    }, 50);
-    this.direccionEmpresas.provincia = '';
-    this.direccionEmpresas.distrito = '';
-    this._adminService.get_Procincias().subscribe(
-      response => {
-        response.forEach((element: any) => {
-          if (element.department_id == this.direccionEmpresas.region) {
-            this.provincias.push(
-              element
-            );
-          }
-        });
-        console.log(this.provincias);
-
-
-      }
-    );
-  }
-
-  select_provincia() {
-    this.distritos = [];
-    setTimeout(() => {
-      $('#sl-distrito').prop('disabled', false);
-    }, 50);
-
-    this.direccionEmpresas.distrito = '';
-
-    this._adminService.get_Distritos().subscribe(
-      response => {
-        response.forEach((element: any) => {
-          if (element.province_id == this.direccionEmpresas.provincia) {
-            this.distritos.push(element);
-            // this.direccion.zip = this.distritos.forEach(element.id);
-          }
-        });
-        console.log(this.distritos);
-
-
-
-      }
-    );
-  }
-
-  select_distrito(event: any) {
-    const selectedId = event.target.value;
-    this.direccionEmpresas.ubigeo = selectedId;
-    console.log(this.direccionEmpresas.ubigeo);
-  }
-
-  registrar(registroForm: any){
-
-    console.log('this.cliientes', this.empresas);
+    console.log('this.cliientes', this.empresa);
     console.log('this.direccionEmpresas', this.direccionEmpresas);
 
     // if (registroForm.valid) {
-      this.btn_registrar = true;
-      this.data = this.empresas;
-      console.log('this.data', this.data);
-      //convertir array this.clientes a un objeto para pasarlo a mi servicio
-      //  this.data.forEach((element: { id: string | number; name: any; }) => {
-      //   this.data[element.id] = element.id;
-      //  });
+    this.btn_registrar = true;
+    this.data = this.empresa;
+    console.log('this.data', this.data);
+    //convertir array this.clientes a un objeto para pasarlo a mi servicio
+    //  this.data.forEach((element: { id: string | number; name: any; }) => {
+    //   this.data[element.id] = element.id;
+    //  });
 
-      //  console.log('this.data como objeto', this.data);
-      this._empresasService.createEmpresa(this.data, this.token).subscribe(
-        response => {
-          if(response.data != undefined){
-            this._empresasService.getEmpresas_id(this.empresas.ruc,this.token).subscribe(
-              response => {
-                console.log('response.data', response.data);
-                this.direccionEmpresas.idCliente = response.data[0].idCliente;
-                console.log('this.direccionEmpresas con idCliente', this.direccionEmpresas);
-                if(response.data != undefined){
-                  this._empresasService.createDireccionEmpresa(this.token, this.direccionEmpresas).subscribe(
-                      response => {
-                        if(response.data != undefined){
-                          iziToast.show({
-                            title: 'SUCCESS',
-                            titleColor: '#006064',
-                            color: '#FFF',
-                            class: 'text-success',
-                            position: 'topRight',
-                            message: 'Cliente creado correctamente'
-                          });
-                          this.btn_registrar = false;
-                          //quiero redirigir a la pagina de index-clientes
-                          this._router.navigate(['/empresa']);
-                        }
-                        
-                      },
-                      error => {
-                        console.log(<any>error);
-                        console.error('Error al crear el cliente:', error);
-                        this.btn_registrar = false;
-                      }
-                    )
-                }
-                
+    //  console.log('this.data como objeto', this.data);
+    this._empresasService.createEmpresa(this.data, this.token).subscribe(
+      response => {
+        if (response.data != undefined) {
+          this._empresasService.getEmpresas_id(this.empresa.ruc, this.token).subscribe(
+            response => {
+              console.log('response.data', response.data);
+              this.direccionEmpresas.idCliente = response.data[0].idCliente;
+              console.log('this.direccionEmpresas con idCliente', this.direccionEmpresas);
+              if (response.data != undefined) {
+                this._empresasService.createDireccionEmpresa(this.token, this.direccionEmpresas).subscribe(
+                  response => {
+                    if (response.data != undefined) {
+                      iziToast.show({
+                        title: 'SUCCESS',
+                        titleColor: '#006064',
+                        color: '#FFF',
+                        class: 'text-success',
+                        position: 'topRight',
+                        message: 'Cliente creado correctamente'
+                      });
+                      this.btn_registrar = false;
+                      //quiero redirigir a la pagina de index-clientes
+                      this._router.navigate(['/empresa']);
+                    }
+
+                  },
+                  error => {
+                    console.log(<any>error);
+                    console.error('Error al crear el cliente:', error);
+                    this.btn_registrar = false;
+                  }
+                )
               }
-            )
-          }else{
-            iziToast.show({
-              title: 'ERROR',
-              titleColor: '#FF0000',
-              color: '#FFF',
-              class: 'text-danger',
-              position: 'topRight',
-              message: response.message,
-            });
-            this.btn_registrar = false;
-          }
-          console.log(response.data);
-          this.btn_registrar = false;
-        },
-        error => {
-          console.log(<any>error);
-          console.error('Error al crear el cliente:', error);
+
+            }
+          )
+        } else {
+          iziToast.show({
+            title: 'ERROR',
+            titleColor: '#FF0000',
+            color: '#FFF',
+            class: 'text-danger',
+            position: 'topRight',
+            message: response.message,
+          });
           this.btn_registrar = false;
         }
+        console.log(response.data);
+        this.btn_registrar = false;
+      },
+      error => {
+        console.log(<any>error);
+        console.error('Error al crear el cliente:', error);
+        this.btn_registrar = false;
+      }
 
-      )
-        
+    )
+
   }
 
-  onCheckboxChange(){
-    if (this.mostrarDireccion) {
-      this.mostrarDireccion = true;
-      console.log('El checkbox está marcado.', this.mostrarDireccion);
-      
-      // Realiza acciones cuando el checkbox está marcado
-    } else {
-      // this.mostrarDireccion = false;
-      console.log('El checkbox está desmarcado.', this.mostrarDireccion);
-      
-      // Realiza acciones cuando el checkbox está desmarcado
-    }
-    
-  }
+
 
 }

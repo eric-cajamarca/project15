@@ -3,7 +3,7 @@
   <div class="card">
     <div class="card-header">
 
-      
+
       <!-- Title -->
       <h4 class="card-header-title">
         Mostrando todos los registros
@@ -35,6 +35,7 @@
                 <th scope="col">Ruc</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Celular</th>
+                <th scope="col">Condición</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Acciones</th>
               </tr>
@@ -45,8 +46,13 @@
                 <td>{{ empresas.razon_Social }}</td>
                 <td>{{ empresas.celular }}</td>
                 <td>
+                    <span class="badge bg-success" *ngIf="empresas.condicion === 'Activo'">Activo </span>
+                    <span class="badge bg-danger" *ngIf="empresas.condicion !== 'Activo'">{{empresas.condicion}}</span>
+                </td>
+                <td>
                   <span class="badge bg-success" *ngIf="empresas.estado">Activo</span>
                   <span class="badge bg-danger" *ngIf="!empresas.estado">Desactivado</span>
+                </td>
                 <td>
                   <div class="btn-group">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
