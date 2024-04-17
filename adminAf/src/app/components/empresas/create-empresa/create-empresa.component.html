@@ -1,4 +1,4 @@
-<app-top-nav></app-top-nav>
+
 <div class="container-fluid">
     <div class="card">
         
@@ -43,7 +43,7 @@
                                         <input type="checkbox" value="remember-me"> Recordarme
                                     </label>
                                 </div> -->
-                                <button *ngIf="encontrado" class="w-100 btn btn-lg btn-primary" type="submit"
+                                <button *ngIf="encontrado" class="w-100 btn btn-lg btn-primary" (click)="registrar()"
                                     >Registrarme</button>
                                 <!-- <p class="mt-5 mb-3 text-muted">&copy; 2023</p> -->
                             </form>

@@ -6,17 +6,23 @@ const jwt = require('../helpers/jwt');
 
 // CREATE TABLE Empresas(
 // 	idEmpresa UNIQUEIDENTIFIER primary key NOT NULL,
-// 	ruc varchar(11) NULL,
-// 	razon_Social varchar(200) NULL,
+// 	idDocumento varchar(1) not null,
+// 	ruc varchar(11) not NULL,
+// 	razon_Social varchar(200) not NULL,
 // 	nombreComercial varchar(200) null,
 // 	rubro varchar(200) NULL,
 // 	celular varchar(11) NULL,
-// 	whatsapp varchar(11) NULL,
-// 	correo varchar(100) NULL,
+// 	correo varchar(100) not NULL,
+// 	password text not null,
 // 	logo varbinary(max) NULL,
 // 	alias varchar(10) NULL,
+// 	condicion varchar(20) null,
+// 	estSunat varchar(20) null,
 // 	estado bit NOT NULL
+
+
 // )
+
 
 const getEmpresas = async function (req, res) {
 
@@ -80,14 +86,71 @@ const getEmpresasById = async function (req, res) {
 
 
 
+// const createEmpresa = async function (req, res) {
+//     console.log('entro a createEmpresa');
+//     const { Ruc, Razon_Social, Rubro, Direccion, Distrito, Region, Provincia, Celular, Whatsapp, Correo, Logo, Alias } = req.body;
+
+//     // const currentDate = moment().format('YYYY-MM-DD');
+//     // const fregistro = currentDate;
+//     // console.log(currentDate);
+//     // console.log(fregistro);
+//     const pool = await sql.connect(dbConfig);
+
+//     // Verificar si el correo electrónico ya existe
+//     const checkEmailQuery = await pool
+//         .request()
+//         .input('Ruc', sql.VarChar, Ruc)
+//         .query('SELECT * FROM Empresa WHERE Ruc = @Ruc');
+
+//     if (checkEmailQuery.recordset.length > 0) {
+//         return res.status(200).send({ message: 'La Empresa ya existe. Por favor registre una empresa diferente', data: undefined });
+//     } else {
+//         try {
+
+//             // Convertir buffer a cadena base64
+//             const base64String = Logo.toString('base64');
+
+//             // // Convertir cadena base64 a buffer
+//             // const restoredBuffer = Buffer.from(base64String, 'base64');
+
+//             const pool = await sql.connect(dbConfig);
+//             const result = await pool
+//                 .request()
+//                 .input('Ruc', sql.VarChar, Ruc)
+//                 .input('Razon_Social', sql.VarChar, Razon_Social)
+//                 .input('Rubro', sql.VarChar, Rubro)
+//                 .input('Direccion', sql.VarChar, Direccion)
+//                 .input('Distrito', sql.VarChar, Distrito)
+//                 .input('Region', sql.VarChar, Region)
+//                 .input('Provincia', sql.VarChar, Provincia)
+//                 .input('Celular', sql.VarChar, Celular)
+//                 .input('Whatsapp', sql.VarChar, Whatsapp)
+//                 .input('Correo', sql.VarChar, Correo)
+//                 .input('Logo', sql.VarBinary, base64String)
+//                 .input('Alias', sql.VarChar, Alias)
+//                 .query('INSERT INTO Empresa (Ruc, Razon_Social, Rubro, Direccion, Distrito, Region, Provincia, Celular, Whatsapp, Correo, Logo, Alias) VALUES (@Ruc, @Razon_Social, @Rubro, @Direccion, @Distrito, @Region, @Provincia, @Celular, @Whatsapp, @Correo, @Logo, @Alias, 1)');
+//             // res.json({ message: 'Usuario creado correctamente' });}
+//             console.log('valor de result:', result.rowsAffected);
+//             let data = result.rowsAffected
+//             res.status(200).send({ message: 'Empresa creada correctamente', data: data });
+//         } catch (error) {
+//             console.error('Error al crear la Empresa:', error);
+//             res.status(200).send({ message: 'Error al crear la Empresa', data: undefined });
+//         }
+//     }
+
+
+// };
+
 const createEmpresa = async function (req, res) {
     console.log('entro a createEmpresa');
     const { Ruc, Razon_Social, Rubro, Direccion, Distrito, Region, Provincia, Celular, Whatsapp, Correo, Logo, Alias } = req.body;
 
-    // const currentDate = moment().format('YYYY-MM-DD');
-    // const fregistro = currentDate;
-    // console.log(currentDate);
-    // console.log(fregistro);
+     const currentDate = moment().format('YYYY-MM-DD');
+     const fregistro = currentDate;
+     console.log(currentDate);
+    
+
     const pool = await sql.connect(dbConfig);
 
     // Verificar si el correo electrónico ya existe
@@ -102,7 +165,9 @@ const createEmpresa = async function (req, res) {
         try {
 
             // Convertir buffer a cadena base64
-            const base64String = Logo.toString('base64');
+            const hashedPassword = await bcrypt.hash(password, 8); // El número 10 es el factor de coste para el cifrado
+            //crear el idUsuario con uuidv4
+            const idEmpresa = uuidv4();
 
             // // Convertir cadena base64 a buffer
             // const restoredBuffer = Buffer.from(base64String, 'base64');
@@ -110,6 +175,7 @@ const createEmpresa = async function (req, res) {
             const pool = await sql.connect(dbConfig);
             const result = await pool
                 .request()
+                .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
                 .input('Ruc', sql.VarChar, Ruc)
                 .input('Razon_Social', sql.VarChar, Razon_Social)
                 .input('Rubro', sql.VarChar, Rubro)
@@ -120,21 +186,23 @@ const createEmpresa = async function (req, res) {
                 .input('Celular', sql.VarChar, Celular)
                 .input('Whatsapp', sql.VarChar, Whatsapp)
                 .input('Correo', sql.VarChar, Correo)
-                .input('Logo', sql.VarBinary, base64String)
+                .input('Logo', sql.VarBinary, hashedPassword)
                 .input('Alias', sql.VarChar, Alias)
-                .query('INSERT INTO Empresa (Ruc, Razon_Social, Rubro, Direccion, Distrito, Region, Provincia, Celular, Whatsapp, Correo, Logo, Alias) VALUES (@Ruc, @Razon_Social, @Rubro, @Direccion, @Distrito, @Region, @Provincia, @Celular, @Whatsapp, @Correo, @Logo, @Alias, 1)');
-            // res.json({ message: 'Usuario creado correctamente' });}
-            console.log('valor de result:', result.rowsAffected);
+                .input('fregistro', sql.DateTime, fregistro)
+                .query('INSERT INTO Empresa (idEmpresa, Ruc, Razon_Social, Rubro, Direccion, Distrito, Region, Provincia, Celular, Whatsapp, Correo, Logo, Alias, fregistro, estado) VALUES (@idEmpresa, @Ruc, @Razon_Social, @Rubro, @Direccion, @Distrito, @Region, @Provincia, @Celular, @Whatsapp, @Correo, @Logo, @Alias, @fregistro, 1)');
+             
+                
+            // console.log('valor de result:', result.rowsAffected);    
             let data = result.rowsAffected
-            res.status(200).send({ message: 'Empresa creada correctamente', data: data });
-        } catch (error) {
+            res.status(200).send({data: data });
+        }
+        catch (error) {
             console.error('Error al crear la Empresa:', error);
-            res.status(200).send({ message: 'Error al crear la Empresa', data: undefined });
+            res.status(500).send('Error al crear la Empresa');
         }
     }
+}
 
-
-};
 
 const updateEmpresa = async (req, res) => {
     //   const { name, apellidos, email, password, rol, estado } = req.body;

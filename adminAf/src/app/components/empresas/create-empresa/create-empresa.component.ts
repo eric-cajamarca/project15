@@ -27,19 +27,20 @@ export class CreateEmpresaComponent {
     password: '',
     repitPassword: '',
     direccion: '',
-    telefono: '',
     celular: '',
     idCliente: '',
     idDireccion: '',
     idEmpresa: '',
-  }; public filtro: any = "";
+  }; 
+  
+  public filtro: any = "";
   public empresa: any = {
     ruc: '',
     email: '',
     password: '',
     repitPassword: '',
-
   };
+
   public clienteruc: any = [];
   // public direccionEmpresas:any=[];
   public documento: any = [];
@@ -112,6 +113,7 @@ export class CreateEmpresaComponent {
               //divido los datos de la despuesta
               this.empresa.rSocial = response.razonSocial;
               this.empresa.condicion = response.estado
+              this.empresas.idDocumento = 6;
 
 
               ///////////
@@ -163,6 +165,7 @@ export class CreateEmpresaComponent {
               this.encontrado = false;
             }else {
               this.clienteruc = response;
+              this.empresas.idDocumento = 1;
               //divido los datos de la despuesta
               this.empresa.rSocial = response.apellidoPaterno + ' ' + response.apellidoMaterno + ', ' + response.nombres;
   
@@ -206,78 +209,109 @@ export class CreateEmpresaComponent {
   }
 
 
-  registrar(loginForm: any) {
+  registrar() {
+
+    //quiero validar si el email es correcto
+    if (this.empresa.email == '') {
+      iziToast.show({
+        title: 'ERROR',
+        titleColor: '#FF0000',
+        color: '#FFF',
+        class: 'text-danger',
+        position: 'topRight',
+        message: 'Ingrese un email'
+      });
+      return;
+    }
+
+    //quiero comparar si el password y el repitPassword son iguales
+    if (this.empresa.password != this.empresa.repitPassword) {
+      iziToast.show({
+        title: 'ERROR',
+        titleColor: '#FF0000',
+        color: '#FFF',
+        class: 'text-danger',
+        position: 'topRight',
+        message: 'Las contraseñas no coinciden'
+      });
+      return;
+    }
+
+
+
+    this.empresas.ruc = this.empresa.ruc;
+    this.empresas.email = this.empresa.email;
+    this.empresas.password = this.empresa.password;
+    
 
     console.log('this.cliientes', this.empresa);
+    console.log('this.empresas', this.empresas);
     console.log('this.direccionEmpresas', this.direccionEmpresas);
 
     // if (registroForm.valid) {
     this.btn_registrar = true;
-    this.data = this.empresa;
+    this.data = this.empresas;
     console.log('this.data', this.data);
-    //convertir array this.clientes a un objeto para pasarlo a mi servicio
-    //  this.data.forEach((element: { id: string | number; name: any; }) => {
-    //   this.data[element.id] = element.id;
-    //  });
+    
 
     //  console.log('this.data como objeto', this.data);
-    this._empresasService.createEmpresa(this.data, this.token).subscribe(
-      response => {
-        if (response.data != undefined) {
-          this._empresasService.getEmpresas_id(this.empresa.ruc, this.token).subscribe(
-            response => {
-              console.log('response.data', response.data);
-              this.direccionEmpresas.idCliente = response.data[0].idCliente;
-              console.log('this.direccionEmpresas con idCliente', this.direccionEmpresas);
-              if (response.data != undefined) {
-                this._empresasService.createDireccionEmpresa(this.token, this.direccionEmpresas).subscribe(
-                  response => {
-                    if (response.data != undefined) {
-                      iziToast.show({
-                        title: 'SUCCESS',
-                        titleColor: '#006064',
-                        color: '#FFF',
-                        class: 'text-success',
-                        position: 'topRight',
-                        message: 'Cliente creado correctamente'
-                      });
-                      this.btn_registrar = false;
-                      //quiero redirigir a la pagina de index-clientes
-                      this._router.navigate(['/empresa']);
-                    }
+    // this._empresasService.createEmpresa(this.data, this.token).subscribe(
+    //   response => {
+    //     if (response.data != undefined) {
+    //       this._empresasService.getEmpresas_id(this.empresa.ruc, this.token).subscribe(
+    //         response => {
+    //           console.log('response.data', response.data);
+    //           this.direccionEmpresas.idCliente = response.data[0].idCliente;
+    //           console.log('this.direccionEmpresas con idCliente', this.direccionEmpresas);
+    //           if (response.data != undefined) {
+    //             this._empresasService.createDireccionEmpresa(this.token, this.direccionEmpresas).subscribe(
+    //               response => {
+    //                 if (response.data != undefined) {
+    //                   iziToast.show({
+    //                     title: 'SUCCESS',
+    //                     titleColor: '#006064',
+    //                     color: '#FFF',
+    //                     class: 'text-success',
+    //                     position: 'topRight',
+    //                     message: 'Cliente creado correctamente'
+    //                   });
+    //                   this.btn_registrar = false;
+    //                   //quiero redirigir a la pagina de index-clientes
+    //                   this._router.navigate(['/empresa']);
+    //                 }
 
-                  },
-                  error => {
-                    console.log(<any>error);
-                    console.error('Error al crear el cliente:', error);
-                    this.btn_registrar = false;
-                  }
-                )
-              }
+    //               },
+    //               error => {
+    //                 console.log(<any>error);
+    //                 console.error('Error al crear el cliente:', error);
+    //                 this.btn_registrar = false;
+    //               }
+    //             )
+    //           }
 
-            }
-          )
-        } else {
-          iziToast.show({
-            title: 'ERROR',
-            titleColor: '#FF0000',
-            color: '#FFF',
-            class: 'text-danger',
-            position: 'topRight',
-            message: response.message,
-          });
-          this.btn_registrar = false;
-        }
-        console.log(response.data);
-        this.btn_registrar = false;
-      },
-      error => {
-        console.log(<any>error);
-        console.error('Error al crear el cliente:', error);
-        this.btn_registrar = false;
-      }
+    //         }
+    //       )
+    //     } else {
+    //       iziToast.show({
+    //         title: 'ERROR',
+    //         titleColor: '#FF0000',
+    //         color: '#FFF',
+    //         class: 'text-danger',
+    //         position: 'topRight',
+    //         message: response.message,
+    //       });
+    //       this.btn_registrar = false;
+    //     }
+    //     console.log(response.data);
+    //     this.btn_registrar = false;
+    //   },
+    //   error => {
+    //     console.log(<any>error);
+    //     console.error('Error al crear el cliente:', error);
+    //     this.btn_registrar = false;
+    //   }
 
-    )
+    // )
 
   }
 

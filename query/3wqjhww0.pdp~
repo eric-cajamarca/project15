@@ -1,24 +1,4 @@
-﻿create table Documentos
-(
-idDocumento varchar(1) primary key not null,
-nombre varchar(20) not null,
-descripcion varchar(200) not null,
-
-)
-select * from Documentos
-go
-
-
-insert into Documentos values ('1','DNI','Documento Nacional de Identidad')
-insert into Documentos values ('4','CARNET','Carnet de extrangería')
-insert into Documentos values ('6','RUC','Registro Unico de Contributentes')
-insert into Documentos values ('7','PASAPORTE','Pasaporte')
-insert into Documentos values ('A','CEDULA','Cédula diplomática de identidad')
-GO
-
-
-
-CREATE TABLE Empresas(
+﻿CREATE TABLE Empresas(
 	idEmpresa UNIQUEIDENTIFIER primary key NOT NULL,
 	idDocumento varchar(1) not null,
 	ruc varchar(11) not NULL,
@@ -41,7 +21,7 @@ CREATE TABLE Empresas(
 )
 go
 
-insert into Empresas values ('42099529-43C9-4B7F-921A-3D6FB946E93E','6','20611688564','EMPRESA FERRETERA AVE FENIX SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','','$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',CONVERT(varbinary(max),''),'Fenix','Activo','Habido',1,GETDATE());
+insert into Empresas values ('42099529-43C9-4B7F-921A-3D6FB946E93E','6','20611688564','EMPRESA FERRETERA AVE FENIX SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','','$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',CONVERT(varbinary(max),''),'Fenix','Activo','Habido',1);
 insert into Empresas values ('BA51C992-7D05-459E-B419-A03358C0A788','6','20611658495','GRUPO OLITOR SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','',CONVERT(varbinary(max),''),'Olitor','Activo','Habido',1);
 insert into Empresas values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','6','10426524541','TORRES NUÑEZ LUCILA','','VENTA AL POR MAYOR Y MENOR DE MATERIALES DE CONSTRUCCIÓN Y ARTÍCULOS DE FERRETERÍA','966818231','lucilatorressjb@gmail.com',CONVERT(varbinary(max),''),'Lucila','Activo','Habido',0);
 
@@ -72,63 +52,32 @@ insert into DireccionEmpresa values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','060
 
 
 select * from DireccionEmpresa
-go
 
---truncate table rol
-create table Rol
+
+
+
+
+
+
+
+create table Documentos
 (
-idRol UNIQUEIDENTIFIER primary key NOT NULL,
-idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-descripcion varchar(50) not null,
+idDocumento varchar(1) primary key not null,
+nombre varchar(20) not null,
+descripcion varchar(200) not null,
+
 )
-go
-select * from Rol
-insert into Rol values
-(NEWID(),'42099529-43C9-4B7F-921A-3D6FB946E93E','Contador'),
- (NEWID(),'42099529-43C9-4B7F-921A-3D6FB946E93E','Almacen'),
- (NEWID(),'42099529-43C9-4B7F-921A-3D6FB946E93E','Despacho'),
- (NEWID(),'42099529-43C9-4B7F-921A-3D6FB946E93E','Administrador'),
-(NEWID(),'42099529-43C9-4B7F-921A-3D6FB946E93E','Vendedor');
-
+select * from Documentos
 go
 
---truncate table usuarioweb
---drop table UsuarioWeb
-CREATE TABLE UsuarioWeb
-(
-	idUsuario UNIQUEIDENTIFIER primary key NOT NULL,
-	idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-	nombres varchar(50) NOT NULL,
-	apellidos varchar(100) NOT NULL,
-	email varchar(100) NOT NULL,
-	password text NOT NULL,
-	idRol UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Rol(idRol) not null, 
-	estado bit NOT NULL,
-	fregistro datetime NOT NULL,
-	
- )
+
+insert into Documentos values ('1','DNI','Documento Nacional de Identidad')
+insert into Documentos values ('4','CARNET','Carnet de extrangería')
+insert into Documentos values ('6','RUC','Registro Unico de Contributentes')
+insert into Documentos values ('7','PASAPORTE','Pasaporte')
+insert into Documentos values ('A','CEDULA','Cédula diplomática de identidad')
 GO
-select * from UsuarioWeb
-select * from Rol
 
-
-INSERT INTO UsuarioWeb (idUsuario, idEmpresa, nombres, apellidos, email, password, idRol, estado, fregistro)
-VALUES
-(
-    NEWID(),
-	'42099529-43C9-4B7F-921A-3D6FB946E93E',
-    'Eric',
-    'Ortiz Guevara',
-	'ericortizguevara@gmail.com',
-	'$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',
-    '7D06FE44-7297-402F-9350-5E67431AD9CC', -- Utiliza directamente el identificador único
-    1,
-    GETDATE()
-);
-
-
-
-go
 
 
 create table Clientes
@@ -195,8 +144,6 @@ INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','PK','Pa
 INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','SA','Saco',1)
 INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','BO','Botella',1)
 INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','ZZ','Otros',1)
-
-go
 
 create table Comprobantes
 (
