@@ -3,6 +3,8 @@ const dbConfig = require('../dbconfig');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
 const jwt = require('../helpers/jwt');
+const { v4: uuidv4 } = require('uuid');
+const { max } = require('moment/moment');
 
 // CREATE TABLE Empresas(
 // 	idEmpresa UNIQUEIDENTIFIER primary key NOT NULL,
@@ -74,9 +76,8 @@ const getEmpresasById = async function (req, res) {
             // res.status(200).send({ data: result.recordset });
         } catch (error) {
             // console.error('Error al obtener los usuarios:', error);
-            res.status(200).send({ data: undefined });
+            res.status(500).send({ data: undefined });
         }
-
 
     }
     else {
@@ -143,62 +144,61 @@ const getEmpresasById = async function (req, res) {
 // };
 
 const createEmpresa = async function (req, res) {
-    console.log('entro a createEmpresa');
-    const { Ruc, Razon_Social, Rubro, Direccion, Distrito, Region, Provincia, Celular, Whatsapp, Correo, Logo, Alias } = req.body;
-
-     const currentDate = moment().format('YYYY-MM-DD');
-     const fregistro = currentDate;
-     console.log(currentDate);
+    console.log('entro a createEmpresa', req.body);
+    const { idDocumento, ruc, razon_Social, nombre_Comercial, rubro, celular, logo, correo, password, alias, condicion, estSunat } = req.body;
     
-
-    const pool = await sql.connect(dbConfig);
+    const currentDate = moment().format('YYYY-MM-DD');
+    const fregistro = currentDate;
+    console.log(currentDate);
+    
+     const pool = await sql.connect(dbConfig);
 
     // Verificar si el correo electrónico ya existe
     const checkEmailQuery = await pool
         .request()
-        .input('Ruc', sql.VarChar, Ruc)
-        .query('SELECT * FROM Empresa WHERE Ruc = @Ruc');
+        .input('Ruc', sql.VarChar, ruc)
+        .query('SELECT * FROM Empresas WHERE ruc = @ruc');
+
+        console.log('checkEmailQuery.recordset:', checkEmailQuery.recordset);
 
     if (checkEmailQuery.recordset.length > 0) {
+
         return res.status(200).send({ message: 'La Empresa ya existe. Por favor registre una empresa diferente', data: undefined });
     } else {
         try {
-
             // Convertir buffer a cadena base64
             const hashedPassword = await bcrypt.hash(password, 8); // El número 10 es el factor de coste para el cifrado
             //crear el idUsuario con uuidv4
             const idEmpresa = uuidv4();
 
-            // // Convertir cadena base64 a buffer
-            // const restoredBuffer = Buffer.from(base64String, 'base64');
-
             const pool = await sql.connect(dbConfig);
             const result = await pool
                 .request()
                 .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
-                .input('Ruc', sql.VarChar, Ruc)
-                .input('Razon_Social', sql.VarChar, Razon_Social)
-                .input('Rubro', sql.VarChar, Rubro)
-                .input('Direccion', sql.VarChar, Direccion)
-                .input('Distrito', sql.VarChar, Distrito)
-                .input('Region', sql.VarChar, Region)
-                .input('Provincia', sql.VarChar, Provincia)
-                .input('Celular', sql.VarChar, Celular)
-                .input('Whatsapp', sql.VarChar, Whatsapp)
-                .input('Correo', sql.VarChar, Correo)
-                .input('Logo', sql.VarBinary, hashedPassword)
-                .input('Alias', sql.VarChar, Alias)
+                .input('idDocumento', sql.VarChar(1), idDocumento)
+                .input('ruc', sql.VarChar, ruc)
+                .input('razon_Social', sql.VarChar, razon_Social)
+                .input('nombreComercial', sql.VarChar, nombre_Comercial)
+                .input('rubro', sql.VarChar, rubro)
+                .input('celular', sql.VarChar, celular)
+                .input('correo', sql.VarChar, correo)
+                .input('password', sql.Text, hashedPassword)
+                .input('logo', sql.VarBinary(sql.MAX), null)
+                .input('alias', sql.VarChar, alias)
+                .input('condicion', sql.VarChar, condicion)
+                .input('estSunat', sql.VarChar, estSunat)
+                .input('estado', sql.Bit, 1)
                 .input('fregistro', sql.DateTime, fregistro)
-                .query('INSERT INTO Empresa (idEmpresa, Ruc, Razon_Social, Rubro, Direccion, Distrito, Region, Provincia, Celular, Whatsapp, Correo, Logo, Alias, fregistro, estado) VALUES (@idEmpresa, @Ruc, @Razon_Social, @Rubro, @Direccion, @Distrito, @Region, @Provincia, @Celular, @Whatsapp, @Correo, @Logo, @Alias, @fregistro, 1)');
+                .query('INSERT INTO Empresas (idEmpresa, idDocumento, ruc, razon_Social, nombreComercial, rubro, celular, correo, password, logo, alias, condicion, estSunat, estado, fregistro) VALUES (@idEmpresa, @idDocumento, @ruc, @razon_Social, @nombreComercial, @rubro, @celular, @correo, @password, @logo, @alias, @condicion, @estSunat, @estado, @fregistro)');
              
                 
-            // console.log('valor de result:', result.rowsAffected);    
-            let data = result.rowsAffected
-            res.status(200).send({data: data });
+             console.log('valor de result:', idEmpresa );    
+            
+            res.status(200).send({data: idEmpresa });
         }
         catch (error) {
             console.error('Error al crear la Empresa:', error);
-            res.status(500).send('Error al crear la Empresa');
+            res.status(500).send({data: undefined});
         }
     }
 }
@@ -423,7 +423,7 @@ const createDireccionEmpresa = async function (req, res) {
         if (req.user.rol == 'Administrador') {
 
             try {
-                let idEmpresa = req.user.empresa;
+                let idEmpresa = req.body.idEmpresa;
                 let ubigeo = req.body.ubigeo;
                 let codPais = req.body.codpais;
                 let region = req.body.region;

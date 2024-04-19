@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import * as e from 'cors';
 import { CookieService } from 'ngx-cookie-service';
 import { AdminService } from 'src/app/services/admin.service';
 import { ApiperuService } from 'src/app/services/apiperu.service';
@@ -19,20 +20,21 @@ export class CreateEmpresaComponent {
 
   public encontrado: any = false;
   public empresas: any = {
-    ruc: '',
-    rSocial: '',
+   
     idDocumento: '',
-    condicion: '',
-    email: '',
-    password: '',
-    repitPassword: '',
-    direccion: '',
+    ruc: '',
+    razon_Social: '',
+    nombre_Comercial: '',
+    rubro: '',
     celular: '',
-    idCliente: '',
-    idDireccion: '',
-    idEmpresa: '',
-  }; 
-  
+    correo: '',
+    password: '',
+    logo:'',
+    condicion: '',
+    estSunat: '',
+   
+  };
+
   public filtro: any = "";
   public empresa: any = {
     ruc: '',
@@ -96,7 +98,7 @@ export class CreateEmpresaComponent {
       if (this.empresa.ruc.length === 11) {
         this._apiperuService.getRucInfo(this.filtro).subscribe(
           response => {
-            if(response.success == false) {
+            if (response.success == false) {
               console.log('response', response);
 
               iziToast.show({
@@ -108,12 +110,12 @@ export class CreateEmpresaComponent {
                 message: 'Error al realizar la validación'
               });
               this.encontrado = false;
-            }else {
+            } else {
               this.clienteruc = response;
               //divido los datos de la despuesta
               this.empresa.rSocial = response.razonSocial;
               this.empresa.condicion = response.estado
-              this.empresas.idDocumento = 6;
+              this.empresas.idDocumento = '6';
 
 
               ///////////
@@ -127,10 +129,10 @@ export class CreateEmpresaComponent {
               console.log('this.clienteruc: ', this.clienteruc);
               this.encontrado = true;
             }
-              
+
           },
           error => {
-            
+
             iziToast.show({
               title: 'ERROR',
               titleColor: '#FF0000',
@@ -153,7 +155,7 @@ export class CreateEmpresaComponent {
       if (this.empresa.ruc.length === 8) {
         this._apiperuService.getDniInfo(this.filtro).subscribe(
           response => {
-            if(response.success == false) {
+            if (response.success == false) {
               iziToast.show({
                 title: 'ERROR',
                 titleColor: '#FF0000',
@@ -163,20 +165,20 @@ export class CreateEmpresaComponent {
                 message: 'Error al realizar la validación'
               });
               this.encontrado = false;
-            }else {
+            } else {
               this.clienteruc = response;
-              this.empresas.idDocumento = 1;
+              this.empresas.idDocumento = '1';
               //divido los datos de la despuesta
               this.empresa.rSocial = response.apellidoPaterno + ' ' + response.apellidoMaterno + ', ' + response.nombres;
-  
-  
+
+
               console.log('this.clienteruc: ', this.clienteruc);
               this.encontrado = true;
             }
 
           },
           error => {
-            
+
             iziToast.show({
               title: 'ERROR',
               titleColor: '#FF0000',
@@ -240,78 +242,86 @@ export class CreateEmpresaComponent {
 
 
     this.empresas.ruc = this.empresa.ruc;
-    this.empresas.email = this.empresa.email;
     this.empresas.password = this.empresa.password;
+    this.empresas.correo = this.empresa.email;
+
+    this.empresas.razon_Social = this.empresa.rSocial;
+    this.empresas.nombre_Comercial = this.clienteruc.nombreComercial;
+    this.empresas.condicion = this.clienteruc.condicion;
+    this.empresas.estSunat = this.clienteruc.estado;
+
     
+
 
     console.log('this.cliientes', this.empresa);
     console.log('this.empresas', this.empresas);
     console.log('this.direccionEmpresas', this.direccionEmpresas);
 
-    // if (registroForm.valid) {
     this.btn_registrar = true;
     this.data = this.empresas;
     console.log('this.data', this.data);
-    
+
 
     //  console.log('this.data como objeto', this.data);
-    // this._empresasService.createEmpresa(this.data, this.token).subscribe(
-    //   response => {
-    //     if (response.data != undefined) {
-    //       this._empresasService.getEmpresas_id(this.empresa.ruc, this.token).subscribe(
-    //         response => {
-    //           console.log('response.data', response.data);
-    //           this.direccionEmpresas.idCliente = response.data[0].idCliente;
-    //           console.log('this.direccionEmpresas con idCliente', this.direccionEmpresas);
-    //           if (response.data != undefined) {
-    //             this._empresasService.createDireccionEmpresa(this.token, this.direccionEmpresas).subscribe(
-    //               response => {
-    //                 if (response.data != undefined) {
-    //                   iziToast.show({
-    //                     title: 'SUCCESS',
-    //                     titleColor: '#006064',
-    //                     color: '#FFF',
-    //                     class: 'text-success',
-    //                     position: 'topRight',
-    //                     message: 'Cliente creado correctamente'
-    //                   });
-    //                   this.btn_registrar = false;
-    //                   //quiero redirigir a la pagina de index-clientes
-    //                   this._router.navigate(['/empresa']);
-    //                 }
+    this._empresasService.createEmpresa(this.data, this.token).subscribe(
+      response => {
+        if (response.data != undefined) {
+          console.log('response.data aqui recibo el id de la empresa creada', response.data);
+          this.direccionEmpresas.idEmpresa = response.data;
+          this._empresasService.createDireccionEmpresa(this.direccionEmpresas,this.token).subscribe(
+            response => {
+              if (response.data != undefined) {
+                iziToast.show({
+                  title: 'SUCCESS',
+                  titleColor: '#006064',
+                  color: '#FFF',
+                  class: 'text-success',
+                  position: 'topRight',
+                  message: 'Empresa creada correctamente'
+                });
+                this.btn_registrar = false;
+                //quiero redirigir a la pagina de index-clientes
+                this._router.navigate(['/empresa']);
+              }
 
-    //               },
-    //               error => {
-    //                 console.log(<any>error);
-    //                 console.error('Error al crear el cliente:', error);
-    //                 this.btn_registrar = false;
-    //               }
-    //             )
-    //           }
+            },
+            error => {
+              console.log(<any>error);
+              console.error('Error al crear la Empresa:', error);
+              this.btn_registrar = false;
+            }
+          )
+        }else{
+          iziToast.show({
+            title: 'ERROR',
+            titleColor: '#FF0000',
+            color: '#FFF',
+            class: 'text-danger',
+            position: 'topRight',
+            message: response.message
+          });
+          return;
+        }
+        
+        this.btn_registrar = false;
+      },
+      error => {
+        console.log(<any>error);
+        console.error('Error al crear la empresa:', error);
+        this.btn_registrar = false;
 
-    //         }
-    //       )
-    //     } else {
-    //       iziToast.show({
-    //         title: 'ERROR',
-    //         titleColor: '#FF0000',
-    //         color: '#FFF',
-    //         class: 'text-danger',
-    //         position: 'topRight',
-    //         message: response.message,
-    //       });
-    //       this.btn_registrar = false;
-    //     }
-    //     console.log(response.data);
-    //     this.btn_registrar = false;
-    //   },
-    //   error => {
-    //     console.log(<any>error);
-    //     console.error('Error al crear el cliente:', error);
-    //     this.btn_registrar = false;
-    //   }
+        iziToast.show({
+          title: 'ERROR',
+          titleColor: '#FF0000',
+          color: '#FFF',
+          class: 'text-danger',
+          position: 'topRight',
+          message: 'Error al crear la empresa'
+        });
+        
+      }
 
-    // )
+    )
 
   }
 

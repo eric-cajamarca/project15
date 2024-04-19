@@ -18,6 +18,7 @@ GO
 
 
 
+
 CREATE TABLE Empresas(
 	idEmpresa UNIQUEIDENTIFIER primary key NOT NULL,
 	idDocumento varchar(1) not null,
@@ -41,12 +42,13 @@ CREATE TABLE Empresas(
 )
 go
 
-insert into Empresas values ('42099529-43C9-4B7F-921A-3D6FB946E93E','6','20611688564','EMPRESA FERRETERA AVE FENIX SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','','$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',CONVERT(varbinary(max),''),'Fenix','Activo','Habido',1,GETDATE());
+insert into Empresas values ('42099529-43C9-4B7F-921A-3D6FB946E93E','6','20611688564','EMPRESA FERRETERA AVE FENIX SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','','$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby',CONVERT(varbinary(max),''),'Fenix','HABIDO','ACTIVO',1,GETDATE());
 insert into Empresas values ('BA51C992-7D05-459E-B419-A03358C0A788','6','20611658495','GRUPO OLITOR SJB E.I.R.L.','','VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA...','968073361','',CONVERT(varbinary(max),''),'Olitor','Activo','Habido',1);
 insert into Empresas values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','6','10426524541','TORRES NUÑEZ LUCILA','','VENTA AL POR MAYOR Y MENOR DE MATERIALES DE CONSTRUCCIÓN Y ARTÍCULOS DE FERRETERÍA','966818231','lucilatorressjb@gmail.com',CONVERT(varbinary(max),''),'Lucila','Activo','Habido',0);
 
 go 
 select * from Empresas
+select * from DireccionEmpresa
 
 -- Tabla para la dirección (reutilizable varias direcciones para varias empresas)
 CREATE TABLE DireccionEmpresa (

@@ -16,3 +16,9 @@
 .form-floating{
     margin-bottom: 10px;
 }
+
+h1{
+    text-align: center;
+    margin-bottom: 30px !important;
+    color: #007bff;
+}
