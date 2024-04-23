@@ -43,6 +43,13 @@ export class EmpresaService {
     return this._http.put(this.url+'empresa/'+empresa._id,params,{headers:headers});
   }
 
+  //api.put('/cambiar_estado_empresa/:id',auth.auth, empresasController.cambiar_estado_empresa);
+  cambiar_estado_empresa(id:any,estado:any,token:any):Observable<any>{
+    let params = JSON.stringify({estado:estado});
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.put(this.url+'cambiar_estado_empresa/'+id,params,{headers:headers});
+  }
+
   // api.get('/direccion_empresa/:id',auth.auth, empresasController.getDireccionEmpresa_id);
   // api.post('/direccion_empresa',auth.auth, empresasController.createDireccionEmpresa);
   // api.put('/direccion_empresa/:id',auth.auth, empresasController.updateDireccionEmpresa);

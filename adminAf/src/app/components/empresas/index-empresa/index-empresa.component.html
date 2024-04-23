@@ -47,7 +47,12 @@
                 <td>{{ empresas.celular }}</td>
                 <td>
                     <span class="badge bg-success" *ngIf="empresas.estSunat === 'ACTIVO'">Activo </span>
-                    <span class="badge bg-danger" *ngIf="empresas.estSunat !== 'ACTIVO'">{{empresas.estSunat}}</span>
+                    <span class="badge bg-warning" *ngIf="empresas.estSunat === 'BAJA DE OFICIO'">Baja de oficio</span>
+                    <span class="badge bg-warning" *ngIf="empresas.estSunat === 'BAJA PROVISIONAL'">Baja provisional</span>
+                    <span class="badge bg-warning" *ngIf="empresas.estSunat === 'BAJA DEFINITIVA'">Baja definitiva</span>
+                    <span class="badge bg-warning" *ngIf="empresas.estSunat === 'SUSPENSION TEMPORAL'">Suspensión temporal</span>
+                    
+                    <span class="badge bg-danger" *ngIf="empresas.estSunat === null">Sin Estado</span>
                 </td>
                 <td>
                   <span class="badge bg-success" *ngIf="empresas.estado">Activo</span>

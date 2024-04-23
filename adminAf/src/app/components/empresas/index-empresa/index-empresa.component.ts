@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 
+declare var iziToast: any;
+declare var $: any;
+
 @Component({
   selector: 'app-index-empresa',
   templateUrl: './index-empresa.component.html',
@@ -45,7 +48,32 @@ initData() {
 
 seleccionar(id:any){}
 
-cambiarEstado(id: any, estado:any) {}
+cambiarEstado(id: any, estado:any) {
+  console.log('cambiar estado', id, estado);
+  this.load_estado = true;
+  this._empresaService.cambiar_estado_empresa(id, estado, this.token).subscribe(
+    response => {
+      console.log('response', response);
+      this.load_estado = false;
+
+      if (response.data != undefined) {
+        iziToast.show({
+          title: 'SUCCESS',
+          titleColor: '#006064',
+          color: '#FFF',
+          class: 'text-success',
+          position: 'topRight',
+          message: 'Estado cambiado correctamente'
+        });
+
+        this.initData();
+      }
+    },
+    error => {
+      console.log(error);
+    }
+  );
+}
 
 editarempresas(id: any) {}
 

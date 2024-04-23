@@ -247,6 +247,7 @@ const updateEmpresa = async (req, res) => {
 
 //cambiar estado de la empresa
 const cambiar_estado_empresa = async function (req, res) {
+    console.log('entro a cambiar_estado_empresa',req.params);
     if (req.user) {
         let idEmpresa = req.params['id'];
         const { estado } = req.body;
@@ -261,10 +262,13 @@ const cambiar_estado_empresa = async function (req, res) {
             const pool = await sql.connect(dbConfig);
             const result = await pool
                 .request()
-                .input('idEmpresa', sql.Int, idEmpresa)
+                .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
                 .input('estado', sql.Bit, nuevo_estado)
-                .query('UPDATE Empresa SET estado = @estado WHERE idEmpresa = @idEmpresa');
+                .query('UPDATE Empresas SET estado = @estado WHERE idEmpresa = @idEmpresa');
+            res.status(200).send({ data: result.rowsAffected });
         } catch (error) {
+            console.error('Error al cambiar el estado de la empresa:', error);
+            res.status(500).send({data: undefined});
 
         }
 
@@ -400,6 +404,10 @@ const deleteAdmin = async (req, res) => {
         res.status(500).send('Error al eliminar un Usuario');
     }
 };
+
+
+
+
 
 // CREATE TABLE DireccionEmpresa (
 //     idDireccionEmpresa INT IDENTITY(1,1) PRIMARY KEY not null,
@@ -566,6 +574,7 @@ module.exports = {
     updateDireccionEmpresa
 
     //direcciones de la empresa
+    
     
 
 

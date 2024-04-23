@@ -35,11 +35,13 @@ import { IndexMarcaComponent } from "./components/marcas/index-marca/index-marca
 import { CreateMarcaComponent } from "./components/marcas/create-marca/create-marca.component";
 import { IndexEmpresaComponent } from "./components/empresas/index-empresa/index-empresa.component";
 import { CreateEmpresaComponent } from "./components/empresas/create-empresa/create-empresa.component";
+import { LoginEmpresaComponent } from "./components/login-empresa/login-empresa.component";
 
 const appRoute : Routes = [
     {path: '', component: InicioComponent, canActivate: [AdminGuard]},
     {path: 'sidebar', component: SidebarComponent, canActivate: [AdminGuard]},
     {path: 'login', component: LoginComponent},
+    {path: 'logempresa', component: LoginEmpresaComponent},
     {path: 'colaborador', component: IndexColaboradorComponent, canActivate: [AdminGuard]},
 
     //despachos
