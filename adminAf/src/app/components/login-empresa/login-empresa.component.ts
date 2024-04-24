@@ -75,7 +75,12 @@ export class LoginEmpresaComponent {
             // localStorage.setItem('identity', response.data.id);
             // localStorage.setItem('user_data',JSON.stringify(response.data));
 
-            this._router.navigate(['/']);
+            //si el ruc y la contraseña son correctos entonces redirecciono a la empresa/:id solo por una unica vez
+            this._router.navigate(['/empresa/'+response.data.idUsuario]);
+
+
+
+            
           }
         },
         error=>{

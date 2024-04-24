@@ -67,6 +67,7 @@ export class CreateEmpresaComponent {
     urbanizacion: '',
   };
   public data: any = {};
+  public load_create = false;
 
   constructor(
     private _adminService: AdminService,
@@ -280,8 +281,9 @@ export class CreateEmpresaComponent {
                   message: 'Empresa creada correctamente'
                 });
                 this.btn_registrar = false;
+                this.load_create = true;
                 //quiero redirigir a la pagina de index-clientes
-                this._router.navigate(['/empresa']);
+                // this._router.navigate(['/empresa']);
               }
 
             },

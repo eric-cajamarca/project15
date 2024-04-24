@@ -6,51 +6,63 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12 p-5" >
-                    <div class="form-signin0" >
-                        <main class="form-signin" >
-                            <form #loginForm="ngForm"  style="text-align: center !important;">
-                                
-                                <h1 class="h3 mb-3 fw-normal">Formulario de registro</h1>
-        
-                                <div class="form-floating">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" name="ruc" [(ngModel)]="empresa.ruc"
-                                            placeholder="Ingrese el RUC" required>
-                                        <button class="btn btn-primary" *ngIf="!encontrado" (click)="buscar(empresa.ruc)">Verificar</button>
-                                        <button class="btn btn-success" *ngIf="encontrado">Verificado</button>
+                    <ng-container *ngIf="load_create">
+                        
+                        <div class="alert alert-success" role="alert">
+                            <h4 class="alert-heading">Empresa creada correctamente</h4>
+                            <p>Verifique su correo <strong> {{empresas.correo}} </strong>  para recibir la conformidad y activación de su cuenta.</p>
+                            <hr>
+                            <p class="mb-0">Este proceso podria tardar de 12 a 24 horas.</p>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!load_create">
+                        <div class="form-signin0" >
+                            <main class="form-signin" >
+                                <form #loginForm="ngForm"  style="text-align: center !important;">
+                                    
+                                    <h1 class="h3 mb-3 fw-normal">Formulario de registro</h1>
+            
+                                    <div class="form-floating">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="ruc" [(ngModel)]="empresa.ruc"
+                                                placeholder="Ingrese el RUC" required>
+                                            <button class="btn btn-primary" *ngIf="!encontrado" (click)="buscar(empresa.ruc)">Verificar</button>
+                                            <button class="btn btn-success" *ngIf="encontrado">Verificado</button>
+                                        </div>
+                                        <!-- <label for="floatingInput">Ruc empresa</label> -->
                                     </div>
-                                    <!-- <label for="floatingInput">Ruc empresa</label> -->
-                                </div>
-                                
-                                <div class="form-floating">
-                                    <input type="email" class="form-control" name="email" [(ngModel)]="empresa.email"
-                                        placeholder="Correo electrónico" required>
-                                    <label for="floatingInput">Correo electrónico</label>
-                                </div>
-                                <div class="form-floating">
-                                    <input type="password" class="form-control" name="password" [(ngModel)]="empresa.password"
-                                        placeholder="Tú contraseña" required>
-                                    <label for="floatingPassword">Contraseña</label>
-                                </div>
-                                <div class="form-floating">
-                                    <input type="password" class="form-control" name="repitPassword" [(ngModel)]="empresa.repitPassword"
-                                        placeholder="Confirmar contraseña" required>
-                                    <label for="floatingPassword">Confirmar contraseña</label>
-                                </div>
-        
-                                <!-- <div class="checkbox mb-3" >
-                                    <label>
-                                        <input type="checkbox" value="remember-me"> Recordarme
-                                    </label>
-                                </div> -->
-                                <button *ngIf="encontrado" class="w-100 btn btn-lg btn-primary" (click)="registrar()"
-                                    >Registrarme</button>
-                                <!-- <p class="mt-5 mb-3 text-muted">&copy; 2023</p> -->
-                            </form>
-        
-        
-                        </main>
-                    </div>
+                                    
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control" name="email" [(ngModel)]="empresa.email"
+                                            placeholder="Correo electrónico" required>
+                                        <label for="floatingInput">Correo electrónico</label>
+                                    </div>
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control" name="password" [(ngModel)]="empresa.password"
+                                            placeholder="Tú contraseña" required>
+                                        <label for="floatingPassword">Contraseña</label>
+                                    </div>
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control" name="repitPassword" [(ngModel)]="empresa.repitPassword"
+                                            placeholder="Confirmar contraseña" required>
+                                        <label for="floatingPassword">Confirmar contraseña</label>
+                                    </div>
+            
+                                    <!-- <div class="checkbox mb-3" >
+                                        <label>
+                                            <input type="checkbox" value="remember-me"> Recordarme
+                                        </label>
+                                    </div> -->
+                                    <button *ngIf="encontrado" class="w-100 btn btn-lg btn-primary" (click)="registrar()"
+                                        >Registrarme</button>
+                                    <!-- <p class="mt-5 mb-3 text-muted">&copy; 2023</p> -->
+                                </form>
+            
+            
+                            </main>
+                        </div>
+                    </ng-container>
+                    
                 </div>
             </div>
         </div>

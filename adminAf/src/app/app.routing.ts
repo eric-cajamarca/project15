@@ -36,6 +36,7 @@ import { CreateMarcaComponent } from "./components/marcas/create-marca/create-ma
 import { IndexEmpresaComponent } from "./components/empresas/index-empresa/index-empresa.component";
 import { CreateEmpresaComponent } from "./components/empresas/create-empresa/create-empresa.component";
 import { LoginEmpresaComponent } from "./components/login-empresa/login-empresa.component";
+import { UpdateEmpresaComponent } from "./components/empresas/update-empresa/update-empresa.component";
 
 const appRoute : Routes = [
     {path: '', component: InicioComponent, canActivate: [AdminGuard]},
@@ -97,7 +98,7 @@ const appRoute : Routes = [
     //empresas
     {path: 'empresa', component: IndexEmpresaComponent, canActivate: [AdminGuard]},
     {path: 'empresa/create', component: CreateEmpresaComponent, canActivate: [AdminGuard]},
-    {path: 'empresa/:id', component: UpdateComprasComponent, canActivate: [AdminGuard]},
+    {path: 'empresa/:id', component: UpdateEmpresaComponent, canActivate: [AdminGuard]},
 ]
 
 export const appRoutingProviders : any[]=[];
