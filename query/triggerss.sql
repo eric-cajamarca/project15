@@ -1,3 +1,27 @@
+--drop TRIGGER CrearRolYUsuario
+
+CREATE TRIGGER CrearRolYUsuario
+ON Empresas
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @IdNuevoRol UNIQUEIDENTIFIER;
+    DECLARE @idEmpresa UNIQUEIDENTIFIER;
+
+    -- Insertar un nuevo rol con datos predeterminados
+    SET @IdNuevoRol = NEWID();
+    INSERT INTO Rol (idRol, idEmpresa, descripcion)
+    SELECT @IdNuevoRol, idEmpresa, 'Administrador'
+    FROM inserted;
+
+    -- Insertar un nuevo usuario con el Id del rol predeterminado
+    INSERT INTO UsuarioWeb (idUsuario, idEmpresa, nombres, apellidos, email, password, idRol, estado, fregistro)
+    SELECT NEWID(), idEmpresa, 'Predeterminado', 'Predeterminado', correo , '$2a$08$iD7U/5D7Kc.BOH06wQg/.uGB7pY9CNSd2LYwEabV3QM9GCHIYQmby', @IdNuevoRol, '1', GETDATE()
+    FROM inserted;
+END;
+
+
+
 --crear correlativo cada vez que se agregue una nueva empresa
 CREATE TRIGGER TR_CrearCorrelativo
 ON Empresas

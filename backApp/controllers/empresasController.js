@@ -40,7 +40,7 @@ const getEmpresas = async function (req, res) {
                 // console.log('result.recordset');
                 // console.log(result.recordset);
                 console.log('result:', result.recordset);
-                res.status(200).send({ data: result.recordset });
+                res.status(200).send({ data: result.recordset[0] });
             } catch (error) {
                 console.error('Error al obtener las epresas:', error);
                 res.status(200).send({ data: undefined });
@@ -58,7 +58,7 @@ const getEmpresas = async function (req, res) {
 };
 
 const getEmpresasById = async function (req, res) {
-
+    console.log('entro a getEmpresasById', req.params);
     const id = req.params.id;
 
     if (req.user) {
@@ -68,14 +68,14 @@ const getEmpresasById = async function (req, res) {
             const pool = await sql.connect(dbConfig);
             let result = await pool
                 .request()
-                .input('id', sql.Int, id)
-                .query('SELECT * FROM Empresa WHERE id = @id');
+                .input('idEmpresa', sql.UniqueIdentifier, id)
+                .query('SELECT * FROM Empresas WHERE idEmpresa = @idEmpresa');
 
             console.log('result:', result.recordset);
-            res.json(result.recordset);
-            // res.status(200).send({ data: result.recordset });
+            //res.json(result.recordset);
+            res.status(200).send({ data: result.recordset });
         } catch (error) {
-            // console.error('Error al obtener los usuarios:', error);
+             console.error('Error al obtener los usuarios:', error);
             res.status(500).send({ data: undefined });
         }
 

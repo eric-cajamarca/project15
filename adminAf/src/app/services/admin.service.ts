@@ -15,6 +15,7 @@ export class AdminService {
   public url: any;
   private _router: any;
   public idUser: any;
+  public idempresa: any;
   
   constructor(
     private _http: HttpClient,
@@ -47,9 +48,16 @@ export class AdminService {
       const helper = new JwtHelperService();
       var decodedToken = helper.decodeToken(token);
 
-      // console.log(decodedToken);
-      const { nombres, apellidos } = decodedToken;
-      this.idUser = { nombres, apellidos };
+      console.log('decodetoken',decodedToken);
+      const { nombres, apellidos, empresa } = decodedToken;
+      this.idUser = { nombres, apellidos, empresa};
+
+      // //quierro extraer el empresa y consultar el razonsocial de la empresa en la base de datos
+      //  const { empresa } = decodedToken;
+      //   this.idempresa = { empresa };
+
+          
+
       //aqui valido que el token sea valido
       if (!decodedToken) {
         console.log('token no valido');
@@ -83,8 +91,8 @@ export class AdminService {
       const helper = new JwtHelperService();
       var decodedToken = helper.decodeToken(token);
 
-      const { nombres, apellidos } = decodedToken;
-      this.idUser = { nombres, apellidos };
+      const { nombres, apellidos, empresa } = decodedToken;
+      this.idUser = { nombres, apellidos, empresa };
 
       if (!decodedToken) {
         console.log('token no valido');

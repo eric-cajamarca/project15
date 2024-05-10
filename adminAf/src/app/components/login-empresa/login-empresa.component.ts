@@ -62,7 +62,7 @@ export class LoginEmpresaComponent {
               message: response.message
             });
           }else{
-            this.usuario = response.data;
+            this.usuario = response.data.idEmpresa;
              console.log(this.usuario);
 
             //quiero guardar el token en CookieService

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { AdminService } from 'src/app/services/admin.service';
 import { ApiperuService } from 'src/app/services/apiperu.service';
@@ -21,10 +21,19 @@ export class UpdateEmpresaComponent {
 
   public filtro: any = "";
   public empresas: any = {
-    correo: '',
-    celular: '',
-    condicion:'ACTIVO',
+   
     idDocumento: '',
+    ruc: '',
+    razon_Social: '',
+    nombre_Comercial: '',
+    rubro: '',
+    celular: '',
+    correo: '',
+    password: '',
+    logo:'',
+    condicion: '',
+    estSunat: '',
+   
   };
   public clienteruc: any = [];
   // public direccionEmpresas:any=[];
@@ -58,6 +67,7 @@ export class UpdateEmpresaComponent {
     private _apiperuService: ApiperuService,
     private _empresasService: EmpresaService,
     private _router: Router,
+    private _route: ActivatedRoute
     
   ) {
     this.token = this._cookieService.get('token');
@@ -83,6 +93,15 @@ export class UpdateEmpresaComponent {
       response => {
         this.distritos = response;
         console.log('this.distritos', this.distritos);
+      
+      }
+    );
+
+    this._documentosService.obtener_documento(this.token).subscribe(
+      response => {
+        this.documento = response.data;
+        console.log('this.documento', this.documento);
+
       }
     );
 
@@ -90,18 +109,27 @@ export class UpdateEmpresaComponent {
   }
 
   ngOnInit() {
-    this._documentosService.obtener_documento(this.token).subscribe(
-      response => {
-        this.documento = response.data;
-        console.log('this.documento', this.documento);
+    //quiero obtener el id de la empresa que lo estoy pasando como parametro en la url
+     this._route.params.subscribe(params => {
+      let id = params['id'];
+      console.log('id', id);
+      this._empresasService.getEmpresas_id(id, this.token).subscribe(
+        response => {
+          console.log('response', response);
+          //convetir el array response.data a un objeto this.empresas
+          this.empresas = response[0];
 
-        //convertir array de lista de roles this.roles a un objeto par usarlo en mi formulario
-        //  this.documento.forEach((element: { id: string | number; name: any; }) => {
-        //   this.documento[element.id] = element.id;
-        //  });
 
-      }
-    );
+
+
+          
+         
+          console.log('this.empresas', this.empresas);
+        }
+      )
+    });
+
+
 
     this.select_pais();
   }
@@ -109,82 +137,82 @@ export class UpdateEmpresaComponent {
   //https://dniruc.apisperu.com/api/v1/dni/45633353?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImVyaWNvcnRpemd1ZXZhcmFAZ21haWwuY29tIn0.-cs9eKiQegcTM0bbaz7O-BT_sS7_BpV_6cndIqCeHfk
 
   buscar() {
-    this.contBuscar = 1;
-    console.log('veo que cod comprobante', this.empresas.idDocumento)
+    // this.contBuscar = 1;
+    // console.log('veo que cod comprobante', this.empresas.idDocumento)
 
-    console.log('filtro', this.empresas.ruc);
-    this.filtro = this.empresas.ruc;
+    // console.log('filtro', this.empresas.ruc);
+    // this.filtro = this.empresas.ruc;
 
-    try {
+    // try {
 
-      if (this.empresas.ruc.length === 11 && this.empresas.idDocumento === '6') {
-        this._apiperuService.getRucInfo(this.filtro).subscribe(
-          response => {
-            this.clienteruc = response;
-            //divido los datos de la despuesta
-            this.empresas.rSocial = response.razonSocial;
-            this.empresas.condicion = response.estado
+    //   if (this.empresas.ruc.length === 11 && this.empresas.idDocumento === '6') {
+    //     this._apiperuService.getRucInfo(this.filtro).subscribe(
+    //       response => {
+    //         this.clienteruc = response;
+    //         //divido los datos de la despuesta
+    //         this.empresas.rSocial = response.razonSocial;
+    //         this.empresas.condicion = response.estado
   
   
-            ///////////
-            this.direccionEmpresas.codpais = "PEN";
-            this.direccionEmpresas.ubigeo = response.ubigeo;
-            this.direccionEmpresas.region = response.departamento;
-            this.direccionEmpresas.provincia = response.provincia;
-            this.direccionEmpresas.distrito = response.distrito;
-            this.direccionEmpresas.direccion = response.direccion;
+    //         ///////////
+    //         this.direccionEmpresas.codpais = "PEN";
+    //         this.direccionEmpresas.ubigeo = response.ubigeo;
+    //         this.direccionEmpresas.region = response.departamento;
+    //         this.direccionEmpresas.provincia = response.provincia;
+    //         this.direccionEmpresas.distrito = response.distrito;
+    //         this.direccionEmpresas.direccion = response.direccion;
   
-            console.log('this.clienteruc: ', this.clienteruc);
-          },
-          error => {
-            iziToast.show({
-              title: 'ERROR',
-              titleColor: '#FF0000',
-              color: '#FFF',
-              class: 'text-danger',
-              position: 'topRight',
-              message: 'Error al realizar la consulta por falta de datos'
-            });
-          });
+    //         console.log('this.clienteruc: ', this.clienteruc);
+    //       },
+    //       error => {
+    //         iziToast.show({
+    //           title: 'ERROR',
+    //           titleColor: '#FF0000',
+    //           color: '#FFF',
+    //           class: 'text-danger',
+    //           position: 'topRight',
+    //           message: 'Error al realizar la consulta por falta de datos'
+    //         });
+    //       });
 
-      }
+    //   }
       
 
 
 
 
-      if (this.empresas.ruc.length === 8 && this.empresas.idDocumento === '1') {
-        this._apiperuService.getDniInfo(this.filtro).subscribe(
-          response => {
-            this.clienteruc = response;
-            //divido los datos de la despuesta
-            this.empresas.rSocial = response.apellidoPaterno + ' ' + response.apellidoMaterno + ', ' + response.nombres;
+    //   if (this.empresas.ruc.length === 8 && this.empresas.idDocumento === '1') {
+    //     this._apiperuService.getDniInfo(this.filtro).subscribe(
+    //       response => {
+    //         this.clienteruc = response;
+    //         //divido los datos de la despuesta
+    //         this.empresas.rSocial = response.apellidoPaterno + ' ' + response.apellidoMaterno + ', ' + response.nombres;
 
 
-            console.log('this.clienteruc: ', this.clienteruc);
-          },
-          error => {
-            iziToast.show({
-              title: 'ERROR',
-              titleColor: '#FF0000',
-              color: '#FFF',
-              class: 'text-danger',
-              position: 'topRight',
-              message: 'Error al realizar la consulta por falta de datos '
-            });
-          });
+    //         console.log('this.clienteruc: ', this.clienteruc);
+    //       },
+    //       error => {
+    //         iziToast.show({
+    //           title: 'ERROR',
+    //           titleColor: '#FF0000',
+    //           color: '#FFF',
+    //           class: 'text-danger',
+    //           position: 'topRight',
+    //           message: 'Error al realizar la consulta por falta de datos '
+    //         });
+    //       });
 
-      }
-    } catch (error) {
-      iziToast.show({
-        title: 'ERROR',
-        titleColor: '#FF0000',
-        color: '#FFF',
-        class: 'text-danger',
-        position: 'topRight',
-        message: 'Ingrese un número de DNI o Ruc'
-      });
-    }
+    //   }
+    // } catch (error) {
+    //   iziToast.show({
+    //     title: 'ERROR',
+    //     titleColor: '#FF0000',
+    //     color: '#FFF',
+    //     class: 'text-danger',
+    //     position: 'topRight',
+    //     message: 'Ingrese un número de DNI o Ruc'
+    //   });
+    // }
 
 
 

@@ -121,46 +121,53 @@ export class UpdateColaboradorComponent {
       }
       console.log('this.colaborador: ', this.colaborador);
 
-      //quiero cambiar el valor de this.colaborador.idRol por el valor de this.roles seleccionado en el select del html
-      //  this.roles.forEach((item:any) => {
-      //     if(item.idRol == this.colaborador.idRol){
-      //       this.colaborador.idRol = item.id;
-      //     }
-      //   });
-
-      this._adminservice.editar_colaborador_admin(this.id, this.colaborador, this.token).subscribe(
-        response => {
-          if (response.data == undefined) {
-            iziToast.show({
-              title: 'ERROR',
-              titleColor: '#FF0000',
-              color: '#FFF',
-              class: 'text-danger',
-              position: 'topRight',
-              message: response.message,
-            });
-            this.btn_actualizar = false;
-
-          } else {
-            this.btn_actualizar = false;
-            // setTimeout(()=> {
-            //   this.btn_actualizar=false;
-            // }, 4000);
-
-            iziToast.show({
-              title: 'SUCCESS',
-              titleColor: '#1DC74C',
-              color: '#FFF',
-              class: 'text-success',
-              position: 'topRight',
-              message: response.message,
-            });
-
-            this._router.navigate(['/colaborador']);
+      
+      try {
+        this._adminservice.editar_colaborador_admin(this.id, this.colaborador, this.token).subscribe(
+          response => {
+            if (response.data == undefined) {
+              iziToast.show({
+                title: 'ERROR',
+                titleColor: '#FF0000',
+                color: '#FFF',
+                class: 'text-danger',
+                position: 'topRight',
+                message: response.message,
+              });
+              this.btn_actualizar = false;
+  
+            } else {
+              this.btn_actualizar = false;
+              // setTimeout(()=> {
+              //   this.btn_actualizar=false;
+              // }, 4000);
+  
+              iziToast.show({
+                title: 'SUCCESS',
+                titleColor: '#1DC74C',
+                color: '#FFF',
+                class: 'text-success',
+                position: 'topRight',
+                message: response.message,
+              });
+  
+              this._router.navigate(['/colaborador']);
+            }
+  
           }
-
-        }
-      )
+        
+        )
+      } catch (error) {
+        iziToast.show({
+          title: 'ERROR',
+          titleColor: '#FF0000',
+          color: '#FFF',
+          class: 'text-danger',
+          position: 'topRight',
+          message: 'Error en el servidor, intente mas tarde'
+        });
+      }
+      
 
     } else {
       iziToast.show({

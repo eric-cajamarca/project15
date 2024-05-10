@@ -21,7 +21,7 @@ var auth  = require('../middlewares/autenticate');
 // READ
 api.get('/empresa', auth.auth, empresasController.getEmpresas);
 api.get('/empresa/:id',auth.auth, empresasController.getEmpresasById);
-api.post('/empresa',auth.auth, empresasController.createEmpresa);
+api.post('/empresa', empresasController.createEmpresa);
 api.put('/empresa/:id',auth.auth, empresasController.updateEmpresa);
 api.put('/cambiar_estado_empresa/:id',auth.auth, empresasController.cambiar_estado_empresa);
 

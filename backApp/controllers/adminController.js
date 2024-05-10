@@ -141,11 +141,11 @@ const updateAdmin = async (req, res) => {
                     const result = await pool
                         .request()
                         .input('idUsuario', sql.UniqueIdentifier, id)
-                        .input('nombres', sql.VarChar, name)
+                        .input('nombres', sql.VarChar, nombres)
                         .input('apellidos', sql.VarChar, apellidos)
                         .input('password', sql.Text, hashedPassword)
-                        .input('rol', sql.UniqueIdentifier, rol)
-                        .query('UPDATE usuarioWeb SET nombres = @nombres, apellidos = @apellidos, password = @password, rol = @rol WHERE idUsuario = @idUsuario');
+                        .input('idRol', sql.UniqueIdentifier, idRol)
+                        .query('UPDATE usuarioWeb SET nombres = @nombres, apellidos = @apellidos, password = @password, idRol = @idRol WHERE idUsuario = @idUsuario');
                     res.status(200).send({ message: 'Usuario actualizado correctamente', data: result.rowsAffected });
 
                 }
@@ -293,7 +293,7 @@ const admin_login = async (req, res) => {
         const checkEmailQuery = await pool
             .request()
             .input('ruc', sql.VarChar, ruc)
-            .query('SELECT * FROM Empresas where ruc = @ruc');
+            .query('SELECT * FROM Empresas where ruc = @ruc ');
         console.log('checkEmailQuery', checkEmailQuery);
 
         if (checkEmailQuery.recordset.length > 0) {
