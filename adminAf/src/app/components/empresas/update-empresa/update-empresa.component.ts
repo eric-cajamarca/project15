@@ -43,6 +43,7 @@ export class UpdateEmpresaComponent {
   public distritos: any = [];
   public token: any = "";
   public contBuscar = 0;
+  public empConect: any = {};
   public btn_registrar = false;
   public mostrarDireccion = false;
 
@@ -58,6 +59,7 @@ export class UpdateEmpresaComponent {
     codLocal: '0',
     urbanizacion: '',
   };
+
   public data: any = {};
 
   constructor(
@@ -73,7 +75,8 @@ export class UpdateEmpresaComponent {
     this.token = this._cookieService.get('token');
 
     this.direccionEmpresas.codpais = 'PEN';
-
+    this.empConect = this._adminService.idUser.empresa;
+    console.log('this.empConect', this.empConect);
 
     this._adminService.get_Regiones().subscribe(
       response => {
@@ -110,14 +113,12 @@ export class UpdateEmpresaComponent {
 
   ngOnInit() {
     //quiero obtener el id de la empresa que lo estoy pasando como parametro en la url
-     this._route.params.subscribe(params => {
-      let id = params['id'];
-      console.log('id', id);
-      this._empresasService.getEmpresas_id(id, this.token).subscribe(
+     
+      this._empresasService.getEmpresas_id(this.empConect, this.token).subscribe(
         response => {
           console.log('response', response);
           //convetir el array response.data a un objeto this.empresas
-          this.empresas = response[0];
+          this.empresas = response.data[0];
 
 
 
@@ -127,7 +128,7 @@ export class UpdateEmpresaComponent {
           console.log('this.empresas', this.empresas);
         }
       )
-    });
+    
 
 
 
@@ -317,6 +318,10 @@ export class UpdateEmpresaComponent {
     console.log(this.direccionEmpresas.ubigeo);
   }
 
+  onLogoChange($event: any){
+    
+  }
+
   registrar(registroForm: any){
 
     console.log('this.cliientes', this.empresas);
@@ -363,7 +368,7 @@ export class UpdateEmpresaComponent {
                         console.error('Error al crear el cliente:', error);
                         this.btn_registrar = false;
                       }
-                    )
+                  )
                 }
                 
               }

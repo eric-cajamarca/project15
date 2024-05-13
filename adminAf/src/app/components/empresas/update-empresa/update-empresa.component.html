@@ -2,14 +2,31 @@
 <app-top-nav></app-top-nav>
 <div class="container">
     <div class="card" style="margin-top: 20px;">
-        <div class="card-header">
+        <div class="card-body">
+
+            <div class="mb-3">
+                <label for="logo" class="form-label">Logo de la empresa</label>
+                <input type="file" class="form-control" name="logo" (change)="onLogoChange($event)">
+            </div>
+
+            <div *ngIf=!empresas.logo class="mb-3">
+                <label for="logoPreview" class="form-label">Vista previa del logo</label>
+                <img src="assets/construccion.jpg"  class="img-fluid">
+            </div>
+
+        </div>
+    
+    </div>
+
+    <div class="card" style="margin-bottom: 20px;">
+        <!-- <div class="card-header">
 
             
             <h4 class="card-header-title">
-                Crear nuevo registro
+                Editar datos de la empresa
             </h4>
 
-        </div>
+        </div> -->
 
         <div class="card-body">
             <div class="col-sm-6 col-log-3 col-md-12">
@@ -27,20 +44,13 @@
                 <div *ngIf="empresas.idDocumento == 6" class="input-group input-group-merge">
                     <input type="text" class="form-control form-control-appended" placeholder="ingrese el número de RUC"
                         name="ruc" [(ngModel)]="empresas.ruc">
-                    <!-- <div class="input-group-append">
-                        <button class="btn btn-primary" (click)="buscar()">
-                            Buscar
-                        </button>
-                    </div> -->
+                    
+
                 </div>
                 <div *ngIf="empresas.idDocumento == 1" class="input-group input-group-merge">
                     <input type="text" class="form-control form-control-appended" placeholder="ingrese el número de DNI"
                         name="ruc" [(ngModel)]="empresas.ruc">
-                    <!-- <div class="input-group-append">
-                        <button class="btn btn-primary" (click)="buscar()">
-                            Buscar
-                        </button>
-                    </div> -->
+                    
                 </div>
             </div>
         </div>
@@ -55,12 +65,12 @@
             <div class="card" style="margin-bottom: 20px;">
 
                 <div class="card-body">
+                    
                     <div class="mb-3">
                         <label for="rSocial" class="form-label">Razón Social</label>
-                        <input type="text" class="form-control" name="rSocial" [(ngModel)]="empresas.razon_Social"
+                        <input type="text" class="form-control" name="rSocial" [(ngModel)]="empresas.rSocial"
                             placeholder="Ingrese la razón social">
                     </div>
-
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" name="correo" [(ngModel)]="empresas.correo"
@@ -71,6 +81,30 @@
                         <input type="tel" class="form-control" name="celular" [(ngModel)]="empresas.celular"
                             placeholder="Ingrese el teléfono (opcional)">
                     </div>
+
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 20px;">
+
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="nombreComercial" class="form-label">Nombre Comercial</label>
+                        <input type="text" class="form-control" name="nombreComercial" [(ngModel)]="empresas.nombreComercial"
+                            placeholder="Ingrese nombre comercial (opcional)">
+                    </div>
+                    <div class="mb-3">
+                        <label for="alias" class="form-label">Alias</label>
+                        <input type="text" class="form-control" name="alias" [(ngModel)]="empresas.alias"
+                            placeholder="Crea un corto alias para tu negocio">
+                    </div>
+                    <div class="mb-3">
+                        <label for="rubro" class="form-label">Giro del negocio</label>
+                        <input type="text" class="form-control" name="rubro" [(ngModel)]="empresas.rubro"
+                            placeholder="Descripcion del giro del negocio">
+                    </div>
+
+                    
 
                 </div>
             </div>
