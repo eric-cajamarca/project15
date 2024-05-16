@@ -510,16 +510,17 @@ const updateDireccionEmpresa = async function (req, res){
 }
 
 const getDireccionEmpresa_id = async function (req, res) {
-    const { id } = req.params;
+    console.log('entro a getDireccionEmpresa_id', req.params);
+    const idEmpresa = req.params.id;
     if (req.user) {
         if (req.user.rol == 'Administrador') {
             try {
                 const pool = await sql.connect(dbConfig);
                 const result = await pool
                     .request()
-                    .input('id', sql.Int, id)
-                    .query('SELECT * FROM DireccionEmpresa WHERE idDireccionEmpresa = @id');
-                res.json(result.recordset);
+                    .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
+                    .query('SELECT * FROM DireccionEmpresa WHERE idEmpresa = @idEmpresa');
+                res.status(200).send({ data: result.recordset });
             } catch (error) {
                 console.error('Error al obtener las direcciones de la empresa:', error);
                 res.status(500).send('Error al obtener las direcciones de la empresa');
@@ -533,6 +534,33 @@ const getDireccionEmpresa_id = async function (req, res) {
         res.status(401).send({ message: 'No Access' });
     }
 }
+
+// const getDirecciones_empresa = async function (req, res) {
+//     console.log('entro a getDirecciones_empresa', req.params);
+//     const idEmpresa = req.params.id;
+
+//     if (req.user) {
+//         if (req.user.rol == 'Administrador') {
+//             try {
+//                 const pool = await sql.connect(dbConfig);
+//                 const result = await pool
+//                     .request()
+//                     .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
+//                     .query('SELECT * FROM DireccionEmpresa WHERE idEmpresa = @idEmpresa');
+//                 res.json(result.recordset);
+//             } catch (error) {
+//                 console.error('Error al obtener las direcciones de la empresa:', error);
+//                 res.status(500).send('Error al obtener las direcciones de la empresa');
+//             }
+//         }
+//         else {
+//             res.status(401).send({ message: 'No Access' });
+//         }
+        
+//     } else {
+//         res.status(401).send({ message: 'No Access' });
+//     }
+// }
 
 
 // const getDireccionEmpresa = async function (req, res) {

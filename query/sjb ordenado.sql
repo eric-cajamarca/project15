@@ -269,6 +269,7 @@ insert into Marcas values('42099529-43C9-4B7F-921A-3D6FB946E93E','TRUPER','HERRA
 
 select * from marcas
 select * from empresas
+select * from UsuarioWeb
 go
 --TRUNCATE TABLE CORRELATIVO
 create table Correlativos
