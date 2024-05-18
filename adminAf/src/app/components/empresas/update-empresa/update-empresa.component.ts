@@ -50,7 +50,9 @@ export class UpdateEmpresaComponent {
   public mostrarDireccion = false;
 
   public str_pais = '';
-  public direccionEmpresas: any = [];
+  public direccionEmpresas: any = {};
+  public direccionEmpresas_const: any = [];
+  // public direccionModificada: any = {};
 
   public data: any = {};
 
@@ -119,7 +121,7 @@ export class UpdateEmpresaComponent {
         response => {
           console.log('response', response);
           //convetir el array response.data a un objeto this.empresas
-          this.direccionEmpresas = response.data;
+          this.direccionEmpresas_const = response.data;
           console.log('this.direccionEmpresas', this.direccionEmpresas);
 
 
@@ -304,6 +306,32 @@ export class UpdateEmpresaComponent {
     
     console.log(this.file);
     
+  }
+
+  editarDireccion(id: any){
+    //quiero obtener el id de del array this.direccionEmpresas seleccionado
+    console.log('id', id);
+    console.log('this.direccionEmpresas', this.direccionEmpresas);
+
+    //quiero buscar el id de la direccion seleccionada en el array this.direccionEmpresas y extraer el objeto
+    this.direccionEmpresas_const.forEach((element: any) => {
+      if (element.idDireccionEmpresa == id) {
+        console.log('element', element);
+        this.direccionEmpresas = element;
+        console.log('this.direccionEmpresas', this.direccionEmpresas);
+      }else{
+        console.log('No se encontró el id');
+      }
+    });
+
+    
+
+
+    
+
+    
+
+
   }
 
   registrar(registroForm: any){
