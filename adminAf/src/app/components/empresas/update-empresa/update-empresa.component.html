@@ -345,18 +345,22 @@
             <h4 class="card-header-title">
                 Direcciones de la empresa
             </h4>
+            <button class="btn-primary" style="border-radius: 5px;" data-bs-toggle="modal" 
+                        data-bs-target="#crearDireccionModal">Crear nueva dirección</button>
 
         </div>
 
         <div class=" flex-column flex-md-row">
             <div class="card-body" *ngFor="let item of direccionEmpresas_const">
-                <div style="width: 60%;">
-                    <p> Ubigeo: {{item.ubigeo}} </p>
-                    <p> Región: {{item.region}} </p>
-                    <p> Distrito: {{item.distrito}} </p>
-                    <p> Provincia: {{item.provincia}} </p>
-                    <p> Dirección: {{item.direccion}} </p>
-                    <p> Referencia: {{item.referencia}} </p>
+                <hr style="border: 5px solid;">
+                
+                <div >
+                    <p> <strong>Ubigeo:</strong> {{item.ubigeo}} </p>
+                    <p> <strong>Región:</strong> {{item.region}} </p>
+                    <p> <strong>Distrito:</strong> {{item.distrito}} </p>
+                    <p> <strong>Provincia:</strong> {{item.provincia}} </p>
+                    <p> <strong>Dirección:</strong> {{item.direccion}} </p>
+
                     <p class="badge bg-success" *ngIf="item.principal"> Condición: Principal </p>
                     <p class="badge bg-warning" *ngIf="!item.principal"> Condición: Convertir en principal </p>
 
@@ -364,114 +368,180 @@
 
                 <div style="width: 30%;">
                     <!-- <button class="btn-warning" style="border-radius: 5px;"> Modificar dirección</button> -->
-                    <button class="btn-warning" style="border-radius: 5px;" data-bs-toggle="modal"
+                    <button class="btn-warning" style="border-radius: 5px; margin-right: 20px; margin-bottom: 10px;" data-bs-toggle="modal"
                         [attr.data-bs-target]="'#editar-' + item.idDireccionEmpresa"
                         (click)="editarDireccion(item.idDireccionEmpresa)">Modificar dirección</button>
 
-                    <!-- Modal -->
-                    <div class="modal fade" [attr.id]="'editar-' + item.idDireccionEmpresa" tabindex="-1" role="dialog"
-                        aria-labelledby="editarDireccionModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editarDireccionModalLabel">Editar dirección: 
-                                        {{item.direccion}} </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <!-- Add your form for editing the address here -->
-                                    <ng-container *ngIf="direccionEmpresas.region !== undefined">
-                                        <h6> Consulta a sunat realizada</h6>
-                                       
-                                        <div class="mb-3">
-                                            <label for="region" class="form-label">Región</label>
-                                            <input type="text" class="form-control" name="region" [(ngModel)]="direccionEmpresas.region">
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label for="provincia" class="form-label">Provincia</label>
-                                            <input type="text" class="form-control" name="provincia" [(ngModel)]="direccionEmpresas.provincia">
-                                        </div>
                     
-                                        <div class="mb-3">
-                                            <label for="distrito" class="form-label">Distrito</label>
-                                            <input type="text" class="form-control" name="distrito" [(ngModel)]="direccionEmpresas.distrito">
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label for="ubigeo" class="form-label">Ubigeo</label>
-                                            <input type="text" class="form-control" name="ubigeo" [(ngModel)]="direccionEmpresas.ubigeo"
-                                                placeholder="Ingrese el ubigeo">
-                                        </div>
-                                    </ng-container>
-
-                                    <ng-container *ngIf="direccionEmpresas.region === undefined">
-
-
-                                        <div class="col-sm-6 form-group">
-                                            <label for="ac-fn">Región (opcional)</label>
-                                            <select id="sl-region" name="region" [(ngModel)]="direccionEmpresas.region"
-                                                class="form-control" (change)="select_region()">
-                                                <option value="" selected disabled>Seleccionar</option>
-                                                <option value="{{item.id}}" *ngFor="let item of regiones">{{item.name}}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-6 form-group">
-                                            <label for="ac-fn">Provincia (opcional)</label>
-                                            <select id="sl-provincia" name="provincia"
-                                                [(ngModel)]="direccionEmpresas.provincia" class="form-control" disabled
-                                                (change)="select_provincia()">
-                                                <option value="" selected disabled>Seleccionar</option>
-                                                <option value="{{item.id}}" *ngFor="let item of provincias">
-                                                    {{item.name}}</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-6 form-group">
-                                            <label for="ac-fn">Distrito (opcional)</label>
-                                            <select id="sl-distrito" name="distrito"
-                                                [(ngModel)]="direccionEmpresas.distrito" class="form-control" disabled
-                                                (change)="select_distrito($event)">
-                                                <option value="" selected disabled>Seleccionar</option>
-                                                <option value="{{item.id}}" *ngFor="let item of distritos">{{item.name}}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="ubigeo" class="form-label">Ubigeo</label>
-                                            <input type="text" class="form-control" name="ubigeo"
-                                                [(ngModel)]="direccionEmpresas.ubigeo"
-                                                placeholder="Ingrese el ubigeo (opcional)">
-                                        </div>
-                                    </ng-container>
+                    
+                </div>
+                
+                <!-- Modal de Actualizacion de la direccion-->
+                <div class="modal fade" [attr.id]="'editar-' + item.idDireccionEmpresa" tabindex="-1" role="dialog"
+                    aria-labelledby="editarDireccionModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editarDireccionModalLabel">Editar dirección:
+                                    {{direccionEmpresas.direccion}} </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Add your form for editing the address here -->
+                                <ng-container *ngIf="direccionEmpresas.region !== undefined">
+                                    <h6> Consulta a sunat realizada</h6>
 
                                     <div class="mb-3">
-                                        <label for="direccion" class="form-label">Dirección</label>
-                                        <input type="text" class="form-control" name="direccion"
-                                            [(ngModel)]="direccionEmpresas.direccion"
-                                            placeholder="Ingrese la dirección (opcional)">
+                                        <label for="region" class="form-label">Región</label>
+                                        <input type="text" class="form-control" name="region"
+                                            [(ngModel)]="direccionEmpresas.region">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="provincia" class="form-label">Provincia</label>
+                                        <input type="text" class="form-control" name="provincia"
+                                            [(ngModel)]="direccionEmpresas.provincia">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="distrito" class="form-label">Distrito</label>
+                                        <input type="text" class="form-control" name="distrito"
+                                            [(ngModel)]="direccionEmpresas.distrito">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="ubigeo" class="form-label">Ubigeo</label>
+                                        <input type="text" class="form-control" name="ubigeo"
+                                            [(ngModel)]="direccionEmpresas.ubigeo" placeholder="Ingrese el ubigeo">
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="direccionEmpresas.region === undefined">
+
+
+                                    <div class="col-sm-6 form-group">
+                                        <label for="ac-fn">Región (opcional)</label>
+                                        <select id="sl-region" name="region" [(ngModel)]="direccionEmpresas.region"
+                                            class="form-control" (change)="select_region()">
+                                            <option value="" selected disabled>Seleccionar</option>
+                                            <option value="{{item.id}}" *ngFor="let item of regiones">{{item.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        <label for="ac-fn">Provincia (opcional)</label>
+                                        <select id="sl-provincia" name="provincia"
+                                            [(ngModel)]="direccionEmpresas.provincia" class="form-control" disabled
+                                            (change)="select_provincia()">
+                                            <option value="" selected disabled>Seleccionar</option>
+                                            <option value="{{item.id}}" *ngFor="let item of provincias">
+                                                {{item.name}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        <label for="ac-fn">Distrito (opcional)</label>
+                                        <select id="sl-distrito" name="distrito"
+                                            [(ngModel)]="direccionEmpresas.distrito" class="form-control" disabled
+                                            (change)="select_distrito($event)">
+                                            <option value="" selected disabled>Seleccionar</option>
+                                            <option value="{{item.id}}" *ngFor="let item of distritos">{{item.name}}
+                                            </option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
+                                        <label for="ubigeo" class="form-label">Ubigeo</label>
+                                        <input type="text" class="form-control" name="ubigeo"
+                                            [(ngModel)]="direccionEmpresas.ubigeo"
+                                            placeholder="Ingrese el ubigeo (opcional)">
+                                    </div>
+                                </ng-container>
+
+                                <div class="mb-3">
+                                    <label for="direccion" class="form-label">Dirección</label>
+                                    <input type="text" class="form-control" name="direccion"
+                                        [(ngModel)]="direccionEmpresas.direccion"
+                                        placeholder="Ingrese la dirección (opcional)">
+                                </div>
+                                <!-- <div class="mb-3">
                                         <label for="referencia" class="form-label">Referencia</label>
                                         <textarea type="text" class="form-control" name="referencia"
                                             [(ngModel)]="direccionEmpresas.referencia"
                                             placeholder="Ingrese la referencia (opcional)"></textarea>
-                                    </div>
+                                    </div> -->
 
 
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="button" class="btn btn-primary">Guardar cambios</button>
-                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary" (click)="actualizarDireccion()" data-bs-dismiss="modal">Guardar
+                                    cambios</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Modal de Creación de la dirección -->
+                <div class="modal fade" id="crearDireccionModal" tabindex="-1" role="dialog" aria-labelledby="crearDireccionModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="crearDireccionModalLabel">Crear nueva dirección</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Add your form for creating a new address here -->
+                                <div class="col-sm-6 form-group">
+                                    <label for="ac-fn">Región (opcional)</label>
+                                    <select id="sl-region" name="region" [(ngModel)]="direccionEmpresas.region"
+                                        class="form-control" (change)="select_region()">
+                                        <option value="" selected disabled>Seleccionar</option>
+                                        <option value="{{item.id}}" *ngFor="let item of regiones">{{item.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <label for="ac-fn">Provincia (opcional)</label>
+                                    <select id="sl-provincia" name="provincia"
+                                        [(ngModel)]="direccionEmpresas.provincia" class="form-control" disabled
+                                        (change)="select_provincia()">
+                                        <option value="" selected disabled>Seleccionar</option>
+                                        <option value="{{item.id}}" *ngFor="let item of provincias">
+                                            {{item.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <label for="ac-fn">Distrito (opcional)</label>
+                                    <select id="sl-distrito" name="distrito"
+                                        [(ngModel)]="direccionEmpresas.distrito" class="form-control" disabled
+                                        (change)="select_distrito($event)">
+                                        <option value="" selected disabled>Seleccionar</option>
+                                        <option value="{{item.id}}" *ngFor="let item of distritos">{{item.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ubigeo" class="form-label">Ubigeo</label>
+                                    <input type="text" class="form-control" name="ubigeo"
+                                        [(ngModel)]="direccionEmpresas.ubigeo"
+                                        placeholder="Ingrese el ubigeo (opcional)">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="direccion" class="form-label">Dirección</label>
+                                    <input type="text" class="form-control" name="direccion"
+                                        [(ngModel)]="direccionEmpresas.direccion"
+                                        placeholder="Ingrese la dirección (opcional)">
+                                </div>
 
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary" (click)="crearDireccion()" data-bs-dismiss="modal">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>

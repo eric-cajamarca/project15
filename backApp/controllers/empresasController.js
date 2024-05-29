@@ -431,7 +431,7 @@ const createDireccionEmpresa = async function (req, res) {
         if (req.user.rol == 'Administrador') {
 
             try {
-                let idEmpresa = req.body.idEmpresa;
+                let idEmpresa = req.user.empresa;
                 let ubigeo = req.body.ubigeo;
                 let codPais = req.body.codpais;
                 let region = req.body.region;
@@ -439,7 +439,7 @@ const createDireccionEmpresa = async function (req, res) {
                 let distrito = req.body.distrito;
                 let urbanizacion = req.body.urbanizacion;
                 let direccion = req.body.direccion;
-                let codLocal = req.body.codLocal;
+                let codLocal = 0;
                 let principal = true;
 
                 let pool = await sql.connect(dbConfig);
@@ -476,15 +476,17 @@ const createDireccionEmpresa = async function (req, res) {
 }
 
 const updateDireccionEmpresa = async function (req, res){
-    console.log('entro a updateDireccionEmpresa');
-    const { ubigeo, codPais, region, provincia, distrito, urbanizacion, direccion, codLocal, principal } = req.body;
-    const { id } = req.params;
+    console.log('entro a updateDireccionEmpresa', req.body);
+    const { idDireccionEmpresa, ubigeo, codPais, region, provincia, distrito, urbanizacion, direccion, codLocal, principal } = req.body;
+    const  id  = idDireccionEmpresa;
+
     if (req.user) {
         if(req.user.rol == 'Administrador'){
             try {
                 const pool = await sql.connect(dbConfig);
                 const result = await pool
                     .request()
+                    .input('id', sql.Int, id)
                     .input('ubigeo', sql.VarChar, ubigeo)
                     .input('codPais', sql.VarChar, codPais)
                     .input('region', sql.VarChar, region)

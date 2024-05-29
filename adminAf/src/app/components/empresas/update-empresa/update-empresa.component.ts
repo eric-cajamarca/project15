@@ -21,7 +21,7 @@ export class UpdateEmpresaComponent {
 
   public filtro: any = "";
   public empresas: any = {
-   
+
     idDocumento: '',
     ruc: '',
     razon_Social: '',
@@ -30,14 +30,14 @@ export class UpdateEmpresaComponent {
     celular: '',
     correo: '',
     password: '',
-    logo:'',
+    logo: '',
     condicion: '',
     estSunat: '',
-   
+
   };
   public clienteruc: any = [];
-  public imgSelect : any | ArrayBuffer = 'assets/img/01.jpg';
-  public file : any = undefined ;
+  public imgSelect: any | ArrayBuffer = 'assets/img/01.jpg';
+  public file: any = undefined;
   // public direccionEmpresas:any=[];
   public documento: any = [];
   public regiones: any = [];
@@ -64,7 +64,7 @@ export class UpdateEmpresaComponent {
     private _empresasService: EmpresaService,
     private _router: Router,
     private _route: ActivatedRoute
-    
+
   ) {
     this.token = this._cookieService.get('token');
 
@@ -90,7 +90,7 @@ export class UpdateEmpresaComponent {
       response => {
         this.distritos = response;
         console.log('this.distritos', this.distritos);
-      
+
       }
     );
 
@@ -106,46 +106,37 @@ export class UpdateEmpresaComponent {
   }
 
   ngOnInit() {
-    //quiero obtener el id de la empresa que lo estoy pasando como parametro en la url
-     
-      this._empresasService.getEmpresas_id(this.empConect, this.token).subscribe(
-        response => {
-          console.log('response', response);
-          //convetir el array response.data a un objeto this.empresas
-          this.empresas = response.data[0];
-          console.log('this.empresas', this.empresas);
-        }
-      )
-
-      this._empresasService.getDireccionEmpresa_id(this.empConect, this.token).subscribe(
-        response => {
-          console.log('response', response);
-          //convetir el array response.data a un objeto this.empresas
-          this.direccionEmpresas_const = response.data;
-          console.log('this.direccionEmpresas', this.direccionEmpresas);
-
-
-          //quiero buscar el nombre de la region de response.data[0].region en this.regiones y extraer el id y name
-          // this.regiones.forEach((element: any) => {
-          //   if (element.name == this.direccionEmpresas.region) {
-          //     this.direccionEmpresas.region = element.id;
-              
-          //   }
-          // });
-
-          console.log('this.direccionEmpresas.region', this.direccionEmpresas);
-          
-        }
-      )
     
-
-
+    this.initData();
 
     this.select_pais();
   }
 
-  
-  buscar() {}
+  initData() {
+    //quiero obtener el id de la empresa que lo estoy pasando como parametro en la url
+
+    this._empresasService.getEmpresas_id(this.empConect, this.token).subscribe(
+      response => {
+        console.log('response', response);
+        //convetir el array response.data a un objeto this.empresas
+        this.empresas = response.data[0];
+        console.log('this.empresas', this.empresas);
+      }
+    )
+
+    this._empresasService.getDireccionEmpresa_id(this.empConect, this.token).subscribe(
+      response => {
+        console.log('response', response);
+        //convetir el array response.data a un objeto this.empresas
+        this.direccionEmpresas_const = response.data;
+        console.log('this.direccionEmpresas', this.direccionEmpresas_const);
+
+      }
+    )
+  }
+
+
+  buscar() { }
 
 
   select_pais() {
@@ -244,26 +235,26 @@ export class UpdateEmpresaComponent {
     console.log(this.direccionEmpresas.ubigeo);
   }
 
-  
-  onLogoChange(event:any):void{
-    var file:any;
-    if(event.target.files && event.target.files[0]){
+
+  onLogoChange(event: any): void {
+    var file: any;
+    if (event.target.files && event.target.files[0]) {
       file = <File>event.target.files[0];
 
-    }else{
+    } else {
       iziToast.show({
-          title: 'ERROR',
-          titleColor: '#FF0000',
-          color: '#FFF',
-          class: 'text-danger',
-          position: 'topRight',
-          message: 'No hay un imagen de envio'
+        title: 'ERROR',
+        titleColor: '#FF0000',
+        color: '#FFF',
+        class: 'text-danger',
+        position: 'topRight',
+        message: 'No hay un imagen de envio'
       });
-    } 
+    }
 
-    if(file.size <= 4000000){
+    if (file.size <= 4000000) {
 
-       if(file.type == 'image/png' || file.type == 'image/webp' || file.type == 'image/jpg' || file.type == 'image/gif' || file.type == 'image/jpeg'){
+      if (file.type == 'image/png' || file.type == 'image/webp' || file.type == 'image/jpg' || file.type == 'image/gif' || file.type == 'image/jpeg') {
         // if (
         //   file.type.startsWith('image/') ||
         //   file.type.startsWith('video/mp4') // Verificar si es una imagen o video
@@ -271,101 +262,133 @@ export class UpdateEmpresaComponent {
         const reader = new FileReader();
         reader.onload = e => this.imgSelect = reader.result;
         console.log(this.imgSelect);
-        
+
         reader.readAsDataURL(file);
 
         $('#input-portada').text(file.name);
         this.file = file;
 
-      }else{
+      } else {
         iziToast.show({
-            title: 'ERROR',
-            titleColor: '#FF0000',
-            color: '#FFF',
-            class: 'text-danger',
-            position: 'topRight',
-            message: 'El archivo debe ser una imagen'
-        });
-        $('#input-portada').text('Seleccionar imagen');
-        this.imgSelect = 'assets/img/01.jpg';
-        this.file = undefined;
-      }
-    }else{
-      iziToast.show({
           title: 'ERROR',
           titleColor: '#FF0000',
           color: '#FFF',
           class: 'text-danger',
           position: 'topRight',
-          message: 'La imagen no puede superar los 4MB'
+          message: 'El archivo debe ser una imagen'
+        });
+        $('#input-portada').text('Seleccionar imagen');
+        this.imgSelect = 'assets/img/01.jpg';
+        this.file = undefined;
+      }
+    } else {
+      iziToast.show({
+        title: 'ERROR',
+        titleColor: '#FF0000',
+        color: '#FFF',
+        class: 'text-danger',
+        position: 'topRight',
+        message: 'La imagen no puede superar los 4MB'
       });
       $('#input-portada').text('Seleccionar imagen');
       this.imgSelect = 'assets/img/01.jpg';
       this.file = undefined;
     }
-    
+
     console.log(this.file);
-    
+
   }
 
-  editarDireccion(id: any){
-    //quiero obtener el id de del array this.direccionEmpresas seleccionado
-    console.log('id', id);
-    console.log('this.direccionEmpresas', this.direccionEmpresas);
 
-    //quiero buscar el id de la direccion seleccionada en el array this.direccionEmpresas y extraer el objeto
-    this.direccionEmpresas_const.forEach((element: any) => {
-      if (element.idDireccionEmpresa == id) {
-        console.log('element', element);
-        this.direccionEmpresas = element;
-        console.log('this.direccionEmpresas', this.direccionEmpresas);
-      }else{
-        console.log('No se encontró el id');
+
+  editarDireccion(id: number) {
+    // Limpiar la variable direccionEmpresas antes de buscar
+    this.direccionEmpresas = {};
+
+    console.log('ID:', id);
+
+    // Buscar el objeto correspondiente en el array direccionEmpresas_const
+    const direccion = this.direccionEmpresas_const.find((element: any) => element.idDireccionEmpresa === id);
+
+    if (direccion) {
+      console.log('Elemento encontrado:', direccion);
+      // Clonar el objeto encontrado
+      this.direccionEmpresas = { ...direccion }; //...este operador se utiliza para clonar un objeto
+      console.log('Objeto clonado en this.direccionEmpresas:', this.direccionEmpresas);
+    } else {
+      console.log('No se encontró el ID:', id);
+    }
+  }
+
+  actualizarDireccion() {
+    console.log('Actualizo direccion de las Empresas:', this.direccionEmpresas);
+    this._empresasService.updateDireccionEmpresa(this.direccionEmpresas, this.token).subscribe(
+      response => {
+        console.log('response', response);
+        iziToast.show({
+          title: 'SUCCESS',
+          titleColor: '#0062cc',
+          color: '#FFF',
+          class: 'text-success',
+          position: 'topRight',
+          message: 'Dirección actualizada correctamente'
+        });
       }
-    });
-
-    
-
-
-    
-
-    
-
-
+      
+    );
+     this.initData();
   }
 
-  registrar(registroForm: any){
+  crearDireccion(){
+    console.log('Crear direccion de las Empresas:', this.direccionEmpresas);
+    this._empresasService.createDireccionEmpresa(this.direccionEmpresas, this.token).subscribe(
+      response => {
+        console.log('response', response);
+        iziToast.show({
+          title: 'SUCCESS',
+          titleColor: '#0062cc',
+          color: '#FFF',
+          class: 'text-success',
+          position: 'topRight',
+          message: 'Dirección creada correctamente'
+        });
+      }
+    );
+    this.initData();
+  }
+
+  registrar(registroForm: any) {
 
     console.log('this.cliientes', this.empresas);
     console.log('this.direccionEmpresas', this.direccionEmpresas);
 
     // if (registroForm.valid) {
-      
-      this.data = this.empresas;
-      console.log('this.data', this.data);
-      //convertir array this.clientes a un objeto para pasarlo a mi servicio
-      //  this.data.forEach((element: { id: string | number; name: any; }) => {
-      //   this.data[element.id] = element.id;
-      //  });
 
-      //  console.log('this.data como objeto', this.data);
-      
-        
+    this.data = this.empresas;
+    console.log('this.data', this.data);
+    //convertir array this.clientes a un objeto para pasarlo a mi servicio
+    //  this.data.forEach((element: { id: string | number; name: any; }) => {
+    //   this.data[element.id] = element.id;
+    //  });
+
+    //  console.log('this.data como objeto', this.data);
+
+
   }
 
-  onCheckboxChange(){
+  onCheckboxChange() {
     if (this.mostrarDireccion) {
       this.mostrarDireccion = true;
       console.log('El checkbox está marcado.', this.mostrarDireccion);
-      
+
       // Realiza acciones cuando el checkbox está marcado
     } else {
       // this.mostrarDireccion = false;
       console.log('El checkbox está desmarcado.', this.mostrarDireccion);
-      
+
       // Realiza acciones cuando el checkbox está desmarcado
     }
-    
+
   }
 
 
