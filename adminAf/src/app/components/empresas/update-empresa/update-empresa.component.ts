@@ -112,6 +112,10 @@ export class UpdateEmpresaComponent {
     this.select_pais();
   }
 
+  removeAccents(str: string) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
   initData() {
     //quiero obtener el id de la empresa que lo estoy pasando como parametro en la url
 
@@ -129,6 +133,35 @@ export class UpdateEmpresaComponent {
         console.log('response', response);
         //convetir el array response.data a un objeto this.empresas
         this.direccionEmpresas_const = response.data;
+
+        //buscar en regiones por el id de response.data.region y asignar el name a direccionEmpresas.region
+        const regionEncontrada = this.regiones.find((element: any) => Number(element.id) === Number(response.data[0].region));
+
+               if (regionEncontrada) {
+                
+                this.direccionEmpresas_const[0].nregion = String(regionEncontrada.name);
+                console.log('this.direccionEmpresas.region', this.direccionEmpresas_const.region);
+              } 
+
+
+        //buscar en provincias por el id de response.data.provincia y asignar el name a direccionEmpresas.provincia
+        const provinciaEncontrada = this.provincias.find((element: any) => Number(element.id) === Number(response.data[0].provincia));
+
+        if (provinciaEncontrada) {
+          
+          this.direccionEmpresas_const[0].nprovincia = String(provinciaEncontrada.name);
+          console.log('this.direccionEmpresas.provincia', this.direccionEmpresas_const.provincia);
+        } 
+
+        //buscar en distritos por el id de response.data.distrito y asignar el name a direccionEmpresas.distrito
+        const distritoEncontrada = this.distritos.find((element: any) => Number(element.id) === Number(response.data[0].distrito));
+
+        if (distritoEncontrada) {
+          
+          this.direccionEmpresas_const[0].ndistrito = String(distritoEncontrada.name);
+          console.log('this.direccionEmpresas.distrito', this.direccionEmpresas_const.distrito);
+        }
+
         console.log('this.direccionEmpresas', this.direccionEmpresas_const);
 
       }

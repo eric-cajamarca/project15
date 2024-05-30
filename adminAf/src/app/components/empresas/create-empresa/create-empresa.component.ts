@@ -20,7 +20,7 @@ export class CreateEmpresaComponent {
 
   public encontrado: any = false;
   public empresas: any = {
-   
+
     idDocumento: '',
     ruc: '',
     razon_Social: '',
@@ -29,10 +29,10 @@ export class CreateEmpresaComponent {
     celular: '',
     correo: '',
     password: '',
-    logo:'',
+    logo: '',
     condicion: '',
     estSunat: '',
-   
+
   };
 
   public filtro: any = "";
@@ -83,8 +83,32 @@ export class CreateEmpresaComponent {
 
   ngOnInit() {
 
+    this._adminService.get_Regiones().subscribe(
+      response => {
+        this.regiones = response;
+        console.log('this.regiones', this.regiones);
+      }
+    );
+
+    this._adminService.get_Procincias().subscribe(
+      response => {
+        this.provincias = response;
+        console.log('this.provincias', this.provincias);
+      }
+    );
+
+    this._adminService.get_Distritos().subscribe(
+      response => {
+        this.distritos = response;
+        console.log('this.distritos', this.distritos);
+
+      }
+    );
   }
 
+  removeAccents(str: string) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
 
   buscar(ruc: any) {
     console.log('ingreso a buscar en la api', ruc);
@@ -122,11 +146,42 @@ export class CreateEmpresaComponent {
               ///////////
               this.direccionEmpresas.codpais = "PEN";
               this.direccionEmpresas.ubigeo = response.ubigeo;
-              this.direccionEmpresas.region = response.departamento;
-              this.direccionEmpresas.provincia = response.provincia;
-              this.direccionEmpresas.distrito = response.distrito;
+              // this.direccionEmpresas.region = response.departamento;
+              // this.direccionEmpresas.provincia = response.provincia;
+              // this.direccionEmpresas.distrito = response.distrito;
               this.direccionEmpresas.direccion = response.direccion;
+              
+              //encuentro el id de la region
+              const regionEncontrada = this.regiones.find((element: any) => this.removeAccents(element.name).toUpperCase() === response.departamento.toUpperCase());
 
+               if (regionEncontrada) {
+                this.direccionEmpresas.region = regionEncontrada.id;
+                console.log('this.direccionEmpresas.region', this.direccionEmpresas.region);
+              } else {
+                console.log('No se encontró la región correspondiente para el departamento:', response.departamento);
+              }
+
+              //encuentro el id de la provincia
+              const provinciaEncontrada = this.provincias.find((element: any) => this.removeAccents(element.name).toUpperCase() === response.provincia.toUpperCase());
+
+              if (provinciaEncontrada) {
+                this.direccionEmpresas.provincia = provinciaEncontrada.id;
+                console.log('this.direccionEmpresas.provincia', this.direccionEmpresas.provincia);
+              } else {
+                console.log('No se encontró la provincia correspondiente para el departamento:', response.provincia);
+              }
+
+              //encuentro el id del distrito
+              const distritoEncontrado = this.distritos.find((element: any) => this.removeAccents(element.name).toUpperCase() === response.distrito.toUpperCase());
+
+              if (distritoEncontrado) {
+                this.direccionEmpresas.distrito = distritoEncontrado.id;
+                console.log('this.direccionEmpresas.distrito', this.direccionEmpresas.distrito);
+              } else {
+                console.log('No se encontró el distrito correspondiente para el departamento:', response.distrito);
+              }
+
+              
               console.log('this.clienteruc: ', this.clienteruc);
               this.encontrado = true;
             }
@@ -251,7 +306,7 @@ export class CreateEmpresaComponent {
     this.empresas.condicion = this.clienteruc.condicion;
     this.empresas.estSunat = this.clienteruc.estado;
 
-    
+
 
 
     console.log('this.cliientes', this.empresa);
@@ -269,7 +324,7 @@ export class CreateEmpresaComponent {
         if (response.data != undefined) {
           console.log('response.data aqui recibo el id de la empresa creada', response.data);
           this.direccionEmpresas.idEmpresa = response.data;
-          this._empresasService.createDireccionEmpresa(this.direccionEmpresas,this.token).subscribe(
+          this._empresasService.createDireccionEmpresa(this.direccionEmpresas, this.token).subscribe(
             response => {
               if (response.data != undefined) {
                 iziToast.show({
@@ -293,7 +348,7 @@ export class CreateEmpresaComponent {
               this.btn_registrar = false;
             }
           )
-        }else{
+        } else {
           iziToast.show({
             title: 'ERROR',
             titleColor: '#FF0000',
@@ -304,7 +359,7 @@ export class CreateEmpresaComponent {
           });
           return;
         }
-        
+
         this.btn_registrar = false;
       },
       error => {
@@ -320,7 +375,7 @@ export class CreateEmpresaComponent {
           position: 'topRight',
           message: 'Error al crear la empresa'
         });
-        
+
       }
 
     )

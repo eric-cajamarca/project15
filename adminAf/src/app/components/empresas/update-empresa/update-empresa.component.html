@@ -356,9 +356,9 @@
                 
                 <div >
                     <p> <strong>Ubigeo:</strong> {{item.ubigeo}} </p>
-                    <p> <strong>Región:</strong> {{item.region}} </p>
-                    <p> <strong>Distrito:</strong> {{item.distrito}} </p>
-                    <p> <strong>Provincia:</strong> {{item.provincia}} </p>
+                    <p> <strong>Región:</strong> {{item.nregion}} </p>
+                    <p> <strong>Distrito:</strong> {{item.ndistrito}} </p>
+                    <p> <strong>Provincia:</strong> {{item.nprovincia}} </p>
                     <p> <strong>Dirección:</strong> {{item.direccion}} </p>
 
                     <p class="badge bg-success" *ngIf="item.principal"> Condición: Principal </p>
@@ -389,7 +389,7 @@
                             </div>
                             <div class="modal-body">
                                 <!-- Add your form for editing the address here -->
-                                <ng-container *ngIf="direccionEmpresas.region !== undefined">
+                                <!-- <ng-container *ngIf="direccionEmpresas.region !== undefined">
                                     <h6> Consulta a sunat realizada</h6>
 
                                     <div class="mb-3">
@@ -415,9 +415,10 @@
                                         <input type="text" class="form-control" name="ubigeo"
                                             [(ngModel)]="direccionEmpresas.ubigeo" placeholder="Ingrese el ubigeo">
                                     </div>
-                                </ng-container>
-
-                                <ng-container *ngIf="direccionEmpresas.region === undefined">
+                                </ng-container> -->
+                                
+                                <!-- direccionEmpresas -->
+                                <ng-container >
 
 
                                     <div class="col-sm-6 form-group">

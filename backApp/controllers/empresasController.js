@@ -431,7 +431,7 @@ const createDireccionEmpresa = async function (req, res) {
         if (req.user.rol == 'Administrador') {
 
             try {
-                let idEmpresa = req.user.empresa;
+                let idEmpresa = req.body.idEmpresa;
                 let ubigeo = req.body.ubigeo;
                 let codPais = req.body.codpais;
                 let region = req.body.region;
@@ -439,7 +439,7 @@ const createDireccionEmpresa = async function (req, res) {
                 let distrito = req.body.distrito;
                 let urbanizacion = req.body.urbanizacion;
                 let direccion = req.body.direccion;
-                let codLocal = 0;
+                let codLocal = '0';
                 let principal = true;
 
                 let pool = await sql.connect(dbConfig);

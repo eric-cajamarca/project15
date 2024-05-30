@@ -141,6 +141,10 @@ export class AdminService {
   get_Regiones():Observable<any>{
     return this._http.get('./assets/regiones.json');
   }
+
+  //quiero buscar Regiones por name
+  
+
   get_Distritos():Observable<any>{
     return this._http.get('./assets/distritos.json');
   }
