@@ -104,6 +104,11 @@ export class CreateClientesComponent implements OnInit {
     this.select_pais();
   }
 
+
+  removeAccents(str: string) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+  
   //https://dniruc.apisperu.com/api/v1/dni/45633353?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImVyaWNvcnRpemd1ZXZhcmFAZ21haWwuY29tIn0.-cs9eKiQegcTM0bbaz7O-BT_sS7_BpV_6cndIqCeHfk
 
   buscar() {
@@ -127,10 +132,41 @@ export class CreateClientesComponent implements OnInit {
             ///////////
             this.direccionClientes.codpais = "PEN";
             this.direccionClientes.ubigeo = response.ubigeo;
-            this.direccionClientes.region = response.departamento;
-            this.direccionClientes.provincia = response.provincia;
-            this.direccionClientes.distrito = response.distrito;
+            // this.direccionClientes.region = response.departamento;
+            // this.direccionClientes.provincia = response.provincia;
+            // this.direccionClientes.distrito = response.distrito;
             this.direccionClientes.direccion = response.direccion;
+
+            //encuentro el id de la region
+            const regionEncontrada = this.regiones.find((element: any) => this.removeAccents(element.name).toUpperCase() === response.departamento.toUpperCase());
+
+            if (regionEncontrada) {
+             this.direccionClientes.region = regionEncontrada.id;
+             console.log('this.direccionClientes.region', this.direccionClientes.region);
+           } else {
+             console.log('No se encontró la región correspondiente para el departamento:', response.departamento);
+           }
+
+           //encuentro el id de la provincia
+           const provinciaEncontrada = this.provincias.find((element: any) => this.removeAccents(element.name).toUpperCase() === response.provincia.toUpperCase());
+
+           if (provinciaEncontrada) {
+             this.direccionClientes.provincia = provinciaEncontrada.id;
+             console.log('this.direccionClientes.provincia', this.direccionClientes.provincia);
+           } else {
+             console.log('No se encontró la provincia correspondiente para el departamento:', response.provincia);
+           }
+
+           //encuentro el id del distrito
+           const distritoEncontrado = this.distritos.find((element: any) => this.removeAccents(element.name).toUpperCase() === response.distrito.toUpperCase());
+
+           if (distritoEncontrado) {
+             this.direccionClientes.distrito = distritoEncontrado.id;
+             console.log('this.direccionClientes.distrito', this.direccionClientes.distrito);
+           } else {
+             console.log('No se encontró el distrito correspondiente para el departamento:', response.distrito);
+           }
+
   
             console.log('this.clienteruc: ', this.clienteruc);
           },

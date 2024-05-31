@@ -21,7 +21,7 @@ export class UpdateClientesComponent {
   public clientes: any = {
     correo: '',
     celular: '',
-    condicion:'ACTIVO',
+    condicion: 'ACTIVO',
   };
   public clienteruc: any = [];
   // public direccionClientes:any=[];
@@ -36,6 +36,7 @@ export class UpdateClientesComponent {
 
   public str_pais = '';
   public direccionClientes: any = {};
+  public direccionClientes_const: any = [];
   public data: any = {};
 
   constructor(
@@ -46,8 +47,8 @@ export class UpdateClientesComponent {
     private _clientesService: ClienteService,
     private _router: Router,
     private _route: ActivatedRoute,
-  
-    
+
+
   ) {
     this.token = this._cookieService.get('token');
 
@@ -81,7 +82,7 @@ export class UpdateClientesComponent {
       }
     );
 
-    
+
   }
 
   ngOnInit() {
@@ -95,7 +96,7 @@ export class UpdateClientesComponent {
           response => {
             console.log('response.data', response.data);
             if (response.data != undefined) {
-                
+
 
               // Modificar el campo 'password' dentro del array 'data'
               response.data.forEach((item: any) => {
@@ -117,22 +118,41 @@ export class UpdateClientesComponent {
           response => {
             console.log('response.data', response.data);
             if (response.data != undefined) {
-               this.direccionClientes = response.data[0];
-              // Modificar el campo 'password' dentro del array 'data'
-              // response.data.forEach((item: any) => {
-              //   this.direccionClientes.idDireccionClientes = item.idDireccionClientes;
-              //   this.direccionClientes.idCliente = item.idCliente;
-              //   this.direccionClientes.codPais = item.codPais;
-              //   this.direccionClientes.ubigeo = item.ubigeo;
-              //   this.direccionClientes.region = item.region;
-              //   this.direccionClientes.provincia = item.provincia;
-              //   this.direccionClientes.distrito = item.distrito;
-              //   this.direccionClientes.direccion = item.direccion;
-              //   this.direccionClientes.principal = item.principal;
-              //   this.direccionClientes.codLocal = item.codLocal;
-              //   this.direccionClientes.urbanizacion = item.urbanizacion;
-              //   this.direccionClientes.referencia = item.referencia;});
-              console.log('this.direccionClientes', this.direccionClientes);
+
+              this.direccionClientes_const = response.data;
+              console.log('this.direccionClientes_const', this.direccionClientes_const);
+
+              //buscar en regiones por el id de response.data.region y asignar el name a direccionEmpresas.region
+              const regionEncontrada = this.regiones.find((element: any) => Number(element.id) === Number(response.data[0].region));
+
+              if (regionEncontrada) {
+
+                this.direccionClientes_const[0].nregion = String(regionEncontrada.name);
+                console.log('this.direccionEmpresas.region', this.direccionClientes_const.nregion);
+              }else{
+                console.log('no se encontro la region');
+              }
+
+
+              //buscar en provincias por el id de response.data.provincia y asignar el name a direccionEmpresas.provincia
+              const provinciaEncontrada = this.provincias.find((element: any) => Number(element.id) === Number(response.data[0].provincia));
+
+              if (provinciaEncontrada) {
+
+                this.direccionClientes_const[0].nprovincia = String(provinciaEncontrada.name);
+                console.log('this.direccionEmpresas.provincia', this.direccionClientes_const.nprovincia);
+              }
+
+              //buscar en distritos por el id de response.data.distrito y asignar el name a direccionEmpresas.distrito
+              const distritoEncontrada = this.distritos.find((element: any) => Number(element.id) === Number(response.data[0].distrito));
+
+              if (distritoEncontrada) {
+
+                this.direccionClientes_const[0].ndistrito = String(distritoEncontrada.name);
+                console.log('this.direccionEmpresas.distrito', this.direccionClientes_const.ndistrito);
+              }
+
+              console.log('this.direccionClientes', this.direccionClientes_const);
             }
           }
         )
@@ -140,7 +160,7 @@ export class UpdateClientesComponent {
 
     );
 
-    
+
 
     // this.select_pais();
   }
@@ -163,8 +183,8 @@ export class UpdateClientesComponent {
             //divido los datos de la despuesta
             this.clientes.rSocial = response.razonSocial;
             this.clientes.condicion = response.estado
-  
-  
+
+
             ///////////
             this.direccionClientes.codpais = "PEN";
             this.direccionClientes.ubigeo = response.ubigeo;
@@ -172,7 +192,7 @@ export class UpdateClientesComponent {
             this.direccionClientes.provincia = response.provincia;
             this.direccionClientes.distrito = response.distrito;
             this.direccionClientes.direccion = response.direccion;
-  
+
             console.log('this.clienteruc: ', this.clienteruc);
           },
           error => {
@@ -187,7 +207,7 @@ export class UpdateClientesComponent {
           });
 
       }
-      
+
 
 
 
@@ -328,93 +348,98 @@ export class UpdateClientesComponent {
     console.log(this.direccionClientes.ubigeo);
   }
 
-  registrar(registroForm: any){
+
+  editarDireccion(id: string) {}
+
+  actualizarDireccion() {}
+
+  registrar(registroForm: any) {
 
     console.log('this.cliientes', this.clientes);
     console.log('this.direccionClientes', this.direccionClientes);
 
     // if (registroForm.valid) {
-      this.btn_registrar = true;
-      this.data = this.clientes;
-      console.log('this.data', this.data);
-      //convertir array this.clientes a un objeto para pasarlo a mi servicio
-      //  this.data.forEach((element: { id: string | number; name: any; }) => {
-      //   this.data[element.id] = element.id;
-      //  });
+    this.btn_registrar = true;
+    this.data = this.clientes;
+    console.log('this.data', this.data);
+    //convertir array this.clientes a un objeto para pasarlo a mi servicio
+    //  this.data.forEach((element: { id: string | number; name: any; }) => {
+    //   this.data[element.id] = element.id;
+    //  });
 
-      //  console.log('this.data como objeto', this.data);
-      this._clientesService.crear_cliente(this.data, this.token).subscribe(
-        response => {
-          if(response.data != undefined){
-            this._clientesService.obtener_cliente_id(this.clientes.ruc,this.token).subscribe(
-              response => {
-                console.log('response.data', response.data);
-                this.direccionClientes.idCliente = response.data[0].idCliente;
-                console.log('this.direccionClientes con idCliente', this.direccionClientes);
-                if(response.data != undefined){
-                  this._clientesService.crear_direccionCliente(this.token, this.direccionClientes).subscribe(
-                      response => {
-                        if(response.data != undefined){
-                          iziToast.show({
-                            title: 'SUCCESS',
-                            titleColor: '#006064',
-                            color: '#FFF',
-                            class: 'text-success',
-                            position: 'topRight',
-                            message: 'Cliente creado correctamente'
-                          });
-                          this.btn_registrar = false;
-                          //quiero redirigir a la pagina de index-clientes
-                          this._router.navigate(['/cliente']);
-                        }
-                        
-                      },
-                      error => {
-                        console.log(<any>error);
-                        console.error('Error al crear el cliente:', error);
-                        this.btn_registrar = false;
-                      }
-                    )
-                }
-                
+    //  console.log('this.data como objeto', this.data);
+    this._clientesService.crear_cliente(this.data, this.token).subscribe(
+      response => {
+        if (response.data != undefined) {
+          this._clientesService.obtener_cliente_id(this.clientes.ruc, this.token).subscribe(
+            response => {
+              console.log('response.data', response.data);
+              this.direccionClientes.idCliente = response.data[0].idCliente;
+              console.log('this.direccionClientes con idCliente', this.direccionClientes);
+              if (response.data != undefined) {
+                this._clientesService.crear_direccionCliente(this.token, this.direccionClientes).subscribe(
+                  response => {
+                    if (response.data != undefined) {
+                      iziToast.show({
+                        title: 'SUCCESS',
+                        titleColor: '#006064',
+                        color: '#FFF',
+                        class: 'text-success',
+                        position: 'topRight',
+                        message: 'Cliente creado correctamente'
+                      });
+                      this.btn_registrar = false;
+                      //quiero redirigir a la pagina de index-clientes
+                      this._router.navigate(['/cliente']);
+                    }
+
+                  },
+                  error => {
+                    console.log(<any>error);
+                    console.error('Error al crear el cliente:', error);
+                    this.btn_registrar = false;
+                  }
+                )
               }
-            )
-          }else{
-            iziToast.show({
-              title: 'ERROR',
-              titleColor: '#FF0000',
-              color: '#FFF',
-              class: 'text-danger',
-              position: 'topRight',
-              message: response.message,
-            });
-            this.btn_registrar = false;
-          }
-          console.log(response.data);
-          this.btn_registrar = false;
-        },
-        error => {
-          console.log(<any>error);
-          console.error('Error al crear el cliente:', error);
+
+            }
+          )
+        } else {
+          iziToast.show({
+            title: 'ERROR',
+            titleColor: '#FF0000',
+            color: '#FFF',
+            class: 'text-danger',
+            position: 'topRight',
+            message: response.message,
+          });
           this.btn_registrar = false;
         }
+        console.log(response.data);
+        this.btn_registrar = false;
+      },
+      error => {
+        console.log(<any>error);
+        console.error('Error al crear el cliente:', error);
+        this.btn_registrar = false;
+      }
 
-      )
-        
+    )
+
   }
 
-  onCheckboxChange(){
+  onCheckboxChange() {
     if (this.mostrarDireccion) {
       this.mostrarDireccion = true;
       console.log('El checkbox está marcado.', this.mostrarDireccion);
-      
+
       // Realiza acciones cuando el checkbox está marcado
     } else {
       // this.mostrarDireccion = false;
       console.log('El checkbox está desmarcado.', this.mostrarDireccion);
-      
+
       // Realiza acciones cuando el checkbox está desmarcado
     }
-    
+
   }
 }
