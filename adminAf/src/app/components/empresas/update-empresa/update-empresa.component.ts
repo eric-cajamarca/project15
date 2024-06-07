@@ -372,6 +372,10 @@ export class UpdateEmpresaComponent {
      this.initData();
   }
 
+  modalCrearDireccion() {
+    this.direccionEmpresas = {};
+  }
+
   crearDireccion(){
     console.log('Crear direccion de las Empresas:', this.direccionEmpresas);
     this._empresasService.createDireccionEmpresa(this.direccionEmpresas, this.token).subscribe(
@@ -395,16 +399,51 @@ export class UpdateEmpresaComponent {
     console.log('this.cliientes', this.empresas);
     console.log('this.direccionEmpresas', this.direccionEmpresas);
 
-    // if (registroForm.valid) {
+     if (registroForm.valid) {
+        if(this.file){
+          this.empresas.logo = this.file;
 
-    this.data = this.empresas;
-    console.log('this.data', this.data);
-    //convertir array this.clientes a un objeto para pasarlo a mi servicio
-    //  this.data.forEach((element: { id: string | number; name: any; }) => {
-    //   this.data[element.id] = element.id;
-    //  });
+          this._empresasService.updateEmpresa( this.empresas.idEmpresa,this.empresas, this.token).subscribe(
+            response => {
+              console.log('response', response);
+              iziToast.show({
+                title: 'SUCCESS',
+                titleColor: '#0062cc',
+                color: '#FFF',
+                class: 'text-success',
+                position: 'topRight',
+                message: 'Empresa actualizada correctamente'
+              });
+            }
+          );
 
-    //  console.log('this.data como objeto', this.data);
+        }else{
+          iziToast.show({
+            title: 'ERROR',
+            titleColor: '#FF0000',
+            color: '#FFF',
+            class: 'text-danger',
+            position: 'topRight',
+            message: 'tiene que subir una imagen para el logo de la empresa'
+          });
+        }
+
+      // this._empresasService.updateEmpresa( this.empresas.idEmpresa,this.empresas, this.token).subscribe(
+      //   response => {
+      //     console.log('response', response);
+      //     iziToast.show({
+      //       title: 'SUCCESS',
+      //       titleColor: '#0062cc',
+      //       color: '#FFF',
+      //       class: 'text-success',
+      //       position: 'topRight',
+      //       message: 'Empresa actualizada correctamente'
+      //     });
+      //   }
+      // );
+
+      
+     }
 
 
   }

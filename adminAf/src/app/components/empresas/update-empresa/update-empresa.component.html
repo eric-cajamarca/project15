@@ -346,13 +346,13 @@
                 Direcciones de la empresa
             </h4>
             <button class="btn-primary" style="border-radius: 5px;" data-bs-toggle="modal" 
-                        data-bs-target="#crearDireccionModal">Crear nueva dirección</button>
+                        data-bs-target="#crearDireccionModal" (click)="modalCrearDireccion()">Crear nueva dirección</button>
 
         </div>
 
         <div class=" flex-column flex-md-row">
             <div class="card-body" *ngFor="let item of direccionEmpresas_const">
-                <hr style="border: 5px solid;">
+                <!-- <hr style="border: 5px solid;"> -->
                 
                 <div >
                     <p> <strong>Ubigeo:</strong> {{item.ubigeo}} </p>
@@ -376,6 +376,7 @@
                     
                 </div>
                 
+                <hr style="border: 5px solid;">
                 <!-- Modal de Actualizacion de la direccion-->
                 <div class="modal fade" [attr.id]="'editar-' + item.idDireccionEmpresa" tabindex="-1" role="dialog"
                     aria-labelledby="editarDireccionModalLabel" aria-hidden="true">

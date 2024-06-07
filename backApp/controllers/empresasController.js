@@ -5,6 +5,9 @@ const moment = require('moment');
 const jwt = require('../helpers/jwt');
 const { v4: uuidv4 } = require('uuid');
 const { max } = require('moment/moment');
+const multiparty = require('multiparty');
+const fs = require('fs');
+const path = require('path');
 
 // CREATE TABLE Empresas(
 // 	idEmpresa UNIQUEIDENTIFIER primary key NOT NULL,
@@ -204,48 +207,157 @@ const createEmpresa = async function (req, res) {
 }
 
 
-const updateEmpresa = async (req, res) => {
-    //   const { name, apellidos, email, password, rol, estado } = req.body;
-    const { name, apellidos, password, rol } = req.body;
-    const { id } = req.params;
-    if (req.user) {
-        try {
+// const updateEmpresa = async function (req, res) {
+//     console.log('entro a updateEmpresa', req.body, req.params);
+//     console.log('req.file', req.files);
 
+//     const { idDocumento, ruc, razon_Social, nombre_Comercial, rubro, celular, correo, password, alias, condicion, estSunat } = req.body;
+//     const  idEmpresa  = req.user.empresa;
+//     if (req.user) {
 
-            console.log('cuando viene sin password');
-
-            const pool = await sql.connect(dbConfig);
-            const result = await pool
-                .request()
-                .input('Ruc', sql.VarChar, Ruc)
-                .input('Razon_Social', sql.VarChar, Razon_Social)
-                .input('Rubro', sql.VarChar, Rubro)
-                .input('Direccion', sql.VarChar, Direccion)
-                .input('Distrito', sql.VarChar, Distrito)
-                .input('Region', sql.VarChar, Region)
-                .input('Provincia', sql.VarChar, Provincia)
-                .input('Celular', sql.VarChar, Celular)
-                .input('Whatsapp', sql.VarChar, Whatsapp)
-                .input('Correo', sql.VarChar, Correo)
-                .input('Logo', sql.Image, Logo)
-                .input('Alias', sql.VarChar, Alias)
-
-                .query('UPDATE Empresa SET Razon_Social = @Razon_Social, Rubro = @Rubro, Direccion = @Direccion, Distrito = @Distrito, Region = @Region, Provincia = @Provincia, Celular = @Celular, Whatsapp = @Whatsapp, Correo = @Correo, Logo = @Logo, Alias = @Alias WHERE id = @id');
-            res.status(200).send({ message: 'Empresa actualizado  correctamente', data: result.rowsAffected });
+//         if(req.files){
+//             //SI HAY IMAGEN
+//             var img_path = req.files.portada.path;
+//             var name = img_path.split('\\');
+//             var portada_name = name[2];
+//             console.log('portada_name', portada_name);
 
 
 
-        } catch (error) {
-            console.error('Error al actualizar un usuario:', error);
-            res.status(500).send('Error al actualizar un usuario');
-        }
-    } else {
-        res.status(401).send({ message: 'No Access' });
-    }
+//         }else{
+//             //SI NO HAY IMAGEN
+//             try {
 
-};
+
+//                 console.log('cuando viene sin password');
+    
+//                 const pool = await sql.connect(dbConfig);
+//                 const result = await pool
+//                     .request()
+//                     .input('Ruc', sql.VarChar, Ruc)
+//                     .input('Razon_Social', sql.VarChar, Razon_Social)
+//                     .input('Rubro', sql.VarChar, Rubro)
+//                     .input('Direccion', sql.VarChar, Direccion)
+//                     .input('Distrito', sql.VarChar, Distrito)
+//                     .input('Region', sql.VarChar, Region)
+//                     .input('Provincia', sql.VarChar, Provincia)
+//                     .input('Celular', sql.VarChar, Celular)
+//                     .input('Whatsapp', sql.VarChar, Whatsapp)
+//                     .input('Correo', sql.VarChar, Correo)
+//                     .input('Logo', sql.Image, Logo)
+//                     .input('Alias', sql.VarChar, Alias)
+    
+//                     .query('UPDATE Empresa SET Razon_Social = @Razon_Social, Rubro = @Rubro, Direccion = @Direccion, Distrito = @Distrito, Region = @Region, Provincia = @Provincia, Celular = @Celular, Whatsapp = @Whatsapp, Correo = @Correo, Logo = @Logo, Alias = @Alias WHERE id = @id');
+//                 res.status(200).send({ message: 'Empresa actualizado  correctamente', data: result.rowsAffected });
+    
+    
+    
+//             } catch (error) {
+//                 console.error('Error al actualizar un usuario:', error);
+//                 res.status(500).send('Error al actualizar un usuario');
+//             }
+//         }
+
+        
+//     } else {
+//         res.status(401).send({ message: 'No Access' });
+//     }
+
+// };
 
 //cambiar estado de la empresa
+
+const updateEmpresa = async function (req, res) {
+    console.log('entro a updateEmpresa', req.body, req.params);
+    console.log('req.file', req.files);
+    console.log('logo', req.body.logo)
+    
+
+        const {
+            idDocumento, ruc, razon_Social, nombre_Comercial, rubro, celular, correo, password, alias, condicion, estSunat
+        } = req.body;
+
+        const idEmpresa = req.user.empresa;
+
+        
+        if (req.user) {
+            if (req.files && req.files.logo) {
+                // Si hay imagen
+                // const file = req.files.logo[0];
+                // const tempPath = file.path;
+                // const targetPath = path.join(__dirname, './uploads/configuraciones', file.originalFilename);
+
+                var img_path = req.files.logo.path;
+                var name = img_path.split('\\');
+                var portada_name = name[2];
+
+                // console.log('tempPath', tempPath);
+                // fs.rename(tempPath, targetPath, async (err) => {
+                //     if (err) return res.status(500).send({ message: 'Error al guardar la imagen', error: err });
+
+                    //  portada_name = file.originalFilename;
+
+                    console.log('portada_name', portada_name);
+
+                    // Aquí puedes actualizar la base de datos con la imagen
+                    try {
+                        const pool = await sql.connect(dbConfig);
+                        const result = await pool
+                            .request()
+                            .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
+                            .input('Rubro', sql.VarChar, rubro)
+                            .input('Celular', sql.VarChar, celular)
+                            .input('Correo', sql.VarChar, correo)
+                            .input('Logo', sql.VarChar, portada_name)
+                            .input('Alias', sql.VarChar, alias)
+                            .query('UPDATE Empresas SET Rubro = @Rubro, Celular = @Celular, Correo = @Correo, Logo = @Logo, Alias = @Alias WHERE idEmpresa = @idEmpresa');
+
+                            // fs.stat('./uploads/configuraciones/'+portada_name, function(err){
+                            //     if(!err){
+                            //         fs.unlink('./uploads/configuraciones/'+portada_name, (err)=>{
+                            //             if(err) throw err;
+                            //         });
+                            //     }
+                            // });
+
+
+
+
+                        res.status(200).send({ message: 'Empresa actualizada correctamente', data: result.rowsAffected });
+
+                    } catch (error) {
+                        console.error('Error al actualizar la empresa:', error);
+                        res.status(500).send('Error al actualizar la empresa');
+                    }
+                // });
+            } else {
+                // Si no hay imagen
+                try {
+                    const pool = await sql.connect(dbConfig);
+                    const result = await pool
+                        .request()
+                        .input('Ruc', sql.VarChar, ruc[0])
+                        .input('Razon_Social', sql.VarChar, razon_Social[0])
+                        .input('Rubro', sql.VarChar, rubro[0])
+                        .input('Celular', sql.VarChar, celular[0])
+                        .input('Correo', sql.VarChar, correo[0])
+                        .input('Alias', sql.VarChar, alias[0])
+                        .query('UPDATE Empresa SET Razon_Social = @Razon_Social, Rubro = @Rubro, Celular = @Celular, Correo = @Correo, Alias = @Alias WHERE id = @id');
+
+                    res.status(200).send({ message: 'Empresa actualizada correctamente', data: result.rowsAffected });
+
+                } catch (error) {
+                    console.error('Error al actualizar la empresa:', error);
+                    res.status(500).send('Error al actualizar la empresa');
+                }
+            }
+        } else {
+            res.status(401).send({ message: 'No Access' });
+        }
+    
+};
+
+
 const cambiar_estado_empresa = async function (req, res) {
     console.log('entro a cambiar_estado_empresa',req.params);
     if (req.user) {
