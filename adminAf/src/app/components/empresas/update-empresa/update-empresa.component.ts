@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { GLOBAL } from 'src/app/services/GLOBAL';
 import { AdminService } from 'src/app/services/admin.service';
 import { ApiperuService } from 'src/app/services/apiperu.service';
 import { DocumentoService } from 'src/app/services/documento.service';
@@ -16,7 +17,7 @@ declare var $: any;
 })
 export class UpdateEmpresaComponent {
 
-
+  public url: any;
   public empresa: any = {};
 
   public filtro: any = "";
@@ -36,7 +37,7 @@ export class UpdateEmpresaComponent {
 
   };
   public clienteruc: any = [];
-  public imgSelect: any | ArrayBuffer = 'assets/img/01.jpg';
+  public imgSelect: any | ArrayBuffer = '';
   public file: any = undefined;
   // public direccionEmpresas:any=[];
   public documento: any = [];
@@ -67,7 +68,8 @@ export class UpdateEmpresaComponent {
 
   ) {
     this.token = this._cookieService.get('token');
-
+    this.url = GLOBAL.url;
+    console.log('this.url', this.url);
     this.direccionEmpresas.codpais = 'PEN';
     this.empConect = this._adminService.idUser.empresa;
     console.log('this.empConect', this.empConect);
@@ -401,6 +403,7 @@ export class UpdateEmpresaComponent {
 
      if (registroForm.valid) {
         if(this.file){
+          this.empresas.logoAnterior = this.empresas.logo;
           this.empresas.logo = this.file;
 
           this._empresasService.updateEmpresa( this.empresas.idEmpresa,this.empresas, this.token).subscribe(

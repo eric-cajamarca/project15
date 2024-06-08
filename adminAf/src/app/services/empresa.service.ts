@@ -92,6 +92,7 @@ export class EmpresaService {
         fd.append('alias', data.alias);
         fd.append('rubro', data.rubro);
         fd.append('logo', data.logo);
+        fd.append('logoAnterior', data.logoAnterior);
 
         return this._http.put(this.url + 'empresa/' + id, fd, { headers: headers });
     } else {

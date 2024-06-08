@@ -16,11 +16,15 @@
                         <input type="file" class="form-control" name="logo" (change)="onLogoChange($event)">
                     </div>
 
-                    <div *ngIf=imgSelect>
-                        <label for="logoPreview" class="form-label">Vista previa del logo</label>
-                        <hr>
-                        <img [src]="imgSelect" class="img-fluid" style="width: 100%;">
-                    </div>
+                    <div>
+                        <label *ngIf="!imgSelect" for="logoPreview" class="form-label">Vista previa del logo actual</label>
+                        <hr *ngIf="!imgSelect">
+                        <img *ngIf="!imgSelect" [src]="url + 'obtener_logo/' + empresas.logo" style="width: 100%;">
+                      
+                        <label *ngIf="imgSelect" for="newLogoPreview" class="form-label">Vista previa del nuevo logo</label>
+                        <hr *ngIf="imgSelect">
+                        <img *ngIf="imgSelect" [src]="imgSelect" class="img-fluid" style="width: 100%;">
+                      </div>
 
                 </div>
 

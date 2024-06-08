@@ -24,6 +24,7 @@ var auth  = require('../middlewares/autenticate');
 // READ
 api.get('/empresa', auth.auth, empresasController.getEmpresas);
 api.get('/empresa/:id',auth.auth, empresasController.getEmpresasById);
+api.get('/obtener_logo/:img', empresasController.obtener_logo);
 api.post('/empresa', empresasController.createEmpresa);
 api.put('/empresa/:id',[auth.auth,path], empresasController.updateEmpresa);
 api.put('/cambiar_estado_empresa/:id',auth.auth, empresasController.cambiar_estado_empresa);
@@ -35,6 +36,7 @@ api.put('/cambiar_estado_empresa/:id',auth.auth, empresasController.cambiar_esta
 api.get('/direccion_empresa/:id',auth.auth, empresasController.getDireccionEmpresa_id);
 api.post('/direccion_empresa',auth.auth, empresasController.createDireccionEmpresa);
 api.put('/direccion_empresa/:id',auth.auth, empresasController.updateDireccionEmpresa);
+
 
 // UPDATE
 // api.put('/empresa/:id', empresasController.updateEmpresa);

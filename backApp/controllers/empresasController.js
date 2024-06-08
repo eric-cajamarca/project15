@@ -48,7 +48,7 @@ const getEmpresas = async function (req, res) {
                 console.error('Error al obtener las epresas:', error);
                 res.status(200).send({ data: undefined });
             }
-        }else{
+        } else {
             res.status(500).send({ message: 'No Access' });
         }
 
@@ -78,7 +78,7 @@ const getEmpresasById = async function (req, res) {
             //res.json(result.recordset);
             res.status(200).send({ data: result.recordset });
         } catch (error) {
-             console.error('Error al obtener los usuarios:', error);
+            console.error('Error al obtener los usuarios:', error);
             res.status(500).send({ data: undefined });
         }
 
@@ -149,12 +149,12 @@ const getEmpresasById = async function (req, res) {
 const createEmpresa = async function (req, res) {
     console.log('entro a createEmpresa', req.body);
     const { idDocumento, ruc, razon_Social, nombre_Comercial, rubro, celular, logo, correo, password, alias, condicion, estSunat } = req.body;
-    
+
     const currentDate = moment().format('YYYY-MM-DD');
     const fregistro = currentDate;
     console.log(currentDate);
-    
-     const pool = await sql.connect(dbConfig);
+
+    const pool = await sql.connect(dbConfig);
 
     // Verificar si el correo electrónico ya existe
     const checkEmailQuery = await pool
@@ -162,7 +162,7 @@ const createEmpresa = async function (req, res) {
         .input('Ruc', sql.VarChar, ruc)
         .query('SELECT * FROM Empresas WHERE ruc = @ruc');
 
-        console.log('checkEmailQuery.recordset:', checkEmailQuery.recordset);
+    console.log('checkEmailQuery.recordset:', checkEmailQuery.recordset);
 
     if (checkEmailQuery.recordset.length > 0) {
 
@@ -193,173 +193,105 @@ const createEmpresa = async function (req, res) {
                 .input('estado', sql.Bit, 1)
                 .input('fregistro', sql.DateTime, fregistro)
                 .query('INSERT INTO Empresas (idEmpresa, idDocumento, ruc, razon_Social, nombreComercial, rubro, celular, correo, password, logo, alias, condicion, estSunat, estado, fregistro) VALUES (@idEmpresa, @idDocumento, @ruc, @razon_Social, @nombreComercial, @rubro, @celular, @correo, @password, @logo, @alias, @condicion, @estSunat, @estado, @fregistro)');
-             
-                
-             console.log('valor de result:', idEmpresa );    
-            
-            res.status(200).send({data: idEmpresa });
+
+
+            console.log('valor de result:', idEmpresa);
+
+            res.status(200).send({ data: idEmpresa });
         }
         catch (error) {
             console.error('Error al crear la Empresa:', error);
-            res.status(500).send({data: undefined});
+            res.status(500).send({ data: undefined });
         }
     }
 }
 
 
-// const updateEmpresa = async function (req, res) {
-//     console.log('entro a updateEmpresa', req.body, req.params);
-//     console.log('req.file', req.files);
-
-//     const { idDocumento, ruc, razon_Social, nombre_Comercial, rubro, celular, correo, password, alias, condicion, estSunat } = req.body;
-//     const  idEmpresa  = req.user.empresa;
-//     if (req.user) {
-
-//         if(req.files){
-//             //SI HAY IMAGEN
-//             var img_path = req.files.portada.path;
-//             var name = img_path.split('\\');
-//             var portada_name = name[2];
-//             console.log('portada_name', portada_name);
-
-
-
-//         }else{
-//             //SI NO HAY IMAGEN
-//             try {
-
-
-//                 console.log('cuando viene sin password');
-    
-//                 const pool = await sql.connect(dbConfig);
-//                 const result = await pool
-//                     .request()
-//                     .input('Ruc', sql.VarChar, Ruc)
-//                     .input('Razon_Social', sql.VarChar, Razon_Social)
-//                     .input('Rubro', sql.VarChar, Rubro)
-//                     .input('Direccion', sql.VarChar, Direccion)
-//                     .input('Distrito', sql.VarChar, Distrito)
-//                     .input('Region', sql.VarChar, Region)
-//                     .input('Provincia', sql.VarChar, Provincia)
-//                     .input('Celular', sql.VarChar, Celular)
-//                     .input('Whatsapp', sql.VarChar, Whatsapp)
-//                     .input('Correo', sql.VarChar, Correo)
-//                     .input('Logo', sql.Image, Logo)
-//                     .input('Alias', sql.VarChar, Alias)
-    
-//                     .query('UPDATE Empresa SET Razon_Social = @Razon_Social, Rubro = @Rubro, Direccion = @Direccion, Distrito = @Distrito, Region = @Region, Provincia = @Provincia, Celular = @Celular, Whatsapp = @Whatsapp, Correo = @Correo, Logo = @Logo, Alias = @Alias WHERE id = @id');
-//                 res.status(200).send({ message: 'Empresa actualizado  correctamente', data: result.rowsAffected });
-    
-    
-    
-//             } catch (error) {
-//                 console.error('Error al actualizar un usuario:', error);
-//                 res.status(500).send('Error al actualizar un usuario');
-//             }
-//         }
-
-        
-//     } else {
-//         res.status(401).send({ message: 'No Access' });
-//     }
-
-// };
-
-//cambiar estado de la empresa
 
 const updateEmpresa = async function (req, res) {
     console.log('entro a updateEmpresa', req.body, req.params);
     console.log('req.file', req.files);
     console.log('logo', req.body.logo)
-    
-
-        const {
-            idDocumento, ruc, razon_Social, nombre_Comercial, rubro, celular, correo, password, alias, condicion, estSunat
-        } = req.body;
-
-        const idEmpresa = req.user.empresa;
-
-        
-        if (req.user) {
-            if (req.files && req.files.logo) {
-                // Si hay imagen
-                // const file = req.files.logo[0];
-                // const tempPath = file.path;
-                // const targetPath = path.join(__dirname, './uploads/configuraciones', file.originalFilename);
-
-                var img_path = req.files.logo.path;
-                var name = img_path.split('\\');
-                var portada_name = name[2];
-
-                // console.log('tempPath', tempPath);
-                // fs.rename(tempPath, targetPath, async (err) => {
-                //     if (err) return res.status(500).send({ message: 'Error al guardar la imagen', error: err });
-
-                    //  portada_name = file.originalFilename;
-
-                    console.log('portada_name', portada_name);
-
-                    // Aquí puedes actualizar la base de datos con la imagen
-                    try {
-                        const pool = await sql.connect(dbConfig);
-                        const result = await pool
-                            .request()
-                            .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
-                            .input('Rubro', sql.VarChar, rubro)
-                            .input('Celular', sql.VarChar, celular)
-                            .input('Correo', sql.VarChar, correo)
-                            .input('Logo', sql.VarChar, portada_name)
-                            .input('Alias', sql.VarChar, alias)
-                            .query('UPDATE Empresas SET Rubro = @Rubro, Celular = @Celular, Correo = @Correo, Logo = @Logo, Alias = @Alias WHERE idEmpresa = @idEmpresa');
-
-                            // fs.stat('./uploads/configuraciones/'+portada_name, function(err){
-                            //     if(!err){
-                            //         fs.unlink('./uploads/configuraciones/'+portada_name, (err)=>{
-                            //             if(err) throw err;
-                            //         });
-                            //     }
-                            // });
 
 
+    const {
+        idDocumento, ruc, razon_Social, nombreComercial, rubro, celular, correo, password, alias, condicion, estSunat, logoAnterior
+    } = req.body;
 
+    const idEmpresa = req.user.empresa;
+    console.log('logoAnterior', logoAnterior);
 
-                        res.status(200).send({ message: 'Empresa actualizada correctamente', data: result.rowsAffected });
+    if (req.user) {
+        if (req.files && req.files.logo) {
+            // Si hay imagen
 
-                    } catch (error) {
-                        console.error('Error al actualizar la empresa:', error);
-                        res.status(500).send('Error al actualizar la empresa');
-                    }
-                // });
-            } else {
-                // Si no hay imagen
-                try {
-                    const pool = await sql.connect(dbConfig);
-                    const result = await pool
-                        .request()
-                        .input('Ruc', sql.VarChar, ruc[0])
-                        .input('Razon_Social', sql.VarChar, razon_Social[0])
-                        .input('Rubro', sql.VarChar, rubro[0])
-                        .input('Celular', sql.VarChar, celular[0])
-                        .input('Correo', sql.VarChar, correo[0])
-                        .input('Alias', sql.VarChar, alias[0])
-                        .query('UPDATE Empresa SET Razon_Social = @Razon_Social, Rubro = @Rubro, Celular = @Celular, Correo = @Correo, Alias = @Alias WHERE id = @id');
+            var img_path = req.files.logo.path;
+            var name = img_path.split('\\');
+            var portada_name = name[2];
 
-                    res.status(200).send({ message: 'Empresa actualizada correctamente', data: result.rowsAffected });
+            console.log('portada_name', portada_name);
 
-                } catch (error) {
-                    console.error('Error al actualizar la empresa:', error);
-                    res.status(500).send('Error al actualizar la empresa');
+            // Aquí puedes actualizar la base de datos con la imagen
+            try {
+                const pool = await sql.connect(dbConfig);
+                const result = await pool
+                    .request()
+                    .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
+                    .input('Rubro', sql.VarChar, rubro)
+                    .input('Celular', sql.VarChar, celular)
+                    .input('nombreComercial', sql.VarChar, nombreComercial)
+                    .input('Correo', sql.VarChar, correo)
+                    .input('Logo', sql.VarChar, portada_name)
+                    .input('Alias', sql.VarChar, alias)
+                    .query('UPDATE Empresas SET Rubro = @Rubro, Celular = @Celular, nombreComercial = @nombreComercial, Correo = @Correo, Logo = @Logo, Alias = @Alias WHERE idEmpresa = @idEmpresa');
+
+                if (logoAnterior) {
+                    fs.unlink('./uploads/configuraciones/' + logoAnterior, (err) => {
+                        if (err) throw err;
+                        // Archivo eliminado correctamente
+                    });
+                } else {
+                    console.log('No se proporcionó un nombre de archivo válido para eliminar.');
                 }
+
+
+
+                res.status(200).send({ message: 'Empresa actualizada correctamente', data: result.rowsAffected });
+
+            } catch (error) {
+                console.error('Error al actualizar la empresa:', error);
+                res.status(500).send('Error al actualizar la empresa');
             }
+            // });
         } else {
-            res.status(401).send({ message: 'No Access' });
+            // Si no hay imagen
+            try {
+                const pool = await sql.connect(dbConfig);
+                const result = await pool
+                    .request()
+                    .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
+                    .input('Rubro', sql.VarChar, rubro)
+                    .input('Celular', sql.VarChar, celular)
+                    .input('nombreComercial', sql.VarChar, nombreComercial)
+                    .input('Correo', sql.VarChar, correo)
+                    .input('Alias', sql.VarChar, alias)
+                    .query('UPDATE Empresas SET Rubro = @Rubro, Celular = @Celular, nombreComercial = @nombreComercial, Correo = @Correo, Alias = @Alias WHERE idEmpresa = @idEmpresa');
+                res.status(200).send({ message: 'Empresa actualizada correctamente', data: result.rowsAffected });
+
+            } catch (error) {
+                console.error('Error al actualizar la empresa:', error);
+                res.status(500).send('Error al actualizar la empresa');
+            }
         }
-    
+    } else {
+        res.status(401).send({ message: 'No Access' });
+    }
+
 };
 
 
 const cambiar_estado_empresa = async function (req, res) {
-    console.log('entro a cambiar_estado_empresa',req.params);
+    console.log('entro a cambiar_estado_empresa', req.params);
     if (req.user) {
         let idEmpresa = req.params['id'];
         const { estado } = req.body;
@@ -380,12 +312,30 @@ const cambiar_estado_empresa = async function (req, res) {
             res.status(200).send({ data: result.rowsAffected });
         } catch (error) {
             console.error('Error al cambiar el estado de la empresa:', error);
-            res.status(500).send({data: undefined});
+            res.status(500).send({ data: undefined });
 
         }
 
     }
 }
+
+const obtener_logo = async function (req, res) {
+    console.log('entro a obtener_logo', req.params);
+    var img = req.params['img'];
+
+
+    fs.stat('./uploads/configuraciones/' + img, function (err) {
+        if (!err) {
+            let path_img = './uploads/configuraciones/' + img;
+            res.status(200).sendFile(path.resolve(path_img));
+        } else {
+            let path_img = 'assets/img/01.jpg';
+            res.status(200).sendFile(path.resolve(path_img));
+        }
+    })
+}
+
+
 
 const obtener_datos_colaborador_admin = async (req, res) => {
     const { id } = req.params;
@@ -587,13 +537,13 @@ const createDireccionEmpresa = async function (req, res) {
 
 }
 
-const updateDireccionEmpresa = async function (req, res){
+const updateDireccionEmpresa = async function (req, res) {
     console.log('entro a updateDireccionEmpresa', req.body);
     const { idDireccionEmpresa, ubigeo, codPais, region, provincia, distrito, urbanizacion, direccion, codLocal, principal } = req.body;
-    const  id  = idDireccionEmpresa;
+    const id = idDireccionEmpresa;
 
     if (req.user) {
-        if(req.user.rol == 'Administrador'){
+        if (req.user.rol == 'Administrador') {
             try {
                 const pool = await sql.connect(dbConfig);
                 const result = await pool
@@ -643,7 +593,7 @@ const getDireccionEmpresa_id = async function (req, res) {
         else {
             res.status(401).send({ message: 'No Access' });
         }
-        
+
     } else {
         res.status(401).send({ message: 'No Access' });
     }
@@ -670,7 +620,7 @@ const getDireccionEmpresa_id = async function (req, res) {
 //         else {
 //             res.status(401).send({ message: 'No Access' });
 //         }
-        
+
 //     } else {
 //         res.status(401).send({ message: 'No Access' });
 //     }
@@ -694,7 +644,7 @@ const getDireccionEmpresa_id = async function (req, res) {
 //         else {
 //             res.status(401).send({ message: 'No Access' });
 //         }
-        
+
 //     } else {
 //         res.status(401).send({ message: 'No Access' });
 //     }
@@ -713,11 +663,14 @@ module.exports = {
     getEmpresasById,
     getDireccionEmpresa_id,
     createDireccionEmpresa,
-    updateDireccionEmpresa
+    updateDireccionEmpresa,
+
+    //logo
+    obtener_logo
 
     //direcciones de la empresa
-    
-    
+
+
 
 
 };
