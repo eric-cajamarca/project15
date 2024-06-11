@@ -24,7 +24,7 @@ export class UpdateColaboradorComponent {
   public id = '';
   public load_data = false;
   public data = false;
-  public roles: any[] = [];
+  public roles: any = [];
 
   constructor(
     private _adminservice: AdminService,

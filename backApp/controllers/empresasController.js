@@ -489,8 +489,8 @@ const createDireccionEmpresa = async function (req, res) {
     console.log('crearDireccionEmpresa req.body', req.body);
     console.log('req.user', req.user);
 
-    if (req.user) {
-        if (req.user.rol == 'Administrador') {
+    // if (req.user) {
+    //     if (req.user.rol == 'Administrador') {
 
             try {
                 let idEmpresa = req.body.idEmpresa;
@@ -526,14 +526,14 @@ const createDireccionEmpresa = async function (req, res) {
 
             }
 
-        }
-        else {
-            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
-        }
-    }
-    else {
-        res.status(500).send({ message: 'No Access' });
-    }
+    //     }
+    //     else {
+    //         res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+    //     }
+    // }
+    // else {
+    //     res.status(500).send({ message: 'No Access' });
+    // }
 
 }
 

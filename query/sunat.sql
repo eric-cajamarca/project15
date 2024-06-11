@@ -111,23 +111,23 @@ CREATE TABLE FormaPago (
 
 
 --catalogo nro 6
-create table Documentos
-(
-idDocumento varchar(1) primary key not null,
-nombre varchar(20) not null,
-descripcion varchar(200) not null,
+--create table Documentos
+--(
+--idDocumento varchar(1) primary key not null,
+--nombre varchar(20) not null,
+--descripcion varchar(200) not null,
 
-)
-select * from Documentos
-go
+--)
+--select * from Documentos
+--go
 
 
-insert into Documentos values ('1','DNI','Documento Nacional de Identidad')
-insert into Documentos values ('4','CARNET','Carnet de extrangería')
-insert into Documentos values ('6','RUC','Registro Unico de Contributentes')
-insert into Documentos values ('7','PASAPORTE','Pasaporte')
-insert into Documentos values ('A','CEDULA','Cédula diplomática de identidad')
-GO
+--insert into Documentos values ('1','DNI','Documento Nacional de Identidad')
+--insert into Documentos values ('4','CARNET','Carnet de extrangería')
+--insert into Documentos values ('6','RUC','Registro Unico de Contributentes')
+--insert into Documentos values ('7','PASAPORTE','Pasaporte')
+--insert into Documentos values ('A','CEDULA','Cédula diplomática de identidad')
+--GO
 
 --catalogo nro 15
 CREATE TABLE Leyenda (

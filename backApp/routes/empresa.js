@@ -34,7 +34,7 @@ api.put('/cambiar_estado_empresa/:id',auth.auth, empresasController.cambiar_esta
 //     updateDireccionEmpresa
 
 api.get('/direccion_empresa/:id',auth.auth, empresasController.getDireccionEmpresa_id);
-api.post('/direccion_empresa',auth.auth, empresasController.createDireccionEmpresa);
+api.post('/direccion_empresa', empresasController.createDireccionEmpresa);
 api.put('/direccion_empresa/:id',auth.auth, empresasController.updateDireccionEmpresa);
 
 

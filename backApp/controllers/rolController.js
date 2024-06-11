@@ -65,7 +65,8 @@ const obtener_roles = async function (req, res) {
                 let pool = await sql.connect(dbConfig);
                 let roles = await pool
                     .request()
-                    .query("SELECT * from Rol");
+                    .input('idEmpresa', sql.UniqueIdentifier, req.user.empresa)
+                    .query("SELECT * from Rol WHERE idEmpresa = @idEmpresa");
                
                 res.status(200).send({data: roles.recordset });
                 

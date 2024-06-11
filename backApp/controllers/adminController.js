@@ -17,9 +17,9 @@ const getAdmin = async function (req, res) {
             try {
                 const pool = await sql.connect(dbConfig);
                 const result = await pool
-                .request()
-                .input('empresa', sql.UniqueIdentifier, req.user.empresa)
-                .query('SELECT * FROM UsuarioWeb UW INNER JOIN Rol R ON UW.idRol = R.idRol WHERE UW.idEmpresa = @empresa')
+                    .request()
+                    .input('empresa', sql.UniqueIdentifier, req.user.empresa)
+                    .query('SELECT * FROM UsuarioWeb UW INNER JOIN Rol R ON UW.idRol = R.idRol WHERE UW.idEmpresa = @empresa')
                 //.query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol where UsuarioWeb.estado = 1 and idEmpresa = @empresa');
                 // res.json(result.recordset);
                 // console.log('result.recordset');
@@ -64,7 +64,7 @@ const createAdmin = async (req, res) => {
                 try {
                     const hashedPassword = await bcrypt.hash(password, 8); // El número 10 es el factor de coste para el cifrado
                     //crear el idUsuario con uuidv4
-                     const idUsuario = uuidv4();
+                    const idUsuario = uuidv4();
 
 
                     const pool = await sql.connect(dbConfig);
@@ -182,7 +182,7 @@ const obtener_datos_colaborador_admin = async (req, res) => {
 
     console.log('obtener_datos_colaborador_admin = id: ', id);
     console.log('req.params antes de validar el usuario: ', req.user);
-    
+
 
     if (req.user) {
         //quiero validar si el rol del usuario es administrador
@@ -194,6 +194,7 @@ const obtener_datos_colaborador_admin = async (req, res) => {
                 const result = await pool
                     .request()
                     .input('idUsuario', sql.UniqueIdentifier, id)
+                    
                     .query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol where idUsuario = @idUsuario');
                 //.query('SELECT * FROM UsuarioWeb where idUsuario = @idUsuario');
 
@@ -213,7 +214,7 @@ const obtener_datos_colaborador_admin = async (req, res) => {
 
                 data = result.recordset;
                 console.log('data: ', data);
-                res.status(200).send({data: data });
+                res.status(200).send({ data: data });
                 //res.json({ data });
 
 
@@ -279,6 +280,7 @@ const cambiar_estado_colaborador_admin = async function (req, res) {
     }
 }
 
+
 const admin_login = async (req, res) => {
     const { email, password, ruc } = req.body;
     const estado = true;
@@ -295,46 +297,66 @@ const admin_login = async (req, res) => {
             .input('ruc', sql.VarChar, ruc)
             .query('SELECT * FROM Empresas where ruc = @ruc ');
         console.log('checkEmailQuery', checkEmailQuery);
+        const bdRuc = checkEmailQuery.recordset[0].ruc;
+        const bdidEmpresa = checkEmailQuery.recordset[0].idEmpresa;
+        console.log('checkEmailQuery.recordset[0].ruc', checkEmailQuery.recordset[0].ruc)
 
         if (checkEmailQuery.recordset.length > 0) {
+            
+            
+            //const bdidEmpresa = checkEmailQuery.recordset[0].idEmpresa;
             console.log('el ruc existe');
-            console.log('aqui valido si el email es correcto', email,'estado :', estado);
+            console.log('aqui valido si el email es correcto', email, 'estado :', estado);
 
             const pool = await sql.connect(dbConfig);
             const checkEmailQuery = await pool
                 .request()
+                .input('idEmpresa', sql.UniqueIdentifier, bdidEmpresa)
                 .input('email', sql.VarChar, email)
                 .input('estado', sql.Bit, estado)
-                //.query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol');
-                .query('SELECT * FROM usuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol WHERE email = @email and estado=@estado');
+                .query('SELECT * FROM usuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol WHERE UsuarioWeb.email = @email and UsuarioWeb.estado=@estado and usuarioWeb.idEmpresa = @idEmpresa');
+
+            //.query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol');
+            //.query('SELECT * FROM usuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol WHERE email = @email and estado=@estado');
 
 
             console.log('checkEmailQuery', checkEmailQuery);
             console.log(checkEmailQuery.recordset.length)
 
             if (checkEmailQuery.recordset.length > 0) {
+                const bdEmail = checkEmailQuery.recordset[0].email;
                 const bdPassword = checkEmailQuery.recordset[0].password;
                 let user = checkEmailQuery.recordset[0];
                 console.log('user respuesta de la bd', user);
-                
 
-                console.log('bdpassword', bdPassword);
-                bcrypt.compare(password, bdPassword, (err, result) => {
-                    if (err) {
-                        console.error('Error al comparar contraseñas:', err);
-                        res.status(500).send('Error al comparar contraseñas');
-                    } else if (result) {
-                        // Las contraseñas coinciden, inicia sesión
-                        res.status(200).send({
-                            data: user,
-                            token: jwt.createToken(user)
-                        });
-                        console.log('las contraseñas coinciden');
-                    } else {
-                        // Las contraseñas no coinciden, devuelve un mensaje de error
-                        res.status(200).send({ message: 'La contraseña es incorrecta', data: undefined });
-                    }
-                });
+                //aqui quiero comparar si el ruc es igual al bdRuc, si el email es igual al bdEmail y si el estado es igual a true
+                if (bdRuc == ruc && bdEmail == email && estado == true) {
+                   
+
+                    console.log('bdRuc == ruc && bdEmail == email && estado == true');
+                    bcrypt.compare(password, bdPassword, (err, result) => {
+                        if (err) {
+                            console.error('Error al comparar contraseñas:', err);
+                            res.status(500).send('Error al comparar contraseñas');
+                        } else if (result) {
+                            // Las contraseñas coinciden, inicia sesión
+                            res.status(200).send({
+                                data: user,
+                                token: jwt.createToken(user)
+                            });
+                            console.log('las contraseñas coinciden');
+                        } else {
+                            // Las contraseñas no coinciden, devuelve un mensaje de error
+                            res.status(200).send({ message: 'La contraseña es incorrecta', data: undefined });
+                        }
+                    });
+
+                } else {
+                    console.log('el ruc no coincide con el email o el estado no es true');
+                    res.status(200).send({ message: 'El ruc no coincide con el email o el estado no es true', data: undefined });
+                }
+
+
             } else {
                 // return res.status(400).json({ message: 'El email no existe. Por favor elija otro.' });
                 res.status(200).send({ message: 'El email no existe o usted no tiene permisos para acceder' });
@@ -345,12 +367,87 @@ const admin_login = async (req, res) => {
             res.status(200).send({ message: 'El ruc no existe', data: undefined });
         }
     } catch (error) {
-        console.error('Error al obtener los usuriosa:', error);
+        console.error('Error al obtener los usurios:', error);
         res.status(200).send({ data: undefined });
     }
 
 
 };
+
+
+
+// const admin_login = async (req, res) => {
+//     const { email, password, ruc } = req.body;
+//     const estado = true;
+//     const data = req.body;
+//     console.log('entro a login admin')
+//     console.log(data);
+
+//     console.log('aqui valido si es el ruc correcto', ruc);
+//     //primero quiero validar si el ruc es correcto en la tabla de Empresas
+//     try {
+//         const pool = await sql.connect(dbConfig);
+//         const checkEmailQuery = await pool
+//             .request()
+//             .input('ruc', sql.VarChar, ruc)
+//             .query('SELECT * FROM Empresas where ruc = @ruc ');
+//         console.log('checkEmailQuery', checkEmailQuery);
+
+//         if (checkEmailQuery.recordset.length > 0) {
+//             console.log('el ruc existe');
+//             console.log('aqui valido si el email es correcto', email,'estado :', estado);
+
+//             const pool = await sql.connect(dbConfig);
+//             const checkEmailQuery = await pool
+//                 .request()
+//                 .input('email', sql.VarChar, email)
+//                 .input('estado', sql.Bit, estado)
+//                 //.query('SELECT * FROM UsuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol');
+//                 .query('SELECT * FROM usuarioWeb INNER JOIN Rol ON UsuarioWeb.idRol = Rol.idRol WHERE email = @email and estado=@estado');
+
+
+//             console.log('checkEmailQuery', checkEmailQuery);
+//             console.log(checkEmailQuery.recordset.length)
+
+//             if (checkEmailQuery.recordset.length > 0) {
+//                 const bdPassword = checkEmailQuery.recordset[0].password;
+//                 let user = checkEmailQuery.recordset[0];
+//                 console.log('user respuesta de la bd', user);
+
+
+//                 console.log('bdpassword', bdPassword);
+//                 bcrypt.compare(password, bdPassword, (err, result) => {
+//                     if (err) {
+//                         console.error('Error al comparar contraseñas:', err);
+//                         res.status(500).send('Error al comparar contraseñas');
+//                     } else if (result) {
+//                         // Las contraseñas coinciden, inicia sesión
+//                         res.status(200).send({
+//                             data: user,
+//                             token: jwt.createToken(user)
+//                         });
+//                         console.log('las contraseñas coinciden');
+//                     } else {
+//                         // Las contraseñas no coinciden, devuelve un mensaje de error
+//                         res.status(200).send({ message: 'La contraseña es incorrecta', data: undefined });
+//                     }
+//                 });
+//             } else {
+//                 // return res.status(400).json({ message: 'El email no existe. Por favor elija otro.' });
+//                 res.status(200).send({ message: 'El email no existe o usted no tiene permisos para acceder' });
+//             }
+
+//         } else {
+//             console.log('el ruc no existe');
+//             res.status(200).send({ message: 'El ruc no existe', data: undefined });
+//         }
+//     } catch (error) {
+//         console.error('Error al obtener los usuriosa:', error);
+//         res.status(200).send({ data: undefined });
+//     }
+
+
+// };
 
 
 
