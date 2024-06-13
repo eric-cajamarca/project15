@@ -73,10 +73,7 @@
                         [attr.data-bs-target]="'#delete-'+empresas.idEmpresa">
                         <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Activar
                       </a>
-                      <a style="cursor: pointer;" class="dropdown-item" (click)="seleccionar(empresas.idEmpresa)"
-                        data-bs-toggle="modal" [attr.data-bs-target]="'#editar-'+empresas.idEmpresa">
-                        <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Editar
-                      </a>
+                      
                     </ul>
                   </div>
 
@@ -108,66 +105,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="modal fade" id="editar-{{empresas.idEmpresa}}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Ventana para editar la empresas:
-                            {{empresas.nombre}}
-                          </h5>
-
-                        </div>
-                        <div class="modal-body">
-                          <p>Está seguro que desea editar la empresas?.</p>
-                          <div>
-                            <div class="col-12">
-                              <div>
-                                <label for="nombre">Nombre</label>
-                                <input type="text" class="form-control" name="nombre"
-                                  [(ngModel)]="prod_Modificar.nombre">
-                              </div>
-
-                              <div>
-                                <label for="descripcion">Descripción</label>
-                                <input type="text" class="form-control" name="descripcion"
-                                  [(ngModel)]="prod_Modificar.descripcion">
-                              </div>
-                            </div>
-
-                            <div class="col-12">
-                              <div>
-                                <label for="contacto">Contato</label>
-                                <input type="text" class="form-control" name="contacto"
-                                  [(ngModel)]="prod_Modificar.contacto">
-                              </div>
-
-                              <div>
-                                <label for="paginaWeb">Pagina Web</label>
-                                <input type="text" class="form-control" name="paginaWeb"
-                                  [(ngModel)]="prod_Modificar.paginaWeb">
-                              </div>
-                            </div>
-                          </div>
-
-
-                        </div>
-
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-warning font-weight-bold"
-                            data-bs-dismiss="modal">Cerrar</button>
-                          <button *ngIf="!load_estado" type="button" class="btn btn-primary font-weight-bold"
-                            (click)="editarempresas(prod_Modificar.idEmpresa)" data-bs-dismiss="modal">Sí, guardar
-                            cambios</button>
-
-                          <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            Modificando...
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                 
                 </td>
               </tr>
             </tbody>

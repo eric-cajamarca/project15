@@ -108,7 +108,7 @@ export class UpdateEmpresaComponent {
   }
 
   ngOnInit() {
-    
+
     this.initData();
 
     this.select_pais();
@@ -139,27 +139,27 @@ export class UpdateEmpresaComponent {
         //buscar en regiones por el id de response.data.region y asignar el name a direccionEmpresas.region
         const regionEncontrada = this.regiones.find((element: any) => Number(element.id) === Number(response.data[0].region));
 
-               if (regionEncontrada) {
-                
-                this.direccionEmpresas_const[0].nregion = String(regionEncontrada.name);
-                console.log('this.direccionEmpresas.region', this.direccionEmpresas_const.region);
-              } 
+        if (regionEncontrada) {
+
+          this.direccionEmpresas_const[0].nregion = String(regionEncontrada.name);
+          console.log('this.direccionEmpresas.region', this.direccionEmpresas_const.region);
+        }
 
 
         //buscar en provincias por el id de response.data.provincia y asignar el name a direccionEmpresas.provincia
         const provinciaEncontrada = this.provincias.find((element: any) => Number(element.id) === Number(response.data[0].provincia));
 
         if (provinciaEncontrada) {
-          
+
           this.direccionEmpresas_const[0].nprovincia = String(provinciaEncontrada.name);
           console.log('this.direccionEmpresas.provincia', this.direccionEmpresas_const.provincia);
-        } 
+        }
 
         //buscar en distritos por el id de response.data.distrito y asignar el name a direccionEmpresas.distrito
         const distritoEncontrada = this.distritos.find((element: any) => Number(element.id) === Number(response.data[0].distrito));
 
         if (distritoEncontrada) {
-          
+
           this.direccionEmpresas_const[0].ndistrito = String(distritoEncontrada.name);
           console.log('this.direccionEmpresas.distrito', this.direccionEmpresas_const.distrito);
         }
@@ -369,16 +369,16 @@ export class UpdateEmpresaComponent {
           message: 'Dirección actualizada correctamente'
         });
       }
-      
+
     );
-     this.initData();
+    this.initData();
   }
 
   modalCrearDireccion() {
     this.direccionEmpresas = {};
   }
 
-  crearDireccion(){
+  crearDireccion() {
     console.log('Crear direccion de las Empresas:', this.direccionEmpresas);
     this._empresasService.createDireccionEmpresa(this.direccionEmpresas, this.token).subscribe(
       response => {
@@ -401,12 +401,30 @@ export class UpdateEmpresaComponent {
     console.log('this.cliientes', this.empresas);
     console.log('this.direccionEmpresas', this.direccionEmpresas);
 
-     if (registroForm.valid) {
-        if(this.file){
-          this.empresas.logoAnterior = this.empresas.logo;
-          this.empresas.logo = this.file;
+    if (registroForm.valid) {
+      if (this.file) {
+        this.empresas.logoAnterior = this.empresas.logo;
+        this.empresas.logo = this.file;
 
-          this._empresasService.updateEmpresa( this.empresas.idEmpresa,this.empresas, this.token).subscribe(
+        this._empresasService.updateEmpresa(this.empresas.idEmpresa, this.empresas, this.token).subscribe(
+          response => {
+            console.log('response', response);
+            iziToast.show({
+              title: 'SUCCESS',
+              titleColor: '#0062cc',
+              color: '#FFF',
+              class: 'text-success',
+              position: 'topRight',
+              message: 'Empresa actualizada correctamente'
+            });
+          }
+        );
+
+      } else {
+        if (this.empresas.logo) {
+          this.empresas.logo = '';
+
+          this._empresasService.updateEmpresa(this.empresas.idEmpresa, this.empresas, this.token).subscribe(
             response => {
               console.log('response', response);
               iziToast.show({
@@ -420,7 +438,7 @@ export class UpdateEmpresaComponent {
             }
           );
 
-        }else{
+        } else {
           iziToast.show({
             title: 'ERROR',
             titleColor: '#FF0000',
@@ -430,25 +448,8 @@ export class UpdateEmpresaComponent {
             message: 'tiene que subir una imagen para el logo de la empresa'
           });
         }
-
-      // this._empresasService.updateEmpresa( this.empresas.idEmpresa,this.empresas, this.token).subscribe(
-      //   response => {
-      //     console.log('response', response);
-      //     iziToast.show({
-      //       title: 'SUCCESS',
-      //       titleColor: '#0062cc',
-      //       color: '#FFF',
-      //       class: 'text-success',
-      //       position: 'topRight',
-      //       message: 'Empresa actualizada correctamente'
-      //     });
-      //   }
-      // );
-
-      
-     }
-
-
+      }
+    }
   }
 
   onCheckboxChange() {

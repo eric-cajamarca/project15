@@ -43,7 +43,7 @@ const getEmpresas = async function (req, res) {
                 // console.log('result.recordset');
                 // console.log(result.recordset);
                 console.log('result:', result.recordset);
-                res.status(200).send({ data: result.recordset[0] });
+                res.status(200).send({ data: result.recordset});
             } catch (error) {
                 console.error('Error al obtener las epresas:', error);
                 res.status(200).send({ data: undefined });

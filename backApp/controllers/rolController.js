@@ -18,6 +18,7 @@ const crear_rol = async function (req, res) {
                 let pool = await sql.connect(dbConfig);
                 let rol = await pool
                     .request()
+                    
                     .input('descripcion', sql.VarChar, descripcion)
                     .query("SELECT * FROM Rol WHERE descripcion = @descripcion");
                 if (rol.recordset.length > 0) {
@@ -27,9 +28,10 @@ const crear_rol = async function (req, res) {
                         let pool = await sql.connect(dbConfig);
                         let rol = await pool
                             .request()
+                            .input('idEmpresa', sql.UniqueIdentifier, req.user.empresa)
                             .input('idRol', sql.UniqueIdentifier, uuidv4())
                             .input('descripcion', sql.VarChar, descripcion)
-                            .query("INSERT INTO Rol (idRol,descripcion) VALUES (@idRol,@descripcion)");
+                            .query("INSERT INTO Rol (idRol,descripcion,idEmpresa) VALUES (@idRol,@descripcion,@idEmpresa)");
 
                         
                         res.status(200).send({ message: 'Rol creado correctamente', data: rol.rowsAffected });

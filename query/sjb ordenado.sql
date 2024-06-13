@@ -18,7 +18,7 @@ GO
 
 
 
-
+truncate table empresas
 CREATE TABLE Empresas(
 	idEmpresa UNIQUEIDENTIFIER primary key NOT NULL,
 	idDocumento varchar(1) not null,
@@ -51,8 +51,10 @@ insert into Empresas values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','6','1042652
 
 go 
 select * from Empresas
---select * from UsuarioWeb
 select * from DireccionEmpresa
+select * from UsuarioWeb
+
+select * from rol
 
 -- Tabla para la dirección (reutilizable varias direcciones para varias empresas)
 CREATE TABLE DireccionEmpresa (
