@@ -34,6 +34,7 @@ export class UpdateEmpresaComponent {
     logo: '',
     condicion: '',
     estSunat: '',
+    logoAnterior: ''
 
   };
   public clienteruc: any = [];
@@ -396,60 +397,129 @@ export class UpdateEmpresaComponent {
     this.initData();
   }
 
+  // registrar(registroForm: any) {
+
+  //   console.log('this.cliientes', this.empresas);
+  //   console.log('this.direccionEmpresas', this.direccionEmpresas);
+
+  //   if (registroForm.valid) {
+  //     if(this.empresas.logo){
+  //       this.empresas.logoAnterior = this.empresas.logo;
+  //     }else{
+  //       this.empresas.logoAnterior = undefined;
+  //     }
+
+  //     if (this.file) {
+                
+  //       this.empresas.logo = this.file;
+
+  //       this._empresasService.updateEmpresa(this.empresas.idEmpresa, this.empresas, this.token).subscribe(
+  //         response => {
+  //           console.log('response', response);
+  //           iziToast.show({
+  //             title: 'SUCCESS',
+  //             titleColor: '#0062cc',
+  //             color: '#FFF',
+  //             class: 'text-success',
+  //             position: 'topRight',
+  //             message: 'Empresa actualizada correctamente'
+  //           });
+  //         }
+  //       );
+
+  //     } else {
+  //       if (this.empresas.logo) {
+  //         this.empresas.logo = undefined;
+
+  //         this._empresasService.updateEmpresa(this.empresas.idEmpresa, this.empresas, this.token).subscribe(
+  //           response => {
+  //             console.log('response', response);
+  //             iziToast.show({
+  //               title: 'SUCCESS',
+  //               titleColor: '#0062cc',
+  //               color: '#FFF',
+  //               class: 'text-success',
+  //               position: 'topRight',
+  //               message: 'Empresa actualizada correctamente'
+  //             });
+  //           }
+  //         );
+
+  //       } else {
+  //         iziToast.show({
+  //           title: 'ERROR',
+  //           titleColor: '#FF0000',
+  //           color: '#FFF',
+  //           class: 'text-danger',
+  //           position: 'topRight',
+  //           message: 'tiene que subir una imagen para el logo de la empresa'
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
+
   registrar(registroForm: any) {
-
-    console.log('this.cliientes', this.empresas);
+    console.log('this.empresas', this.empresas);
     console.log('this.direccionEmpresas', this.direccionEmpresas);
-
-    if (registroForm.valid) {
-      if (this.file) {
-        this.empresas.logoAnterior = this.empresas.logo;
-        this.empresas.logo = this.file;
-
-        this._empresasService.updateEmpresa(this.empresas.idEmpresa, this.empresas, this.token).subscribe(
-          response => {
-            console.log('response', response);
-            iziToast.show({
-              title: 'SUCCESS',
-              titleColor: '#0062cc',
-              color: '#FFF',
-              class: 'text-success',
-              position: 'topRight',
-              message: 'Empresa actualizada correctamente'
-            });
-          }
-        );
-
-      } else {
-        if (this.empresas.logo) {
-          this.empresas.logo = '';
-
-          this._empresasService.updateEmpresa(this.empresas.idEmpresa, this.empresas, this.token).subscribe(
-            response => {
-              console.log('response', response);
-              iziToast.show({
-                title: 'SUCCESS',
-                titleColor: '#0062cc',
-                color: '#FFF',
-                class: 'text-success',
-                position: 'topRight',
-                message: 'Empresa actualizada correctamente'
-              });
-            }
-          );
-
-        } else {
-          iziToast.show({
-            title: 'ERROR',
-            titleColor: '#FF0000',
-            color: '#FFF',
-            class: 'text-danger',
-            position: 'topRight',
-            message: 'tiene que subir una imagen para el logo de la empresa'
-          });
-        }
-      }
+  
+    if (!registroForm.valid) {
+      return; // Salir temprano si el formulario no es válido.
     }
+  
+    // Establecer 'logoAnterior' basado en la existencia de 'logo'.
+    this.empresas.logoAnterior = this.empresas.logo ? this.empresas.logo : undefined;
+  
+    // Si no hay archivo seleccionado y tampoco hay logo actual, mostrar error.
+    if (!this.file && !this.empresas.logo) {
+      iziToast.show({
+        title: 'ERROR',
+        titleColor: '#FF0000',
+        color: '#FFF',
+        class: 'text-danger',
+        position: 'topRight',
+        message: 'Debe subir una imagen para el logo de la empresa.'
+      });
+      return;
+    }
+  
+    // Si hay un archivo seleccionado, actualizar 'logo' con el archivo.
+    if (this.file) {
+      this.empresas.logo = this.file;
+    } else {
+      // Si no hay archivo pero sí un logo existente, se procede a eliminar el logo actual.
+      this.empresas.logo = undefined;
+    }
+  
+    // Llamar a la función de actualización.
+    this.actualizarEmpresa();
+  }
+  
+  actualizarEmpresa() {
+    this._empresasService.updateEmpresa(this.empresas.idEmpresa, this.empresas, this.token).subscribe(
+      response => {
+        console.log('response', response);
+        iziToast.show({
+          title: 'SUCCESS',
+          titleColor: '#0062cc',
+          color: '#FFF',
+          class: 'text-success',
+          position: 'topRight',
+          message: 'Empresa actualizada correctamente.'
+        });
+      },
+      error => {
+        console.error('Error al actualizar la empresa:', error);
+        iziToast.show({
+          title: 'ERROR',
+          titleColor: '#FF0000',
+          color: '#FFF',
+          class: 'text-danger',
+          position: 'topRight',
+          message: 'Error al actualizar la empresa.'
+        });
+      }
+    );
   }
 
   onCheckboxChange() {

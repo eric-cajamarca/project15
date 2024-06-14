@@ -45,6 +45,10 @@ import { IndexEmpresaComponent } from './components/empresas/index-empresa/index
 import { CreateEmpresaComponent } from './components/empresas/create-empresa/create-empresa.component';
 import { UpdateEmpresaComponent } from './components/empresas/update-empresa/update-empresa.component';
 import { LoginEmpresaComponent } from './components/login-empresa/login-empresa.component';
+import { FormatSentenceDirective } from './format-sentence.directive';
+import { ConvertToUpperDirective } from './convert-to-upper.directive';
+import { ValidatePhoneDirective } from './validate-phone.directive';
+import { ValidateEmailDirective } from './validate-email.directive';
 
 
 @NgModule({
@@ -85,7 +89,11 @@ import { LoginEmpresaComponent } from './components/login-empresa/login-empresa.
     IndexEmpresaComponent,
     CreateEmpresaComponent,
     UpdateEmpresaComponent,
-    LoginEmpresaComponent
+    LoginEmpresaComponent,
+    FormatSentenceDirective,
+    ConvertToUpperDirective,
+    ValidatePhoneDirective,
+    ValidateEmailDirective
   ],
   imports: [
     BrowserModule,

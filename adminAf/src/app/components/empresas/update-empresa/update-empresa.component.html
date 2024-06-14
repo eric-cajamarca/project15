@@ -75,12 +75,12 @@
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" name="correo" [(ngModel)]="empresas.correo"
-                                    placeholder="Ingrese el email (opcional)">
+                                    placeholder="Ingrese el email" appValidateEmail >
                             </div>
                             <div class="mb-3">
-                                <label for="celular" class="form-label">Teléfono</label>
+                                <label for="celular" class="form-label">Celular</label>
                                 <input type="tel" class="form-control" name="celular" [(ngModel)]="empresas.celular"
-                                    placeholder="Ingrese el teléfono (opcional)">
+                                    placeholder="El número de celular debe empezar con el 9 y tener 9 dígitos." appValidatePhone>
                             </div>
                         </div>
                     </div>
@@ -119,17 +119,17 @@
                     <div class="mb-3">
                         <label for="nombreComercial" class="form-label">Nombre Comercial</label>
                         <input type="text" class="form-control" name="nombreComercial"
-                            [(ngModel)]="empresas.nombreComercial" placeholder="Ingrese nombre comercial (opcional)">
+                            [(ngModel)]="empresas.nombreComercial" placeholder="Ingrese nombre comercial (opcional)" appConvertToUpper>
                     </div>
                     <div class="mb-3">
                         <label for="alias" class="form-label">Alias</label>
                         <input type="text" class="form-control" name="alias" [(ngModel)]="empresas.alias"
-                            placeholder="Crea un corto alias para tu negocio">
+                            placeholder="Crea un corto alias para tu negocio" maxlength="10" appFormatSentence>
                     </div>
                     <div class="mb-3">
                         <label for="rubro" class="form-label">Giro del negocio</label>
                         <textarea type="text" class="form-control" name="rubro" [(ngModel)]="empresas.rubro"
-                            placeholder="Descripcion del giro del negocio"></textarea>
+                            placeholder="Descripcion del giro del negocio" appFormatSentence></textarea>
                     </div>
 
 

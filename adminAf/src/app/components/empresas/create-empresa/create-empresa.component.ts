@@ -150,38 +150,43 @@ export class CreateEmpresaComponent {
               // this.direccionEmpresas.provincia = response.provincia;
               // this.direccionEmpresas.distrito = response.distrito;
               this.direccionEmpresas.direccion = response.direccion;
-              
-              //encuentro el id de la region
-              const regionEncontrada = this.regiones.find((element: any) => this.removeAccents(element.name).toUpperCase() === response.departamento.toUpperCase());
 
-               if (regionEncontrada) {
-                this.direccionEmpresas.region = regionEncontrada.id;
-                console.log('this.direccionEmpresas.region', this.direccionEmpresas.region);
-              } else {
-                console.log('No se encontró la región correspondiente para el departamento:', response.departamento);
+              try {
+                //encuentro el id de la region
+                const regionEncontrada = this.regiones.find((element: any) => this.removeAccents(element.name).toUpperCase() === response.departamento.toUpperCase());
+
+                if (regionEncontrada) {
+                  this.direccionEmpresas.region = regionEncontrada.id;
+                  console.log('this.direccionEmpresas.region', this.direccionEmpresas.region);
+                } else {
+                  console.log('No se encontró la región correspondiente para el departamento:', response.departamento);
+                }
+
+                //encuentro el id de la provincia
+                const provinciaEncontrada = this.provincias.find((element: any) => this.removeAccents(element.name).toUpperCase() === response.provincia.toUpperCase());
+
+                if (provinciaEncontrada) {
+                  this.direccionEmpresas.provincia = provinciaEncontrada.id;
+                  console.log('this.direccionEmpresas.provincia', this.direccionEmpresas.provincia);
+                } else {
+                  console.log('No se encontró la provincia correspondiente para el departamento:', response.provincia);
+                }
+
+                //encuentro el id del distrito
+                const distritoEncontrado = this.distritos.find((element: any) => this.removeAccents(element.name).toUpperCase() === response.distrito.toUpperCase());
+
+                if (distritoEncontrado) {
+                  this.direccionEmpresas.distrito = distritoEncontrado.id;
+                  console.log('this.direccionEmpresas.distrito', this.direccionEmpresas.distrito);
+                } else {
+                  console.log('No se encontró el distrito correspondiente para el departamento:', response.distrito);
+                }
+              } catch (error) {
+                console.error('Error al buscar la región, provincia y distrito:', error);
               }
 
-              //encuentro el id de la provincia
-              const provinciaEncontrada = this.provincias.find((element: any) => this.removeAccents(element.name).toUpperCase() === response.provincia.toUpperCase());
 
-              if (provinciaEncontrada) {
-                this.direccionEmpresas.provincia = provinciaEncontrada.id;
-                console.log('this.direccionEmpresas.provincia', this.direccionEmpresas.provincia);
-              } else {
-                console.log('No se encontró la provincia correspondiente para el departamento:', response.provincia);
-              }
 
-              //encuentro el id del distrito
-              const distritoEncontrado = this.distritos.find((element: any) => this.removeAccents(element.name).toUpperCase() === response.distrito.toUpperCase());
-
-              if (distritoEncontrado) {
-                this.direccionEmpresas.distrito = distritoEncontrado.id;
-                console.log('this.direccionEmpresas.distrito', this.direccionEmpresas.distrito);
-              } else {
-                console.log('No se encontró el distrito correspondiente para el departamento:', response.distrito);
-              }
-
-              
               console.log('this.clienteruc: ', this.clienteruc);
               this.encontrado = true;
             }
