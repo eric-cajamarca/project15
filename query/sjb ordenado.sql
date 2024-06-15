@@ -416,13 +416,14 @@ idSucursal UNIQUEIDENTIFIER primary key not null,
 idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE not null,
 nombre varchar(20) not null,
 direccion varchar(200) null,
-idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
+--idUsuario UNIQUEIDENTIFIER FOREIGN KEY REFERENCES UsuarioWeb (idUsuario) not null,
 fregistro datetime not null,
 estado bit not null
 )
 
 
 go
+select * from DireccionEmpresa
 select * from Sucursal
 select * from UsuarioWeb
 go

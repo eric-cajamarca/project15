@@ -20,6 +20,49 @@ BEGIN
     FROM inserted;
 END;
 
+----------------------------------------------------------------
+-- Crear trigger para insertar en Sucursal al agregar una nueva dirección en DireccionEmpresa
+drop trigger trg_AfterInsert_DireccionEmpresa
+--CREATE TRIGGER trg_AfterInsert_DireccionEmpresa
+--ON DireccionEmpresa
+--AFTER INSERT
+--AS
+--BEGIN
+--    DECLARE @idEmpresa UNIQUEIDENTIFIER;
+--    DECLARE @direccion VARCHAR(255);
+    
+--    -- Obtener valores de la fila insertada
+--    SELECT 
+--        @idEmpresa = idEmpresa,
+--        @direccion = direccion
+--    FROM inserted;
+    
+--    -- Insertar nueva sucursal
+--    INSERT INTO Sucursal (
+--        idSucursal,
+--        idEmpresa,
+--        nombre,
+--        direccion,
+--        idUsuario,
+--        fregistro,
+--        estado
+--    )
+--    VALUES (
+--        NEWID(), -- Generar un nuevo id único para idSucursal
+--        @idEmpresa,
+--        'Sucursal Nueva', -- Nombre de la sucursal, puedes ajustarlo según sea necesario
+--        @direccion,
+--        '00000000-0000-0000-0000-000000000000', -- ID de usuario ficticio, cámbialo según sea necesario
+--        GETDATE(),
+--        1 -- Estado activo
+--    );
+--END;
+--GO
+
+select * from DireccionEmpresa
+select * from Sucursal
+
+
 
 
 --crear correlativo cada vez que se agregue una nueva empresa

@@ -43,7 +43,7 @@ const getEmpresas = async function (req, res) {
                 // console.log('result.recordset');
                 // console.log(result.recordset);
                 console.log('result:', result.recordset);
-                res.status(200).send({ data: result.recordset});
+                res.status(200).send({ data: result.recordset });
             } catch (error) {
                 console.error('Error al obtener las epresas:', error);
                 res.status(200).send({ data: undefined });
@@ -492,39 +492,41 @@ const createDireccionEmpresa = async function (req, res) {
     // if (req.user) {
     //     if (req.user.rol == 'Administrador') {
 
-            try {
-                let idEmpresa = req.body.idEmpresa;
-                let ubigeo = req.body.ubigeo;
-                let codPais = req.body.codpais;
-                let region = req.body.region;
-                let provincia = req.body.provincia;
-                let distrito = req.body.distrito;
-                let urbanizacion = req.body.urbanizacion;
-                let direccion = req.body.direccion;
-                let codLocal = '0';
-                let principal = true;
+    try {
+        let idEmpresa = req.body.idEmpresa;
+        let ubigeo = req.body.ubigeo;
+        let codPais = req.body.codpais;
+        let region = req.body.region;
+        let provincia = req.body.provincia;
+        let distrito = req.body.distrito;
+        let urbanizacion = req.body.urbanizacion;
+        let direccion = req.body.direccion;
+        let codLocal = '0';
+        let principal = true;
 
-                let pool = await sql.connect(dbConfig);
-                let insertDireccionEmpresa = await pool.request()
-                    .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
-                    .input('ubigeo', sql.VarChar, ubigeo)
-                    .input('codPais', sql.VarChar, codPais)
-                    .input('region', sql.VarChar, region)
-                    .input('provincia', sql.VarChar, provincia)
-                    .input('distrito', sql.VarChar, distrito)
-                    .input('urbanizacion', sql.VarChar, urbanizacion)
-                    .input('direccion', sql.VarChar, direccion)
-                    .input('codLocal', sql.VarChar, codLocal)
-                    .input('principal', sql.Bit, principal)
-                    .query('insert into DireccionEmpresa (idEmpresa,ubigeo,codPais,region,provincia,distrito,urbanizacion,direccion,codLocal, principal) values (@idEmpresa,@ubigeo,@codPais,@region,@provincia,@distrito,@urbanizacion,@direccion,@codLocal,@principal)');
+        let pool = await sql.connect(dbConfig);
+        let insertDireccionEmpresa = await pool.request()
+            .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
+            .input('ubigeo', sql.VarChar, ubigeo)
+            .input('codPais', sql.VarChar, codPais)
+            .input('region', sql.VarChar, region)
+            .input('provincia', sql.VarChar, provincia)
+            .input('distrito', sql.VarChar, distrito)
+            .input('urbanizacion', sql.VarChar, urbanizacion)
+            .input('direccion', sql.VarChar, direccion)
+            .input('codLocal', sql.VarChar, codLocal)
+            .input('principal', sql.Bit, principal)
+            .query('insert into DireccionEmpresa (idEmpresa,ubigeo,codPais,region,provincia,distrito,urbanizacion,direccion,codLocal, principal) values (@idEmpresa,@ubigeo,@codPais,@region,@provincia,@distrito,@urbanizacion,@direccion,@codLocal,@principal)');
 
+        res.status(200).send({ data: insertDireccionEmpresa.rowsAffected });
 
-                res.status(200).send({ data: insertDireccionEmpresa.rowsAffected });
-            } catch (error) {
-                console.log('error', error);
-                res.status(500).send({ message: error.message, data: undefined });
+        // quiero ejecutar el metodo createSucursalEmpresa
+        createSucursalEmpresa(req, res);
+    } catch (error) {
+        console.log('error', error);
+        res.status(500).send({ message: error.message, data: undefined });
 
-            }
+    }
 
     //     }
     //     else {
@@ -534,6 +536,45 @@ const createDireccionEmpresa = async function (req, res) {
     // else {
     //     res.status(500).send({ message: 'No Access' });
     // }
+
+}
+
+//crear sucursal de la empresa 
+
+
+//crear el metodo const createSucursalEmpresa con los parametros del metodo const createDireccionEmpresa
+const createSucursalEmpresa = async function (req, res) {
+    console.log('crearSucursalEmpresa req.body', req.body);
+    //console.log('req.user', req.user);
+
+    try {
+        let idSucursal =  uuidv4();
+        let idEmpresa = req.body.idEmpresa;
+        let nombre = req.body.nombre;
+        let direccion = req.body.direccion;
+        // let idUsuario = req.body.idUsuario;
+        let fregistro = moment().format('YYYY-MM-DD');
+        let estado = true;
+
+        let pool = await sql.connect(dbConfig);
+        let insertSucursalEmpresa = await pool.request()
+            .input('idSucursal', sql.UniqueIdentifier, idSucursal)
+            .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
+            .input('nombre', sql.VarChar, nombre)
+            .input('direccion', sql.VarChar, direccion)
+            // .input('idUsuario', sql.UniqueIdentifier, idUsuario)
+            .input('fregistro', sql.DateTime, fregistro)
+            .input('estado', sql.Bit, estado)
+            .query('insert into Sucursal (idSucursal,idEmpresa,nombre,direccion,fregistro,estado) values (@idSucursal,@idEmpresa,@nombre,@direccion,@fregistro,@estado)');
+
+            //.query('insert into Sucursal (idEmpresa,nombre,direccion,fregistro,estado) values (@idEmpresa,@nombre,@direccion,@fregistro,@estado)');
+            //.query('insert into Sucursal (idEmpresa,nombre,direccion,idUsuario,fregistro,estado) values (@idEmpresa,@nombre,@direccion,@idUsuario,@fregistro,@estado)');
+        //res.status(200).send({ data: insertSucursalEmpresa.rowsAffected });
+    } catch (error) {
+        console.log('error', error);
+        res.status(500).send({ message: error.message, data: undefined });
+
+    }
 
 }
 

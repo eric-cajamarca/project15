@@ -377,6 +377,11 @@ export class UpdateEmpresaComponent {
 
   modalCrearDireccion() {
     this.direccionEmpresas = {};
+    this.direccionEmpresas.idEmpresa = this.empresas.idEmpresa;
+    this.direccionEmpresas.idUsuario = this.empresas.idUsuario;
+    this.direccionEmpresas.codpais = 'PEN';
+    this.direccionEmpresas.nombre = this.empresas.alias;
+    
   }
 
   crearDireccion() {

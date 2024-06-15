@@ -509,7 +509,7 @@
                                 <div class="col-sm-6 form-group">
                                     <label for="ac-fn">Provincia (opcional)</label>
                                     <select id="sl-provincia" name="provincia"
-                                        [(ngModel)]="direccionEmpresas.provincia" class="form-control" disabled
+                                        [(ngModel)]="direccionEmpresas.provincia" class="form-control"
                                         (change)="select_provincia()">
                                         <option value="" selected disabled>Seleccionar</option>
                                         <option value="{{item.id}}" *ngFor="let item of provincias">
@@ -519,7 +519,7 @@
                                 <div class="col-sm-6 form-group">
                                     <label for="ac-fn">Distrito (opcional)</label>
                                     <select id="sl-distrito" name="distrito"
-                                        [(ngModel)]="direccionEmpresas.distrito" class="form-control" disabled
+                                        [(ngModel)]="direccionEmpresas.distrito" class="form-control" 
                                         (change)="select_distrito($event)">
                                         <option value="" selected disabled>Seleccionar</option>
                                         <option value="{{item.id}}" *ngFor="let item of distritos">{{item.name}}
