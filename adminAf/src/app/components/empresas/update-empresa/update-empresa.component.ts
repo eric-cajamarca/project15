@@ -137,35 +137,30 @@ export class UpdateEmpresaComponent {
         //convetir el array response.data a un objeto this.empresas
         this.direccionEmpresas_const = response.data;
 
-        //buscar en regiones por el id de response.data.region y asignar el name a direccionEmpresas.region
-        const regionEncontrada = this.regiones.find((element: any) => Number(element.id) === Number(response.data[0].region));
+        
+        //recorrer del array this.direccionEmpresas_const  buscar en regiones por el id de response.data.region y asignar el name a direccionEmpresas.region
+         this.direccionEmpresas_const.forEach((direccion: any) => {
+          const regionEncontrada = this.regiones.find((element: any) => Number(element.id) === Number(direccion.region));
+          if (regionEncontrada) {
+            direccion.nregion = String(regionEncontrada.name);
+          }
 
-        if (regionEncontrada) {
+          //buscar en provincias por el id de response.data.provincia y asignar el name a direccionEmpresas.provincia
+          const provinciaEncontrada = this.provincias.find((element: any) => Number(element.id) === Number(direccion.provincia));
+          if (provinciaEncontrada) {
+            direccion.nprovincia = String(provinciaEncontrada.name);
+          }
 
-          this.direccionEmpresas_const[0].nregion = String(regionEncontrada.name);
-          console.log('this.direccionEmpresas.region', this.direccionEmpresas_const.region);
+          //buscar en distritos por el id de response.data.distrito y asignar el name a direccionEmpresas.distrito
+          const distritoEncontrada = this.distritos.find((element: any) => Number(element.id) === Number(direccion.distrito));
+          if (distritoEncontrada) {
+            direccion.ndistrito = String(distritoEncontrada.name);
+          }
         }
+        );
 
+        console.log('this.direccionEmpresas', this.direccionEmpresas_const)
 
-        //buscar en provincias por el id de response.data.provincia y asignar el name a direccionEmpresas.provincia
-        const provinciaEncontrada = this.provincias.find((element: any) => Number(element.id) === Number(response.data[0].provincia));
-
-        if (provinciaEncontrada) {
-
-          this.direccionEmpresas_const[0].nprovincia = String(provinciaEncontrada.name);
-          console.log('this.direccionEmpresas.provincia', this.direccionEmpresas_const.provincia);
-        }
-
-        //buscar en distritos por el id de response.data.distrito y asignar el name a direccionEmpresas.distrito
-        const distritoEncontrada = this.distritos.find((element: any) => Number(element.id) === Number(response.data[0].distrito));
-
-        if (distritoEncontrada) {
-
-          this.direccionEmpresas_const[0].ndistrito = String(distritoEncontrada.name);
-          console.log('this.direccionEmpresas.distrito', this.direccionEmpresas_const.distrito);
-        }
-
-        console.log('this.direccionEmpresas', this.direccionEmpresas_const);
 
       }
     )

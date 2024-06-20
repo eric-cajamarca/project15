@@ -51,9 +51,10 @@ insert into Empresas values ('5615C329-F8B6-4634-B0EF-C02B9F2315B3','6','1042652
 
 go 
 select * from Empresas
-select * from DireccionEmpresa
 select * from UsuarioWeb
+select * from DireccionEmpresa
 
+select * from sucursal
 select * from rol
 
 -- Tabla para la dirección (reutilizable varias direcciones para varias empresas)
@@ -423,6 +424,7 @@ estado bit not null
 
 
 go
+select * from empresas
 select * from DireccionEmpresa
 select * from Sucursal
 select * from UsuarioWeb

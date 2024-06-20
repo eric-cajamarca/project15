@@ -245,7 +245,7 @@ const updateEmpresa = async function (req, res) {
                     .input('Alias', sql.VarChar, alias)
                     .query('UPDATE Empresas SET Rubro = @Rubro, Celular = @Celular, nombreComercial = @nombreComercial, Correo = @Correo, Logo = @Logo, Alias = @Alias WHERE idEmpresa = @idEmpresa');
 
-                if (logoAnterior) {
+                if (logoAnterior != undefined && logoAnterior !== 'undefined') {
                     fs.unlink('./uploads/configuraciones/' + logoAnterior, (err) => {
                         if (err) throw err;
                         // Archivo eliminado correctamente
@@ -253,6 +253,25 @@ const updateEmpresa = async function (req, res) {
                 } else {
                     console.log('No se proporcionó un nombre de archivo válido para eliminar.');
                 }
+
+                // if (logoAnterior != undefined && logoAnterior !== 'undefined') {
+                //     const filePath = path.join(__dirname, '../uploads/configuraciones/', logoAnterior);
+                //     fs.access(filePath, fs.constants.F_OK, (err) => {
+                //         if (err) {
+                //             console.log('El archivo no existe.');
+                //         } else {
+                //             fs.unlink(filePath, (err) => {
+                //                 if (err) {
+                //                     console.error('Error al eliminar el archivo:', err);
+                //                 } else {
+                //                     console.log('Archivo eliminado correctamente.');
+                //                 }
+                //             });
+                //         }
+                //     });
+                // } else {
+                //     console.log('No se proporcionó un nombre de archivo válido para eliminar.');
+                // }
 
 
 
@@ -504,6 +523,11 @@ const createDireccionEmpresa = async function (req, res) {
         let codLocal = '0';
         let principal = true;
 
+        
+        //let idUsuario = 'C654A619-B725-4C2E-9175-A3F4AC3B7845';
+    
+        //let nombre = 'Mi empresa';
+
         let pool = await sql.connect(dbConfig);
         let insertDireccionEmpresa = await pool.request()
             .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
@@ -516,6 +540,8 @@ const createDireccionEmpresa = async function (req, res) {
             .input('direccion', sql.VarChar, direccion)
             .input('codLocal', sql.VarChar, codLocal)
             .input('principal', sql.Bit, principal)
+            //.input('idUsuario', sql.UniqueIdentifier, idUsuario)
+            //.input('nombre', sql.VarChar, nombre)
             .query('insert into DireccionEmpresa (idEmpresa,ubigeo,codPais,region,provincia,distrito,urbanizacion,direccion,codLocal, principal) values (@idEmpresa,@ubigeo,@codPais,@region,@provincia,@distrito,@urbanizacion,@direccion,@codLocal,@principal)');
 
         res.status(200).send({ data: insertDireccionEmpresa.rowsAffected });
@@ -548,9 +574,17 @@ const createSucursalEmpresa = async function (req, res) {
     //console.log('req.user', req.user);
 
     try {
+        let nombre = '';
+
+        if (req.body.nombre) {
+            nombre = req.body.nombre;
+        } else {
+            nombre = 'Mi sucursal';
+        }
+
         let idSucursal =  uuidv4();
         let idEmpresa = req.body.idEmpresa;
-        let nombre = req.body.nombre;
+        
         let direccion = req.body.direccion;
         // let idUsuario = req.body.idUsuario;
         let fregistro = moment().format('YYYY-MM-DD');
