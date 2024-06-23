@@ -5,66 +5,94 @@
 }
 
 .container-fluid {
-    /* Asegúrate de reemplazar 'ruta/a/tu/imagen.jpg' con la ruta a tu imagen de fondo */
+    
     background-image: url('src/assets/construccion.jpg');
-    background-size: cover; /* Asegura que la imagen cubra todo el contenedor */
-    background-position: center; /* Centra la imagen en el contenedor */
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
 }
   
 
-body {
-    height: 100%;
-
-}
-
-body {
+.container-fluid {
     display: flex;
+    justify-content: center; 
     align-items: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
-
+    height: 100vh;
 }
 
-/* .container-fluid {
-    background-color: gray !important;
-    height: 100%;
-    padding: 0;
-    
-} */
+
 
 .form-signin0 {
-    width: 100%;
+    width: 450px;
+    
+    min-width: 90%; /* Cambia el ancho al 90% del contenedor */
+    max-width: 550px; /* Aumenta el máximo ancho a 450px */
+    padding: 15px; /* Ajusta el padding para más espacio interior */
+    margin: auto; /* Simplifica las declaraciones de margen */
+    color: #909094;
+    text-align: center;
+    border-radius: 15px !important; /* Hace los bordes más redondeados */
+    border: 2px solid #7d7e81 !important; /* Hace el borde más grueso y sólido */
+    background-color: rgba(227,103,46,0.90) !important; /* Hace el fondo ligeramente más opaco */
+    
+}
+
+.form-signin {
+    width: 100%; /* Cambia el ancho al 90% del contenedor */
+    max-width: 550px !important; /* Aumenta el máximo ancho a 550px */
+    padding: 20px; /* Aumenta el padding para más espacio interior */
+    margin: auto; /* Simplifica las declaraciones de margen */
+    border-radius: 15px !important; /* Hace los bordes más redondeados */
+    /* Personalizaciones adicionales */
+    background-color: #ffffff; /* Cambia el color de fondo a blanco */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añade sombra alrededor del formulario */
+}
+
+
+/*desseo que el .container-fluid se ubique en el centro de la pantalla*/
+/* .container-fluid {
+    display: flex;
+    
+    justify-content: center; 
+    align-items: center;
+    height: 100vh;
+}
+
+
+.form-signin0 {
+  
+    width: 100% ;
     max-width: 400px;
     padding: auto;
     margin-top: auto;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: auto;
-    color: #bcbcc4;
+    color: #2626b9;
+    text-align: center;
 
     border-radius: 10px !important;
     border: 0.1px solid #012ffa57 !important;
     background-color:  rgba(227,103,46,0.80) !important;
-    /* background-color:  #e3672e !important; */
+    
 }
+
 .form-signin {
+    
     width: 100%;
-    max-width: 350px;
-    padding: auto;
+    max-width: 500px !important;
+    padding: 10px;
     margin-top: auto;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 0;
 
     border-radius: 10px !important;
-    /* background-color: rgba(128, 128, 128, 0.589) !important; */
-}
-
-/* .form{
-  background-color: #646060 !important;
-  border-radius: 10px !important;
-  text-align: center;
+    
 } */
+
+
 
 .form-signin .checkbox {
     font-weight: 400;
@@ -100,18 +128,14 @@ body {
 
 }
 
-/* .mb-4 {
-    margin-bottom: 1.5rem !important;
-    background-color: #646060 !important;
-    border-radius: 10px !important;
-} */
 
-@media (min-width: 768px) {
+
+/* @media (min-width: 768px) {
     .bd-placeholder-img-lg {
         font-size: 3.5rem;
 
     }
-}
+} */
 
 .btn-primary{
     background-color: #7a7978;
