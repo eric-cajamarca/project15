@@ -49,6 +49,7 @@ import { FormatSentenceDirective } from './format-sentence.directive';
 import { ConvertToUpperDirective } from './convert-to-upper.directive';
 import { ValidatePhoneDirective } from './validate-phone.directive';
 import { ValidateEmailDirective } from './validate-email.directive';
+import { FormatNombresDirective } from './format-nombres.directive';
 
 
 @NgModule({
@@ -93,7 +94,8 @@ import { ValidateEmailDirective } from './validate-email.directive';
     FormatSentenceDirective,
     ConvertToUpperDirective,
     ValidatePhoneDirective,
-    ValidateEmailDirective
+    ValidateEmailDirective,
+    FormatNombresDirective
   ],
   imports: [
     BrowserModule,

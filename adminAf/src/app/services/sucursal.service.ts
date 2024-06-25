@@ -42,9 +42,11 @@ export class SucursalService {
     return this._http.post(this.url+'sucursal',sucursal,{headers:headers});
   }
 
-  editar_sucursal_idEmpresa(token:any,id:any,sucursal:any):Observable<any>{
+  editar_sucursal_idEmpresa(sucursal:any,token:any):Observable<any>{
+    let id = sucursal.id;
+    let params = JSON.stringify(sucursal);
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
-    return this._http.put(this.url+'sucursal/'+id,sucursal,{headers:headers});
+    return this._http.put(this.url+'sucursal/'+id,params,{headers:headers});
   }
 
   eliminar_sucursal_idempresa(token:any,id:any):Observable<any>{

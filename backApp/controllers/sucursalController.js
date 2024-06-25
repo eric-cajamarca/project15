@@ -22,6 +22,12 @@ const obtener_sucursal_idempresa = async function (req, res) {
             try {
                 let pool = await sql.connect(dbConfig);
                 let sucursal = await pool.request().query("SELECT * FROM Sucursal WHERE idEmpresa = '" + idEmpresa + "'");
+
+                //quiero recorrer sucursal y cambiar el formato de la fecha de fregistro
+                sucursal.recordset.forEach(element => {
+                    element.fregistro = element.fregistro.toISOString().split('T')[0];
+                });           
+
                 res.status(200).send({ data: sucursal.recordset });
             } catch (error) {
                 console.log('obterner sucursal error: ' + error);
@@ -56,48 +62,45 @@ const obtener_sucursal_todos = async function (req, res) {
     }
 }
 
-const crear_sucursal_idEmpresa = async function (req, res) {
+// const crear_sucursal_idEmpresa = async function (req, res) {
 
-    const { nombre, direccion } = req.body;
+//     const { nombre, direccion } = req.body;
 
-    const idUsuario = req.user.idUsuario;
-    const idEmpresa = req.user.empresa;
-    const idSucursal = uuidv4();
+//     const idUsuario = req.user.idUsuario;
+//     const idEmpresa = req.user.empresa;
+//     const idSucursal = uuidv4();
 
-    if (req.user) {
-        if (req.user.rol == 'Administrador') {
-            try {
-                let pool = await sql.connect(dbConfig);
-                let sucursal = await pool
-                    .request()
-                    .input('idSucursal', sql.UniqueIdentifier, idSucursal)
-                    .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
-                    .input('nombre', sql.VarChar, nombre)
-                    .input('direccion', sql.VarChar, direccion)
-                    .input('idUsuario', sql.UniqueIdentifier, idUsuario)
-                    .query("INSERT INTO Sucursal (idSucursal, idEmpresa, nombre, direccion, idUsuario, fregistro) VALUES (@idSucursal, @idEmpresa, @nombre, @direccion, @idUsuario, GETDATE())");
+//     if (req.user) {
+//         if (req.user.rol == 'Administrador') {
+//             try {
+//                 let pool = await sql.connect(dbConfig);
+//                 let sucursal = await pool
+//                     .request()
+//                     .input('idSucursal', sql.UniqueIdentifier, idSucursal)
+//                     .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
+//                     .input('nombre', sql.VarChar, nombre)
+//                     .input('direccion', sql.VarChar, direccion)
+//                     .input('idUsuario', sql.UniqueIdentifier, idUsuario)
+//                     .query("INSERT INTO Sucursal (idSucursal, idEmpresa, nombre, direccion, idUsuario, fregistro) VALUES (@idSucursal, @idEmpresa, @nombre, @direccion, @idUsuario, GETDATE())");
 
-                res.status(200).send({ message: 'Sucursal creada correctamente', data: sucursal.rowsAffected });
-            } catch (error) {
-                console.log('crear sucursal error: ' + error);
-                res.status(500).send({ message: 'Error al crear la sucursal', data: undefined });
-            }
-        } else {
-            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
-        }
-    }
-    else {
-        res.status(500).send({ message: 'No Access', data: undefined });
-    }
-}
+//                 res.status(200).send({ message: 'Sucursal creada correctamente', data: sucursal.rowsAffected });
+//             } catch (error) {
+//                 console.log('crear sucursal error: ' + error);
+//                 res.status(500).send({ message: 'Error al crear la sucursal', data: undefined });
+//             }
+//         } else {
+//             res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+//         }
+//     }
+//     else {
+//         res.status(500).send({ message: 'No Access', data: undefined });
+//     }
+// }
 
 const editar_sucursal_idEmpresa = async function (req, res) {
 
-    const { idEmpresa, idUsuario, nombre, direccion } = req.body;
-
-
-    const idSucursal = req.params.id;
-
+    console.log('editar_sucursal_idEmpresa: ', req.body);
+    const { idEmpresa, idSucursal, nombre, direccion } = req.body;
 
     if (req.user) {
         if (req.user.rol == 'Administrador') {
@@ -110,8 +113,8 @@ const editar_sucursal_idEmpresa = async function (req, res) {
                     .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
                     .input('nombre', sql.VarChar, nombre)
                     .input('direccion', sql.VarChar, direccion)
-                    .input('idUsuario', sql.UniqueIdentifier, idUsuario)
-                    .query("UPDATE Sucursal SET nombre = @nombre, direccion = @direccion, idUsuario = @idUsuario, fregistro = GETDATE() WHERE idSucursal = @idSucursal and idEmpresa = @idEmpresa");
+                    
+                    .query("UPDATE Sucursal SET nombre = @nombre, direccion = @direccion, fregistro = GETDATE() WHERE idSucursal = @idSucursal and idEmpresa = @idEmpresa");
 
                 res.status(200).send({ message: 'Sucursal editada correctamente', data: sucursal.rowsAffected });
             } catch (error) {
@@ -357,7 +360,7 @@ const eliminar_stock_sucursal = async function (req, res) {
 module.exports = {
     obtener_sucursal_idempresa,
     obtener_sucursal_todos,
-    crear_sucursal_idEmpresa,
+    //crear_sucursal_idEmpresa,
     editar_sucursal_idEmpresa,
     eliminar_sucursal_idempresa,
 

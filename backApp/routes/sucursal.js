@@ -5,7 +5,7 @@ var auth  = require('../middlewares/autenticate');
 // obtener_stock_productos_sucursal
 api.get('/sucursal',auth.auth, sucursalController.obtener_sucursal_todos);
 api.get('/sucursalempresa/',auth.auth, sucursalController.obtener_sucursal_idempresa);
-api.post('/sucursal', auth.auth, sucursalController.crear_sucursal_idEmpresa);
+//api.post('/sucursal', auth.auth, sucursalController.crear_sucursal_idEmpresa);
 api.put('/sucursal/:id',auth.auth, sucursalController.editar_sucursal_idEmpresa);
 api.delete('/sucursal/:id',auth.auth, sucursalController.eliminar_sucursal_idempresa);
 

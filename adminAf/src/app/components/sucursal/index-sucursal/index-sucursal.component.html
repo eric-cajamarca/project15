@@ -9,10 +9,11 @@
         </h4>
   
         <button class="btn btn-primary" [routerLink]="['/sucursal/create']" routerLinkActive="active"
-                    style="text-align: right; margin-bottom: 20px;">crear nueva sucursal</button>
+                    style="text-align: right; margin-bottom: 20px;" disabled>crear nueva sucursal</button>
+        <h6>Puede crear una nueva sucursal en editar empresa con permisos de administrador</h6>
       </div>
   
-      <ng-container *ngIf="sucursales.length === 0">
+      <ng-container *ngIf="sucursales_const.length === 0">
         <div class="row">
           <div class="col-12">
             <div class="alert alert-danger" role="alert">
@@ -24,8 +25,34 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="sucursales.length > 0">
-
+      <ng-container *ngIf="sucursales_const.length > 0">
+        <table class="table">
+          <thead>
+              <tr>
+                  <th>Nombre</th>
+                  <th>Dirección</th>
+                  <th>Registro</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let item of sucursales_const">
+                  <td> {{item.nombre}} </td>
+                  <td>{{item.direccion }}</td>
+                  <td>{{item.fregistro}} </td>
+                  <td>
+                    <span  class="badge bg-success" *ngIf="item.estado">Activo</span>
+                    <span  class="badge bg-danger" *ngIf="!item.estado">Inactivo</span>
+                  </td>
+                  <td>
+                      <button *ngIf="!item.estado" class="btn btn-success" >Activar</button>
+                      <button *ngIf="item.estado" class="btn btn-danger" >Desactivar</button>
+                      <button class="btn btn-primary" [routerLink]="['/sucursal',item.idSucursal]" >Edit</button>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
       </ng-container>
     </div>
 </div>
