@@ -46,10 +46,83 @@
                     <span  class="badge bg-danger" *ngIf="!item.estado">Inactivo</span>
                   </td>
                   <td>
-                      <button *ngIf="!item.estado" class="btn btn-success" >Activar</button>
+                      <!-- <button *ngIf="!item.estado" class="btn btn-success" >Activar</button>
                       <button *ngIf="item.estado" class="btn btn-danger" >Desactivar</button>
-                      <button class="btn btn-primary" [routerLink]="['/sucursal',item.idSucursal]" >Edit</button>
+                      <button class="btn btn-primary" [routerLink]="['/sucursal',item.idSucursal]" >Edit</button> -->
+
+                      <!-- Example single danger button -->
+                    <!-- <div class="btn-group">
+                      <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Opciones
+                      </button>
+                      <ul class="dropdown-menu">
+                        <a style="cursor: pointer;" class="dropdown-item" *ngIf="item.estado" data-bs-toggle="modal"
+                          [attr.data-bs-target]="'#update-'+item.idSucursal">
+                          <i class="icon-1x text-dark-50 flaticon2-cross"></i> &nbsp; Desactivar
+                        </a>
+                        <a style="cursor: pointer;" class="dropdown-item" *ngIf="!item.estado" data-bs-toggle="modal"
+                          [attr.data-bs-target]="'#update-'+item.idSucursal">
+                          <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Activar
+                        </a>
+                        <a class="dropdown-item" [routerLink]="['/sucursal',item.idSucursal]">
+                          <i class="icon-1x text-dark-50 flaticon-edit"></i> &nbsp; Editar
+                        </a>
+                      </ul>
+                    </div> -->
+
+                    <div class="dropdown" ngbDropdown>
+                      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" aria-expanded="false" ngbDropdownToggle>
+                        OPciones
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" ngbDropdownMenu>
+                        <li *ngIf="item.estado">
+                          <a style="cursor: pointer;" class="dropdown-item" data-bs-toggle="modal" [attr.data-bs-target]="'#update-'+item.idSucursal">
+                            <i class="icon-1x text-dark-50 flaticon2-cross"></i> &nbsp; Desactivar
+                          </a>
+                        </li>
+                        <li *ngIf="!item.estado">
+                          <a style="cursor: pointer;" class="dropdown-item" data-bs-toggle="modal" [attr.data-bs-target]="'#update-'+item.idSucursal">
+                            <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Activar
+                          </a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" [routerLink]="['/sucursal', item.idSucursal]">
+                            <i class="icon-1x text-dark-50 flaticon-edit"></i> &nbsp; Editar
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+
+
+
+                    <div class="modal fade" id="update-{{item.idSucursal}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Cambio de estado de la sucursal: {{item.nombre}}</h5>
+                                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                      <i aria-hidden="true" class="ki ki-close"></i>
+                                  </button>
+                              </div>
+                              <div class="modal-body">
+                                  <p>Está seguro que desea cambiar el estado la sucursal?.</p>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-warning font-weight-bold" data-bs-dismiss="modal">Cerrar</button>
+                                  <button *ngIf="!load_estado" type="button" class="btn btn-danger font-weight-bold" (click)="actualizarEstado(item.idSucursal,item.estado)" data-bs-dismiss="modal">Sí, Cambiar</button>
+                  
+                                  <button *ngIf="load_estado" class="btn btn-danger" type="button" disabled>
+                                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                      Cambiando...
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+
                   </td>
+                  
               </tr>
           </tbody>
       </table>

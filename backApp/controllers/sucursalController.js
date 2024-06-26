@@ -131,6 +131,48 @@ const editar_sucursal_idEmpresa = async function (req, res) {
     }
 }
 
+const editar_estado_idsucursal = async function (req, res) {
+    console.log('editar_estado_idsucursal: ', req.body, req.params.id);
+    const  idSucursal  = req.params.id;
+    const estado = req.body.estado;
+
+    let nuevo_estado = false;
+    
+
+    if (req.user) {
+        if (req.user.rol == 'Administrador') {
+
+            if (!estado) {
+                nuevo_estado = true;
+            } else {
+                nuevo_estado = false;
+            }
+
+            console.log('nuevo_estado: ', nuevo_estado);
+            try {
+                let pool = await sql.connect(dbConfig);
+                let sucursal = await pool
+                    .request()
+                    .input('idSucursal', sql.UniqueIdentifier, idSucursal)
+                    .input('estado', sql.Bit, nuevo_estado)
+                    .query("UPDATE Sucursal SET estado = @estado WHERE idSucursal = @idSucursal");
+
+                res.status(200).send({ message: 'Estado de la sucursal editado correctamente', data: sucursal.rowsAffected });
+            } catch (error) {
+                console.log('editar sucursal error: ' + error);
+                res.status(500).send({ message: 'Error al editar la sucursal', data: undefined });
+            }
+
+        } else {
+            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+        }
+    }
+    else {
+        res.status(500).send({ message: 'No Access', data: undefined });
+    }
+
+}
+
 const eliminar_sucursal_idempresa = async function (req, res) {
     const idEmpresa = req.user.empresa;
 
@@ -363,6 +405,7 @@ module.exports = {
     //crear_sucursal_idEmpresa,
     editar_sucursal_idEmpresa,
     eliminar_sucursal_idempresa,
+    editar_estado_idsucursal,
 
     /////////////////////////////////
     obtener_stock_sucursal_idProducto,

@@ -7,6 +7,7 @@ api.get('/sucursal',auth.auth, sucursalController.obtener_sucursal_todos);
 api.get('/sucursalempresa/',auth.auth, sucursalController.obtener_sucursal_idempresa);
 //api.post('/sucursal', auth.auth, sucursalController.crear_sucursal_idEmpresa);
 api.put('/sucursal/:id',auth.auth, sucursalController.editar_sucursal_idEmpresa);
+api.put('/sucursalestado/:id',auth.auth, sucursalController.editar_estado_idsucursal);
 api.delete('/sucursal/:id',auth.auth, sucursalController.eliminar_sucursal_idempresa);
 
 //////////////////////////////////////////////////////////////////////////////////////////

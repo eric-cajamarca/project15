@@ -54,6 +54,13 @@ export class SucursalService {
     return this._http.delete(this.url+'sucursal/'+id,{headers:headers});
   }
 
+  //api.put('/sucursalestado/:id',auth.auth, sucursalController.editar_estado_idsucursal);
+  editar_estado_idsucursal(id:any,estado:any,token:any):Observable<any>{
+    console.log('estado: ',estado);
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.put(this.url+'sucursalestado/'+id,estado,{headers:headers});
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////
 // api.get('/stocksucursal',auth.auth, sucursalController.obtener_stock_sucursal_idProducto);
 // api.get('/stocksucursales/',auth.auth, sucursalController.obtener_stock_sucursales_idempresa);
