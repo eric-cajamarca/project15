@@ -131,16 +131,13 @@ export class EmpresaService {
     return this._http.put(this.url+'direccion_empresa/'+direccion._id,params,{headers:headers});
   }
   
-  // uploadLogo(file: File, token: string): Observable<any> {
-  //   const formData = new FormData();
-  //   formData.append('logo', file);
+  //api.put('/cambiar_principal/:id',auth.auth, empresasController.cambiar_principal_direccion);
 
-  //   return this._http.post(`${this.url}/upload-logo`, formData, {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`
-  //     }
-  //   });
-  // }
+  cambiar_principal_direccion(id:any,token:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.put(this.url+'cambiar_principal/'+id,{},{headers:headers});
+  }
+  
 
 
 

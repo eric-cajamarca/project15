@@ -273,7 +273,7 @@ export class CreateComprasComponent implements OnInit {
             color: '#FFF',
             class: 'text-danger',
             position: 'topRight',
-            message: 'El cliente no existe.'
+            message: 'El proveedor no existe.'
           });
         }
       },

@@ -397,6 +397,38 @@ export class UpdateEmpresaComponent {
     this.initData();
   }
 
+  updatePrincipal(id:any){
+    console.log('id',id);
+    this._empresasService.cambiar_principal_direccion(id,this.token).subscribe(
+      response => {
+        console.log('response', response);
+        if(response.data > 0){
+          iziToast.show({
+            title: 'SUCCESS',
+            titleColor: '#0062cc',
+            color: '#FFF',
+            class: 'text-success',
+            position: 'topRight',
+            message: 'Dirección principal actualizada correctamente'
+          });
+
+          this.initData();
+
+        }else{
+          iziToast.show({
+            title: 'ERROR',
+            titleColor: '#FF0000',
+            color: '#FFF',
+            class: 'text-danger',
+            position: 'topRight',
+            message: 'Error al actualizar la dirección principal'
+          });
+        }
+        
+      }
+    );
+  }
+
   // registrar(registroForm: any) {
 
   //   console.log('this.cliientes', this.empresas);

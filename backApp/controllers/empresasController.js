@@ -423,51 +423,6 @@ const cambiar_estado_colaborador_admin = async function (req, res) {
     }
 }
 
-// const admin_login = async (req, res) => {
-//     const { email, password } = req.body;
-//     const estado = true;
-//     const data = req.body;
-//     console.log('entro a login admin')
-//     console.log(data);
-
-//     const pool = await sql.connect(dbConfig);
-//     const checkEmailQuery = await pool
-//         .request()
-//         .input('email', sql.VarChar, email)
-//         .input('estado', sql.Bit, estado)
-//         .query('SELECT * FROM usuarioWeb WHERE email = @email and estado=@estado');
-
-//     console.log('checkEmailQuery');
-//     console.log(checkEmailQuery.recordset.length)
-//     if (checkEmailQuery.recordset.length > 0) {
-//         const bdPassword = checkEmailQuery.recordset[0].password;
-//         let user = checkEmailQuery.recordset[0];
-//         console.log('user');
-//         console.log(user);
-
-//         console.log(bdPassword);
-//         bcrypt.compare(password, bdPassword, (err, result) => {
-//             if (err) {
-//                 console.error('Error al comparar contraseñas:', err);
-//                 res.status(500).send('Error al comparar contraseñas');
-//             } else if (result) {
-
-//                 res.status(200).send({
-//                     data: user,
-//                     token: jwt.createToken(user)
-//                 });
-//                 console.log('las contraseñas coinciden');
-//             } else {
-
-//                 res.status(200).send({ message: 'La contraseña es incorrecta', data: undefined });
-//             }
-//         });
-//     } else {
-
-//         res.status(200).send({ message: 'El email no existe o usted no tiene permisos para acceder' });
-//     }
-// };
-
 
 
 
@@ -523,9 +478,9 @@ const createDireccionEmpresa = async function (req, res) {
         let codLocal = '0';
         let principal = true;
 
-        
+
         //let idUsuario = 'C654A619-B725-4C2E-9175-A3F4AC3B7845';
-    
+
         //let nombre = 'Mi empresa';
 
         let pool = await sql.connect(dbConfig);
@@ -582,9 +537,9 @@ const createSucursalEmpresa = async function (req, res) {
             nombre = 'Mi sucursal';
         }
 
-        let idSucursal =  uuidv4();
+        let idSucursal = uuidv4();
         let idEmpresa = req.body.idEmpresa;
-        
+
         let direccion = req.body.direccion;
         // let idUsuario = req.body.idUsuario;
         let fregistro = moment().format('YYYY-MM-DD');
@@ -601,8 +556,8 @@ const createSucursalEmpresa = async function (req, res) {
             .input('estado', sql.Bit, estado)
             .query('insert into Sucursal (idSucursal,idEmpresa,nombre,direccion,fregistro,estado) values (@idSucursal,@idEmpresa,@nombre,@direccion,@fregistro,@estado)');
 
-            //.query('insert into Sucursal (idEmpresa,nombre,direccion,fregistro,estado) values (@idEmpresa,@nombre,@direccion,@fregistro,@estado)');
-            //.query('insert into Sucursal (idEmpresa,nombre,direccion,idUsuario,fregistro,estado) values (@idEmpresa,@nombre,@direccion,@idUsuario,@fregistro,@estado)');
+        //.query('insert into Sucursal (idEmpresa,nombre,direccion,fregistro,estado) values (@idEmpresa,@nombre,@direccion,@fregistro,@estado)');
+        //.query('insert into Sucursal (idEmpresa,nombre,direccion,idUsuario,fregistro,estado) values (@idEmpresa,@nombre,@direccion,@idUsuario,@fregistro,@estado)');
         //res.status(200).send({ data: insertSucursalEmpresa.rowsAffected });
     } catch (error) {
         console.log('error', error);
@@ -674,57 +629,51 @@ const getDireccionEmpresa_id = async function (req, res) {
     }
 }
 
-// const getDirecciones_empresa = async function (req, res) {
-//     console.log('entro a getDirecciones_empresa', req.params);
-//     const idEmpresa = req.params.id;
+//convertir en principal la direccion de la empresa por su idDireccionEmpresa y el resro de direcciones en false
+const cambiar_principal_direccion = async function (req, res) {
+    console.log('entro a cambiar_principal_direccion', req.body, req.params);
+    const idDireccionEmpresa = req.params.id;
+    const idEmpresa = req.user.empresa;
 
-//     if (req.user) {
-//         if (req.user.rol == 'Administrador') {
-//             try {
-//                 const pool = await sql.connect(dbConfig);
-//                 const result = await pool
-//                     .request()
-//                     .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
-//                     .query('SELECT * FROM DireccionEmpresa WHERE idEmpresa = @idEmpresa');
-//                 res.json(result.recordset);
-//             } catch (error) {
-//                 console.error('Error al obtener las direcciones de la empresa:', error);
-//                 res.status(500).send('Error al obtener las direcciones de la empresa');
-//             }
-//         }
-//         else {
-//             res.status(401).send({ message: 'No Access' });
-//         }
+    if (req.user) {
+        if (req.user.rol == 'Administrador') {
+            try {
+                const pool = await sql.connect(dbConfig);
+                const result = await pool
+                    .request()
+                    .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
+                    .query('UPDATE DireccionEmpresa SET principal = 0 WHERE idEmpresa = @idEmpresa');
+                //res.status(200).send({ data: result.rowsAffected });
+                if (result.rowsAffected > 0) {
+                    //console.log('result.rowsAffected:', result.rowsAffected);
+                    try {
+                        const pool = await sql.connect(dbConfig);
+                        const result = await pool
+                            .request()
+                            .input('idDireccionEmpresa', sql.Int, idDireccionEmpresa)
+                            .query('UPDATE DireccionEmpresa SET principal = 1 WHERE idDireccionEmpresa = @idDireccionEmpresa');
+                        res.status(200).send({ data: result.rowsAffected });
+                    } catch (error) {
+                        console.error('Error al cambiar la direccion principal1:', error);
+                        res.status(500).send('Error al cambiar la direccion principal');
+                    }
+                }
 
-//     } else {
-//         res.status(401).send({ message: 'No Access' });
-//     }
-// }
+
+            } catch (error) {
+                console.error('Error al cambiar la direccion principal0:', error);
+                res.status(500).send('Error al cambiar la direccion principal');
+            }
 
 
-// const getDireccionEmpresa = async function (req, res) {
-//     if (req.user) {
-//         if (req.user.rol == 'Administrador') {
-//             try {
-//                 const pool = await sql.connect(dbConfig);
-//                 const result = await pool
-//                     .request()
-//                     .query('SELECT * FROM DireccionEmpresa');
-//                 res.json(result.recordset);
-//             } catch (error) {
-//                 console.error('Error al obtener las direcciones de la empresa:', error);
-//                 res.status(500).send('Error al obtener las direcciones de la empresa');
-//             }
-//         }
-//         else {
-//             res.status(401).send({ message: 'No Access' });
-//         }
-
-//     } else {
-//         res.status(401).send({ message: 'No Access' });
-//     }
-// }
-
+        }
+        else {
+            res.status(401).send({ message: 'No Access' });
+        }
+    } else {
+        res.status(401).send({ message: 'No Access' });
+    }
+}
 
 module.exports = {
     getEmpresas,
@@ -739,6 +688,7 @@ module.exports = {
     getDireccionEmpresa_id,
     createDireccionEmpresa,
     updateDireccionEmpresa,
+    cambiar_principal_direccion,
 
     //logo
     obtener_logo
