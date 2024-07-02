@@ -178,7 +178,7 @@ insert into tipoDoc values ('01','FACTURA')
 insert into tipoDoc values ('03','BOLETA DE VENTA')
 insert into tipoDoc values ('07','NOTA DE CREDITO')
 insert into tipoDoc values ('08','NOTA DE DEBITO')
-insert into tipoDoc values ('09','GUIA DE TEMISIÓN REMITENTE')
+insert into tipoDoc values ('09','GUIA DE REMISIÓN REMITENTE')
 insert into tipoDoc values ('12','TICKET DE MAQUINA REGISTRADORA')
 
 insert into tipoDoc values ('13','DOCUMENTO EMITIDO POR BANCOS, INSTITUCIONES FINANCIERAS, CREDITICIAS Y DE SEGUROS QUE

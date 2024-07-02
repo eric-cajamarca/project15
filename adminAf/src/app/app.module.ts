@@ -50,6 +50,8 @@ import { ConvertToUpperDirective } from './convert-to-upper.directive';
 import { ValidatePhoneDirective } from './validate-phone.directive';
 import { ValidateEmailDirective } from './validate-email.directive';
 import { FormatNombresDirective } from './format-nombres.directive';
+import { IndexCategoriasComponent } from './components/categorias/index-categorias/index-categorias.component';
+import { CreateCategoriasComponent } from './components/categorias/create-categorias/create-categorias.component';
 
 
 @NgModule({
@@ -95,7 +97,9 @@ import { FormatNombresDirective } from './format-nombres.directive';
     ConvertToUpperDirective,
     ValidatePhoneDirective,
     ValidateEmailDirective,
-    FormatNombresDirective
+    FormatNombresDirective,
+    IndexCategoriasComponent,
+    CreateCategoriasComponent
   ],
   imports: [
     BrowserModule,

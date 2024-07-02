@@ -1,4 +1,4 @@
-
+--truncate table estadopago
 create table EstadoPago
 (
 	idEstadoPago int identity(1,1) primary key not null,

@@ -121,6 +121,7 @@ const crear_producto = async (req, res) => {
                     .input("Codigo", sql.VarChar, Codigo.toString())
                     .input("idCategoria", sql.Int, idCategoria)
                     .input("descripcion", sql.VarChar, descripcion)
+                    .input("idMarca", sql.Int, idMarca) //idMarca
                     .input("idPresentacion", sql.Int, idPresentacion)
                     .input("cUnitario", sql.Decimal(18,5), cUnitario)
                     .input("fProduccion", sql.VarChar, fProduccion)
@@ -131,6 +132,7 @@ const crear_producto = async (req, res) => {
                     .input("facturar", sql.VarChar, facturar)
                     .input("idUsuario", sql.UniqueIdentifier, idUsuario)
                     .input("FIngreso", sql.DateTime, FIngreso)
+                    .input("estado", sql.Bit, 1) //estado
                     .query("INSERT INTO Productos VALUES (@idProducto, @idEmpresa, @Codigo, @idCategoria, @descripcion, @idPresentacion, @cUnitario, @fProduccion, @fVencimiento, @alertaMinimo, @alertaMaximo, @VecesVendidas, @facturar, @idUsuario, @FIngreso)");
 
                     

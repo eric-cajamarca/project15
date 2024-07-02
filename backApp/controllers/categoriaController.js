@@ -12,10 +12,15 @@ const dbConfig = require('../dbconfig');
 // )
 
 const obtener_Categorias = async (req, res) => {
+    const idEmpresa = req.user.empresa;
     if(req.user){
         try {
             let pool = await sql.connect(dbConfig);
-            let categorias = await pool.request().query("select * from Categorias");
+            let categorias = await pool
+            .request()
+            .input('idEmpresa',sql.UniqueIdentifier,idEmpresa)
+            .query("select * from Categoria where idEmpresa = @idEmpresa");
+            // .query("select * from Categoria");
             res.status(200).send({data: categorias.recordset});
         } catch (error) {
             res.status(500).send({message: error.message, data: undefined});

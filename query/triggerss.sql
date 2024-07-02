@@ -21,8 +21,8 @@ BEGIN
 END;
 
 ----------------------------------------------------------------
--- Crear trigger para insertar en Sucursal al agregar una nueva dirección en DireccionEmpresa
-drop trigger trg_AfterInsert_DireccionEmpresa
+-- Crear trigger para insertar en Sucursal al agregar una nueva direcciï¿½n en DireccionEmpresa
+--drop trigger trg_AfterInsert_DireccionEmpresa
 --CREATE TRIGGER trg_AfterInsert_DireccionEmpresa
 --ON DireccionEmpresa
 --AFTER INSERT
@@ -48,11 +48,11 @@ drop trigger trg_AfterInsert_DireccionEmpresa
 --        estado
 --    )
 --    VALUES (
---        NEWID(), -- Generar un nuevo id único para idSucursal
+--        NEWID(), -- Generar un nuevo id ï¿½nico para idSucursal
 --        @idEmpresa,
---        'Sucursal Nueva', -- Nombre de la sucursal, puedes ajustarlo según sea necesario
+--        'Sucursal Nueva', -- Nombre de la sucursal, puedes ajustarlo segï¿½n sea necesario
 --        @direccion,
---        '00000000-0000-0000-0000-000000000000', -- ID de usuario ficticio, cámbialo según sea necesario
+--        '00000000-0000-0000-0000-000000000000', -- ID de usuario ficticio, cï¿½mbialo segï¿½n sea necesario
 --        GETDATE(),
 --        1 -- Estado activo
 --    );
@@ -66,24 +66,61 @@ select * from Sucursal
 
 
 --crear correlativo cada vez que se agregue una nueva empresa
+--drop trigger TR_CrearCorrelativo
 CREATE TRIGGER TR_CrearCorrelativo
 ON Empresas
 AFTER INSERT
 AS
 BEGIN
     DECLARE @idEmpresa UNIQUEIDENTIFIER;
-    DECLARE @numero int;
+    declare @numero int;
 
-    -- Obtener el idEmpresa y el número deseado para el nuevo registro de Correlativos
-    SELECT @idEmpresa = idEmpresa, @numero = 10000 FROM inserted;
-
+    -- Obtener el idEmpresa y el nï¿½mero deseado para el nuevo registro de Correlativos
+    SELECT @idEmpresa = idEmpresa FROM inserted;
+	
     -- Insertar el nuevo registro en Correlativos
     INSERT INTO Correlativos (idEmpresa, numero)
-    VALUES (@idEmpresa, @numero);
+    VALUES (@idEmpresa, 10000);
 END;
 
+GO
+select * from correlativos
 
+--------------------------------------------------------
+CREATE TRIGGER trg_after_empresa_insert
+ON Empresas
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @idEmpresa UNIQUEIDENTIFIER;
 
+    -- Obtener el idEmpresa
+    SELECT @idEmpresa = idEmpresa FROM inserted;
+
+    -- Insertar registros en la tabla Comprobantes
+    INSERT INTO Comprobantes (idEmpresa, codigo, nombre, serie, numero)
+    VALUES 
+        (@idEmpresa, '01', 'Factura', 'F001', 1),
+        (@idEmpresa, '03', 'Boleta', 'B001', 1),
+        (@idEmpresa, '07', 'Nota de Credito', 'NC01', 1),
+        (@idEmpresa, '08', 'Nota de Debito', 'ND01', 1),
+        (@idEmpresa, '08', 'Nota de Debito', 'BD01', 1),
+        (@idEmpresa, '08', 'Nota de Debito', 'FD01', 1),
+        (@idEmpresa, 'RA', 'Comunicacion de Baja', '-', 1),
+        (@idEmpresa, 'RC', 'Resumen Diario', '-', 1),
+        (@idEmpresa, '10', 'Guia Remitente', 'TG01', 1),
+        (@idEmpresa, '11', 'Guia Transportista', 'RG01', 1),
+        (@idEmpresa, 'LT', 'Letra por Cobrar', 'LT', 1),
+        (@idEmpresa, 'TK', 'Ticket de Despacho', 'TK01', 1),
+        (@idEmpresa, 'NP', 'Nota de Pedido', 'NP01', 1),
+        (@idEmpresa, 'CT', 'Cotizacion', 'CT01', 1),
+        (@idEmpresa, 'NE', 'Nota de Envio', 'NE01', 1),
+        (@idEmpresa, 'RP', 'Recibo de Pago', 'RP01', 1);
+END
+GO
+
+select * from Comprobantes
 --se registrara un nuevo registro por cada nuevo producto que se agrege a los productos
 --drop trigger InsertarUnidadesPorCaja
 CREATE TRIGGER InsertarUnidadesPorCaja
@@ -116,7 +153,7 @@ AS
 BEGIN
     -- Insertar un nuevo registro en la tabla PreciosV con los valores predeterminados
     INSERT INTO PreciosV (idProducto, cUnitario, mayorista, cliente, transeunte)
-    SELECT idProducto, inserted.cUnitario, 0.0, 0.0, 0.0 -- Puedes ajustar el valor del idUsuario según tu lógica
+    SELECT idProducto, inserted.cUnitario, 0.0, 0.0, 0.0 -- Puedes ajustar el valor del idUsuario segï¿½n tu lï¿½gica
     FROM inserted;
 END;
 
@@ -141,7 +178,7 @@ BEGIN
     DECLARE @idProducto UNIQUEIDENTIFIER;
     DECLARE @cantidad DECIMAL(18, 3);
 
-    -- Obtener datos de la venta recién insertada
+    -- Obtener datos de la venta reciï¿½n insertada
     SELECT
         @idSucursal = i.idSucursal,
         @idProducto = i.idProducto,
@@ -176,7 +213,7 @@ BEGIN
     DECLARE @idProducto UNIQUEIDENTIFIER;
     DECLARE @cantidad DECIMAL(18, 3);
 
-    -- Obtener datos de la compra recién insertada
+    -- Obtener datos de la compra reciï¿½n insertada
     SELECT
         @idSucursal = i.idSucursal,
         @idProducto = i.idProducto,
@@ -211,14 +248,14 @@ BEGIN
     DECLARE @idEmpresa UNIQUEIDENTIFIER;
     DECLARE @idComprobante int;
 
-    -- Obtener datos de la venta recién insertada
+    -- Obtener datos de la venta reciï¿½n insertada
     SELECT
         @idEmpresa = i.idEmpresa,
         @idComprobante = i.idComprobante
     FROM
         inserted i;
 
-    -- Actualizar la suma del número de comprobante en la tabla Comprobantes
+    -- Actualizar la suma del nï¿½mero de comprobante en la tabla Comprobantes
     UPDATE Comprobantes
     SET numero = numero + 1
     WHERE
@@ -244,7 +281,7 @@ BEGIN
     DECLARE @fecha date;
     DECLARE @totalVenta decimal(18, 2);
 
-    -- Obtener datos de la venta recién insertada
+    -- Obtener datos de la venta reciï¿½n insertada
     SELECT
         @idEmpresa = i.idEmpresa,
         @fecha = i.fEmision,
@@ -278,7 +315,7 @@ BEGIN
 
     DECLARE @IdCompra UNIQUEIDENTIFIER, @IdProducto UNIQUEIDENTIFIER, @CantidadEliminada DECIMAL, @IdEmpresa UNIQUEIDENTIFIER;
 
-    -- Obtén los valores afectados por la operación de eliminación
+    -- Obtï¿½n los valores afectados por la operaciï¿½n de eliminaciï¿½n
     SELECT @IdCompra = IdCompra, @IdProducto = IdProducto, @CantidadEliminada = Cantidad, @IdEmpresa=idEmpresa
     FROM DELETED;
 
@@ -299,7 +336,7 @@ BEGIN
 
     DECLARE @IdCompra UNIQUEIDENTIFIER, @IdProducto UNIQUEIDENTIFIER, @CantidadAntigua DECIMAL, @CantidadNueva DECIMAL, @IdEmpresa UNIQUEIDENTIFIER;
 
-    -- Obtén los valores afectados por la operación de actualización
+    -- Obtï¿½n los valores afectados por la operaciï¿½n de actualizaciï¿½n
     SELECT @IdCompra = IdCompra, @IdProducto = IdProducto, @CantidadAntigua = Cantidad FROM DELETED;
     SELECT @CantidadNueva = Cantidad FROM INSERTED;
 

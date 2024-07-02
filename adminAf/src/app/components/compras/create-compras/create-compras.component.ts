@@ -22,7 +22,6 @@ const FORMATO_FECHA = 'dd/MM/yyyy';
 export class CreateComprasComponent implements OnInit {
 
   public compras: any = {
-    idEmpresa: '',
     idSucursal: '',
     idComprobante: '',
     idCliente: '',
@@ -769,6 +768,11 @@ export class CreateComprasComponent implements OnInit {
   registrarCompras() {
     this.compras.compCompra = this.compras.serie + '-' + this.compras.numero;
     this.loadButton = true;
+
+    // if (!this.compras.idEmpresa) {
+    //   console.log('this.compras.idEmpresa valido si idempresa esta vacio', this.compras.idEmpresa);
+    //   return;
+    // }
   
     console.log('this.compras', this.compras);
     // Aquí preparo los datos que irán a crear una compra nueva

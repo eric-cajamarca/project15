@@ -188,25 +188,26 @@ go
 select * from Presentacion
 
 
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','BG','Bolsa',1)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','CEN','Ciento',100)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','MIL','Millar',1000)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','BX','Caja',1)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','RO','Rollo',1)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','WG','Gal�n',1)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','MTR','Metros',1)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','KGM','Kilogramo',1)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','LTR','Litro',1)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','NIU','Unidad',1)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','DZN','Docena',12)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','TNE','Tonelada',1)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','PK','Paquete',1)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','SA','Saco',1)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','BO','Botella',1)
-INSERT INTO Presentacion VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','ZZ','Otros',1)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','BG','Bolsa',1)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','CEN','Ciento',100)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','MIL','Millar',1000)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','BX','Caja',1)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','RO','Rollo',1)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','WG','Gal�n',1)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','MTR','Metros',1)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','KGM','Kilogramo',1)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','LTR','Litro',1)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','NIU','Unidad',1)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','DZN','Docena',12)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','TNE','Tonelada',1)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','PK','Paquete',1)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','SA','Saco',1)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','BO','Botella',1)
+INSERT INTO Presentacion VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','ZZ','Otros',1)
 
 go
 
+--drop table comprobantes
 create table Comprobantes
 (
 idComprobante int identity (1,1) primary key not null,
@@ -214,7 +215,7 @@ idEmpresa UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE 
 codigo varchar(2) not null,
 nombre varchar(50) not null,
 serie varchar(4) not null,
-numero varchar(8) not null,
+numero int not null,
 )
 go
 
@@ -223,22 +224,22 @@ select * from Comprobantes
 select * from Empresas
 go
 
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','01','Factura','F001','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','03','Boleta','B001','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','07','Nota de credito','BC01','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','07','Nota de credito','FC01','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','08','Nota de dedito','BD01','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','08','Nota de dedito','FD01','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','RA','Comunicacion de baja','-','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','RC','Resumen diario','-','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','10','Guia Remitente','TG01','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','11','Guia Transportista','RG01','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','LT','Letra por cobrar','LT','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','TK','Ticket de despacho','TK01','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','NP','Nota de pedido','NP01','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','CT','Cotizacion','CT01','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','NE','Nota de envio','NE01','1')
-insert into Comprobantes values	('42099529-43C9-4B7F-921A-3D6FB946E93E','RP','Recibo de pago','RP01','1')
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','01','Factura','F001',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','03','Boleta','B001',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','07','Nota de credito','BC01',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','07','Nota de credito','FC01',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','08','Nota de dedito','BD01',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','08','Nota de dedito','FD01',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','RA','Comunicacion de baja','-',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','RC','Resumen diario','-',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','10','Guia Remitente','TG01',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','11','Guia Transportista','RG01',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023E','LT','Letra por cobrar','LT',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','TK','Ticket de despacho','TK01',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','NP','Nota de pedido','NP01',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','CT','Cotizacion','CT01',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','NE','Nota de envio','NE01',1)
+insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','RP','Recibo de pago','RP01',1)
 go
 
 
@@ -252,9 +253,9 @@ Descripcion varchar(200)not null,
 )
 go
 
-INSERT INTO Categorias VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','Electricidad')
-INSERT INTO Categorias VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','Carpinteria')
-INSERT INTO Categorias VALUES ('42099529-43C9-4B7F-921A-3D6FB946E93E','Pintura')
+INSERT INTO Categorias VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','Electricidad')
+INSERT INTO Categorias VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','Carpinteria')
+INSERT INTO Categorias VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','Pintura')
 --INSERT INTO Categoria VALUES ('Aceite')
 select * from Categorias
 
@@ -287,7 +288,7 @@ numero int not null,
 )
 go
 
-insert into Correlativos values('42099529-43C9-4B7F-921A-3D6FB946E93E',500000)
+insert into Correlativos values('0CE8EED8-83C6-4694-B64F-9AD82B5E4023',100000)
 insert into Correlativos values('BA51C992-7D05-459E-B419-A03358C0A788',600000)
 insert into Correlativos values('5615C329-F8B6-4634-B0EF-C02B9F2315B3',700000)
 go

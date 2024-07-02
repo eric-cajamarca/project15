@@ -37,6 +37,7 @@ import { IndexEmpresaComponent } from "./components/empresas/index-empresa/index
 import { CreateEmpresaComponent } from "./components/empresas/create-empresa/create-empresa.component";
 import { LoginEmpresaComponent } from "./components/login-empresa/login-empresa.component";
 import { UpdateEmpresaComponent } from "./components/empresas/update-empresa/update-empresa.component";
+import { IndexCategoriasComponent } from "./components/categorias/index-categorias/index-categorias.component";
 
 const appRoute : Routes = [
     {path: '', component: InicioComponent, canActivate: [AdminGuard]},
@@ -83,6 +84,10 @@ const appRoute : Routes = [
     {path: 'sucursal', component: IndexSucursalComponent, canActivate: [AdminGuard]},
     {path: 'sucursal/create', component: CreateSucursalComponent, canActivate: [AdminGuard]},
     {path: 'sucursal/:id', component: UpdateSucursalComponent, canActivate: [AdminGuard]},
+
+    //categorias
+    {path: 'categorias', component: IndexCategoriasComponent, canActivate: [AdminGuard]},
+    {path: 'categorias/create', component: CreateSucursalComponent, canActivate: [AdminGuard]},
 
     //productos
     {path: 'productos', component: IndexProductoComponent, canActivate: [AdminGuard]},
