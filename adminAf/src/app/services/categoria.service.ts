@@ -52,7 +52,7 @@ export class CategoriaService {
     
   }
 
-  editar_categoria(token:any,id:any,categoria:any):Observable<any>{
+  editar_categoria(id:any,categoria:any,token:any):Observable<any>{
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.put(this.url+'categorias/'+id,categoria,{headers:headers});
   }

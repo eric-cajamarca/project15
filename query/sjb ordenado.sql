@@ -242,22 +242,26 @@ insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','NE','No
 insert into Comprobantes values	('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','RP','Recibo de pago','RP01',1)
 go
 
-
---truncate table Categorias
-create table Categorias 
+--drop table Productos
+--drop table Categorias
+--create table Categoria
+create table Categoria 
 (
 idCategoria int identity (1,1) primary key not null,
 idEmpresa  UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Empresas(idEmpresa) ON DELETE CASCADE,
-Descripcion varchar(200)not null,
+nombre varchar(100) not null,
+descripcion varchar(200)not null,
+estado bit not null
 
 )
 go
 
 INSERT INTO Categorias VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','Electricidad')
-INSERT INTO Categorias VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','Carpinteria')
+INSERT INTO Categoria VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','Carpinteria','Carpinteria en general',1)
 INSERT INTO Categorias VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','Pintura')
 --INSERT INTO Categoria VALUES ('Aceite')
 select * from Categorias
+select * from Empresas
 
 go
 
@@ -564,3 +568,6 @@ CREATE TABLE UndPorCaja (
 );
 
 select * from UndPorCaja
+SELECT * FROM Productos
+SELECT * FROM Compras
+SELECT * FROM DetalleCompras

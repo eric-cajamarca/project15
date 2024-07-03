@@ -47,9 +47,9 @@
                   <span class="badge bg-success" *ngIf="item.estado">Activo</span>
                   <span class="badge bg-danger" *ngIf="!item.estado">Desactivado</span>
                 <td>
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-                      aria-expanded="false">
+                  <div class="btn-group" ngbDropdown>
+                    <button  class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                      aria-expanded="false" ngbDropdownToggle>
                       Opciones
                     </button>
                     <ul class="dropdown-menu">
@@ -66,7 +66,11 @@
                         <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Editar
                       </a>
                     </ul>
+                    
+                    
                   </div>
+                
+                  
 
                   <div class="modal fade" id="delete-{{item.idCategoria}}" tabindex="-1" role="dialog"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -97,7 +101,7 @@
                     </div>
                   </div>
                   <div class="modal fade" id="editar-{{item.idCategoria}}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    aria-labelledby="exampleModalLabel" aria-hidden="true" >
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">

@@ -7,6 +7,7 @@ import { variosService } from 'src/app/services/varios.service';
 
 declare var $: any;
 declare var iziToast: any;
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-index-categorias',
@@ -27,6 +28,13 @@ export class IndexCategoriasComponent {
     private _categoriaService: CategoriaService,
   ) { 
     this.token = this._cookieService.get('token');
+  }
+
+  ngAfterViewInit(): void {
+    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+      return new bootstrap.Dropdown(dropdownToggleEl);
+    });
   }
 
   ngOnInit(): void {
@@ -92,10 +100,17 @@ export class IndexCategoriasComponent {
   }
 
   seleccionar(id: any) {
-    console.log('Seleccionar marca con id: ', id);
-    console.log('this.marcas_const', this.categorias_const);
+    console.log('Seleccionar CATEGORIAS con id: ', id);
+    console.log('this.CATEGORIASs_const', this.categorias_const);
+
+    // //quiero buscar el id en el array de categorias y extraer el objeto
+    // const idEncontrado = this.categorias_const.filter((item: any) => item.idCategoria == id);
+    // this.prod_Modificar = idEncontrado[0];
+    // console.log('this.prod_Modificar', this.prod_Modificar);
     
-    this._categoriaService.obtener_categoria_id_idempresa(id, this.token).subscribe(
+    
+
+    this._categoriaService.obtener_categoria_id(id, this.token).subscribe(
       response => {
         console.log('response.data');
         console.log(response.data);
@@ -114,12 +129,14 @@ export class IndexCategoriasComponent {
         console.log(<any>error);
       }
     );
+
+
   }
 
   
   editarCategorias(id: number) {
     console.log('Editar marca con id: ', id , this.prod_Modificar);
-    this._categoriaService.editar_categoria(id, this.prod_Modificar, this.token).subscribe(
+    this._categoriaService.editar_categoria(this.prod_Modificar.idCategoria, this.prod_Modificar, this.token).subscribe(
       response=>{
         
         console.log('response.data', response.data);

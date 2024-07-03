@@ -31,24 +31,24 @@ const obtener_Categorias = async (req, res) => {
     }
 }
 
-const obtener_Categorias_idEmpresa = async (req, res) => {
+// const obtener_Categorias_idEmpresa = async (req, res) => {
 
-   const idEmpresa = req.user.empresa;
-    if(req.user){
-        try {
-            let pool = await sql.connect(dbConfig);
-            let categorias = await pool.request()
-            .input('idEmpresa',sql.UniqueIdentifier,idEmpresa)
-            .query("select * from Categorias where idEmpresa = @idEmpresa");
-            res.status(200).send({data: categorias.recordset});
-        } catch (error) {
-            res.status(500).send({message: error.message, data: undefined});
-        }
-    }
-    else {
-    res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
-    }
-}
+//    const idEmpresa = req.user.empresa;
+//     if(req.user){
+//         try {
+//             let pool = await sql.connect(dbConfig);
+//             let categorias = await pool.request()
+//             .input('idEmpresa',sql.UniqueIdentifier,idEmpresa)
+//             .query("select * from Categorias where idEmpresa = @idEmpresa");
+//             res.status(200).send({data: categorias.recordset});
+//         } catch (error) {
+//             res.status(500).send({message: error.message, data: undefined});
+//         }
+//     }
+//     else {
+//     res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+//     }
+// }
 
 const obtener_Categoria_id = async (req, res) => {
     const idCategoria = req.params.id;
@@ -57,52 +57,56 @@ const obtener_Categoria_id = async (req, res) => {
         try {
             let pool = await sql.connect(dbConfig);
             let categoria = await pool.request()
-            .input('idCategoria',sql.Int,id)
-            .query("select * from Categorias where idCategoria = @idCategoria");
-            res.status(200).send({data: categoria.recordset});
-        } catch (error) {
-            res.status(500).send({message: error.message, data: undefined});
-        }
-    }
-    else {
-    res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
-    }
-
-}
-
-const obtener_Categoria_id_idempresa = async (req, res) => {
-    const idCategoria = req.params.id;
-    const idEmpresa = req.user.empresa;
-
-    if(req.user){
-        try {
-            let pool = await sql.connect(dbConfig);
-            let categoria = await pool.request()
             .input('idCategoria',sql.Int,idCategoria)
-            .input('idEmpresa',sql.UniqueIdentifier,idEmpresa)
-            .query("select * from Categorias where idCategoria = @idCategoria and idEmpresa = @idEmpresa");
+            .query("select * from Categoria where idCategoria = @idCategoria");
             res.status(200).send({data: categoria.recordset});
         } catch (error) {
-            console.log('obtener_Categoria_id_idempresa', error);
+            console.log('obtener_Categoria_id', error);
             res.status(500).send({message: error.message, data: undefined});
         }
     }
     else {
     res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
     }
+
 }
+
+// const obtener_Categoria_id_idempresa = async (req, res) => {
+//     const idCategoria = req.params.id;
+//     const idEmpresa = req.user.empresa;
+
+//     if(req.user){
+//         try {
+//             let pool = await sql.connect(dbConfig);
+//             let categoria = await pool.request()
+//             .input('idCategoria',sql.Int,idCategoria)
+//             .input('idEmpresa',sql.UniqueIdentifier,idEmpresa)
+//             .query("select * from Categorias where idCategoria = @idCategoria and idEmpresa = @idEmpresa");
+//             res.status(200).send({data: categoria.recordset});
+//         } catch (error) {
+//             console.log('obtener_Categoria_id_idempresa', error);
+//             res.status(500).send({message: error.message, data: undefined});
+//         }
+//     }
+//     else {
+//     res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+//     }
+// }
 
 const crear_Categoria = async (req, res) => {
-    const {Descripcion } = req.body;
+    const {descripcion, nombre } = req.body;
     const idEmpresa = req.user.empresa;
+    const estado = 1;
     if(req.user){
         try {
             let pool = await sql.connect(dbConfig);
             let categoria = await pool.request()
-            .input('Descripcion',sql.VarChar,Descripcion)
             .input('idEmpresa',sql.UniqueIdentifier,idEmpresa)
-            .query("insert into Categorias (Descripcion,idEmpresa) values (@Descripcion,@idEmpresa)");
-            res.status(200).send({data: categoria.recordset});
+            .input('nombre',sql.VarChar,nombre)
+            .input('descripcion',sql.VarChar,descripcion)
+            .input('estado',sql.Bit,estado)
+            .query("insert into Categoria (idEmpresa,nombre,descripcion,estado) values (@idEmpresa,@nombre,@descripcion,@estado)");
+            res.status(200).send({data: categoria.rowsAffected});
         } catch (error) {
             console.log('crear_Categoria', error);
             res.status(500).send({message: error.message, data: undefined});
@@ -114,8 +118,8 @@ const crear_Categoria = async (req, res) => {
 
 }
 
-const editar_Categoria = async (req, res) => {
-    const {Descripcion } = req.body;
+const editar_Categoria = async function(req, res) {
+    const {descripcion, nombre } = req.body;
     const idCategoria = req.params.id;
     const idEmpresa = req.user.empresa;
 
@@ -123,11 +127,12 @@ const editar_Categoria = async (req, res) => {
         try {
             let pool = await sql.connect(dbConfig);
             let categoria = await pool.request()
-            .input('Descripcion',sql.VarChar,Descripcion)
             .input('idCategoria',sql.Int,idCategoria)
             .input('idEmpresa',sql.UniqueIdentifier,idEmpresa)
-            .query("update Categorias set Descripcion = @Descripcion where idCategoria = @idCategoria and idEmpresa = @idEmpresa");
-            res.status(200).send({data: categoria.recordset});
+            .input('nombre',sql.VarChar,nombre)
+            .input('descripcion',sql.VarChar,descripcion)
+            .query("update Categoria set nombre=@nombre, descripcion = @descripcion where idCategoria = @idCategoria and idEmpresa = @idEmpresa");
+            res.status(200).send({data: categoria.rowsAffected});
         } catch (error) {
             console.log('editar_Categoria', error);
             res.status(500).send({message: error.message, data: undefined});
@@ -166,9 +171,9 @@ const eliminar_Categoria = async (req, res) => {
 
 module.exports = {
     obtener_Categorias,
-    obtener_Categorias_idEmpresa,
+    //obtener_Categorias_idEmpresa,
     obtener_Categoria_id,
-    obtener_Categoria_id_idempresa,
+    //obtener_Categoria_id_idempresa,
     crear_Categoria,
     editar_Categoria,
     eliminar_Categoria
