@@ -260,7 +260,7 @@ INSERT INTO Categorias VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','Electrici
 INSERT INTO Categoria VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','Carpinteria','Carpinteria en general',1)
 INSERT INTO Categorias VALUES ('0CE8EED8-83C6-4694-B64F-9AD82B5E4023','Pintura')
 --INSERT INTO Categoria VALUES ('Aceite')
-select * from Categorias
+select * from Categoria
 select * from Empresas
 
 go

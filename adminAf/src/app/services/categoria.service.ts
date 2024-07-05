@@ -61,5 +61,11 @@ export class CategoriaService {
     let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
     return this._http.delete(this.url+'categorias/'+id,{headers:headers});
   }
+
+  //api.put('/cambiar_estado/:id',auth.auth, categoriaController.cambiar_estado_categoria);
+  cambiar_estado_categoria(id:any,estado:any,token:any):Observable<any>{
+    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
+    return this._http.put(this.url+'cambiar_estado/'+id,{estado},{headers:headers});
+  }
   
 }

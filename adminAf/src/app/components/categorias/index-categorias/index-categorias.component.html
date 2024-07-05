@@ -12,6 +12,18 @@
       <button class="btn btn-primary" [routerLink]="['/categorias/create']" routerLinkActive="active"
         style="text-align: right; margin-bottom: 20px;">Crear nueva categoría</button>
 
+        <div class="card-body">
+          <div class="input-group input-group-merge">
+            <input type="text" class="form-control form-control-appended" placeholder="Buscador general" name="filtro"
+              [(ngModel)]="filtro">
+            <div class="input-group-append">
+              <button class="btn btn-primary" (click)="filtrar()">
+                Buscar
+              </button>
+            </div>
+          </div>
+        </div>
+
     </div>
 
     <ng-container *ngIf="categorias.length === 0">
@@ -66,13 +78,8 @@
                         <i class="icon-1x text-dark-50 flaticon2-check-mark"></i> &nbsp; Editar
                       </a>
                     </ul>
-                    
-                    
-                  </div>
-                
-                  
 
-                  <div class="modal fade" id="delete-{{item.idCategoria}}" tabindex="-1" role="dialog"
+                    <div class="modal fade" id="delete-{{item.idCategoria}}" tabindex="-1" role="dialog"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
@@ -127,19 +134,7 @@
                               </div>
                             </div>
 
-                            <!-- <div class="col-12">
-                              <div>
-                                <label for="contacto">Contato</label>
-                                <input type="text" class="form-control" name="contacto"
-                                  [(ngModel)]="prod_Modificar.contacto">
-                              </div>
-
-                              <div>
-                                <label for="paginaWeb">Pagina Web</label>
-                                <input type="text" class="form-control" name="paginaWeb"
-                                  [(ngModel)]="prod_Modificar.paginaWeb">
-                              </div>
-                            </div> -->
+                            
                           </div>
 
 
@@ -160,6 +155,11 @@
                       </div>
                     </div>
                   </div>
+                    
+                  </div>
+                  
+
+                 
                 </td>
               </tr>
             </tbody>

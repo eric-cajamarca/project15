@@ -20,5 +20,8 @@ api.post('/categorias', auth.auth, categoriaController.crear_Categoria);
 api.put('/categorias/:id',auth.auth, categoriaController.editar_Categoria);
 api.delete('/categorias/:id',auth.auth, categoriaController.eliminar_Categoria);
 
+//cambiar_estado_categoria
+api.put('/cambiar_estado/:id',auth.auth, categoriaController.cambiar_estado_categoria);
+
 
 module.exports = api;

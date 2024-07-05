@@ -20,6 +20,7 @@ export class IndexCategoriasComponent {
   public prod_Modificar: any = {};
   public load_estado = false;
   public token: any = '';
+  public filtro = '';
   
   constructor(
     private _router: Router,
@@ -63,40 +64,45 @@ export class IndexCategoriasComponent {
 
   cambiarEstado(id: any, estado: any) {
     console.log('Cambiar estado de la marca: ', id, estado);
-    // this._categoriaService.editarEstadoMarca(id, estado,this.token).subscribe(
-    //   response => {
-    //     console.log('response.data');
-    //     console.log(response.data);
-    //     if (response.data == undefined) {
+    this._categoriaService.cambiar_estado_categoria(id, estado,this.token).subscribe(
+      response => {
+        console.log('response.data');
+        console.log(response.data);
+        if (response.data == undefined) {
 
-    //       console.log('No hay datos');
-    //     } else {
-    //       this.marcas = response.data;
+          console.log('No hay datos');
+        } else {
+          this.categorias = response.data;
           
 
-    //       iziToast.show({
-    //         title: 'SUCCESS',
-    //         titleColor: '#008000',
-    //         color: '#FFF',
-    //         class: 'text-success',
-    //         position: 'topRight',
-    //         message: 'El estado de la marca ha sido actualizado correctamente',
-    //       });
-    //       this.initData();
-    //       // $('body').removeClass('modal-open');
-    //       // $('.modal-backdrop').remove();
-    //       // //habilitar el scroll en el body en el componente
-    //       // $('body').css('overflow-y', 'auto');
+          iziToast.show({
+            title: 'SUCCESS',
+            titleColor: '#008000',
+            color: '#FFF',
+            class: 'text-success',
+            position: 'topRight',
+            message: 'El estado de la categoría ha sido actualizado correctamente',
+          });
+          this.initData();
+          
+        }
+      },
+      error => {
+        console.log('Error al obtener las categorías');
+        //console.log(<any>error);
+      }
+    );
 
+  }
 
-    //     }
-    //   },
-    //   error => {
-    //     console.log('Error al obtener marcas');
-    //     //console.log(<any>error);
-    //   }
-    // );
-
+  filtrar() {
+    if (this.filtro) {
+      //
+      var term = new RegExp(this.filtro, 'i');
+      this.categorias = this.categorias_const.filter(item => term.test(item.nombre) || term.test(item.descripcion) );
+    } else {
+      this.categorias = this.categorias_const;
+    }
   }
 
   seleccionar(id: any) {

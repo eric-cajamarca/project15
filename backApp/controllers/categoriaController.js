@@ -145,6 +145,40 @@ const editar_Categoria = async function(req, res) {
 
 }
 
+const cambiar_estado_categoria = async function(req, res) {
+    const {estado } = req.body;
+    const idCategoria = req.params.id;
+    const idEmpresa = req.user.empresa;
+    var cambioEstado = 0;
+
+    if(req.user){
+        //if(estado == 1 || estado == 0){
+            if(estado){
+
+                cambioEstado = 0;
+            }else{
+                cambioEstado = 1;
+            }
+        //}
+
+        try {
+            let pool = await sql.connect(dbConfig);
+            let categoria = await pool.request()
+            .input('idCategoria',sql.Int,idCategoria)
+            .input('idEmpresa',sql.UniqueIdentifier,idEmpresa)
+            .input('estado',sql.Bit,cambioEstado)
+            .query("update Categoria set estado=@estado where idCategoria = @idCategoria and idEmpresa = @idEmpresa");
+            res.status(200).send({data: categoria.rowsAffected});
+        } catch (error) {
+            console.log('cambiar_estado_categoria', error);
+            res.status(500).send({message: error.message, data: undefined});
+        }
+    }
+    else {
+    res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+    }
+}
+
 const eliminar_Categoria = async (req, res) => {
     const idCategoria = req.params.id;
     const idEmpresa = req.user.empresa;
@@ -176,6 +210,7 @@ module.exports = {
     //obtener_Categoria_id_idempresa,
     crear_Categoria,
     editar_Categoria,
+    cambiar_estado_categoria,
     eliminar_Categoria
 
 }

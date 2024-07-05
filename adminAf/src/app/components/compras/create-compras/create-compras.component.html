@@ -258,16 +258,21 @@
                             </div>
 
 
-                            <div>
+                            <div >
                                 <label style="width: 300px;">Categoría (*)</label>
-                                <div class="col-lg-9 col-xl-9">
-                                    <select required name="idCategoria" [(ngModel)]="nuevoProducto.idCategoria"
-                                        (ngModelChange)="onSelectCategoria($event)" class="form-control">
+                                
+                                <div class="col-lg-9 col-xl-9" style="display: inline-flex;">
+                                    <div style="width: 70%; margin-right: 10px ;">
+                                        <select required name="idCategoria" [(ngModel)]="nuevoProducto.idCategoria"
+                                        (ngModelChange)="onSelectCategoria($event)"  (click)="cargarCategorias()"  class="form-control" >
                                         <option value="" selected disabled>Seleccionar...</option>
                                         <option *ngFor="let item of categoria" [value]="item.idCategoria">{{
-                                            item.Descripcion }}
+                                            item.nombre }}
                                         </option>
                                     </select>
+                                    </div>
+                                    
+                                    <button type="button" class="btn btn-primary" (click)="agregarNuevaCategoria()">Nueva</button>
                                 </div>
                             </div>
                             <div>

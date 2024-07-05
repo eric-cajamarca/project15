@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { ClienteService } from 'src/app/services/cliente.service';
@@ -86,7 +87,8 @@ export class CreateComprasComponent implements OnInit {
     private _documentoService: DocumentoService,
     private _tablasSunatService: TablasSunatService,
     private _categoriaService: CategoriaService,
-    private _presentacionService: PresentacionService
+    private _presentacionService: PresentacionService,
+    private _router: Router,
 
   ) {
     this.token = this._cookieService.get('token');
@@ -139,15 +141,15 @@ export class CreateComprasComponent implements OnInit {
       }
     );
 
-    this._categoriaService.obtener_categorias(this.token).subscribe(
-      response => {
-        this.categoria = response.data;
-        console.log('this.categoria', this.categoria);
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    // this._categoriaService.obtener_categorias(this.token).subscribe(
+    //   response => {
+    //     this.categoria = response.data;
+    //     console.log('this.categoria', this.categoria);
+    //   },
+    //   error => {
+    //     console.log(error);
+    //   }
+    // );
 
     this._presentacionService.obtener_presentaciones(this.token).subscribe(
       response => {
@@ -251,6 +253,18 @@ export class CreateComprasComponent implements OnInit {
     );
 
 
+  }
+  cargarCategorias(){
+    this._categoriaService.obtener_categorias(this.token).subscribe(
+      response => {
+        this.categoria = response.data;
+        this.categoria.sort((a: { nombre: string; }, b: { nombre: any; }) => a.nombre.localeCompare(b.nombre));
+        console.log('this.categoria', this.categoria);
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
   buscar() {
@@ -942,6 +956,13 @@ export class CreateComprasComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  agregarNuevaCategoria() {
+    console.log('agregarNuevaCategoria', this.categoria);
+    //this._router.navigate(['/categorias/create']);
+    window.open('/categorias/create', '_blank');
+
   }
   
 
