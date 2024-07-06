@@ -10,6 +10,7 @@ import { PresentacionService } from 'src/app/services/presentacion.service';
 import { ProductoService } from 'src/app/services/producto.service';
 import { SucursalService } from 'src/app/services/sucursal.service';
 import { TablasSunatService } from 'src/app/services/tablas-sunat.service';
+import { variosService } from 'src/app/services/varios.service';
 
 declare var iziToast: any;
 declare var $: any;
@@ -72,6 +73,7 @@ export class CreateComprasComponent implements OnInit {
   };
   public correlativo: any = '';
   public loadButton: boolean = false;
+  public marcas: any = [];
   // FORMATO_FECHA = FORMATO_FECHA;
 
   public token: any;
@@ -88,6 +90,7 @@ export class CreateComprasComponent implements OnInit {
     private _tablasSunatService: TablasSunatService,
     private _categoriaService: CategoriaService,
     private _presentacionService: PresentacionService,
+    private _marcaService: variosService,
     private _router: Router,
 
   ) {
@@ -260,6 +263,20 @@ export class CreateComprasComponent implements OnInit {
         this.categoria = response.data;
         this.categoria.sort((a: { nombre: string; }, b: { nombre: any; }) => a.nombre.localeCompare(b.nombre));
         console.log('this.categoria', this.categoria);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+
+  cargarMarcas(){
+    this._marcaService.obtenerMarcas(this.token).subscribe(
+      response => {
+        this.marcas = response.data;
+        this.marcas.sort((a: { nombre: string; }, b: { nombre: any; }) => a.nombre.localeCompare(b.nombre));
+        console.log('this.marcas', this.marcas);
       },
       error => {
         console.log(error);
@@ -964,6 +981,15 @@ export class CreateComprasComponent implements OnInit {
     window.open('/categorias/create', '_blank');
 
   }
+
+  agregarNuevaSucursal(){
+    console.log('agregarNuevaSucursal', this.sucursales);
+    window.open('/sucursal/create', '_blank');
+  }
   
+  agregarNuevaMarca(){
+    console.log('agregarNuevaMarca', this.marcas);
+    window.open('/marcas/create', '_blank');
+  }
 
 }
