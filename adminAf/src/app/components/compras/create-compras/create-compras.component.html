@@ -271,7 +271,7 @@
                                     <div class="col-lg-9 col-xl-9" style="display: inline-flex;">
                                         <div style="width: 60%; margin-right: 10px ;">
                                             <select required name="idMarca" [(ngModel)]="nuevoProducto.idMarca"
-                                                (ngModelChange)="onSelectCategoria($event)" (click)="cargarMarcas()"
+                                                (ngModelChange)="onselectMarca($event)" (click)="cargarMarcas()"
                                                 class="form-control">
                                                 <option value="" selected disabled>Seleccionar...</option>
                                                 <option *ngFor="let item of marcas" [value]="item.idMarca">{{
@@ -402,6 +402,7 @@
                             <thead class="table table-dark" style="position: sticky; top: 0; z-index: 100;">
                                 <tr>
                                     <th>Código</th>
+                                    <th>Marca</th>
                                     <th>Categoría</th>
                                     <th>Producto</th>
                                     <th>Present.</th>
@@ -419,7 +420,8 @@
 
                                 <tr *ngFor="let item of detalleCompras; let idx = index">
                                     <td>{{item.codigo}}</td>
-                                    <td>{{item.categoria.Descripcion}}</td>
+                                    <td>{{item.marca.nombre}} </td>
+                                    <td>{{item.categoria.nombre}}</td>
                                     <td>{{item.descripcion}}</td>
                                     <td style="width: 60px; text-align: center;">{{item.presentacion.Descripcion}}</td>
                                     <td style="width: 60px; text-align: right;">{{item.cantidad}}</td>

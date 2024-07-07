@@ -18,22 +18,22 @@
 
                     <label for="nombre">Nombre</label>
                     <input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="marca.nombre"
-                        required>
+                        required appFormatSentence>
                 </div>
                 <div class="form-group">
                     <label for="descripcion">Descripción</label>
                     <textarea class="form-control" id="descripcion" name="descripcion" [(ngModel)]="marca.descripcion"
-                        required></textarea>
+                        required appFormatSentence></textarea>
                 </div>
                 <div class="form-group">
                     <label for="contacto">Contacto</label>
                     <input type="text" class="form-control" id="contacto" name="contacto" [(ngModel)]="marca.contacto"
-                        required>
+                        required appFormatSentence>
                 </div>
                 <div class="form-group">
                     <label for="paginaWeb">Pagina Web</label>
                     <input type="text" class="form-control" id="paginaWeb" name="paginaWeb"
-                        [(ngModel)]="marca.paginaWeb" required>
+                        [(ngModel)]="marca.paginaWeb" >
                 </div>
 
                 <div class="form-group" style="margin-top: 20px;">
