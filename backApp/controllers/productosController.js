@@ -92,7 +92,7 @@ const obtener_productos_id = async (req, res) => {
 }
 
 const crear_producto = async (req, res) => {
-    const { Codigo, idCategoria, descripcion, idPresentacion, cUnitario, fProduccion, fVencimiento, facturar } = req.body;
+    const { Codigo, idCategoria, idMarca, descripcion, idPresentacion, cUnitario, fProduccion, fVencimiento, facturar } = req.body;
 
     console.log('crear producto ', req.body);
     //crear id unico
@@ -133,7 +133,7 @@ const crear_producto = async (req, res) => {
                     .input("idUsuario", sql.UniqueIdentifier, idUsuario)
                     .input("FIngreso", sql.DateTime, FIngreso)
                     .input("estado", sql.Bit, 1) //estado
-                    .query("INSERT INTO Productos VALUES (@idProducto, @idEmpresa, @Codigo, @idCategoria, @descripcion, @idPresentacion, @cUnitario, @fProduccion, @fVencimiento, @alertaMinimo, @alertaMaximo, @VecesVendidas, @facturar, @idUsuario, @FIngreso)");
+                    .query("INSERT INTO Productos VALUES (@idProducto, @idEmpresa, @Codigo, @idCategoria, @descripcion, @idMarca, @idPresentacion, @cUnitario, @fProduccion, @fVencimiento, @alertaMinimo, @alertaMaximo, @VecesVendidas, @facturar, @idUsuario, @FIngreso, @estado)");
 
                     
                     //if(productos.rowsAffected == 1){

@@ -59,10 +59,10 @@ simbolo varchar(3)
 
 )
 --go
---insert into TipoCambio values ('SOLES',1,'S/')
---insert into TipoCambio values ('DOLARES AMERICANOS',3.688,'US$')
---insert into TipoCambio values ('EUROS',3.688,'€')
---SELECT * FROM TipoCambio
+insert into TipoCambio values ('SOLES',1,'S/')
+insert into TipoCambio values ('DOLARES AMERICANOS',3.688,'US$')
+insert into TipoCambio values ('EUROS',3.688,'€')
+SELECT * FROM TipoCambio
 --go
 
 --drop table mediospago

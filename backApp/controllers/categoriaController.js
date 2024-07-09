@@ -19,7 +19,7 @@ const obtener_Categorias = async (req, res) => {
             let categorias = await pool
             .request()
             .input('idEmpresa',sql.UniqueIdentifier,idEmpresa)
-            .query("select * from Categoria where idEmpresa = @idEmpresa");
+            .query("select * from Categorias where idEmpresa = @idEmpresa");
             // .query("select * from Categoria");
             res.status(200).send({data: categorias.recordset});
         } catch (error) {
@@ -58,7 +58,7 @@ const obtener_Categoria_id = async (req, res) => {
             let pool = await sql.connect(dbConfig);
             let categoria = await pool.request()
             .input('idCategoria',sql.Int,idCategoria)
-            .query("select * from Categoria where idCategoria = @idCategoria");
+            .query("select * from Categorias where idCategoria = @idCategoria");
             res.status(200).send({data: categoria.recordset});
         } catch (error) {
             console.log('obtener_Categoria_id', error);
@@ -105,7 +105,7 @@ const crear_Categoria = async (req, res) => {
             .input('nombre',sql.VarChar,nombre)
             .input('descripcion',sql.VarChar,descripcion)
             .input('estado',sql.Bit,estado)
-            .query("insert into Categoria (idEmpresa,nombre,descripcion,estado) values (@idEmpresa,@nombre,@descripcion,@estado)");
+            .query("insert into Categorias (idEmpresa,nombre,descripcion,estado) values (@idEmpresa,@nombre,@descripcion,@estado)");
             res.status(200).send({data: categoria.rowsAffected});
         } catch (error) {
             console.log('crear_Categoria', error);
@@ -131,7 +131,7 @@ const editar_Categoria = async function(req, res) {
             .input('idEmpresa',sql.UniqueIdentifier,idEmpresa)
             .input('nombre',sql.VarChar,nombre)
             .input('descripcion',sql.VarChar,descripcion)
-            .query("update Categoria set nombre=@nombre, descripcion = @descripcion where idCategoria = @idCategoria and idEmpresa = @idEmpresa");
+            .query("update Categorias set nombre=@nombre, descripcion = @descripcion where idCategoria = @idCategoria and idEmpresa = @idEmpresa");
             res.status(200).send({data: categoria.rowsAffected});
         } catch (error) {
             console.log('editar_Categoria', error);
@@ -167,7 +167,7 @@ const cambiar_estado_categoria = async function(req, res) {
             .input('idCategoria',sql.Int,idCategoria)
             .input('idEmpresa',sql.UniqueIdentifier,idEmpresa)
             .input('estado',sql.Bit,cambioEstado)
-            .query("update Categoria set estado=@estado where idCategoria = @idCategoria and idEmpresa = @idEmpresa");
+            .query("update Categorias set estado=@estado where idCategoria = @idCategoria and idEmpresa = @idEmpresa");
             res.status(200).send({data: categoria.rowsAffected});
         } catch (error) {
             console.log('cambiar_estado_categoria', error);

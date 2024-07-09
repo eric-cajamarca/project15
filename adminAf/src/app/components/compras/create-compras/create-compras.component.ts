@@ -640,6 +640,7 @@ export class CreateComprasComponent implements OnInit {
               facturar: 'SI',
               idStockSucursal: element.idStockSucursal,
               idEmpresa: element.idEmpresa,
+              idMarca: element.idMarca,
               idSucursal: element.idSucursal,
               ubicacion: element.ubicacion,
             };

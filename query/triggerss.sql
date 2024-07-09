@@ -21,49 +21,30 @@ BEGIN
 END;
 
 ----------------------------------------------------------------
--- Crear trigger para insertar en Sucursal al agregar una nueva direcci�n en DireccionEmpresa
---drop trigger trg_AfterInsert_DireccionEmpresa
---CREATE TRIGGER trg_AfterInsert_DireccionEmpresa
---ON DireccionEmpresa
---AFTER INSERT
---AS
---BEGIN
---    DECLARE @idEmpresa UNIQUEIDENTIFIER;
---    DECLARE @direccion VARCHAR(255);
-    
---    -- Obtener valores de la fila insertada
---    SELECT 
---        @idEmpresa = idEmpresa,
---        @direccion = direccion
---    FROM inserted;
-    
---    -- Insertar nueva sucursal
---    INSERT INTO Sucursal (
---        idSucursal,
---        idEmpresa,
---        nombre,
---        direccion,
---        idUsuario,
---        fregistro,
---        estado
---    )
---    VALUES (
---        NEWID(), -- Generar un nuevo id �nico para idSucursal
---        @idEmpresa,
---        'Sucursal Nueva', -- Nombre de la sucursal, puedes ajustarlo seg�n sea necesario
---        @direccion,
---        '00000000-0000-0000-0000-000000000000', -- ID de usuario ficticio, c�mbialo seg�n sea necesario
---        GETDATE(),
---        1 -- Estado activo
---    );
---END;
---GO
+--drop TRIGGER CrearRolesPredeterminados
+CREATE TRIGGER CrearRolesPredeterminados
+ON Empresas
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @idEmpresa UNIQUEIDENTIFIER;
 
-select * from DireccionEmpresa
-select * from Sucursal
+    -- Obtener el idEmpresa
+    SELECT @idEmpresa = idEmpresa FROM inserted;
 
+    -- Insertar registros en la tabla Comprobantes
+    INSERT INTO Rol(idRol, idEmpresa, descripcion)
+    VALUES 
+        (NEWID(), @idEmpresa, 'Vendedor'),
+		(NEWID(), @idEmpresa, 'Almacenero'),
+		(NEWID(), @idEmpresa, 'Chofer'),
+		(NEWID(), @idEmpresa, 'Despacho')
 
-
+        
+	END
+GO
+select * from rol
 
 --crear correlativo cada vez que se agregue una nueva empresa
 --drop trigger TR_CrearCorrelativo
@@ -87,7 +68,9 @@ GO
 select * from correlativos
 
 --------------------------------------------------------
-CREATE TRIGGER trg_after_empresa_insert
+--trigger para insertar registros en la tabla de comprobantes
+--drop TRIGGER trg_after_comprobantes_insert
+CREATE TRIGGER trg_after_comprobantes_insert
 ON Empresas
 AFTER INSERT
 AS
@@ -121,6 +104,106 @@ END
 GO
 
 select * from Comprobantes
+----------------------------------------------------------------------------------
+--trigger para insertar los registros para la tabla de presentaciones
+--drop trigger trg_after_empresa_insert
+CREATE TRIGGER trg_after_empresa_insert
+ON Empresas
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @idEmpresa UNIQUEIDENTIFIER;
+
+    -- Obtener el idEmpresa
+    SELECT @idEmpresa = idEmpresa FROM inserted;
+
+    -- Insertar registros en la tabla Comprobantes
+    INSERT INTO Presentacion (idEmpresa, codigo, Descripcion, Multiplicador)
+    VALUES 
+		(@idEmpresa,'BG','BOLSA',1),
+		(@idEmpresa,'BO','BOTELLA',1),
+		(@idEmpresa,'BJ','BALDE',1),
+		(@idEmpresa,'CY','CILINDRO',1),
+		(@idEmpresa,'CJ','CONO',1),
+		(@idEmpresa,'CEN','CIENTO',100),
+		(@idEmpresa,'BX','CAJA',1),
+		(@idEmpresa,'DZN','DOCENA',12),
+		(@idEmpresa,'GRM','GRAMO',1),
+		(@idEmpresa,'SET','JUEGO',1),
+		(@idEmpresa,'MTR','METRO',1),
+		(@idEmpresa,'MTK','METRO CUADRADO',1),
+		(@idEmpresa,'MTQ','METRO CUBICO',1),
+		(@idEmpresa,'MIL','MILLAR',1000),
+		(@idEmpresa,'UM','MILLON DE UNIDADES',1000000),
+		(@idEmpresa,'RO','ROLLO',1),
+		(@idEmpresa,'ONZ','ONZAS',1),
+		(@idEmpresa,'MTR','METROS',1),
+		(@idEmpresa,'KGM','KILOGRAMO',1),
+		(@idEmpresa,'KTM','KILOMETRO',1),
+		(@idEmpresa,'CA','LATAS',1),
+		(@idEmpresa,'LTR','LITRO',1),
+		(@idEmpresa,'TNE','TONELADA',1),
+		(@idEmpresa,'TU','TUBOS',1),
+		(@idEmpresa,'PF','PALETAS',1),
+		(@idEmpresa,'PK','PAQUETE',1),
+		(@idEmpresa,'PR','PAR',1),
+		(@idEmpresa,'FOT','PIES',1),
+		(@idEmpresa,'FTK','PIES CUADRADOS',1),
+		(@idEmpresa,'FTQ','PIES CUBICOS',1),
+		(@idEmpresa,'ST','PLIEGO',1),
+		(@idEmpresa,'SA','SACO',1),
+		(@idEmpresa,'NIU','UNIDAD (BIENES)',1),
+		(@idEmpresa,'ZZ','UNIDAD (SERVICIOS)',1),
+		(@idEmpresa,'GLL','US GALON (3.7843 L)',1),
+		(@idEmpresa,'YRD','YARDA',1);
+	
+END
+GO
+
+select * from presentacion
+
+
+  --      (@idEmpresa,'BG','Bolsa',1),
+		--(@idEmpresa,'BO','Botella',1),
+		--(@idEmpresa,'BJ','Balde',1),
+		--(@idEmpresa,'CY','Cilindro',1),
+		--(@idEmpresa,'CJ','Cono',1),
+  --      (@idEmpresa,'CEN','Ciento',100),
+		--(@idEmpresa,'BX','Caja',1),
+		--(@idEmpresa,'DZN','Docena',12),
+		--(@idEmpresa,'GRM','Gramo',1),
+		--(@idEmpresa,'SET','Juego',1),
+		--(@idEmpresa,'MTR','Metro',1),
+		--(@idEmpresa,'MTK','Metro cuadrado',1),
+		--(@idEmpresa,'MTQ','Metro cubico',1),
+  --      (@idEmpresa,'MIL','Millar',1000),
+		--(@idEmpresa,'UM','Millon de unidades',1000000),
+  --      (@idEmpresa,'RO','Rollo',1),
+		--(@idEmpresa,'ONZ','ONZAS',1),
+  --      (@idEmpresa,'MTR','Metros',1),
+  --      (@idEmpresa,'KGM','Kilogramo',1),
+		--(@idEmpresa,'KTM','Kilometro',1),
+		--(@idEmpresa,'CA','Latas',1),
+  --      (@idEmpresa,'LTR','Litro',1),
+  --      (@idEmpresa,'TNE','Tonelada',1),
+		--(@idEmpresa,'TU','Tubos',1),
+		--(@idEmpresa,'PF','Paletas',1),
+  --      (@idEmpresa,'PK','Paquete',1),
+		--(@idEmpresa,'PR','Par',1),
+		--(@idEmpresa,'FOT','Pies',1),
+		--(@idEmpresa,'FTK','Pies cuadrados',1),
+		--(@idEmpresa,'FTQ','Pies cubicos',1),
+		--(@idEmpresa,'ST','Pliego',1),
+  --      (@idEmpresa,'SA','Saco',1),
+		--(@idEmpresa,'NIU','Unidad (bienes)',1),
+		--(@idEmpresa,'ZZ','Unidad (servicios)',1),
+  --      (@idEmpresa,'GLL','US Galon (3.7843 L)',1),
+  --      (@idEmpresa,'YRD','Yarda',1);
+
+
+
+--------------------------------------------------------------------------------------
 --se registrara un nuevo registro por cada nuevo producto que se agrege a los productos
 --drop trigger InsertarUnidadesPorCaja
 CREATE TRIGGER InsertarUnidadesPorCaja
