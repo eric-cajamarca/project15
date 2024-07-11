@@ -7,6 +7,7 @@ import { ComprasService } from 'src/app/services/compras.service';
 import { PresentacionService } from 'src/app/services/presentacion.service';
 import { ProductoService } from 'src/app/services/producto.service';
 import { SucursalService } from 'src/app/services/sucursal.service';
+import { variosService } from 'src/app/services/varios.service';
 
 declare var $: any;
 declare var iziToast: any;
@@ -27,6 +28,7 @@ export class IndexComprasComponent implements OnInit {
   public compras: Array<any> = [];
   public compras_const: Array<any> = [];
   public detCompras: Array<any> = [];
+  public marcas: any = [];
 
   public load_estado = false;
   public categoria: any = [];
@@ -47,7 +49,8 @@ export class IndexComprasComponent implements OnInit {
     private _sucursalService: SucursalService,
     private _productoService: ProductoService,
     private _categoriaService: CategoriaService,
-    private _presentacionService: PresentacionService 
+    private _presentacionService: PresentacionService,
+    private _marcaService: variosService
   ) {
     this.token = this._cookieService.get('token');
   }
@@ -78,6 +81,17 @@ export class IndexComprasComponent implements OnInit {
       response => {
         this.sucursales = response.data;
         console.log('this.sucursales', this.sucursales);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this._marcaService.obtenerMarcas(this.token).subscribe(
+      response => {
+        this.marcas = response.data;
+        this.marcas.sort((a: { nombre: string; }, b: { nombre: any; }) => a.nombre.localeCompare(b.nombre));
+        console.log('this.marcas', this.marcas);
       },
       error => {
         console.log(error);
@@ -177,8 +191,10 @@ export class IndexComprasComponent implements OnInit {
 
             const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.producto.idPresentacion);
             element.presentacion = selectedObjectPresentacion;
-
-
+            
+            //buscar en this.marcas el idMarca y traer todo el objeto del idMarca
+            const selectedObjectMarca = this.marcas.find((item: any) => item.idMarca == element.producto.idMarca);
+            element.marca = selectedObjectMarca;
 
           }
           );

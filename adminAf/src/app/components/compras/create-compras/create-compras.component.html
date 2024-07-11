@@ -82,13 +82,13 @@
                             </div>
                             <div class="col-sm-6 col-lg-3 col-md-6">
                                 <div>
-                                    <label for="fEmision">Fecha de Emisión</label>
+                                    <label for="fEmision">Fecha de Emisión (*)</label>
                                     <input type="date" class="form-control" name="fEmision"
                                         [(ngModel)]="compras.fEmision">
                                 </div>
 
                                 <div>
-                                    <label for="fVencimiento">Fecha de Vencimiento</label>
+                                    <label for="fVencimiento">Fecha de Vencimiento (*)</label>
                                     <input type="date" class="form-control" name="fVencimiento"
                                         [(ngModel)]="compras.fVencimiento">
                                 </div>
@@ -100,7 +100,7 @@
                             <div class="col-sm-6 col-lg-3 col-md-6">
                                 <div>
                                     <div>
-                                        <label style="width: 300px;">Moneda</label>
+                                        <label style="width: 300px;">Moneda (*)</label>
                                         <div class="col-lg-9 col-xl-9">
                                             <select required name="idMoneda" [(ngModel)]="compras.idMoneda"
                                                 class="form-control">
@@ -115,7 +115,7 @@
 
                                 <div>
                                     <div class="form-group -row">
-                                        <label style="width: 300px;">Estado de pago</label>
+                                        <label style="width: 300px;">Estado de pago (*)</label>
                                         <div class="col-lg-9 col-xl-9">
                                             <select required name="idEstadoPago" [(ngModel)]="compras.idEstadoPago"
                                                 class="form-control">
@@ -132,7 +132,7 @@
                             <div class="col-sm-6 col-lg-3 col-md-6">
                                 <div>
 
-                                    <label style="width: 300px;">Medios de pago</label>
+                                    <label style="width: 300px;">Medios de pago (*)</label>
                                     <div class="col-lg-9 col-xl-9">
                                         <select required name="idMediosPago" [(ngModel)]="compras.idMediosPago"
                                             class="form-control">
@@ -197,6 +197,7 @@
                                         <th>Código</th>
                                         <th>Categoría</th>
                                         <th>Producto</th>
+                                        <th>Marca</th>
                                         <th>Present.</th>
                                         <th>Cantidad</th>
                                         <th>C.Unitario</th>
@@ -211,8 +212,9 @@
 
                                     <tr *ngFor="let item of stockSucursales; let idx = index">
                                         <th scope="row">{{item.producto.Codigo}}</th>
-                                        <td>{{item.categoria.Descripcion}} </td>
+                                        <td>{{item.categoria.nombre}} </td>
                                         <td>{{item.producto.descripcion}} </td>
+                                        <td>{{item.marca.nombre}} </td>
                                         <td style="width: 60px; text-align: center;">{{item.presentacion.Descripcion}}
                                         </td>
                                         <td style="width: 60px; text-align: right;">{{item.cantidad}}</td>
@@ -402,9 +404,9 @@
                             <thead class="table table-dark" style="position: sticky; top: 0; z-index: 100;">
                                 <tr>
                                     <th>Código</th>
-                                    <th>Marca</th>
                                     <th>Categoría</th>
                                     <th>Producto</th>
+                                    <th>Marca</th>
                                     <th>Present.</th>
                                     <th>Cantidad</th>
                                     <th>P.Unitario</th>
@@ -420,9 +422,10 @@
 
                                 <tr *ngFor="let item of detalleCompras; let idx = index">
                                     <td>{{item.codigo}}</td>
-                                    <td>{{item.marca.nombre}} </td>
+                                    
                                     <td>{{item.categoria.nombre}}</td>
                                     <td>{{item.descripcion}}</td>
+                                    <td>{{item.marca.nombre}} </td>
                                     <td style="width: 60px; text-align: center;">{{item.presentacion.Descripcion}}</td>
                                     <td style="width: 60px; text-align: right;">{{item.cantidad}}</td>
                                     <td style="width: 60px; text-align: right;">{{item.cUnitario | number:'1.2-2'}}

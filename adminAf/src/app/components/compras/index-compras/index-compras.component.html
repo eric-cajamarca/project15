@@ -139,6 +139,7 @@
                                   <th>Código</th>
                                   <th>Categoría</th>
                                   <th>Producto</th>
+                                  <th>Marca</th>
                                   <th>Present.</th>
                                   <th>Cantidad</th>
                                   <th>P.Unitario</th>
@@ -154,8 +155,9 @@
     
                                 <tr *ngFor="let item of detalleCompras; let idx = index">
                                   <td>{{item.codigo}}</td>
-                                  <td>{{item.categoria.Descripcion}}</td>
+                                  <td>{{item.categoria.nombre}}</td>
                                   <td>{{item.descripcion}}</td>
+                                  <td>{{item.marca.nombre}}</td>
                                   <td style="width: 60px; text-align: center;">{{item.presentacion.Descripcion}}</td>
                                   <td style="width: 60px; text-align: right;">{{item.cantidad}}</td>
                                   <td style="width: 60px; text-align: right;">{{item.cUnitario | number:'1.2-2'}}

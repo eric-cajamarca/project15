@@ -10,6 +10,7 @@ import { PresentacionService } from 'src/app/services/presentacion.service';
 import { ProductoService } from 'src/app/services/producto.service';
 import { SucursalService } from 'src/app/services/sucursal.service';
 import { TablasSunatService } from 'src/app/services/tablas-sunat.service';
+import { variosService } from 'src/app/services/varios.service';
 
 declare var iziToast: any;
 declare var $: any;
@@ -40,6 +41,7 @@ export class UpdateComprasComponent {
   public detalleCompras_const: any = [];
   public nuevoDetalleCompra: any = {};
   public comprobantes: any = [];
+  public marcas: any = [];
   public clientes: any = {};
   public productos: any = {};
 
@@ -94,7 +96,8 @@ export class UpdateComprasComponent {
     private _tablasSunatService: TablasSunatService,
     private _categoriaService: CategoriaService,
     private _presentacionService: PresentacionService,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _marcaService: variosService,
 
   ) {
     this.token = this._cookieService.get('token');
@@ -150,8 +153,9 @@ export class UpdateComprasComponent {
               const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.producto.idPresentacion);
               element.presentacion = selectedObjectPresentacion;
 
-
-
+              //buscar en this.marcas el idMarca y traer todo el objeto del idMarca
+              const selectedObjectMarca = this.marcas.find((item: any) => item.idMarca == element.producto.idMarca);
+              element.marca = selectedObjectMarca;
             }
             );
             this.detalleCompras = response.data;
@@ -264,6 +268,17 @@ export class UpdateComprasComponent {
       }
     );
 
+    this._marcaService.obtenerMarcas(this.token).subscribe(
+      response => {
+        this.marcas = response.data;
+        this.marcas.sort((a: { nombre: string; }, b: { nombre: any; }) => a.nombre.localeCompare(b.nombre));
+        console.log('this.marcas', this.marcas);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
     this._productoService.obtener_productos_todos(this.token).subscribe(
       response => {
         console.log('response productos', response.data);
@@ -325,7 +340,9 @@ export class UpdateComprasComponent {
               const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.producto.idPresentacion);
               element.presentacion = selectedObjectPresentacion;
 
-
+              //buscar en this.marcas el idMarca y traer todo el objeto del idMarca
+              const selectedObjectMarca = this.marcas.find((item: any) => item.idMarca == element.producto.idMarca);
+              element.marca = selectedObjectMarca;
 
             });
           } else {
@@ -405,6 +422,7 @@ export class UpdateComprasComponent {
       this.nuevoProducto.idPresentacion = this.prodSelecionado.producto.idPresentacion;
       this.nuevoProducto.idSucursal = this.prodSelecionado.idSucursal;
       this.nuevoProducto.cantidad = 0;
+      this.nuevoProducto.idMarca = this.prodSelecionado.producto.idMarca;
       this.nuevoProducto.cantidadAnterior = this.prodSelecionado.cantidad;
       this.nuevoProducto.ubicacion = this.prodSelecionado.ubicacion;
       this.nuevoProducto.idStockSucursal = this.prodSelecionado.idStockSucursal;
@@ -442,6 +460,7 @@ export class UpdateComprasComponent {
       this.nuevoProducto.idPresentacion = this.prodSelecionado.producto.idPresentacion;
       this.nuevoProducto.idSucursal = this.prodSelecionado.idSucursal;
       this.nuevoProducto.cantidad = this.prodSelecionado.cantidad;
+      this.nuevoProducto.idMarca = this.prodSelecionado.producto.idMarca;
       this.nuevoProducto.cantidadAnterior = this.prodSelecionado.cantidad;
       this.nuevoProducto.ubicacion = this.prodSelecionado.ubicacion;
       this.nuevoProducto.idStockSucursal = this.prodSelecionado.idStockSucursal;

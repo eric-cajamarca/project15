@@ -28,9 +28,9 @@ export class CreateComprasComponent implements OnInit {
     idComprobante: '',
     idCliente: '',
     idDocumento: '',
-    idMoneda: '',
+    idMoneda: "1",
     idEstadoPago: '',
-    idMediosPago: '',
+    idMediosPago: "5",
     fechaEmision: '',
     fechaPago: '',
     total: 0,
@@ -144,15 +144,26 @@ export class CreateComprasComponent implements OnInit {
       }
     );
 
-    // this._categoriaService.obtener_categorias(this.token).subscribe(
-    //   response => {
-    //     this.categoria = response.data;
-    //     console.log('this.categoria', this.categoria);
-    //   },
-    //   error => {
-    //     console.log(error);
-    //   }
-    // );
+    this._marcaService.obtenerMarcas(this.token).subscribe(
+      response => {
+        this.marcas = response.data;
+        this.marcas.sort((a: { nombre: string; }, b: { nombre: any; }) => a.nombre.localeCompare(b.nombre));
+        console.log('this.marcas', this.marcas);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this._categoriaService.obtener_categorias(this.token).subscribe(
+      response => {
+        this.categoria = response.data;
+        console.log('this.categoria', this.categoria);
+      },
+      error => {
+        console.log(error);
+      }
+    );
 
     this._presentacionService.obtener_presentaciones(this.token).subscribe(
       response => {
@@ -235,9 +246,17 @@ export class CreateComprasComponent implements OnInit {
               const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.producto.idPresentacion);
               element.presentacion = selectedObjectPresentacion;
 
+              //buscar en this.marcas el idMarca y traer todo el objeto del idMarca
+              const selectedObjectMarca = this.marcas.find((item: any) => item.idMarca == element.producto.idMarca);
+              element.marca = selectedObjectMarca;
+
+              console.log('selectedObjectMarca', selectedObjectMarca);
+
 
 
             });
+
+            console.log('this.stockSucursales', this.stockSucursales);
           } else {
             console.error('Uno de los arrays es undefined o está vacío.');
           }
@@ -258,6 +277,7 @@ export class CreateComprasComponent implements OnInit {
 
   }
   cargarCategorias(){
+    this.categoria = [];
     this._categoriaService.obtener_categorias(this.token).subscribe(
       response => {
         this.categoria = response.data;
@@ -272,6 +292,7 @@ export class CreateComprasComponent implements OnInit {
 
 
   cargarMarcas(){
+    this.marcas=[];
     this._marcaService.obtenerMarcas(this.token).subscribe(
       response => {
         this.marcas = response.data;
@@ -331,6 +352,7 @@ export class CreateComprasComponent implements OnInit {
       this.nuevoProducto.descripcion = this.prodSelecionado.producto.descripcion;
       this.nuevoProducto.cUnitario = this.prodSelecionado.producto.cUnitario;
       this.nuevoProducto.idCategoria = this.prodSelecionado.producto.idCategoria;
+      this.nuevoProducto.idMarca = this.prodSelecionado.producto.idMarca;
       this.nuevoProducto.idPresentacion = this.prodSelecionado.producto.idPresentacion;
       this.nuevoProducto.idSucursal = this.prodSelecionado.idSucursal;
       this.nuevoProducto.cantidad = 0;
@@ -365,7 +387,7 @@ export class CreateComprasComponent implements OnInit {
     if (this.filtroConsulta) {
       // quiero bucar en this.stockSucursales el codigo o la descripcion que coincida con this.filtroConsulta
       var term = new RegExp(this.filtroConsulta, 'i');
-      this.stockSucursales = this.stockSucursales_const.filter((item: { producto: { descripcion: string; Codigo: string; }; }) => term.test(item.producto.descripcion) || term.test(item.producto.Codigo));
+      this.stockSucursales = this.stockSucursales_const.filter((item: { producto: { descripcion: string; Codigo: string; }; marca:{nombre:string} }) => term.test(item.producto.descripcion) || term.test(item.producto.Codigo) || term.test(item.marca.nombre));
       console.log('this.productos despues de la busqueda', this.stockSucursales);
 
       //
@@ -609,7 +631,21 @@ export class CreateComprasComponent implements OnInit {
     this.compras.compCompra = this.compras.serie + '-' + this.compras.numero;
     this.loadButton = true;
 
-    // if (!this.compras.idEmpresa) {
+    // verifico si fechaEmision, fvencimiento, idMoneda, idEstadoPago, idMediosPago, total  son diferentes de vacio
+    if (!this.compras.fEmision || !this.compras.idMoneda || !this.compras.idEstadoPago || !this.compras.idMediosPago) {
+      console.log('this.compras.fechaEmision valido si fechaEmision esta vacio', this.compras.fechaEmision);
+      iziToast.show({
+        title: 'ERROR',
+        titleColor: '#FF0000',
+        color: '#FFF',
+        class: 'text-danger',
+        position: 'topRight',
+        message: 'Debe llenar todos los campos obligatorios (*).'
+      });
+      return;
+    }
+
+    // if (!this.compras.fechaEmision ) {
     //   console.log('this.compras.idEmpresa valido si idempresa esta vacio', this.compras.idEmpresa);
     //   return;
     // }
@@ -777,6 +813,7 @@ export class CreateComprasComponent implements OnInit {
           );
   
           this.loadButton = false;
+          this._router.navigate(['/compras']);
         }
       },
       error => {
