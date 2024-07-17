@@ -829,14 +829,13 @@ export class CreateComprasComponent implements OnInit {
 
   }
 
-  agregarNuevaSucursal(){
-    console.log('agregarNuevaSucursal', this.sucursales);
-    window.open('/sucursal/create', '_blank');
-  }
-  
   agregarNuevaMarca(){
     console.log('agregarNuevaMarca', this.marcas);
     window.open('/marcas/create', '_blank');
   }
 
+  agregarNuevaSucursal(){
+    console.log('agregarNuevaSucursal', this.sucursales);
+    window.open('/sucursal/create', '_blank');
+  }
 }

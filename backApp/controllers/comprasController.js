@@ -249,8 +249,9 @@ const editar_compra = async function (req, res) {
     const fVencimiento = fechaFormateada;
 
     if (req.user) {
-        if (req.user.rol == 'Administrador') {
-            //solo quiero editar los datos modificcados
+        if (req.user.rol == 'Administrador' || req.user.rol == 'Almacenero') {
+            //aqui deseo editar la compra
+            
             try {
                 let pool = await sql.connect(dbConfig);
                 let editarCompra = await pool

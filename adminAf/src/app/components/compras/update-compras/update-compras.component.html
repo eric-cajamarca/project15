@@ -270,30 +270,90 @@
                         </label>
 
                         <div class="col-sm-6 col-log-3 col-md-6">
-                            <div>
-                                <label for="Codigo">Código (*)</label>
-                                <input type="text" class="form-control" name="Codigo"
-                                    [(ngModel)]="nuevoProducto.codigo">
-                            </div>
+                            <!-- <div style="display: inline-flex;"> -->
+                                <div  style="width: 50%;">
+                                    <label for="Codigo">Código (*)</label>
+                                    <input type="text" class="form-control" name="Codigo"
+                                        [(ngModel)]="nuevoProducto.codigo">
+                                </div>
+                                <div>
+                                    <label style="width: 300px;">Marca (*)</label>
+
+                                    <div class="col-lg-9 col-xl-9" style="display: inline-flex;">
+                                        <div style="width: 60%; margin-right: 10px ;">
+                                            <select required name="idMarca" [(ngModel)]="nuevoProducto.idMarca"
+                                                (ngModelChange)="onselectMarca($event)" (click)="cargarMarcas()"
+                                                class="form-control">
+                                                <option value="" selected disabled>Seleccionar...</option>
+                                                <option *ngFor="let item of marcas" [value]="item.idMarca">{{
+                                                    item.nombre }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <button type="button" class="btn btn-primary"
+                                            (click)="agregarNuevaMarca()">Nueva
+                                        </button>
+
+                                    </div>
+                                </div>
+
+                            <!-- </div> -->
+
+
 
 
                             <div>
                                 <label style="width: 300px;">Categoría (*)</label>
-                                <div class="col-lg-9 col-xl-9">
-                                    <select required name="idCategoria" [(ngModel)]="nuevoProducto.idCategoria"
-                                        (ngModelChange)="onSelectCategoria($event)" class="form-control">
-                                        <option value="" selected disabled>Seleccionar...</option>
-                                        <option *ngFor="let item of categoria" [value]="item.idCategoria">{{
-                                            item.nombre }}
-                                        </option>
-                                    </select>
+
+                                <div class="col-lg-9 col-xl-9" style="display: inline-flex;">
+                                    <div style="width: 60%; margin-right: 10px ;">
+                                        <select required name="idCategoria" [(ngModel)]="nuevoProducto.idCategoria"
+                                            (ngModelChange)="onSelectCategoria($event)" (click)="cargarCategorias()"
+                                            class="form-control">
+                                            <option value="" selected disabled>Seleccionar...</option>
+                                            <option *ngFor="let item of categoria" [value]="item.idCategoria">{{
+                                                item.nombre }}
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <button type="button" class="btn btn-primary"
+                                        (click)="agregarNuevaCategoria()">Nueva</button>
+                                </div>
+                                <div>
+                                    <label for="descripcion">Descripción (*)</label>
+                                    <textarea type="text" class="form-control" name="descripcion"
+                                        [(ngModel)]="nuevoProducto.descripcion" maxlength="200"></textarea>
                                 </div>
                             </div>
-                            <div>
-                                <label for="descripcion">Descripción (*)</label>
-                                <input type="text" class="form-control" name="descripcion"
-                                    [(ngModel)]="nuevoProducto.descripcion">
-                            </div>
+
+                            <!-- <div class="col-sm-6 col-log-3 col-md-6">
+                                <div>
+                                    <label for="Codigo">Código (*)</label>
+                                    <input type="text" class="form-control" name="Codigo"
+                                        [(ngModel)]="nuevoProducto.codigo">
+                                </div>
+
+
+                                <div>
+                                    <label style="width: 300px;">Categoría (*)</label>
+                                    <div class="col-lg-9 col-xl-9">
+                                        <select required name="idCategoria" [(ngModel)]="nuevoProducto.idCategoria"
+                                            (ngModelChange)="onSelectCategoria($event)" class="form-control">
+                                            <option value="" selected disabled>Seleccionar...</option>
+                                            <option *ngFor="let item of categoria" [value]="item.idCategoria">{{
+                                                item.nombre }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="descripcion">Descripción (*)</label>
+                                    <input type="text" class="form-control" name="descripcion"
+                                        [(ngModel)]="nuevoProducto.descripcion">
+                                </div>
+                            </div> -->
                         </div>
                         <div class="col-sm-6 col-log-3 col-md-6">
                             <div>

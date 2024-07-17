@@ -91,8 +91,39 @@ const crear_detalle_compras_idcompra = async function (req, res) {
 }
 
 const editar_detalle_compras_idcompra = async (req, res) => {
+    console.log('editar_detalle_compras_idcompra reqbody: ' , req.body);
+    console.log('editar_detalle_compras_idcompra: reqparams' , req.params);
+    const {idDetalleCompra, idEmpresa, idSucursal, cantidad, idProducto, idPresentacion, pUnitario, total, idUsuario } = req.body;
+    var detalleCompra = {
+        idDetalleCompra,
+        idEmpresa,
+        idSucursal,
+        cantidad,
+        idProducto,
+        idPresentacion,
+        pUnitario,
+        total,
+        idUsuario,
+        idCompra: req.params.id
+    };
     
-    const { idEmpresa, idSucursal, idCompra, cantidad, idProducto, idPresentacion, pUnitario, total, idUsuario } = req.body;
+    console.log ('detalleCompra en editar_detalle_compras_idcompra ' , detalleCompra);
+
+    let productos = [];
+
+    detalleCompra.forEach(element => {
+        var producto = element.Producto;
+        productos.push(producto);
+    });
+
+    let stockSucursal = [];
+    productos.forEach(element => {
+        var stock = element.Stock;
+        stockSucursal.push(stock);
+        stockSucursal.push()
+    });
+
+    console.log('producto en editar_detalle_compras_idcompra: ' , productos);
 
     if (req.user) {
         if (req.user.rol == 'Administrador') {
@@ -101,16 +132,17 @@ const editar_detalle_compras_idcompra = async (req, res) => {
                 let pool = await sql.connect(dbConfig);
                 let detalleCompra = await pool
                 .request()
+                .input('idDetalleCompra', sql.Int, idDetalleCompra)
                 .input('idEmpresa', sql.UniqueIdentifier, idEmpresa)
                 .input('idSucursal', sql.UniqueIdentifier, idSucursal)
-                .input('idCompra', sql.Int, idCompra)
+                .input('idCompra', sql.UniqueIdentifier, idCompra)
                 .input('cantidad', sql.Decimal(18,3), cantidad)
                 .input('idProducto', sql.UniqueIdentifier, idProducto)
                 .input('idPresentacion', sql.Int, idPresentacion)
                 .input('pUnitario', sql.Decimal(18,5), pUnitario)
                 .input('total', sql.Decimal(18,2), total)
                 .input('idUsuario', sql.UniqueIdentifier, idUsuario)
-                .query("UPDATE DetalleCompras SET idEmpresa = @idEmpresa, idSucursal = @idSucursal, idCompra = @idCompra, cantidad = @cantidad, idProducto = @idProducto, idPresentacion = @idPresentacion, pUnitario = @pUnitario, total = @total, idUsuario = @idUsuario WHERE idCompra = '" + idCompra + "'");
+                .query("UPDATE DetalleCompras SET idEmpresa = @idEmpresa, idSucursal = @idSucursal, cantidad = @cantidad, idProducto = @idProducto, idPresentacion = @idPresentacion, pUnitario = @pUnitario, total = @total, idUsuario = @idUsuario WHERE idDetalleCompra = @idDetalleCompra and idCompra = @idCompra");
 
                 res.status(200).send({  data: detalleCompra.rowsAffected });
 
