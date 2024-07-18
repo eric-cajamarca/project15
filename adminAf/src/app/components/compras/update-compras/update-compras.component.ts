@@ -865,7 +865,7 @@ export class UpdateComprasComponent {
       console.log('compras No son iguales');
 
       this.compras.idCliente = this.compras.idCliente[0];
-
+      console.log('this.compras antes de hacer la consulta', this.compras);
       this._comprasService.editar_compra(this.idCompra,this.compras, this.token).subscribe(
         response => {
           console.log('response', response);
