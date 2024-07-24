@@ -554,6 +554,43 @@ export class PrincipalInventarioComponent {
 
   }
 
+  incrementarCantidad(idx: number) {
+    this.detalleCompras[idx].cantidad++;
+    this.actualizarSubtotal(idx);
+  }
+
+  decrementarCantidad(idx: number) {
+    if (this.detalleCompras[idx].cantidad > 0) {
+      this.detalleCompras[idx].cantidad--;
+      this.actualizarSubtotal(idx);
+    }
+  }
+
+  incrementarPUnitario(idx: number) {
+    this.detalleCompras[idx].cUnitario = parseFloat((this.detalleCompras[idx].cUnitario + 0.01).toFixed(2));
+    this.actualizarSubtotal(idx);
+  }
+
+  decrementarPUnitario(idx: number) {
+    if (this.detalleCompras[idx].cUnitario > 0) {
+      this.detalleCompras[idx].cUnitario = parseFloat((this.detalleCompras[idx].cUnitario - 0.01).toFixed(2));
+      this.actualizarSubtotal(idx);
+    }
+  }
+
+  actualizarSubtotal(idx: number) {
+    this.detalleCompras[idx].subtotal = parseFloat((this.detalleCompras[idx].cantidad * this.detalleCompras[idx].cUnitario).toFixed(2));
+  }
+
+  // quitar(idx: number, subtotal: number) {
+  //   this.detalleCompras.splice(idx, 1);
+  //   // Lógica adicional para manejar la eliminación del elemento
+  // }
+
+  modalNuevoProducto() {
+    $('#nuevoProductoModal').modal('show');
+  }
+
 
   
   registrarCompras() {}

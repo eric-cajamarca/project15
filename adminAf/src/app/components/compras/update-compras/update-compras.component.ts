@@ -134,54 +134,56 @@ export class UpdateComprasComponent {
       this._comprasService.obtener_detalle_compras_idcompra(this.idCompra, this.token).subscribe(
         response => {
           console.log('response detalle compras', response);
-          if (response.data != undefined) {
+          this.detalleCompras = response.data;
+          this.llenarDetalleCompras();
+          // if (response.data != undefined) {
 
-            response.data.forEach((element: any) => {
-              //buscar en this.productos el codigo y traer todo el objeto del codigo
-              const selectedObject = this.productos.find((item: any) => item.idProducto == element.idProducto);
-              element.producto = selectedObject;
+          //   response.data.forEach((element: any) => {
+          //     //buscar en this.productos el codigo y traer todo el objeto del codigo
+          //     const selectedObject = this.productos.find((item: any) => item.idProducto == element.idProducto);
+          //     element.producto = selectedObject;
 
-              //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
-              const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
-              element.sucursal = selectedObjectSucursal;
+          //     //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
+          //     const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
+          //     element.sucursal = selectedObjectSucursal;
 
-              //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
-              const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.producto.idCategoria);
-              element.categoria = selectedObjectCategoria;
+          //     //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
+          //     const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.producto.idCategoria);
+          //     element.categoria = selectedObjectCategoria;
 
-              //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
+          //     //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
 
-              const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.producto.idPresentacion);
-              element.presentacion = selectedObjectPresentacion;
+          //     const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.producto.idPresentacion);
+          //     element.presentacion = selectedObjectPresentacion;
 
-              //buscar en this.marcas el idMarca y traer todo el objeto del idMarca
-              const selectedObjectMarca = this.marcas.find((item: any) => item.idMarca == element.producto.idMarca);
-              element.marca = selectedObjectMarca;
-            }
-            );
-            this.detalleCompras = response.data;
-            this.detalleCompras_const = JSON.parse(JSON.stringify(response.data));
-
-
-            //quiero recorrer detallecompras y modificar algunos campos
-            this.detalleCompras.forEach((element: any) => {
-              element.idPresentacion = element.producto.idPresentacion;
-              element.idCategoria = element.producto.idCategoria;
-              element.idSucursal = element.sucursal.idSucursal;
-              element.cUnitario = element.pUnitario;
-              element.subtotal = element.total;
-              element.descripcion = element.producto.descripcion;
-              element.codigo = element.producto.Codigo;
-              element.fProduccion = element.producto.fProduccion;
-              element.fVencimiento = element.producto.fVencimiento;
-            });
+          //     //buscar en this.marcas el idMarca y traer todo el objeto del idMarca
+          //     const selectedObjectMarca = this.marcas.find((item: any) => item.idMarca == element.producto.idMarca);
+          //     element.marca = selectedObjectMarca;
+          //   }
+          //   );
+          //   this.detalleCompras = response.data;
+          //   this.detalleCompras_const = JSON.parse(JSON.stringify(response.data));
 
 
+          //   //quiero recorrer detallecompras y modificar algunos campos
+          //   this.detalleCompras.forEach((element: any) => {
+          //     element.idPresentacion = element.producto.idPresentacion;
+          //     element.idCategoria = element.producto.idCategoria;
+          //     element.idSucursal = element.sucursal.idSucursal;
+          //     element.cUnitario = element.pUnitario;
+          //     element.subtotal = element.total;
+          //     element.descripcion = element.producto.descripcion;
+          //     element.codigo = element.producto.Codigo;
+          //     element.fProduccion = element.producto.fProduccion;
+          //     element.fVencimiento = element.producto.fVencimiento;
+          //   });
 
 
-            this.loadCompras = false;
-            console.log('this.detalleCompras', this.detalleCompras);
-          }
+
+
+          //   this.loadCompras = false;
+          //   console.log('this.detalleCompras', this.detalleCompras);
+          // }
         },
         error => {
           console.log(error);
@@ -191,6 +193,58 @@ export class UpdateComprasComponent {
 
     // this.initData();
 
+  }
+
+  llenarDetalleCompras() {
+    if (this.detalleCompras != undefined) {
+
+      this.detalleCompras.forEach((element: any) => {
+        //buscar en this.productos el codigo y traer todo el objeto del codigo
+        const selectedObject = this.productos.find((item: any) => item.idProducto == element.idProducto);
+        element.producto = selectedObject;
+
+        //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
+        const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
+        element.sucursal = selectedObjectSucursal;
+
+        //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
+        const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.producto.idCategoria);
+        element.categoria = selectedObjectCategoria;
+
+        //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
+
+        const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.producto.idPresentacion);
+        element.presentacion = selectedObjectPresentacion;
+
+        //buscar en this.marcas el idMarca y traer todo el objeto del idMarca
+        const selectedObjectMarca = this.marcas.find((item: any) => item.idMarca == element.producto.idMarca);
+        element.marca = selectedObjectMarca;
+      }
+      );
+      // this.detalleCompras = response.data;
+      this.detalleCompras_const = JSON.parse(JSON.stringify(this.detalleCompras));
+
+
+      //quiero recorrer detallecompras y modificar algunos campos
+      this.detalleCompras.forEach((element: any) => {
+        element.idPresentacion = element.producto.idPresentacion;
+        element.idCategoria = element.producto.idCategoria;
+        element.idSucursal = element.sucursal.idSucursal;
+        element.pUnitario = element.pUnitario;
+        element.idMarca = element.producto.idMarca;
+        element.subtotal = element.total;
+        element.descripcion = element.producto.descripcion;
+        element.codigo = element.producto.Codigo;
+        element.fProduccion = element.producto.fProduccion;
+        element.fVencimiento = element.producto.fVencimiento;
+      });
+
+
+
+
+      this.loadCompras = false;
+      console.log('this.detalleCompras', this.detalleCompras);
+    }
   }
 
   initData() {
@@ -280,16 +334,16 @@ export class UpdateComprasComponent {
       }
     );
 
-    this._marcaService.obtenerMarcas(this.token).subscribe(
-      response => {
-        this.marcas = response.data;
-        this.marcas.sort((a: { nombre: string; }, b: { nombre: any; }) => a.nombre.localeCompare(b.nombre));
-        console.log('this.marcas', this.marcas);
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    // this._marcaService.obtenerMarcas(this.token).subscribe(
+    //   response => {
+    //     this.marcas = response.data;
+    //     this.marcas.sort((a: { nombre: string; }, b: { nombre: any; }) => a.nombre.localeCompare(b.nombre));
+    //     console.log('this.marcas', this.marcas);
+    //   },
+    //   error => {
+    //     console.log(error);
+    //   }
+    // );
 
     this._productoService.obtener_productos_todos(this.token).subscribe(
       response => {
@@ -455,7 +509,7 @@ export class UpdateComprasComponent {
       this.nuevoProducto.idProducto = this.prodSelecionado.idProducto;
       this.nuevoProducto.codigo = this.prodSelecionado.producto.Codigo;
       this.nuevoProducto.descripcion = this.prodSelecionado.producto.descripcion;
-      this.nuevoProducto.cUnitario = this.prodSelecionado.producto.cUnitario;
+      this.nuevoProducto.pUnitario = this.prodSelecionado.producto.cUnitario;
       this.nuevoProducto.idCategoria = this.prodSelecionado.producto.idCategoria;
       this.nuevoProducto.idPresentacion = this.prodSelecionado.producto.idPresentacion;
       this.nuevoProducto.idSucursal = this.prodSelecionado.idSucursal;
@@ -640,6 +694,8 @@ export class UpdateComprasComponent {
 
   agregarProductoNuevo() {
 
+    console.log('this.nuevoProducto', this.nuevoProducto);
+
     if (!this.editardetalle) {
       //quiero agregar la condicion di idProducto, idpresentacion, idcategoria y idsucursal no estan vacios
 
@@ -651,54 +707,49 @@ export class UpdateComprasComponent {
         this.nuevoProducto.fVencimiento = undefined;
       }
 
+      this.nuevoProducto.subtotal = Number(this.nuevoProducto.pUnitario) * Number(this.nuevoProducto.cantidad);
+
       if (this.nuevoProducto.idPresentacion != undefined && this.nuevoProducto.idCategoria != undefined && this.nuevoProducto.idSucursal != undefined) {
         this.detalleCompras.push(this.nuevoProducto);
         console.log('si hay datos que guardar')
 
+
+        // this.detalleCompras.forEach((element: any) => {
+        //   console.log('this.detalleCompras.idProducto != undefined');
+        //   element.subtotal = element.pUnitario * element.cantidad;
+
+        // });
+
         try {
           if (this.detalleCompras.idProducto != undefined) {
-            this.detalleCompras.forEach((element: any) => {
-              console.log('this.detalleCompras.idProducto != undefined');
-              //buscar en this.productos el codigo y traer todo el objeto del codigo
-              const selectedObject = this.productos.find((item: any) => item.idProducto == element.idProducto);
-              element.producto = selectedObject;
-              // Ahora, selectedObject contiene toda la información del elemento seleccionado
-              //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
-              const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
-              element.sucursal = selectedObjectSucursal;
-
-              //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
-              const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.idSucursal);
-              element.categoria = selectedObjectCategoria;
-
-              //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
-              const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.idSucursal);
-              element.presentacion = selectedObjectPresentacion;
-
-
-
-            });
+           
+            this.llenarDetalleCompras();
+          
           } else {
 
             console.log('this.detalleCompras.idProducto != undefined');
-            this.detalleCompras.forEach((element: any) => {
+            // this.detalleCompras.forEach((element: any) => {
 
-              //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
-              const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == this.nuevoProducto.idSucursal);
-              element.sucursal = selectedObjectSucursal;
+            //   //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
+            //   const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == this.nuevoProducto.idSucursal);
+            //   element.sucursal = selectedObjectSucursal;
 
-              //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
-              const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == this.nuevoProducto.idCategoria);
-              element.categoria = selectedObjectCategoria;
+            //   //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
+            //   const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == this.nuevoProducto.idCategoria);
+            //   element.categoria = selectedObjectCategoria;
 
-              //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
-              const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == this.nuevoProducto.idPresentacion);
-              element.presentacion = selectedObjectPresentacion;
+            //   //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
+            //   const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == this.nuevoProducto.idPresentacion);
+            //   element.presentacion = selectedObjectPresentacion;
 
 
 
-            });
+            // });
+            
+            this.llenarDetalleCompras();
           }
+
+          console.log('this.detalleCompras', this.detalleCompras);
         } catch (error) {
           console.log(error);
         }
@@ -716,45 +767,46 @@ export class UpdateComprasComponent {
       }
     }
     else {
-      //aqui quiero editar el detalle de compras utilizando el indice de la fila seleccionada
-      console.log('Aquí quiero editar el detalle de compras utilizando el índice de la fila seleccionada');
-      console.log('this.nuevoProducto', this.nuevoProducto);
-      console.log('this.detalleCompras', this.detalleCompras);
+      // //aqui quiero editar el detalle de compras utilizando el indice de la fila seleccionada
+      // console.log('Aquí quiero editar el detalle de compras utilizando el índice de la fila seleccionada');
+      // console.log('this.nuevoProducto', this.nuevoProducto);
+      // console.log('this.detalleCompras', this.detalleCompras);
 
-      // Buscar el elemento correspondiente en detalleCompras
-      const index = this.detalleCompras.findIndex((element: any) => element.idProducto === this.nuevoProducto.idProducto);
+      // // Buscar el elemento correspondiente en detalleCompras
+      // const index = this.detalleCompras.findIndex((element: any) => element.idProducto === this.nuevoProducto.idProducto);
 
-      if (index !== -1) { // Si se encuentra el elemento en detalleCompras
-        const element = this.detalleCompras[index];
-        // Actualizar los campos del elemento con los datos del nuevo producto
-        element.idProducto = this.nuevoProducto.idProducto;
-        element.codigo = this.nuevoProducto.codigo;
-        element.descripcion = this.nuevoProducto.descripcion;
-        element.cUnitario = this.nuevoProducto.cUnitario;
-        element.cantidad = this.nuevoProducto.cantidad;
-        element.subtotal = this.nuevoProducto.cUnitario * this.nuevoProducto.cantidad;
-        element.idCategoria = this.nuevoProducto.idCategoria;
-        element.idPresentacion = this.nuevoProducto.idPresentacion;
-        element.idSucursal = this.nuevoProducto.idSucursal;
-        element.ubicacion = this.nuevoProducto.ubicacion;
-        element.fProduccion = this.nuevoProducto.fProduccion;
-        element.fVencimiento = this.nuevoProducto.fVencimiento;
+      // if (index !== -1) { // Si se encuentra el elemento en detalleCompras
+      //   const element = this.detalleCompras[index];
+      //   // Actualizar los campos del elemento con los datos del nuevo producto
+      //   element.idProducto = this.nuevoProducto.idProducto;
+      //   element.codigo = this.nuevoProducto.codigo;
+      //   element.descripcion = this.nuevoProducto.descripcion;
+      //   element.cUnitario = this.nuevoProducto.cUnitario;
+      //   element.cantidad = this.nuevoProducto.cantidad;
+      //   element.subtotal = this.nuevoProducto.cUnitario * this.nuevoProducto.cantidad;
+      //   element.idCategoria = this.nuevoProducto.idCategoria;
+      //   element.idPresentacion = this.nuevoProducto.idPresentacion;
+      //   element.idSucursal = this.nuevoProducto.idSucursal;
+      //   element.ubicacion = this.nuevoProducto.ubicacion;
+      //   element.fProduccion = this.nuevoProducto.fProduccion;
+      //   element.fVencimiento = this.nuevoProducto.fVencimiento;
+      //   element.idMarca = this.nuevoProducto.idMarca;
 
 
-        //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
-        const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
-        element.sucursal = selectedObjectSucursal;
+      //   //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
+      //   const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
+      //   element.sucursal = selectedObjectSucursal;
 
-        //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
-        const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.idCategoria);
-        element.categoria = selectedObjectCategoria;
+      //   //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
+      //   const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.idCategoria);
+      //   element.categoria = selectedObjectCategoria;
 
-        //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
-        const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.idPresentacion);
-        element.presentacion = selectedObjectPresentacion;
-      }
+      //   //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
+      //   const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.idPresentacion);
+      //   element.presentacion = selectedObjectPresentacion;
+      // }
 
-      this.editardetalle = false;
+      // this.editardetalle = false;
 
 
 
@@ -766,18 +818,18 @@ export class UpdateComprasComponent {
 
 
     //deseo multiplicar el precio por la cantidad de this.nuevoProducto
-    this.nuevoProducto.subtotal = this.nuevoProducto.cUnitario * this.nuevoProducto.cantidad;
+    //this.nuevoProducto.subtotal = this.nuevoProducto.cUnitario * this.nuevoProducto.cantidad;
     console.log('this.nuevoProducto', this.nuevoProducto);
 
 
     console.log('this.detalleCompras', this.detalleCompras);
 
-    //deseo recorrer detalleCompras y sumar el subtotal y guardarlo en this.compras.total
-    this.compras.subTotal = 0;
-    this.detalleCompras.forEach((element: any) => {
-      this.compras.subTotal = this.compras.subTotal + element.subtotal;
-    });
-
+    // //deseo recorrer detalleCompras y sumar el subtotal y guardarlo en this.compras.total
+    // this.compras.subTotal = 0;
+    // this.detalleCompras.forEach((element: any) => {
+    //   this.compras.subTotal = this.compras.subTotal + element.subtotal;
+    // });
+    this.sumarDetalleCompras();
 
     this.nuevoProducto = {};
     this.correlativo.numero = this.correlativo.numero + 1;
@@ -787,13 +839,21 @@ export class UpdateComprasComponent {
 
   }
 
+  sumarDetalleCompras() {
+     // //deseo recorrer detalleCompras y sumar el subtotal y guardarlo en this.compras.total
+    this.compras.subTotal = 0;
+    this.detalleCompras.forEach((element: any) => {
+      this.compras.subTotal = this.compras.subTotal + element.subtotal;
+    });
+  }
+
   sumarFooterFactura() {
 
-    this.compras.igv = 0;
-    this.compras.exonerado = 0;
-    this.compras.gratuito = 0;
-    this.compras.descuentos = 0;
-    this.compras.otrosCargos = 0;
+    // this.compras.igv = 0;
+    // this.compras.exonerado = 0;
+    // this.compras.gratuito = 0;
+    // this.compras.descuentos = 0;
+    // this.compras.otrosCargos = 0;
     this.compras.total = 0;
 
     this.compras.total = (this.compras.subTotal + this.compras.igv + this.compras.otrosCargos) - this.compras.descuentos;
@@ -814,7 +874,7 @@ export class UpdateComprasComponent {
 
   }
 
- 
+
   sonArraysIguales(array1: any[], array2: any[]): boolean {
     if (array1.length !== array2.length) {
       return false;
@@ -849,16 +909,20 @@ export class UpdateComprasComponent {
     }
 
     // // Si no son ni arrays ni objetos, simplemente comparar los valores
-     return objeto1 === objeto2;
+    return objeto1 === objeto2;
   }
+
+
 
   ActualizarCompras() {
 
     console.log('this.compras', this.compras);
     console.log('this.detalleCompras', this.detalleCompras);
 
+    //---------------------------------------
+    //detecto si se realizo cambios en this.compras y this.detalleCompras
     //quiero comparar this.compras con this.compras_const son iguales o no
-     if (this.sonIguales(this.compras, this.compras_const)) {
+    if (this.sonIguales(this.compras, this.compras_const)) {
       console.log(' compras Son iguales');
     }
     else {
@@ -866,7 +930,7 @@ export class UpdateComprasComponent {
 
       this.compras.idCliente = this.compras.idCliente[0];
       console.log('this.compras antes de hacer la consulta', this.compras);
-      this._comprasService.editar_compra(this.idCompra,this.compras, this.token).subscribe(
+      this._comprasService.editar_compra(this.idCompra, this.compras, this.token).subscribe(
         response => {
           console.log('response', response);
           if (response.data != undefined) {
@@ -895,7 +959,16 @@ export class UpdateComprasComponent {
     }
     else {
       console.log('detalleCompras No son iguales');
-      
+
+      //quiero recorrer detallecompras y modificar algunos campos
+      this.detalleCompras.forEach((element: any) => {
+
+        element.pUnitario = element.cUnitario;
+
+      });
+
+      console.log('this.detalleCompras antes de la consulta al controlador ', this.detalleCompras);
+
       this._comprasService.editar_detalle_compras_idcompra(this.idCompra, this.detalleCompras, this.token).subscribe(
         response => {
           console.log('response', response);
@@ -919,7 +992,7 @@ export class UpdateComprasComponent {
 
     //this._router.navigate(['/compras']);
 
-    
+
   }
 
 
@@ -935,6 +1008,22 @@ export class UpdateComprasComponent {
   agregarNuevaMarca() {
     console.log('agregarNuevaMarca', this.marcas);
     window.open('/marcas/create', '_blank');
+  }
+
+  modalNuevoProducto() {
+    $('#nuevoProductoModal').modal('show');
+  }
+
+  actualizarSubtotal(idx: number) {
+
+    this.detalleCompras[idx].subtotal = parseFloat((this.detalleCompras[idx].cantidad * this.detalleCompras[idx].pUnitario).toFixed(2));
+    this.sumarDetalleCompras();
+    this.sumarFooterFactura();
+  }
+
+  //quiero multiplicar el precio unitario por la cantidad y mostrar el resultado en el subtotal de this.nuevoProducto
+  actualizarSubtotalNuevoProducto() {
+    this.nuevoProducto.subtotal = parseFloat((Number(this.nuevoProducto.cantidad) * this.nuevoProducto.pUnitario).toFixed(2));
   }
 
 

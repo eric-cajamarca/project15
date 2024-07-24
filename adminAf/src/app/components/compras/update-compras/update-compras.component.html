@@ -192,6 +192,180 @@
                                     Buscar
                                 </button>
                             </div>
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="modalNuevoProducto()"
+                                    style="margin-left: 10px;">
+                                    Crear producto
+                                </button>
+                            </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="nuevoProductoModal" tabindex="-1"
+                                aria-labelledby="nuevoProductoModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content" style="color: #858585;">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="nuevoProductoModalLabel">Nuevo Producto</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" >
+                                            <!-- Contenido del modal -->
+                                            
+                                            <div class="nuevo-producto">
+                                                <!-- crear aqui el html para (idProducto, idEmpresa, Codigo, idCategoria, descripcion, idPresentacion, cUnitario, fProduccion, fVencimiento, alertaMinimo, alertaMaximo, VecesVendidas, facturar, idUsuario, FIngreso) -->
+                                                <div class="card"
+                                                    style="border: #94847c 1px solid !important; border-radius: 5px;">
+                                                    <div class="card-body">
+
+                                                        <div class="row form-group">
+                                    
+                                                            <label>
+                                                                <input type="checkbox" [(ngModel)]="nuevoProducto.useCorrelativo" name="useCorrelativo"
+                                                                    (change)="onCheckboxChange()"> Usar correlativo
+                                                            </label>
+                                    
+                                                            <div class="col-sm-6 col-log-3 col-md-6">
+                                                                <!-- <div style="display: inline-flex;"> -->
+                                                                    <div  style="width: 50%;">
+                                                                        <label for="Codigo">Código (*)</label>
+                                                                        <input type="text" class="form-control" name="Codigo"
+                                                                            [(ngModel)]="nuevoProducto.codigo">
+                                                                    </div>
+                                                                    <div>
+                                                                        <label style="width: 300px;">Marca (*)</label>
+                                    
+                                                                        <div class="col-lg-9 col-xl-9" style="display: inline-flex;">
+                                                                            <div style="width: 60%; margin-right: 10px ;">
+                                                                                <select required name="idMarca" [(ngModel)]="nuevoProducto.idMarca"
+                                                                                    (ngModelChange)="onselectMarca($event)" (click)="cargarMarcas()"
+                                                                                    class="form-control">
+                                                                                    <option value="" selected disabled>Seleccionar...</option>
+                                                                                    <option *ngFor="let item of marcas" [value]="item.idMarca">{{
+                                                                                        item.nombre }}
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                    
+                                                                            <button type="button" class="btn btn-primary"
+                                                                                (click)="agregarNuevaMarca()">Nueva
+                                                                            </button>
+                                    
+                                                                        </div>
+                                                                    </div>
+                                    
+                                                                <!-- </div> -->
+                                    
+                                    
+                                    
+                                    
+                                                                <div>
+                                                                    <label style="width: 300px;">Categoría (*)</label>
+                                    
+                                                                    <div class="col-lg-9 col-xl-9" style="display: inline-flex;">
+                                                                        <div style="width: 60%; margin-right: 10px ;">
+                                                                            <select required name="idCategoria" [(ngModel)]="nuevoProducto.idCategoria"
+                                                                                (ngModelChange)="onSelectCategoria($event)" (click)="cargarCategorias()"
+                                                                                class="form-control">
+                                                                                <option value="" selected disabled>Seleccionar...</option>
+                                                                                <option *ngFor="let item of categoria" [value]="item.idCategoria">{{
+                                                                                    item.nombre }}
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                    
+                                                                        <button type="button" class="btn btn-primary"
+                                                                            (click)="agregarNuevaCategoria()">Nueva</button>
+                                                                    </div>
+                                                                    <div>
+                                                                        <label for="descripcion">Descripción (*)</label>
+                                                                        <textarea type="text" class="form-control" name="descripcion"
+                                                                            [(ngModel)]="nuevoProducto.descripcion" maxlength="200"></textarea>
+                                                                    </div>
+                                                                </div>
+                                    
+                                                               
+                                                            </div>
+                                                            <div class="col-sm-6 col-log-3 col-md-6">
+                                                                <div>
+                                                                    <label style="width: 300px;">Presentación (*)</label>
+                                                                    <div class="col-lg-9 col-xl-9">
+                                                                        <select required name="idPresentacion" [(ngModel)]="nuevoProducto.idPresentacion"
+                                                                            (ngModelChange)="onSelectPresentacion($event)" class="form-control">
+                                                                            <option value="" selected disabled>Seleccionar...</option>
+                                                                            <option *ngFor="let item of presentacion" [value]="item.idPresentacion">{{
+                                                                                item.Descripcion }}
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <label for="pUnitario">Precio Unitario</label>
+                                                                    <input type="text" class="form-control" name="pUnitario"
+                                                                        [(ngModel)]="nuevoProducto.pUnitario" (blur)="actualizarSubtotalNuevoProducto()">
+                                                                </div>
+                                                                <div>
+                                                                    <label for="cantidad">Cantidad</label>
+                                                                    <input type="text" class="form-control" name="cantidad"
+                                                                        [(ngModel)]="nuevoProducto.cantidad" (blur)="actualizarSubtotalNuevoProducto()">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6 col-log-3 col-md-6">
+                                                                <div>
+                                                                    <label for="fProduccion">Fecha de Producción</label>
+                                                                    <input type="date" class="form-control" name="fProduccion"
+                                                                        [(ngModel)]="nuevoProducto.fProduccion">
+                                                                </div>
+                                                                <div>
+                                                                    <label for="fVencimiento">Fecha de Vencimiento</label>
+                                                                    <input type="date" class="form-control" name="fVencimiento"
+                                                                        [(ngModel)]="nuevoProducto.fVencimiento">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6 col-log-3 col-md-6">
+                                                                <div>
+                                                                    <label style="width: 300px;">Sucursal (*)</label>
+                                                                    <div class="col-lg-9 col-xl-9">
+                                                                        <select required name="idSucursal" [(ngModel)]="nuevoProducto.idSucursal"
+                                                                            (ngModelChange)="onSelectSucursal($event)" class="form-control">
+                                                                            <option value="" selected disabled>Seleccionar...</option>
+                                                                            <option *ngFor="let item of sucursales" [value]="item.idSucursal">{{
+                                                                                item.nombre }}
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div style="margin-bottom: 20px;">
+                                                                    <label for="descripcion">Ubicación</label>
+                                                                    <input type="text" class="form-control" name="ubicacion"
+                                                                        [(ngModel)]="nuevoProducto.ubicacion">
+                                                                </div>
+                                    
+                                                                
+                                    
+                                                            </div>
+                                    
+                                    
+                                    
+                                    
+                                    
+                                                        </div>
+                                    
+                                    
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-primary">Guardar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -228,7 +402,7 @@
                                         <td style="width: 60px; text-align: center;">{{item.presentacion.Descripcion}}</td>
                                         <td style="width: 60px; text-align: right;">{{item.cantidad}}</td>
                                         <td style="width: 60px; text-align: right;">{{item.producto.cUnitario |
-                                            number:'1.2-2'}} </td>
+                                            number:'1.2-5'}} </td>
                                         <td style="width: 60px; text-align: center;">{{item.producto.fProduccion}} </td>
                                         <td style="width: 60px; text-align: center;">{{item.producto.fVencimiento}}
                                         </td>
@@ -236,7 +410,7 @@
                                         <td style="width: 60px; text-align: center;">{{item.sucursal.nombre}} </td>
                                         <td>
                                             <a style="cursor: pointer;" class="text-success"
-                                                (click)="seleccionar(idx)">
+                                                (click)="seleccionar(idx)" data-bs-toggle="modal" data-bs-target="#addProducto">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
                                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
                                                 </svg>
@@ -244,6 +418,180 @@
                                             
 
                                         </td>
+
+                                        <!-- modal -->
+
+                                        <div class="modal fade" id="addProducto" tabindex="-1"
+                                                aria-labelledby="addProductoLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="addProductoLabel">Agregar
+                                                                Producto existente</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <!-- Contenido del formulario de agregar producto aquí -->
+                                                            <h1>Este es el cuerpo del modal</h1>
+                                                            <div class="nuevo-producto">
+                                                                <!-- crear aqui el html para (idProducto, idEmpresa, Codigo, idCategoria, descripcion, idPresentacion, cUnitario, fProduccion, fVencimiento, alertaMinimo, alertaMaximo, VecesVendidas, facturar, idUsuario, FIngreso) -->
+                                                                <div class="card"
+                                                                    style="border: #94847c 1px solid !important; border-radius: 5px;">
+                                                                    
+                                                                    <div class="card-body">
+
+                                                                        <div class="row form-group">
+                                                    
+                                                                            <label>
+                                                                                <input type="checkbox" [(ngModel)]="nuevoProducto.useCorrelativo" name="useCorrelativo"
+                                                                                    (change)="onCheckboxChange()"> Usar correlativo
+                                                                            </label>
+                                                    
+                                                                            <div class="col-sm-6 col-log-3 col-md-6">
+                                                                                <!-- <div style="display: inline-flex;"> -->
+                                                                                    <div  style="width: 50%;">
+                                                                                        <label for="Codigo">Código (*)</label>
+                                                                                        <input type="text" class="form-control" name="Codigo"
+                                                                                            [(ngModel)]="nuevoProducto.codigo">
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <label style="width: 300px;">Marca (*)</label>
+                                                    
+                                                                                        <div class="col-lg-9 col-xl-9" style="display: inline-flex;">
+                                                                                            <div style="width: 60%; margin-right: 10px ;">
+                                                                                                <select required name="idMarca" [(ngModel)]="nuevoProducto.idMarca"
+                                                                                                    (ngModelChange)="onselectMarca($event)" (click)="cargarMarcas()"
+                                                                                                    class="form-control">
+                                                                                                    <option value="" selected disabled>Seleccionar...</option>
+                                                                                                    <option *ngFor="let item of marcas" [value]="item.idMarca">{{
+                                                                                                        item.nombre }}
+                                                                                                    </option>
+                                                                                                </select>
+                                                                                            </div>
+                                                    
+                                                                                            <button type="button" class="btn btn-primary"
+                                                                                                (click)="agregarNuevaMarca()">Nueva
+                                                                                            </button>
+                                                    
+                                                                                        </div>
+                                                                                    </div>
+                                                    
+                                                                                <!-- </div> -->
+                                                    
+                                                    
+                                                    
+                                                    
+                                                                                <div>
+                                                                                    <label style="width: 300px;">Categoría (*)</label>
+                                                    
+                                                                                    <div class="col-lg-9 col-xl-9" style="display: inline-flex;">
+                                                                                        <div style="width: 60%; margin-right: 10px ;">
+                                                                                            <select required name="idCategoria" [(ngModel)]="nuevoProducto.idCategoria"
+                                                                                                (ngModelChange)="onSelectCategoria($event)" (click)="cargarCategorias()"
+                                                                                                class="form-control">
+                                                                                                <option value="" selected disabled>Seleccionar...</option>
+                                                                                                <option *ngFor="let item of categoria" [value]="item.idCategoria">{{
+                                                                                                    item.nombre }}
+                                                                                                </option>
+                                                                                            </select>
+                                                                                        </div>
+                                                    
+                                                                                        <button type="button" class="btn btn-primary"
+                                                                                            (click)="agregarNuevaCategoria()">Nueva</button>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <label for="descripcion">Descripción (*)</label>
+                                                                                        <textarea type="text" class="form-control" name="descripcion"
+                                                                                            [(ngModel)]="nuevoProducto.descripcion" maxlength="200"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                    
+                                                                                
+                                                                            </div>
+                                                                            <div class="col-sm-6 col-log-3 col-md-6">
+                                                                                <div>
+                                                                                    <label style="width: 300px;">Presentación (*)</label>
+                                                                                    <div class="col-lg-9 col-xl-9">
+                                                                                        <select required name="idPresentacion" [(ngModel)]="nuevoProducto.idPresentacion"
+                                                                                            (ngModelChange)="onSelectPresentacion($event)" class="form-control">
+                                                                                            <option value="" selected disabled>Seleccionar...</option>
+                                                                                            <option *ngFor="let item of presentacion" [value]="item.idPresentacion">{{
+                                                                                                item.Descripcion }}
+                                                                                            </option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <label for="pUnitario">Precio Unitario</label>
+                                                                                    <input type="text" class="form-control" name="pUnitario"
+                                                                                        [(ngModel)]="nuevoProducto.pUnitario">
+                                                                                </div>
+                                                                                <div>
+                                                                                    <label for="cantidad">Cantidad</label>
+                                                                                    <input type="text" class="form-control" name="cantidad"
+                                                                                        [(ngModel)]="nuevoProducto.cantidad">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-6 col-log-3 col-md-6">
+                                                                                <div>
+                                                                                    <label for="fProduccion">Fecha de Producción</label>
+                                                                                    <input type="date" class="form-control" name="fProduccion"
+                                                                                        [(ngModel)]="nuevoProducto.fProduccion">
+                                                                                </div>
+                                                                                <div>
+                                                                                    <label for="fVencimiento">Fecha de Vencimiento</label>
+                                                                                    <input type="date" class="form-control" name="fVencimiento"
+                                                                                        [(ngModel)]="nuevoProducto.fVencimiento">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-6 col-log-3 col-md-6">
+                                                                                <div>
+                                                                                    <label style="width: 300px;">Sucursal (*)</label>
+                                                                                    <div class="col-lg-9 col-xl-9">
+                                                                                        <select required name="idSucursal" [(ngModel)]="nuevoProducto.idSucursal"
+                                                                                            (ngModelChange)="onSelectSucursal($event)" class="form-control">
+                                                                                            <option value="" selected disabled>Seleccionar...</option>
+                                                                                            <option *ngFor="let item of sucursales" [value]="item.idSucursal">{{
+                                                                                                item.nombre }}
+                                                                                            </option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div style="margin-bottom: 20px;">
+                                                                                    <label for="descripcion">Ubicación</label>
+                                                                                    <input type="text" class="form-control" name="ubicacion"
+                                                                                        [(ngModel)]="nuevoProducto.ubicacion">
+                                                                                </div>
+                                                    
+                                                                                <!-- <button type="button" class="btn btn-primary"
+                                                                                    (click)="agregarProductoNuevo()">Agregar</button> -->
+                                                    
+                                                                            </div>
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
+                                                                        </div>
+                                                    
+                                                    
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button"
+                                                                class="btn btn-success font-weight-bold"
+                                                                data-bs-dismiss="modal"
+                                                                (click)="agregarProductoNuevo()">Agregar</button>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                     </tr>
 
 
@@ -257,8 +605,8 @@
         </div>
 
 
-        <div class="nuevo-producto">
-            <!-- crear aqui el html para (idProducto, idEmpresa, Codigo, idCategoria, descripcion, idPresentacion, cUnitario, fProduccion, fVencimiento, alertaMinimo, alertaMaximo, VecesVendidas, facturar, idUsuario, FIngreso) -->
+        <!-- <div class="nuevo-producto">
+           
             <div class="card" style="border: #94847c 1px solid !important; border-radius: 5px;">
                 <div class="card-body">
 
@@ -270,7 +618,7 @@
                         </label>
 
                         <div class="col-sm-6 col-log-3 col-md-6">
-                            <!-- <div style="display: inline-flex;"> -->
+                           
                                 <div  style="width: 50%;">
                                     <label for="Codigo">Código (*)</label>
                                     <input type="text" class="form-control" name="Codigo"
@@ -298,8 +646,7 @@
                                     </div>
                                 </div>
 
-                            <!-- </div> -->
-
+                           
 
 
 
@@ -328,32 +675,7 @@
                                 </div>
                             </div>
 
-                            <!-- <div class="col-sm-6 col-log-3 col-md-6">
-                                <div>
-                                    <label for="Codigo">Código (*)</label>
-                                    <input type="text" class="form-control" name="Codigo"
-                                        [(ngModel)]="nuevoProducto.codigo">
-                                </div>
-
-
-                                <div>
-                                    <label style="width: 300px;">Categoría (*)</label>
-                                    <div class="col-lg-9 col-xl-9">
-                                        <select required name="idCategoria" [(ngModel)]="nuevoProducto.idCategoria"
-                                            (ngModelChange)="onSelectCategoria($event)" class="form-control">
-                                            <option value="" selected disabled>Seleccionar...</option>
-                                            <option *ngFor="let item of categoria" [value]="item.idCategoria">{{
-                                                item.nombre }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label for="descripcion">Descripción (*)</label>
-                                    <input type="text" class="form-control" name="descripcion"
-                                        [(ngModel)]="nuevoProducto.descripcion">
-                                </div>
-                            </div> -->
+                            
                         </div>
                         <div class="col-sm-6 col-log-3 col-md-6">
                             <div>
@@ -369,7 +691,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="cUnitario">Precio Unitario</label>
+                                <label for="pUnitario">Precio Unitario</label>
                                 <input type="text" class="form-control" name="cUnitario"
                                     [(ngModel)]="nuevoProducto.cUnitario">
                             </div>
@@ -426,7 +748,7 @@
 
             </div>
 
-        </div>
+        </div> -->
 
         <div class="tabla-detalle">
             <div class="card" style="border: #94847c 1px solid !important; border-radius: 5px;">
@@ -458,21 +780,34 @@
                                     <td>{{item.descripcion}}</td>
                                     <td>{{item.marca.nombre}} </td>
                                     <td style="width: 60px; text-align: center;">{{item.presentacion.Descripcion}}</td>
-                                    <td style="width: 60px; text-align: right;">{{item.cantidad}}</td>
-                                    <td style="width: 60px; text-align: right;">{{item.cUnitario | number:'1.2-2'}}
+                                    <td style="width: 150px; text-align: center;">
+                                        <!-- <button (click)="decrementarCantidad(idx)">-</button> -->
+                                        <input type="number" [(ngModel)]="item.cantidad"
+                                            style="width: 70px; text-align: center;" (change)="actualizarSubtotal(idx)">
+                                        <!-- <button (click)="incrementarCantidad(idx)">+</button> -->
                                     </td>
+                                    <td style="width: 150px; text-align: center;">
+                                        <!-- <button (click)="decrementarPUnitario(idx)">-</button> -->
+                                        <input type="number" [(ngModel)]="item.pUnitario"
+                                            style="width: 70px; text-align: center;" (change)="actualizarSubtotal(idx)">
+                                        <!-- <button (click)="incrementarPUnitario(idx)">+</button> -->
+                                    </td>
+
+                                    <!-- <td style="width: 60px; text-align: right;">{{item.cantidad}}</td>
+                                    <td style="width: 60px; text-align: right;">{{item.cUnitario | number:'1.2-2'}}
+                                    </td> -->
                                     <td style="width: 60px; text-align: right;">{{item.subtotal | number:'1.2-2'}} </td>
                                     <td style="width: 60px; text-align: center;">{{item.fProduccion}} </td>
                                     <td style="width: 60px; text-align: center;">{{item.fVencimiento}} </td>
 
                                     <td style="width: 60px; text-align: center;">{{item.sucursal.nombre}}</td>
                                     <td>
-                                        <a style="cursor: pointer; margin-right: 5px;" class="text-warning"
+                                        <!-- <a style="cursor: pointer; margin-right: 5px;" class="text-warning"
                                                 (click)="seleccionarDetalle(idx)">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
                                                 <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
                                             </svg>
-                                        </a>
+                                        </a> -->
                                         <a style="cursor: pointer;" class="text-danger" (click)="quitar(idx, item.subtotal)">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                                 <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
@@ -500,6 +835,19 @@
             <div class="card" style="border: #94847c 1px solid !important; border-radius: 5px;">
                 <div class="card-body">
                     <div class="row form-group">
+                        <div class="col-sm-6 col-lg-3 col-md-6">
+                            <div>
+                                <label for="subTotal">SubTotal</label>
+                                <input type="number" class="form-control" name="subTotal" [(ngModel)]="compras.subTotal"
+                                    placeholder="Ingrese el subTotal">
+                            </div>
+                            <div>
+                                <label for="descuentos">Descuentos</label>
+                                <input type="number" class="form-control" name="descuentos"
+                                    [(ngModel)]="compras.descuentos" (change)="onInput()"
+                                    placeholder="Ingrese los descuentos">
+                            </div>
+                        </div>
                         <div class="col-sm-6 col-lg-3 col-md-6">
                             <div>
                                 <label for="igv">IGV</label>
@@ -530,19 +878,7 @@
                                     placeholder="Ingrese los otros cargos">
                             </div>
                         </div>
-                        <div class="col-sm-6 col-lg-3 col-md-6">
-                            <div>
-                                <label for="subTotal">SubTotal</label>
-                                <input type="number" class="form-control" name="subTotal" [(ngModel)]="compras.subTotal"
-                                    placeholder="Ingrese el subTotal">
-                            </div>
-                            <div>
-                                <label for="descuentos">Descuentos</label>
-                                <input type="number" class="form-control" name="descuentos"
-                                    [(ngModel)]="compras.descuentos" (change)="onInput()"
-                                    placeholder="Ingrese los descuentos">
-                            </div>
-                        </div>
+                        
 
 
                         <div class="col-sm-6 col-lg-3 col-md-6">

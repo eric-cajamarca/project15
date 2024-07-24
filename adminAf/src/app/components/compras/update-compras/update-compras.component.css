@@ -17,8 +17,8 @@ h3{
 .cabecera-compra .card{
     width: 100%;
     display: flex;
-    background-color: #94847c;
-    color: white;
+    background-color: #fcfbfb;
+    color: #909094;
     
     border-radius: 5px;
 }
@@ -26,8 +26,8 @@ h3{
 .tabla-busqueda .card{
     width: 100%;
     display: flex;
-    background-color: #94847c;
-    color: white;
+    background-color: #fcfbfb;
+    color: #909094;
     /* padding: 10px; */
     /* margin-bottom: 10px; */
     border-radius: 5px;
@@ -36,8 +36,8 @@ h3{
 .nuevo-producto .card{
     width: 100%;
     display: flex;
-    background-color: #94847c;
-    color: white;
+    background-color: #fcfbfb;
+    color: #909094;
     
     border-radius: 5px;
 }
@@ -45,8 +45,9 @@ h3{
 .totales .card{
     width: 100%;
     display: flex;
-    background-color: #94847c;
-    color: white;
+    /* background-color: #94847c; */
+    background-color: #fcfbfb;
+    color: #909094;
     
     border-radius: 5px;
 }
@@ -58,8 +59,8 @@ h3{
 .tabla-detalle .card{
     width: 100%;
     display: flex;
-    background-color: #94847c;
-    color: white;
+    background-color: #fcfbfb;
+    color: #909094;
     /* padding: 10px; */
     /* margin-bottom: 10px; */
     border-radius: 5px;
