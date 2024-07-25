@@ -91,23 +91,116 @@ const obtener_productos_id = async (req, res) => {
 
 }
 
+// const crear_producto = async (req, res) => {
+//     const { Codigo, idCategoria, idMarca, descripcion, idPresentacion, pUnitario, fProduccion, fVencimiento, facturar } = req.body;
+
+//     console.log('crear producto ', req.body);
+//     //crear id unico
+//     const idProducto = uuidv4();
+//     const idEmpresa = req.user.empresa;
+//     const idUsuario = req.user.sub;
+//     //console.log('idUsuario ', idUsuario);
+   
+//     // idCategoria = parseInt(idCategoria);
+
+
+//     //obtener fecha actual
+//     var hoy = new Date();
+//     var dd = hoy.getDate();
+//     var mm = hoy.getMonth() + 1;
+//     var yyyy = hoy.getFullYear();
+
+//     //dar formato a la fecha datetime
+//     const FIngreso = yyyy + '-' + mm + '-' + dd;
+
+//     if (req.user) {
+//         if (req.user.rol == 'Administrador') {
+//             try {
+//                 let pool = await sql.connect(dbConfig);
+//                 let productos = await pool
+//                     .request()
+//                     .input("idProducto", sql.UniqueIdentifier, idProducto)
+//                     .input("idEmpresa", sql.UniqueIdentifier, idEmpresa)
+//                     .input("Codigo", sql.VarChar, Codigo.toString())
+//                     .input("idCategoria", sql.Int, parseInt(idCategoria))
+//                     .input("descripcion", sql.VarChar, descripcion)
+//                     .input("idMarca", sql.Int, parseInt(idMarca)) //idMarca
+//                     .input("idPresentacion", sql.Int, parseInt(idPresentacion))
+//                     .input("cUnitario", sql.Decimal(18,5), parseFloat(pUnitario))
+//                     .input("fProduccion", sql.VarChar, fProduccion)
+//                     .input("fVencimiento", sql.VarChar, fVencimiento)
+//                     .input("alertaMinimo", sql.Decimal, 5)
+//                     .input("alertaMaximo", sql.Decimal, 50)
+//                     .input("VecesVendidas", sql.Int, 0)
+//                     .input("facturar", sql.VarChar, facturar)
+//                     .input("idUsuario", sql.UniqueIdentifier, idUsuario)
+//                     .input("FIngreso", sql.DateTime, FIngreso)
+//                     .input("estado", sql.Bit, 1) //estado
+//                     .query("INSERT INTO Productos VALUES (@idProducto, @idEmpresa, @Codigo, @idCategoria, @descripcion, @idMarca, @idPresentacion, @cUnitario, @fProduccion, @fVencimiento, @alertaMinimo, @alertaMaximo, @VecesVendidas, @facturar, @idUsuario, @FIngreso, @estado)");
+
+                    
+//                     //if(productos.rowsAffected == 1){
+//                         res.status(200).send({ data: idProducto });
+//                     // }else{
+//                     //     res.status(500).send({ message: 'Error al crear los productos', data: undefined });
+//                     // }
+//                     console.log('producto creado ', idProducto);
+                
+//             } catch (error) {
+//                 console.log('crear productos error: ' + error);
+//                 res.status(500).send({ message: 'Error al crear los productos', data: undefined });
+//             }
+
+//         } else {
+//             console.log('no tiene permisos');
+//             res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+//         }
+//     }
+//     else {
+//         console.log('no tiene acceso');
+//         res.status(500).send({ message: 'No Access', data: undefined });
+//     }
+
+
+// }
+
 const crear_producto = async (req, res) => {
-    const { Codigo, idCategoria, idMarca, descripcion, idPresentacion, cUnitario, fProduccion, fVencimiento, facturar } = req.body;
+    const { codigo, idCategoria, idMarca, descripcion, idPresentacion, pUnitario, fProduccion, fVencimiento } = req.body;
 
     console.log('crear producto ', req.body);
-    //crear id unico
+
+    const facturar = 'SI';
+    
+    console.log('facturar ', facturar);
+    console.log('Codigo ', codigo);
+    console.log('idCategoria ', idCategoria);
+    console.log('idMarca ', idMarca);
+    console.log('descripcion ', descripcion);
+    console.log('idPresentacion ', idPresentacion);
+    console.log('pUnitario ', pUnitario);
+    console.log('fProduccion ', fProduccion);
+    console.log('fVencimiento ', fVencimiento);
+    
+    
+    // Verificar si los campos necesarios están presentes y no vacíos
+
+    if (!codigo || !idCategoria || !idMarca || !descripcion || !idPresentacion || !pUnitario || !facturar) {
+        res.status(400).send({ message: 'Todos los campos obligatorios deben ser completados', data: undefined });
+        return;
+    }
+
+    // Crear id único
     const idProducto = uuidv4();
     const idEmpresa = req.user.empresa;
     const idUsuario = req.user.sub;
-    //console.log('idUsuario ', idUsuario);
-   
-    //obtener fecha actual
+
+    // Obtener fecha actual
     var hoy = new Date();
     var dd = hoy.getDate();
     var mm = hoy.getMonth() + 1;
     var yyyy = hoy.getFullYear();
 
-    //dar formato a la fecha datetime
+    // Dar formato a la fecha datetime
     const FIngreso = yyyy + '-' + mm + '-' + dd;
 
     if (req.user) {
@@ -118,31 +211,26 @@ const crear_producto = async (req, res) => {
                     .request()
                     .input("idProducto", sql.UniqueIdentifier, idProducto)
                     .input("idEmpresa", sql.UniqueIdentifier, idEmpresa)
-                    .input("Codigo", sql.VarChar, Codigo.toString())
-                    .input("idCategoria", sql.Int, idCategoria)
+                    .input("Codigo", sql.VarChar, codigo.toString())
+                    .input("idCategoria", sql.Int, parseInt(idCategoria))
                     .input("descripcion", sql.VarChar, descripcion)
-                    .input("idMarca", sql.Int, idMarca) //idMarca
-                    .input("idPresentacion", sql.Int, idPresentacion)
-                    .input("cUnitario", sql.Decimal(18,5), cUnitario)
-                    .input("fProduccion", sql.VarChar, fProduccion)
-                    .input("fVencimiento", sql.VarChar, fVencimiento)
+                    .input("idMarca", sql.Int, parseInt(idMarca)) // idMarca
+                    .input("idPresentacion", sql.Int, parseInt(idPresentacion))
+                    .input("cUnitario", sql.Decimal(18,5), parseFloat(pUnitario))
+                    .input("fProduccion", sql.VarChar, fProduccion ? fProduccion.toString() : null)
+                    .input("fVencimiento", sql.VarChar, fVencimiento ? fVencimiento.toString() : null)
                     .input("alertaMinimo", sql.Decimal, 5)
                     .input("alertaMaximo", sql.Decimal, 50)
                     .input("VecesVendidas", sql.Int, 0)
-                    .input("facturar", sql.VarChar, facturar)
+                    .input("facturar", sql.VarChar, facturar.toString())
                     .input("idUsuario", sql.UniqueIdentifier, idUsuario)
                     .input("FIngreso", sql.DateTime, FIngreso)
-                    .input("estado", sql.Bit, 1) //estado
+                    .input("estado", sql.Bit, 1) // estado
                     .query("INSERT INTO Productos VALUES (@idProducto, @idEmpresa, @Codigo, @idCategoria, @descripcion, @idMarca, @idPresentacion, @cUnitario, @fProduccion, @fVencimiento, @alertaMinimo, @alertaMaximo, @VecesVendidas, @facturar, @idUsuario, @FIngreso, @estado)");
 
-                    
-                    //if(productos.rowsAffected == 1){
-                        res.status(200).send({ data: idProducto });
-                    // }else{
-                    //     res.status(500).send({ message: 'Error al crear los productos', data: undefined });
-                    // }
-                    console.log('producto creado ', idProducto);
-                
+                res.status(200).send({ data: idProducto });
+                console.log('producto creado ', idProducto);
+
             } catch (error) {
                 console.log('crear productos error: ' + error);
                 res.status(500).send({ message: 'Error al crear los productos', data: undefined });
@@ -152,14 +240,12 @@ const crear_producto = async (req, res) => {
             console.log('no tiene permisos');
             res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
         }
-    }
-    else {
+    } else {
         console.log('no tiene acceso');
         res.status(500).send({ message: 'No Access', data: undefined });
     }
-
-
 }
+
 
 const actualizar_producto = async function(detalle) {
     // const idProducto = req.params.id;

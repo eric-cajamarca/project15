@@ -83,6 +83,7 @@ export class UpdateComprasComponent {
   public editardetalle: boolean = false;
   public updateDetalleCompra: any = 0;
   public updatecompra: any = 0;
+  public productoCreado: any = false;
 
 
   constructor(
@@ -225,6 +226,7 @@ export class UpdateComprasComponent {
       this.detalleCompras_const = JSON.parse(JSON.stringify(this.detalleCompras));
 
 
+      console.log('this.detalleCompras antes de recorrerlo', this.detalleCompras);
       //quiero recorrer detallecompras y modificar algunos campos
       this.detalleCompras.forEach((element: any) => {
         element.idPresentacion = element.producto.idPresentacion;
@@ -243,7 +245,7 @@ export class UpdateComprasComponent {
 
 
       this.loadCompras = false;
-      console.log('this.detalleCompras', this.detalleCompras);
+      console.log('this.detalleCompras despues de recorrerlo', this.detalleCompras);
     }
   }
 
@@ -345,6 +347,24 @@ export class UpdateComprasComponent {
     //   }
     // );
 
+    this.obtenerProductos();
+    
+    this._comprasService.obtener_correlativo_empresa(this.token).subscribe(
+      response => {
+        this.correlativo = response.data[0];
+
+        console.log('this.correlativo', this.correlativo);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    this.obtenerStockSucursal();
+
+  }
+
+  obtenerProductos() {
     this._productoService.obtener_productos_todos(this.token).subscribe(
       response => {
         console.log('response productos', response.data);
@@ -364,17 +384,9 @@ export class UpdateComprasComponent {
       }
     );
 
-    this._comprasService.obtener_correlativo_empresa(this.token).subscribe(
-      response => {
-        this.correlativo = response.data[0];
+  }
 
-        console.log('this.correlativo', this.correlativo);
-      },
-      error => {
-        console.log(error);
-      }
-    );
-
+  obtenerStockSucursal() {
     this._sucursalService.obtener_stock_sucursales_idempresa(this.token).subscribe(
       response => {
         this.stockSucursales = response.data;
@@ -427,7 +439,6 @@ export class UpdateComprasComponent {
         console.log(error);
       }
     );
-
   }
 
   cargarCategorias() {
@@ -536,42 +547,42 @@ export class UpdateComprasComponent {
   }
 
 
-  seleccionarDetalle(idx: number) {
-    this.editardetalle = true;
+  // seleccionarDetalle(idx: number) {
+  //   this.editardetalle = true;
 
-    if (idx >= 0 && idx < this.detalleCompras.length) {
+  //   if (idx >= 0 && idx < this.detalleCompras.length) {
 
-      this.prodSelecionado = this.detalleCompras[idx];
-      console.log('this.prodSelecionado', this.prodSelecionado);
+  //     this.prodSelecionado = this.detalleCompras[idx];
+  //     console.log('this.prodSelecionado', this.prodSelecionado);
 
-      this.nuevoProducto.idProducto = this.prodSelecionado.idProducto;
-      this.nuevoProducto.codigo = this.prodSelecionado.producto.Codigo;
-      this.nuevoProducto.descripcion = this.prodSelecionado.producto.descripcion;
-      this.nuevoProducto.cUnitario = this.prodSelecionado.producto.cUnitario;
-      this.nuevoProducto.idCategoria = this.prodSelecionado.producto.idCategoria;
-      this.nuevoProducto.idPresentacion = this.prodSelecionado.producto.idPresentacion;
-      this.nuevoProducto.idSucursal = this.prodSelecionado.idSucursal;
-      this.nuevoProducto.cantidad = this.prodSelecionado.cantidad;
-      this.nuevoProducto.idMarca = this.prodSelecionado.producto.idMarca;
-      this.nuevoProducto.cantidadAnterior = this.prodSelecionado.cantidad;
-      this.nuevoProducto.ubicacion = this.prodSelecionado.ubicacion;
-      this.nuevoProducto.idStockSucursal = this.prodSelecionado.idStockSucursal;
-      this.nuevoProducto.idEmpresa = this.prodSelecionado.idEmpresa;
+  //     this.nuevoProducto.idProducto = this.prodSelecionado.idProducto;
+  //     this.nuevoProducto.codigo = this.prodSelecionado.producto.Codigo;
+  //     this.nuevoProducto.descripcion = this.prodSelecionado.producto.descripcion;
+  //     this.nuevoProducto.cUnitario = this.prodSelecionado.producto.cUnitario;
+  //     this.nuevoProducto.idCategoria = this.prodSelecionado.producto.idCategoria;
+  //     this.nuevoProducto.idPresentacion = this.prodSelecionado.producto.idPresentacion;
+  //     this.nuevoProducto.idSucursal = this.prodSelecionado.idSucursal;
+  //     this.nuevoProducto.cantidad = this.prodSelecionado.cantidad;
+  //     this.nuevoProducto.idMarca = this.prodSelecionado.producto.idMarca;
+  //     this.nuevoProducto.cantidadAnterior = this.prodSelecionado.cantidad;
+  //     this.nuevoProducto.ubicacion = this.prodSelecionado.ubicacion;
+  //     this.nuevoProducto.idStockSucursal = this.prodSelecionado.idStockSucursal;
+  //     this.nuevoProducto.idEmpresa = this.prodSelecionado.idEmpresa;
 
-      this.nuevoProducto.fProduccion = this.prodSelecionado.producto.fProduccion;
-      //quiero convertir la fecha de produccion a string en formato yyyy-mm-dd
-
-
-
-      this.nuevoProducto.fVencimiento = this.prodSelecionado.producto.fVencimiento;
-    }
+  //     this.nuevoProducto.fProduccion = this.prodSelecionado.producto.fProduccion;
+  //     //quiero convertir la fecha de produccion a string en formato yyyy-mm-dd
 
 
 
+  //     this.nuevoProducto.fVencimiento = this.prodSelecionado.producto.fVencimiento;
+  //   }
 
-    console.log('this.nuevoProducto', this.nuevoProducto);
 
-  }
+
+
+  //   console.log('this.nuevoProducto', this.nuevoProducto);
+
+  // }
 
 
 
@@ -644,13 +655,22 @@ export class UpdateComprasComponent {
 
   }
 
-  onSelectPresentacion(selectedValue: any) {
+  onSelectPresentacion(event: any) {
 
-    const selectedObject = this.presentacion.find((item: any) => item.idPresentacion == selectedValue);
-    this.nuevoProducto.presentacion = selectedObject;
-    // Ahora, selectedObject contiene toda la información del elemento seleccionado
-    console.log('selectedObject', selectedObject);
-    console.log('this.nuevoProducto', this.nuevoProducto);
+    const idPresentacion = Number(event);
+    if (!isNaN(idPresentacion)) {
+      this.nuevoProducto.idPresentacion = idPresentacion;
+      // Lógica adicional para manejar la selección de presentación
+
+      const selectedObject = this.presentacion.find((item: any) => item.idPresentacion == idPresentacion);
+      this.nuevoProducto.presentacion = selectedObject;
+      // Ahora, selectedObject contiene toda la información del elemento seleccionado
+      console.log('selectedObject', selectedObject);
+      console.log('this.nuevoProducto', this.nuevoProducto);
+    } else {
+      console.error("Valor inválido para idPresentacion");
+    }
+
 
   }
 
@@ -665,11 +685,21 @@ export class UpdateComprasComponent {
   }
 
   onSelectSucursal(selectedValue: any) {
-    const selectedObject = this.sucursales.find((item: any) => item.idSucursal == selectedValue);
-    this.nuevoProducto.sucursal = selectedObject;
-    // Ahora, selectedObject contiene toda la información del elemento seleccionado
-    console.log('selectedObject', selectedObject);
-    console.log('this.nuevoProducto', this.nuevoProducto);
+
+    const idSucursal = Number(event);
+    if (!isNaN(idSucursal)) {
+      this.nuevoProducto.idSucursal = idSucursal;
+      // Lógica adicional para manejar la selección de sucursal
+      const selectedObject = this.sucursales.find((item: any) => item.idSucursal == selectedValue);
+      this.nuevoProducto.sucursal = selectedObject;
+      // Ahora, selectedObject contiene toda la información del elemento seleccionado
+      console.log('selectedObject', selectedObject);
+      console.log('this.nuevoProducto', this.nuevoProducto);
+    } else {
+      console.error("Valor inválido para idSucursal");
+    }
+
+
   }
 
   onCheckboxChange() {
@@ -692,160 +722,216 @@ export class UpdateComprasComponent {
 
   }
 
-  agregarProductoNuevo() {
-
-    console.log('this.nuevoProducto', this.nuevoProducto);
-
-    if (!this.editardetalle) {
-      //quiero agregar la condicion di idProducto, idpresentacion, idcategoria y idsucursal no estan vacios
-
-      if (!this.nuevoProducto.fProduccion) {
-        this.nuevoProducto.fProduccion = undefined;
-      }
-
-      if (!this.nuevoProducto.fVencimiento) {
-        this.nuevoProducto.fVencimiento = undefined;
-      }
-
-      this.nuevoProducto.subtotal = Number(this.nuevoProducto.pUnitario) * Number(this.nuevoProducto.cantidad);
-
-      if (this.nuevoProducto.idPresentacion != undefined && this.nuevoProducto.idCategoria != undefined && this.nuevoProducto.idSucursal != undefined) {
-        this.detalleCompras.push(this.nuevoProducto);
-        console.log('si hay datos que guardar')
-
-
-        // this.detalleCompras.forEach((element: any) => {
-        //   console.log('this.detalleCompras.idProducto != undefined');
-        //   element.subtotal = element.pUnitario * element.cantidad;
-
-        // });
-
-        try {
-          if (this.detalleCompras.idProducto != undefined) {
-           
-            this.llenarDetalleCompras();
-          
-          } else {
-
-            console.log('this.detalleCompras.idProducto != undefined');
-            // this.detalleCompras.forEach((element: any) => {
-
-            //   //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
-            //   const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == this.nuevoProducto.idSucursal);
-            //   element.sucursal = selectedObjectSucursal;
-
-            //   //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
-            //   const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == this.nuevoProducto.idCategoria);
-            //   element.categoria = selectedObjectCategoria;
-
-            //   //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
-            //   const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == this.nuevoProducto.idPresentacion);
-            //   element.presentacion = selectedObjectPresentacion;
-
-
-
-            // });
-            
-            this.llenarDetalleCompras();
-          }
-
-          console.log('this.detalleCompras', this.detalleCompras);
-        } catch (error) {
-          console.log(error);
-        }
-
-
-      } else {
-        iziToast.show({
-          title: 'ERROR',
-          titleColor: '#FF0000',
-          color: '#FFF',
-          class: 'text-danger',
-          position: 'topRight',
-          message: 'Debe llenar todos los campos obligatorios (*).'
-        });
-      }
-    }
-    else {
-      // //aqui quiero editar el detalle de compras utilizando el indice de la fila seleccionada
-      // console.log('Aquí quiero editar el detalle de compras utilizando el índice de la fila seleccionada');
-      // console.log('this.nuevoProducto', this.nuevoProducto);
-      // console.log('this.detalleCompras', this.detalleCompras);
-
-      // // Buscar el elemento correspondiente en detalleCompras
-      // const index = this.detalleCompras.findIndex((element: any) => element.idProducto === this.nuevoProducto.idProducto);
-
-      // if (index !== -1) { // Si se encuentra el elemento en detalleCompras
-      //   const element = this.detalleCompras[index];
-      //   // Actualizar los campos del elemento con los datos del nuevo producto
-      //   element.idProducto = this.nuevoProducto.idProducto;
-      //   element.codigo = this.nuevoProducto.codigo;
-      //   element.descripcion = this.nuevoProducto.descripcion;
-      //   element.cUnitario = this.nuevoProducto.cUnitario;
-      //   element.cantidad = this.nuevoProducto.cantidad;
-      //   element.subtotal = this.nuevoProducto.cUnitario * this.nuevoProducto.cantidad;
-      //   element.idCategoria = this.nuevoProducto.idCategoria;
-      //   element.idPresentacion = this.nuevoProducto.idPresentacion;
-      //   element.idSucursal = this.nuevoProducto.idSucursal;
-      //   element.ubicacion = this.nuevoProducto.ubicacion;
-      //   element.fProduccion = this.nuevoProducto.fProduccion;
-      //   element.fVencimiento = this.nuevoProducto.fVencimiento;
-      //   element.idMarca = this.nuevoProducto.idMarca;
-
-
-      //   //buscar en this.sucursales el idSucursal y traer todo el objeto del idSucursal
-      //   const selectedObjectSucursal = this.sucursales.find((item: any) => item.idSucursal == element.idSucursal);
-      //   element.sucursal = selectedObjectSucursal;
-
-      //   //buscar en this.categoria el idCategoria y traer todo el objeto del idCategoria
-      //   const selectedObjectCategoria = this.categoria.find((item: any) => item.idCategoria == element.idCategoria);
-      //   element.categoria = selectedObjectCategoria;
-
-      //   //buscar en this.presentacion el idPresentacion y traer todo el objeto del idPresentacion
-      //   const selectedObjectPresentacion = this.presentacion.find((item: any) => item.idPresentacion == element.idPresentacion);
-      //   element.presentacion = selectedObjectPresentacion;
-      // }
-
-      // this.editardetalle = false;
-
-
-
-    }
-
-
-
-    console.log('this.detalleCompras', this.detalleCompras);
-
-
-    //deseo multiplicar el precio por la cantidad de this.nuevoProducto
-    //this.nuevoProducto.subtotal = this.nuevoProducto.cUnitario * this.nuevoProducto.cantidad;
-    console.log('this.nuevoProducto', this.nuevoProducto);
-
-
-    console.log('this.detalleCompras', this.detalleCompras);
-
-    // //deseo recorrer detalleCompras y sumar el subtotal y guardarlo en this.compras.total
-    // this.compras.subTotal = 0;
-    // this.detalleCompras.forEach((element: any) => {
-    //   this.compras.subTotal = this.compras.subTotal + element.subtotal;
-    // });
-    this.sumarDetalleCompras();
-
+  modalNuevoProducto() {
     this.nuevoProducto = {};
-    this.correlativo.numero = this.correlativo.numero + 1;
-    this.sumarFooterFactura();
-
-    this.updateDetalleCompra++;
-
+    $('#nuevoProductoModal').modal('show');
   }
 
+  crearNuevoProductoModal() {
+
+    console.log('this.nuevoProducto', this.nuevoProducto);
+    this._productoService.crear_producto(this.nuevoProducto, this.token).subscribe(
+      response => {
+        console.log('response', response);
+        if (response.data) {
+          // this.productos.push(response.data);
+          //this.productos = response.data;
+          console.log('this.productos', response.data);
+
+          //ahora quiero crear un nuevo registro en stockSucursales con estos datos idSucursal, idProducto, cantidad, ubicacion y idEmpresa
+          let stockSucursal = {
+            idSucursal: this.nuevoProducto.idSucursal,
+            idProducto: response.data,
+            cantidad: this.nuevoProducto.cantidad,
+            ubicacion: this.nuevoProducto.ubicacion,
+            idEmpresa: this.compras.idEmpresa
+          }
+
+          console.log('stockSucursal antes de enviar a backend', stockSucursal);
+          this._sucursalService.crear_stock_sucursal_idEmpresa(stockSucursal, this.token).subscribe(
+            response => {
+              console.log('response', response);
+              if (response.data) {
+                this.stockSucursales.push(response.data);
+                console.log('this.stockSucursales', this.stockSucursales);
+
+                iziToast.show({
+                  title: 'OK',
+                  titleColor: '#008000',
+                  color: '#FFF',
+                  class: 'text-success',
+                  position: 'topRight',
+                  message: 'Producto creado correctamente.'
+                });
+
+                this.productoCreado = true;
+                this.obtenerProductos();
+              }
+            },
+            error => {
+              console.log(error);
+            }
+          );
+
+          
+          this.correlativo.numero = this.correlativo.numero + 1;
+          // $('#nuevoProductoModal').modal('hide');
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  // agregarProductoNuevo() {
+
+  //   console.log('this.nuevoProducto', this.nuevoProducto);
+
+
+  //   //quiero agregar la condicion di idProducto, idpresentacion, idcategoria y idsucursal no estan vacios
+
+  //   if (!this.nuevoProducto.fProduccion) {
+  //     this.nuevoProducto.fProduccion = undefined;
+  //   }
+
+  //   if (!this.nuevoProducto.fVencimiento) {
+  //     this.nuevoProducto.fVencimiento = undefined;
+  //   }
+
+  //    let subTotal = this.nuevoProducto.cantidad * this.nuevoProducto.pUnitario;
+  //    this.nuevoProducto.subtotal = subTotal;
+
+  //    console.log('this.nuevoProducto.subtotal', this.nuevoProducto);
+
+  //   if (this.nuevoProducto.idPresentacion != undefined && this.nuevoProducto.idCategoria != undefined && this.nuevoProducto.idSucursal != undefined) {
+  //     this.detalleCompras.push(this.nuevoProducto);
+  //     console.log('si hay datos que guardar')
+
+
+  //     try {
+  //       if (this.detalleCompras.idProducto != undefined) {
+  //         console.log('this.detalleCompras.idProducto = undefined');
+  //         this.llenarDetalleCompras();
+
+  //       } else {
+
+  //         console.log('this.detalleCompras.idProducto = undefined');
+
+  //         this.llenarDetalleCompras();
+  //       }
+
+  //       console.log('this.detalleCompras', this.detalleCompras);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+
+
+  //   } else {
+  //     iziToast.show({
+  //       title: 'ERROR',
+  //       titleColor: '#FF0000',
+  //       color: '#FFF',
+  //       class: 'text-danger',
+  //       position: 'topRight',
+  //       message: 'Debe llenar todos los campos obligatorios (*).'
+  //     });
+  //   }
+
+
+
+  //   //deseo multiplicar el precio por la cantidad de this.nuevoProducto
+  //   //this.nuevoProducto.subtotal = this.nuevoProducto.cUnitario * this.nuevoProducto.cantidad;
+  //   console.log('this.nuevoProducto', this.nuevoProducto);
+
+
+  //   console.log('this.detalleCompras', this.detalleCompras);
+
+  //   // //deseo recorrer detalleCompras y sumar el subtotal y guardarlo en this.compras.total
+  //   // this.compras.subTotal = 0;
+  //   // this.detalleCompras.forEach((element: any) => {
+  //   //   this.compras.subTotal = this.compras.subTotal + element.subtotal;
+  //   // });
+
+
+  //   this.sumarDetalleCompras();
+
+  //   this.nuevoProducto = {};
+  //   this.correlativo.numero = this.correlativo.numero + 1;
+  //   this.sumarFooterFactura();
+
+  //   this.updateDetalleCompra++;
+
+  // }
+
+  agregarProductoNuevo() {
+
+    this.productoCreado = false;
+    console.log('this.nuevoProducto inicial', this.nuevoProducto);
+
+    // Verificar si los campos necesarios están presentes y no vacíos
+    if (!this.nuevoProducto.idPresentacion || !this.nuevoProducto.idCategoria || !this.nuevoProducto.idSucursal) {
+        iziToast.show({
+            title: 'ERROR',
+            titleColor: '#FF0000',
+            color: '#FFF',
+            class: 'text-danger',
+            position: 'topRight',
+            message: 'Debe llenar todos los campos obligatorios (*).'
+        });
+        return;
+    }
+
+    // Asignar undefined a fProduccion y fVencimiento si no están presentes
+    if (!this.nuevoProducto.fProduccion) {
+        this.nuevoProducto.fProduccion = undefined;
+    }
+
+    if (!this.nuevoProducto.fVencimiento) {
+        this.nuevoProducto.fVencimiento = undefined;
+    }
+
+    // Verificar y calcular el subtotal
+    if (typeof this.nuevoProducto.cantidad === 'number' && typeof this.nuevoProducto.pUnitario === 'number') {
+        let subTotal = this.nuevoProducto.cantidad * this.nuevoProducto.pUnitario;
+        this.nuevoProducto.subtotal = subTotal;
+    } else {
+        console.log('Error: cantidad o pUnitario no son números válidos', this.nuevoProducto.cantidad, this.nuevoProducto.pUnitario);
+        return;
+    }
+
+    console.log('this.nuevoProducto con subtotal', this.nuevoProducto);
+
+    // Agregar nuevoProducto a detalleCompras
+    this.detalleCompras.push({ ...this.nuevoProducto });
+    console.log('Producto agregado: ', this.nuevoProducto);
+    this.llenarDetalleCompras();
+    
+    // Reiniciar nuevoProducto
+    this.nuevoProducto = {};
+
+    // Incrementar el correlativo
+   
+
+    // Llamar a las funciones adicionales
+    this.sumarDetalleCompras();
+    this.sumarFooterFactura();
+
+    console.log('this.detalleCompras', this.detalleCompras);
+    this.updateDetalleCompra++;
+}
+
+
+
+
   sumarDetalleCompras() {
-     // //deseo recorrer detalleCompras y sumar el subtotal y guardarlo en this.compras.total
+    // //deseo recorrer detalleCompras y sumar el subtotal y guardarlo en this.compras.total
     this.compras.subTotal = 0;
     this.detalleCompras.forEach((element: any) => {
       this.compras.subTotal = this.compras.subTotal + element.subtotal;
     });
   }
+
 
   sumarFooterFactura() {
 
@@ -864,13 +950,12 @@ export class UpdateComprasComponent {
 
   onInput() {
     this.compras.total = (this.compras.subTotal + this.compras.igv + this.compras.otrosCargos) - this.compras.descuentos;
-
   }
+
 
   buscarFactura() {
     this.compras.compCompra = this.compras.serie + '-' + this.compras.numero;
     this.compras.idCliente = this.clientes.idCliente;
-
 
   }
 
@@ -1010,20 +1095,25 @@ export class UpdateComprasComponent {
     window.open('/marcas/create', '_blank');
   }
 
-  modalNuevoProducto() {
-    $('#nuevoProductoModal').modal('show');
-  }
+  
 
   actualizarSubtotal(idx: number) {
 
     this.detalleCompras[idx].subtotal = parseFloat((this.detalleCompras[idx].cantidad * this.detalleCompras[idx].pUnitario).toFixed(2));
     this.sumarDetalleCompras();
     this.sumarFooterFactura();
+    console.log('this.detalleCompras', this.detalleCompras);
   }
 
   //quiero multiplicar el precio unitario por la cantidad y mostrar el resultado en el subtotal de this.nuevoProducto
   actualizarSubtotalNuevoProducto() {
     this.nuevoProducto.subtotal = parseFloat((Number(this.nuevoProducto.cantidad) * this.nuevoProducto.pUnitario).toFixed(2));
+    console.log('actualizarSubtotalNuevoProducto this.nuevoProducto', this.nuevoProducto);
+  }
+
+  onSelectPUnitario(selectedValue: any) {
+    this.nuevoProducto.subtotal = parseFloat((Number(this.nuevoProducto.cantidad) * this.nuevoProducto.pUnitario).toFixed(2));
+    console.log('actualizarSubtotalNuevoProducto this.nuevoProducto', this.nuevoProducto);
   }
 
 

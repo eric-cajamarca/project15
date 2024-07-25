@@ -302,12 +302,12 @@
                                                                 <div>
                                                                     <label for="pUnitario">Precio Unitario</label>
                                                                     <input type="text" class="form-control" name="pUnitario"
-                                                                        [(ngModel)]="nuevoProducto.pUnitario" (blur)="actualizarSubtotalNuevoProducto()">
+                                                                        [(ngModel)]="nuevoProducto.pUnitario" (change)="actualizarSubtotalNuevoProducto()">
                                                                 </div>
                                                                 <div>
                                                                     <label for="cantidad">Cantidad</label>
                                                                     <input type="text" class="form-control" name="cantidad"
-                                                                        [(ngModel)]="nuevoProducto.cantidad" (blur)="actualizarSubtotalNuevoProducto()">
+                                                                        [(ngModel)]="nuevoProducto.cantidad" (change)="actualizarSubtotalNuevoProducto()">
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-6 col-log-3 col-md-6">
@@ -359,9 +359,9 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Cerrar</button>
-                                            <button type="button" class="btn btn-primary">Guardar</button>
+                                            <button *ngIf="productoCreado" type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal" (click)="agregarProductoNuevo()">Agregar</button>
+                                            <button *ngIf="!productoCreado" type="button" class="btn btn-primary" (click)="crearNuevoProductoModal()">Guardar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -524,13 +524,13 @@
                                                                                 </div>
                                                                                 <div>
                                                                                     <label for="pUnitario">Precio Unitario</label>
-                                                                                    <input type="text" class="form-control" name="pUnitario"
-                                                                                        [(ngModel)]="nuevoProducto.pUnitario">
+                                                                                    <input type="number" class="form-control" name="pUnitario"
+                                                                                        [(ngModel)]="nuevoProducto.pUnitario" (change)="actualizarSubtotalNuevoProducto()">
                                                                                 </div>
                                                                                 <div>
                                                                                     <label for="cantidad">Cantidad</label>
-                                                                                    <input type="text" class="form-control" name="cantidad"
-                                                                                        [(ngModel)]="nuevoProducto.cantidad">
+                                                                                    <input type="number" class="form-control" name="cantidad"
+                                                                                        [(ngModel)]="nuevoProducto.cantidad" (change)="actualizarSubtotalNuevoProducto()">
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-sm-6 col-log-3 col-md-6">
@@ -781,16 +781,16 @@
                                     <td>{{item.marca.nombre}} </td>
                                     <td style="width: 60px; text-align: center;">{{item.presentacion.Descripcion}}</td>
                                     <td style="width: 150px; text-align: center;">
-                                        <!-- <button (click)="decrementarCantidad(idx)">-</button> -->
+                                        
                                         <input type="number" [(ngModel)]="item.cantidad"
                                             style="width: 70px; text-align: center;" (change)="actualizarSubtotal(idx)">
-                                        <!-- <button (click)="incrementarCantidad(idx)">+</button> -->
+                                        
                                     </td>
                                     <td style="width: 150px; text-align: center;">
-                                        <!-- <button (click)="decrementarPUnitario(idx)">-</button> -->
+                                        
                                         <input type="number" [(ngModel)]="item.pUnitario"
                                             style="width: 70px; text-align: center;" (change)="actualizarSubtotal(idx)">
-                                        <!-- <button (click)="incrementarPUnitario(idx)">+</button> -->
+                                        
                                     </td>
 
                                     <!-- <td style="width: 60px; text-align: right;">{{item.cantidad}}</td>
