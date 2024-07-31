@@ -168,7 +168,7 @@ export class UpdateComprasComponent {
       );
     });
 
-    // this.initData();
+    
 
   }
 
@@ -240,15 +240,7 @@ export class UpdateComprasComponent {
       }
     );
 
-    this._sucursalService.obtener_sucursal_idempresa(this.token).subscribe(
-      response => {
-        this.sucursales = response.data;
-        console.log('this.sucursales', this.sucursales);
-      },
-      error => {
-        console.log(error);
-      }
-    );
+   this.cargarSucursales();
 
     this._marcaService.obtenerMarcas(this.token).subscribe(
       response => {
@@ -374,6 +366,8 @@ export class UpdateComprasComponent {
   //   }
   // }
 
+  
+
   obtenerCorrelativo() {
     this._comprasService.obtener_correlativo_empresa(this.token).subscribe(
       response => {
@@ -461,6 +455,19 @@ export class UpdateComprasComponent {
           this.stockSucursales = [];
         }
 
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  cargarSucursales() {
+    this.sucursales = [];
+    this._sucursalService.obtener_sucursal_idempresa(this.token).subscribe(
+      response => {
+        this.sucursales = response.data;
+        console.log('this.sucursales', this.sucursales);
       },
       error => {
         console.log(error);
@@ -702,8 +709,8 @@ export class UpdateComprasComponent {
   }
 
   onSelectCategoria(selectedValue: any) {
-
-    const selectedObject = this.categoria.find((item: any) => item.idCategoria == selectedValue);
+    const numericValue = Number(selectedValue);
+    const selectedObject = this.categoria.find((item: any) => item.idCategoria == numericValue);
     this.nuevoProducto.categoria = selectedObject;
     // Ahora, selectedObject contiene toda la información del elemento seleccionado
     console.log('selectedObject', selectedObject);
@@ -712,12 +719,13 @@ export class UpdateComprasComponent {
   }
 
   onSelectSucursal(selectedValue: any) {
+    const numericValue = Number(selectedValue);
 
-    const idSucursal = Number(event);
+    const idSucursal = Number(selectedValue);
     if (!isNaN(idSucursal)) {
       this.nuevoProducto.idSucursal = idSucursal;
       // Lógica adicional para manejar la selección de sucursal
-      const selectedObject = this.sucursales.find((item: any) => item.idSucursal == selectedValue);
+      const selectedObject = this.sucursales.find((item: any) => item.idSucursal == numericValue);
       this.nuevoProducto.sucursal = selectedObject;
       // Ahora, selectedObject contiene toda la información del elemento seleccionado
       console.log('selectedObject', selectedObject);
@@ -800,7 +808,10 @@ export class UpdateComprasComponent {
                 console.log('this.nuevoProducto', this.nuevoProducto);
 
                 this.obtenerStockSucursal();
-
+                this.obtenerCorrelativo();  // Actualizar correlativo
+                //aqui quiero desmarcar el checkbox
+                this.nuevoProducto.useCorrelativo = false;
+                
               }
             },
             error => {
@@ -837,7 +848,7 @@ export class UpdateComprasComponent {
       }
     );
 
-
+    
   }
 
   // agregarProductoNuevo() {
@@ -977,7 +988,7 @@ export class UpdateComprasComponent {
 
 
     // Llamar a las funciones adicionales
-    //this.sumarDetalleCompras();
+    this.sumarDetalleCompras();
     this.sumarFooterFactura();
 
     console.log('this.detalleCompras', this.detalleCompras);
@@ -1116,8 +1127,44 @@ export class UpdateComprasComponent {
       });
 
       console.log('this.detalleCompras antes de la consulta al controlador ', this.detalleCompras);
+      
+        this._comprasService.editar_detalle_compras_idcompra(this.idCompra, this.detalleCompras, this.token).subscribe(
+          response => {
+            console.log('response', response);
+            if (response.data != undefined) {
+              iziToast.show({
+                title: 'SUCCESS',
+                titleColor: '#006400',
+                color: '#FFF',
+                class: 'text-success',
+                position: 'topRight',
+                message: 'El detalle de la compra se actualizó correctamente.'
+              });
+            }
+          },
+          error => {
+            console.log(error);
+          }
+        );
+      
+      //deseo recorrer detalleCompras y crear un nuevo objeto con los campos que necesito
+      const estockSucursal = this.detalleCompras.forEach((element: any) => {
+        let detalleCompra = {
+          idStockSucursal: element.idStockSucursal,
+          idEmpresa: element.idEmpresa,
+          idSucursal: element.idSucursal,
+          idProducto: element.idProducto,
+          cantidad: element.cantidad,
+          ubicacion: element.ubicacion,
+          
+          
+        };
 
-      this._comprasService.editar_detalle_compras_idcompra(this.idCompra, this.detalleCompras, this.token).subscribe(
+        console.log('detalleCompra', detalleCompra);
+      }
+      );
+      
+      this._sucursalService.editar_stock_sucursal(this.idCompra, estockSucursal, this.token).subscribe(
         response => {
           console.log('response', response);
           if (response.data != undefined) {
@@ -1127,7 +1174,7 @@ export class UpdateComprasComponent {
               color: '#FFF',
               class: 'text-success',
               position: 'topRight',
-              message: 'El detalle de la compra se actualizó correctamente.'
+              message: 'El stock de la sucursal se actualizó correctamente.'
             });
           }
         },
@@ -1135,8 +1182,8 @@ export class UpdateComprasComponent {
           console.log(error);
         }
       );
-
     }
+
 
     //this._router.navigate(['/compras']);
 

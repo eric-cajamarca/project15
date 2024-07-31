@@ -144,36 +144,36 @@ const editar_detalle_compras_idcompra = async (req, res) => {
 
         // const productos = DetalleCompra.map(compra => compra.producto);
         // Extracción de productos con campos adicionales
-        const productos = DetalleCompra.map(compra => {
-            const { idProducto, idEmpresa, idCategoria, idDetalleCompra, idSucursal, idCompra, idMarca, idPresentacion, pUnitario, descripcion, fProduccion, fVencimiento, codigo } = compra;
-            return {
-                codigo,
-                idProducto,
-                idEmpresa,
-                idCategoria,
-                descripcion,
-                idMarca,
-                idPresentacion,
-                pUnitario,
-                fProduccion,
-                fVencimiento,
-                idDetalleCompra,
-                idSucursal,
-                idCompra,
+        // const productos = DetalleCompra.map(compra => {
+        //     const { idProducto, idEmpresa, idCategoria, idDetalleCompra, idSucursal, idCompra, idMarca, idPresentacion, pUnitario, descripcion, fProduccion, fVencimiento, codigo } = compra;
+        //     return {
+        //         codigo,
+        //         idProducto,
+        //         idEmpresa,
+        //         idCategoria,
+        //         descripcion,
+        //         idMarca,
+        //         idPresentacion,
+        //         pUnitario,
+        //         fProduccion,
+        //         fVencimiento,
+        //         idDetalleCompra,
+        //         idSucursal,
+        //         idCompra,
 
-            };
-        });
+        //     };
+        // });
 
-        console.log('producto en editar_detalle_compras_idcompra: ', productos);
+        // console.log('producto en editar_detalle_compras_idcompra: ', productos);
 
-        try {
-            for (const detalle of productos) {
-                await prodController.actualizar_producto(detalle);
-            }
+        // try {
+        //     for (const detalle of productos) {
+        //         await prodController.actualizar_producto(detalle);
+        //     }
 
-        } catch (error) {
-            console.log('error en actualizar_producto: ', error);
-        }
+        // } catch (error) {
+        //     console.log('error en actualizar_producto: ', error);
+        // }
 
 
         const idUsuario = req.user.sub;

@@ -327,7 +327,7 @@
                                                                     <label style="width: 300px;">Sucursal (*)</label>
                                                                     <div class="col-lg-9 col-xl-9">
                                                                         <select required name="idSucursal" [(ngModel)]="nuevoProducto.idSucursal"
-                                                                            (ngModelChange)="onSelectSucursal($event)" class="form-control">
+                                                                            (ngModelChange)="onSelectSucursal($event)"  (click)="cargarSucursales()" class="form-control">
                                                                             <option value="" selected disabled>Seleccionar...</option>
                                                                             <option *ngFor="let item of sucursales" [value]="item.idSucursal">{{
                                                                                 item.nombre }}
@@ -551,7 +551,7 @@
                                                                                         <label style="width: 300px;">Sucursal (*)</label>
                                                                                         <div class="col-lg-9 col-xl-9">
                                                                                             <select required name="idSucursal" [(ngModel)]="nuevoProducto.idSucursal"
-                                                                                                (ngModelChange)="onSelectSucursal($event)" class="form-control">
+                                                                                                (ngModelChange)="onSelectSucursal($event)" (click)="cargarSucursales()" class="form-control">
                                                                                                 <option value="" selected disabled>Seleccionar...</option>
                                                                                                 <option *ngFor="let item of sucursales" [value]="item.idSucursal">{{
                                                                                                     item.nombre }}
