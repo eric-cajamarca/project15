@@ -25,6 +25,7 @@ const categoriaRoutes = require('./routes/categoria');
 const presentacionRoutes = require('./routes/presentacion');
 const marcaRoutes = require('./routes/marcas');
 const unidporcajaRoutes = require('./routes/unidporcaja');
+const preciosVRoutes = require('./routes/preciosV');
 
 
 const PORT = process.env.PORT || 3000;
@@ -97,7 +98,7 @@ app.use('/api', categoriaRoutes);
 app.use('/api', presentacionRoutes);
 app.use('/api', marcaRoutes);
 app.use('/api', unidporcajaRoutes);
-
+app.use('/api', preciosVRoutes);
 
 // Escuchar en el puerto
 app.listen(PORT, () => {

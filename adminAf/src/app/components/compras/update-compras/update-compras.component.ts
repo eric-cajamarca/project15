@@ -1154,6 +1154,7 @@ export class UpdateComprasComponent {
           idEmpresa: element.idEmpresa,
           idSucursal: element.idSucursal,
           idProducto: element.idProducto,
+          cantidadAnterior: element.cantidadAnterior,
           cantidad: element.cantidad,
           ubicacion: element.ubicacion,
           

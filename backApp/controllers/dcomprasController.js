@@ -1,6 +1,7 @@
 const sql = require('mssql');
 const dbConfig = require('../dbconfig');
 const prodController = require('./productosController');
+const preciosVController = require('./preciosVController');
 
 // create table DetalleCompras
 // (
@@ -204,6 +205,7 @@ const editar_detalle_compras_idcompra = async (req, res) => {
                 for (const detalle of dCompra) {
                     if (detalle.idDetalleCompra) {
                         await actualizarDetalleCompra(detalle);
+                        await preciosVController.actualizarPrecioV(detalle);
                     } else {
                         await crear_detallecompras(detalle);
                     }
