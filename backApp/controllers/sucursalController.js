@@ -281,6 +281,29 @@ const obtener_stock_sucursales_idempresa = async function (req, res) {
 }
 
 const crear_stock_sucursal_idEmpresa = async function (req, res) {
+    const { idStockSucursal } = req.body;
+    const idEmpresa = req.user.empresa;
+    const idUsuario = req.user.sub;
+
+    if(req.user){
+        if(req.user.rol == 'Administrador'){
+            if(idStockSucursal){
+                await editar_stock_sucursal(req, res);
+                
+            }else{
+                await crearstock_sucursal_idEmpresa(req, res);
+            }
+        }else{
+            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+        }
+    }
+    else{
+        res.status(500).send({ message: 'No Access', data: undefined });
+    }
+}
+
+
+const crearstock_sucursal_idEmpresa = async function (req, res) {
 
     const { idSucursal, idProducto, cantidad, ubicacion } = req.body;
     const idEmpresa = req.user.empresa;
@@ -288,8 +311,8 @@ const crear_stock_sucursal_idEmpresa = async function (req, res) {
 
     console.log('crear_stock_sucursal_idEmpresa: ', req.body);
 
-    if (req.user) {
-        if (req.user.rol == 'Administrador') {
+    // if (req.user) {
+    //     if (req.user.rol == 'Administrador') {
             try {
                 let pool = await sql.connect(dbConfig);
                 let stockSucursal = await pool
@@ -302,22 +325,24 @@ const crear_stock_sucursal_idEmpresa = async function (req, res) {
                     .input('idUsuario', sql.UniqueIdentifier, idUsuario)
                     .query("INSERT INTO StockSucursal ( idEmpresa, idSucursal, idProducto, cantidad, ubicacion, fIngreso, idUsuario) VALUES ( @idEmpresa, @idSucursal, @idProducto, @cantidad, @ubicacion, GETDATE(), @idUsuario)");
 
-                res.status(200).send({ data: stockSucursal.rowsAffected });
+               // res.status(200).send({ data: stockSucursal.rowsAffected });
             } catch (error) {
                 console.log('crear stockSucursal error: ' + error);
                 res.status(500).send({ message: 'Error al crear la stockSucursal', data: undefined });
             }
-        } else {
-            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
-        }
-    }
-    else {
-        res.status(500).send({ message: 'No Access', data: undefined });
-    }
+    //     } else {
+    //         res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+    //     }
+    // }
+    // else {
+    //     res.status(500).send({ message: 'No Access', data: undefined });
+    // }
 
 }
 
 const editar_stock_sucursal = async function (req, res) {
+
+    console.log('editar_stock_sucursal: ', req.body);
 
     const { idEmpresa, idSucursal, idStockSucursal, cantidad, cantidadAnterior, ubicacion } = req.body;
 
@@ -336,8 +361,8 @@ const editar_stock_sucursal = async function (req, res) {
     console.log('cantidadTotal: ', cantidadTotal);
 
 
-    if (req.user) {
-        if (req.user.rol == 'Administrador') {
+    // if (req.user) {
+    //     if (req.user.rol == 'Administrador') {
 
             try {
                 let pool = await sql.connect(dbConfig);
@@ -352,19 +377,19 @@ const editar_stock_sucursal = async function (req, res) {
                     .input('idUsuario', sql.UniqueIdentifier, idUsuario)
                     .query("UPDATE StockSucursal SET idEmpresa = @idEmpresa, idSucursal = @idSucursal, idProducto = @idProducto, cantidad = @cantidad, ubicacion = @ubicacion, fIngreso = GETDATE(), idUsuario = @idUsuario WHERE idStockSucursal = @idStockSucursal");
 
-                res.status(200).send({ data: stockSucursal.rowsAffected });
+                //res.status(200).send({ data: stockSucursal.rowsAffected });
             } catch (error) {
                 console.log('editar stockSucursal error: ' + error);
                 res.status(500).send({ message: 'Error al editar la stockSucursal', data: undefined });
             }
 
-        } else {
-            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
-        }
-    }
-    else {
-        res.status(500).send({ message: 'No Access', data: undefined });
-    }
+    //     } else {
+    //         res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+    //     }
+    // }
+    // else {
+    //     res.status(500).send({ message: 'No Access', data: undefined });
+    // }
 
 }
 
@@ -408,9 +433,11 @@ module.exports = {
     editar_estado_idsucursal,
 
     /////////////////////////////////
+    
     obtener_stock_sucursal_idProducto,
     obtener_stock_sucursales_idempresa,
     crear_stock_sucursal_idEmpresa,
+    //crearstock_sucursal_idEmpresa,
     editar_stock_sucursal,
     eliminar_stock_sucursal
 

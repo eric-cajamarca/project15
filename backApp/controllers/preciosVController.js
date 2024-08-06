@@ -17,6 +17,7 @@ const dbConfig = require('../dbconfig');
 //crear un registro en PreciosV
 const crearPrecioV = async function (detalle) {
     
+    console.log('detalle en crear preciosV', detalle);
 
     if (req.user) {
         try {

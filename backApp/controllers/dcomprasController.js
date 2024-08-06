@@ -94,12 +94,12 @@ const crear_detalle_compras_idcompra = async function (req, res) {
 
 
 const crear_detallecompras = async function (detalle) {
-
+    console.log('detalle en crear nuevo_detallecompras: ', detalle);
     try {
         // Formatear pUnitario a dos decimales
         const pUnitarioFormateado = parseFloat(detalle.pUnitario);
 
-        console.log('pUnitarioFormateado: ', pUnitarioFormateado);
+        console.log('pUnitarioFormateado en crear_detallecompras: ', pUnitarioFormateado);
 
         let pool = await sql.connect(dbConfig);
         let detalleCompra = await pool
@@ -115,7 +115,8 @@ const crear_detallecompras = async function (detalle) {
             .input('idUsuario', sql.UniqueIdentifier, detalle.idUsuario)
             .query("INSERT INTO DetalleCompras (idEmpresa, idSucursal, idCompra, cantidad, idProducto, idPresentacion, pUnitario, total, idUsuario) VALUES (@idEmpresa, @idSucursal, @idCompra, @cantidad, @idProducto, @idPresentacion, @pUnitario, @total, @idUsuario)");
 
-        res.status(200).send({ data: detalleCompra.rowsAffected });
+        //res.status(200).send({ data: detalleCompra.rowsAffected });
+        console.log('detalleCompra en crear_detallecompras: ', detalleCompra.rowsAffected);
 
     } catch (error) {
         console.log('crear detallecompras error: ' + error);
@@ -143,38 +144,38 @@ const editar_detalle_compras_idcompra = async (req, res) => {
         console.log('DetalleCompra en editar_detalle_compras_idcompra ', DetalleCompra);
 
 
-        // const productos = DetalleCompra.map(compra => compra.producto);
-        // Extracción de productos con campos adicionales
-        // const productos = DetalleCompra.map(compra => {
-        //     const { idProducto, idEmpresa, idCategoria, idDetalleCompra, idSucursal, idCompra, idMarca, idPresentacion, pUnitario, descripcion, fProduccion, fVencimiento, codigo } = compra;
-        //     return {
-        //         codigo,
-        //         idProducto,
-        //         idEmpresa,
-        //         idCategoria,
-        //         descripcion,
-        //         idMarca,
-        //         idPresentacion,
-        //         pUnitario,
-        //         fProduccion,
-        //         fVencimiento,
-        //         idDetalleCompra,
-        //         idSucursal,
-        //         idCompra,
+        // productos = DetalleCompra.map(compra => compra.producto);
+        //Extracción de productos con campos adicionales
+        const productos = DetalleCompra.map(compra => {
+            const { idProducto, idEmpresa, idCategoria, idDetalleCompra, idSucursal, idCompra, idMarca, idPresentacion, pUnitario, descripcion, fProduccion, fVencimiento, codigo } = compra;
+            return {
+                codigo,
+                idProducto,
+                idEmpresa,
+                idCategoria,
+                descripcion,
+                idMarca,
+                idPresentacion,
+                pUnitario,
+                fProduccion,
+                fVencimiento,
+                idDetalleCompra,
+                idSucursal,
+                idCompra,
 
-        //     };
-        // });
+            };
+        });
 
-        // console.log('producto en editar_detalle_compras_idcompra: ', productos);
+        console.log('producto en editar_detalle_compras_idcompra: ', productos);
 
-        // try {
-        //     for (const detalle of productos) {
-        //         await prodController.actualizar_producto(detalle);
-        //     }
+        try {
+            for (const detalle of productos) {
+                await prodController.actualizar_producto(detalle);
+            }
 
-        // } catch (error) {
-        //     console.log('error en actualizar_producto: ', error);
-        // }
+        } catch (error) {
+            console.log('error en actualizar_producto: ', error);
+        }
 
 
         const idUsuario = req.user.sub;
@@ -192,7 +193,8 @@ const editar_detalle_compras_idcompra = async (req, res) => {
                 pUnitario,
                 total,
                 idCompra: req.params.id,
-                idEmpresa: req.user.empresa
+                idEmpresa: req.user.empresa,
+                idUsuario: req.user.sub
             };
         });
 
@@ -205,7 +207,7 @@ const editar_detalle_compras_idcompra = async (req, res) => {
                 for (const detalle of dCompra) {
                     if (detalle.idDetalleCompra) {
                         await actualizarDetalleCompra(detalle);
-                        await preciosVController.actualizarPrecioV(detalle);
+                        // await preciosVController.crearPrecioV(detalle);
                     } else {
                         await crear_detallecompras(detalle);
                     }
@@ -255,6 +257,32 @@ const actualizarDetalleCompra = async function (detalle) {
     }
 }
 
+const eliminar_detalle_compras_idcompra = async function (req, res) {
+    const idCompra = req.params.id;
+    console.log('eliminar_detalle_compras_idcompra: ', idCompra);
+    if (req.user) {
+        if (req.user.rol == 'Administrador') {
+            try {
+                let pool = await sql.connect(dbConfig);
+                let detallecompras = await pool
+                    .request()
+                    .input('idCompra', sql.UniqueIdentifier, idCompra)
+                    .query("DELETE FROM DetalleCompras WHERE idCompra = @idCompra");
+
+                res.status(200).send({ data: detallecompras.rowsAffected });
+
+            } catch (error) {
+                console.log('eliminar detallecompras error: ' + error);
+                res.status(500).send({ message: 'Error al eliminar detallecompras', data: undefined });
+            }
+        } else {
+            res.status(200).send({ message: 'No tiene permisos para realizar esta acción', data: undefined });
+        }
+    }
+    else {
+        res.status(500).send({ message: 'No Access', data: undefined });
+    }
+}
 
 module.exports = {
     obtener_detalle_compras_idcompra,

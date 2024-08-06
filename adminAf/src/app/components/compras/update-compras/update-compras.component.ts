@@ -303,7 +303,7 @@ export class UpdateComprasComponent {
       }
       );
       // this.detalleCompras = response.data;
-      this.detalleCompras_const = JSON.parse(JSON.stringify(this.detalleCompras));
+      //this.detalleCompras_const = JSON.parse(JSON.stringify(this.detalleCompras));
 
 
     }
@@ -991,7 +991,7 @@ export class UpdateComprasComponent {
     this.sumarDetalleCompras();
     this.sumarFooterFactura();
 
-    console.log('this.detalleCompras', this.detalleCompras);
+    console.log('this.detalleCompras despues de agregar el producto nuevo', this.detalleCompras);
     this.updateDetalleCompra++;
   }
 
@@ -1003,7 +1003,10 @@ export class UpdateComprasComponent {
     this.compras.subTotal = 0;
     this.detalleCompras.forEach((element: any) => {
       this.compras.subTotal = this.compras.subTotal + element.subtotal;
+      element.total = element.cantidad * element.pUnitario;
     });
+
+    console.log('this.detallecompras.Total', this.detalleCompras);
   }
 
 
@@ -1120,11 +1123,13 @@ export class UpdateComprasComponent {
       console.log('detalleCompras No son iguales');
 
       //quiero recorrer detallecompras y modificar algunos campos
-      this.detalleCompras.forEach((element: any) => {
+      console.log('this.detallecompras antes de recorrerlo', this.detalleCompras);
+      // this.detalleCompras.forEach((element: any) => {
 
-        element.pUnitario = element.cUnitario;
+      //   element.pUnitario = element.cUnitario;
 
-      });
+      // });
+      console.log('this.detallecompras despues de recorrerlo', this.detalleCompras);
 
       console.log('this.detalleCompras antes de la consulta al controlador ', this.detalleCompras);
       
@@ -1146,6 +1151,14 @@ export class UpdateComprasComponent {
             console.log(error);
           }
         );
+
+        // //quiero comparar detalleCompras con detalleCompras_const y extraer los idDetalleCompra que se eliminaron
+        // let idDetalleCompraEliminado = [];
+        // this.detalleCompras_const.forEach((element: any) => {
+        //   if (!this.detalleCompras.some((item: any) => item.idDetalleCompra === element.idDetalleCompra)) {
+        //     idDetalleCompraEliminado.push(element.idDetalleCompra);
+        //   }
+        // });
       
       //deseo recorrer detalleCompras y crear un nuevo objeto con los campos que necesito
       const estockSucursal = this.detalleCompras.forEach((element: any) => {
@@ -1161,11 +1174,11 @@ export class UpdateComprasComponent {
           
         };
 
-        console.log('detalleCompra', detalleCompra);
+        console.log('estockSucursal', estockSucursal);
       }
       );
       
-      this._sucursalService.editar_stock_sucursal(this.idCompra, estockSucursal, this.token).subscribe(
+      this._sucursalService.crear_stock_sucursal_idEmpresa( estockSucursal, this.token).subscribe(
         response => {
           console.log('response', response);
           if (response.data != undefined) {
@@ -1185,13 +1198,27 @@ export class UpdateComprasComponent {
       );
     }
 
+    //aqui elimino los idDetalleCompra que se eliminaron
+    this.idEliminado();
+    //this._comprasService.(this.idCompra, this.token).subscribe(
+
 
     //this._router.navigate(['/compras']);
 
 
   }
 
-
+  idEliminado(){
+    //quiero comparar detalleCompras con detalleCompras_const y extraer los idDetalleCompra que se eliminaron
+    let idDetalleCompraEliminado: any[] = [];
+    this.detalleCompras_const.forEach((element: any) => {
+      if (!this.detalleCompras.some((item: any) => item.idDetalleCompra === element.idDetalleCompra)) {
+        idDetalleCompraEliminado.push(element.idDetalleCompra);
+      }
+    });
+    
+    console.log('idDetalleCompraEliminado', idDetalleCompraEliminado);
+  }
 
 
   agregarNuevaCategoria() {
@@ -1214,6 +1241,9 @@ export class UpdateComprasComponent {
     this.sumarDetalleCompras();
     this.sumarFooterFactura();
     console.log('this.detalleCompras', this.detalleCompras);
+
+    this.idEliminado();
+    console.log('this.detalleCompras_const', this.detalleCompras_const);
   }
 
   //quiero multiplicar el precio unitario por la cantidad y mostrar el resultado en el subtotal de this.nuevoProducto
